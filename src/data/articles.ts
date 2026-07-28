@@ -1,0 +1,565 @@
+export interface Article {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  readTime: number; // minutes
+  linkedProducts: string[];
+  /** Full HTML body for published articles; undefined = stub */
+  bodyHtml?: string;
+  /** Custom SEO title (defaults to title + " — PrismBay") */
+  seoTitle?: string;
+  /** Custom meta description (defaults to description) */
+  metaDescription?: string;
+}
+
+export const CATEGORIES = [
+  { slug: "all", name: "All" },
+  { slug: "ai-business-systems", name: "AI Business Systems" },
+  { slug: "ai-operations", name: "AI Operations" },
+  { slug: "ai-compliance", name: "AI Compliance" },
+  { slug: "ai-procurement", name: "AI Procurement" },
+  { slug: "ai-workforce", name: "AI Workforce" },
+  { slug: "ai-payment-security", name: "AI Payment Security" },
+  { slug: "ai-app-development", name: "AI App Development" },
+  { slug: "digital-transformation", name: "Digital Transformation" },
+  { slug: "business-automation", name: "Business Automation" },
+  { slug: "product-comparisons", name: "Product Comparisons" },
+];
+
+export const ARTICLES: Article[] = [
+  // ── PUBLISHED: Article 1 ──
+  {
+    slug: "how-ai-business-systems-save-smbs-time",
+    title: "How AI Business Systems Save SMBs 20+ Hours Per Week",
+    description:
+      "Practical guide to AI automation for small businesses. Learn which workflows deliver the highest time savings when automated with AI business systems.",
+    category: "ai-business-systems",
+    readTime: 12,
+    linkedProducts: ["Nexus One", "NexusOS"],
+    seoTitle: "How AI Business Systems Save SMBs 20+ Hours Per Week — PrismBay",
+    metaDescription:
+      "Practical guide to AI automation for small businesses. Learn which workflows deliver the highest time savings when automated with AI business systems.",
+    bodyHtml: `<p>Small and medium-sized businesses run on tight margins — and tighter schedules. Owners and managers typically juggle sales tracking, customer follow-ups, expense reporting, project updates, and team coordination, often across a patchwork of spreadsheets, email threads, and disconnected tools. The result is a kind of administrative gravity that pulls hours out of every week.</p>
+<p>AI business systems offer a different approach. Rather than bolting automation onto existing chaos, they provide a structured operating model where routine coordination, reporting, and tracking happen in the background — leaving people free to do the work that actually moves the business forward.</p>
+<p>This article walks through the workflows where AI business systems deliver the most meaningful time savings, what those savings look like in practice, and how to evaluate whether an AI operating system is right for your business.</p>
+
+<h2>Where the Time Actually Goes</h2>
+<p>Before talking about savings, it's worth understanding where small business hours are typically spent. Research from business operations surveys consistently identifies a cluster of recurring administrative activities that consume significant weekly time:</p>
+<ul>
+  <li><strong>Status updates and reporting:</strong> Compiling weekly summaries, updating stakeholders, preparing meeting notes — often 3–5 hours per week across a small team.</li>
+  <li><strong>Task and deadline tracking:</strong> Chasing progress on projects, updating task boards, sending reminders — typically 2–4 hours per week.</li>
+  <li><strong>Customer activity logging:</strong> Recording calls, updating contact records, logging follow-up tasks — often 3–6 hours per week for customer-facing teams.</li>
+  <li><strong>Expense and invoice monitoring:</strong> Categorising spending, matching receipts, flagging discrepancies — roughly 2–3 hours per week.</li>
+  <li><strong>Cross-team handoffs:</strong> Passing work between departments, clarifying requirements, resolving miscommunication — variable but frequently 3–5 hours per week.</li>
+</ul>
+<p>None of these activities are unnecessary — they're genuinely important. The problem is the format: when they're done manually across disconnected tools, they consume time that could go toward higher-value work.</p>
+
+<h2>What an AI Business Operating System Actually Does</h2>
+<p>An AI business operating system — such as <strong>Nexus One</strong> for smaller businesses or <strong>NexusOS</strong> for mid-sized organisations — connects these activities into a single coordinated workspace. AI agents handle the routine coordination: tracking deadlines, surfacing items that need attention, preparing summary reports, and logging activity across departments.</p>
+<p>The key distinction from traditional automation tools is integration. Instead of automating individual tasks in isolation, an AI business system connects customer activity to sales pipelines, project updates to team reporting, and expenses to financial summaries. The agents work across these connections, so a status update in one area automatically surfaces in the relevant reports and dashboards.</p>
+
+<h3>Workflows with the Highest Automation Potential</h3>
+<p>Not every workflow benefits equally from AI automation. The ones that deliver the highest time savings tend to share three characteristics: they're repetitive, they involve data that exists in digital form, and they cross multiple tools or people.</p>
+<p><strong>Daily standup and status reporting.</strong> Instead of each team member compiling their own update and a manager assembling a summary, AI agents track progress across connected systems and generate structured status reports automatically.</p>
+<p><strong>Customer follow-up management.</strong> AI agents monitor customer activity — recent purchases, support queries, contract renewals — and surface the accounts that need attention, along with relevant context. No more digging through email threads before every call.</p>
+<p><strong>Expense reconciliation.</strong> Rather than manually matching receipts to line items and chasing approvals, AI procurement and finance agents categorise spending, flag anomalies, and route approvals based on predefined rules.</p>
+<p><strong>Project milestone tracking.</strong> AI agents monitor task completion across connected project tools and alert managers when milestones are at risk — before the status meeting, not during it.</p>
+<p><strong>Cross-department handoffs.</strong> When a sales deal closes, AI agents can trigger the customer onboarding workflow, notify the delivery team, and update the financial forecast — all without a chain of forwarded emails.</p>
+
+<h2>What the Time Savings Look Like in Practice</h2>
+<p>When these workflows move from manual coordination to AI-assisted operation, the time savings compound. A small business with 5–15 employees might reasonably expect to recover 20 or more hours per week across the team — not from eliminating anyone's role, but from removing the friction between tasks.</p>
+<p>A team lead who spends 45 minutes each morning assembling status updates across Slack, email, and a project tool might cut that to 5 minutes of reviewing an AI-generated summary. A customer success manager who spends an hour logging call notes and updating CRM records might find those records already populated, needing only a quick review. An operations manager who spends Tuesday mornings reconciling expense reports might open a dashboard where anomalies are already flagged.</p>
+<p>These individual savings may seem modest in isolation, but across a team they represent meaningful capacity — time that can shift toward strategic work, client relationships, or simply a more manageable workweek.</p>
+
+<h2>How to Evaluate an AI Business System for Your Team</h2>
+<p>If you're considering an AI business system for your organisation, here are four questions to guide your evaluation:</p>
+<p><strong>1. Does it connect your existing tools?</strong> The biggest time savings come from integration, not from replacing your current tools. Look for systems that work with your existing CRM, project management, and communication platforms.</p>
+<p><strong>2. Is the operating model clear?</strong> A good AI business system includes defined agent roles, workflow patterns, and reporting structures. You should be able to see how work flows through the system before you implement it.</p>
+<p><strong>3. Can you start with one department?</strong> You don't need to automate everything at once. The most successful implementations start with a single high-pain area — often sales tracking or expense management — and expand from there.</p>
+<p><strong>4. What does the implementation plan look like?</strong> Products in PrismBay's marketplace, including Nexus One and NexusOS, come with detailed implementation roadmaps, agent configuration guides, and workflow templates. The quality of this guidance often determines whether the system gets adopted or sits on a shelf.</p>
+
+<h2>The Bottom Line</h2>
+<p>AI business systems aren't about replacing people — they're about removing the administrative overhead that keeps people from doing their best work. For small and medium-sized businesses, the practical result is often 20 or more hours per week recovered from coordination overhead and returned to the work that actually grows the business.</p>
+<p>The products exist. The implementation plans are detailed. The question is whether your team is ready to move from managing the chaos to operating with a system.</p>`,
+  },
+
+  // ── PUBLISHED: Article 2 ──
+  {
+    slug: "procurement-intelligence-cfo-guide",
+    title: "Procurement Intelligence: What It Is and Why Every CFO Needs It",
+    description:
+      "Procurement intelligence uses AI to analyse spend, compare suppliers, and find savings. Learn how modern platforms give CFOs visibility into every pound spent.",
+    category: "ai-procurement",
+    readTime: 11,
+    linkedProducts: ["SpendShield AI"],
+    seoTitle: "Procurement Intelligence: What It Is and Why Every CFO Needs It — PrismBay",
+    metaDescription:
+      "Procurement intelligence uses AI to analyse spend, compare suppliers, and find savings. Learn how modern platforms give CFOs visibility into every pound spent.",
+    bodyHtml: `<p>Most organisations don't know what they spend. Not in the literal sense — the invoices get paid, the ledgers balance — but in the strategic sense: which suppliers are charging different rates for the same service across departments, which contracts auto-renew without review, which vendor relationships carry unrecognised risk, and where consolidation could meaningfully reduce costs.</p>
+<p>Procurement intelligence is the answer to that blind spot. It's a structured approach to understanding organisational spending — not through periodic audits or annual reviews, but through continuous AI-powered analysis of purchase data, supplier performance, contract terms, and market pricing.</p>
+<p>For CFOs and finance leaders, procurement intelligence represents one of the highest-ROI applications of AI to business operations. Here's what it involves, how it works, and what it takes to implement.</p>
+
+<h2>What Procurement Intelligence Actually Means</h2>
+<p>Procurement intelligence goes beyond spend analysis — though that's where it starts. Traditional procurement reporting tells you what you bought and from whom. Procurement intelligence tells you whether you paid the right price, whether the supplier is performing as expected, whether a better alternative exists, and whether recurring charges contain duplicates or anomalies.</p>
+<p>The core components of a procurement intelligence system include:</p>
+<p><strong>Spend classification.</strong> AI agents categorise every transaction across departments, creating a unified view of organisational spending. This sounds straightforward, but in organisations above a certain size, purchase data typically lives in multiple systems — ERP platforms, corporate cards, expense tools, and departmental budgets. Classification brings it together.</p>
+<p><strong>Supplier comparison and benchmarking.</strong> Once spend is classified, AI agents compare pricing across suppliers providing similar goods or services. The same item — IT hardware, office supplies, consulting services — often comes through different vendors at different rates. Procurement intelligence surfaces those variances.</p>
+<p><strong>Contract analysis.</strong> AI agents review supplier contracts and compare actual spend against agreed terms. This catches over-billing, identifies services no longer being used but still being paid for, and flags contracts approaching renewal without review.</p>
+<p><strong>Vendor risk assessment.</strong> Beyond pricing, procurement intelligence monitors supplier health indicators — financial stability, compliance certifications, delivery performance — and flags vendors whose risk profile has changed.</p>
+<p><strong>Savings opportunity identification.</strong> By combining all of the above, the system identifies specific, actionable savings opportunities: duplicate suppliers, negotiation leverage points, consolidation candidates, and contracts where pricing has drifted from market rates.</p>
+
+<h2>Why Traditional Procurement Teams Miss These Opportunities</h2>
+<p>Even experienced procurement professionals operate with significant information constraints. A typical procurement manager might oversee dozens of supplier relationships, hundreds of contracts, and thousands of transactions per month. Manually reviewing every invoice, comparing every rate, and monitoring every supplier's performance simply isn't possible at that scale.</p>
+<p>As a result, procurement teams tend to focus on the largest contracts and the most visible categories — enterprise software licences, major facilities contracts, strategic supplier relationships. The long tail of smaller transactions, departmental purchases, and recurring charges often goes unexamined. That's where AI procurement platforms like <strong>SpendShield AI</strong> create value: they apply consistent analysis across every transaction, not just the ones that get human attention.</p>
+
+<h2>The CFO's Perspective: Why This Matters Now</h2>
+<p>For CFOs, procurement intelligence addresses several persistent challenges:</p>
+<p><strong>Budget visibility.</strong> When spend is fragmented across systems and departments, the CFO's view of organisational spending is always slightly out of date. Procurement intelligence provides real-time visibility — not monthly reports assembled from spreadsheets.</p>
+<p><strong>Margin pressure.</strong> In an environment where input costs are rising, procurement savings flow directly to the bottom line. A 3–5% reduction in indirect spend through better supplier management and duplicate elimination is a meaningful margin contribution in most businesses.</p>
+<p><strong>Risk management.</strong> Supplier concentration, vendor financial instability, and contract non-compliance are risks that procurement intelligence identifies early — before they become problems. For publicly traded companies and regulated industries, this is increasingly a board-level concern.</p>
+<p><strong>Audit readiness.</strong> When procurement decisions are supported by structured analysis — supplier comparisons, contract reviews, pricing benchmarks — the rationale for every purchasing decision is documented and defensible.</p>
+
+<h2>What Implementation Looks Like</h2>
+<p>Adopting procurement intelligence doesn't require replacing your existing finance stack. Modern AI procurement systems integrate with existing ERP, accounting, and expense management tools — pulling transaction data, classifying it, and surfacing insights through dashboards designed for procurement teams and finance leaders.</p>
+<p>The implementation typically follows a phased approach:</p>
+<p><strong>Phase one: Spend visibility.</strong> Connect data sources, classify transactions, and establish the baseline view of organisational spend. This phase alone often surfaces immediate savings through duplicate vendor identification and obvious pricing anomalies.</p>
+<p><strong>Phase two: Supplier analysis.</strong> Layer in supplier performance monitoring, contract review, and risk assessment. This shifts the system from reporting on what happened to flagging what needs attention.</p>
+<p><strong>Phase three: Ongoing optimisation.</strong> With the baseline established, AI agents continuously monitor new transactions, compare against benchmarks, and surface savings opportunities as they emerge — not at the end of the quarter.</p>
+
+<h2>Is Procurement Intelligence Right for Your Organisation?</h2>
+<p>Procurement intelligence delivers the highest return in organisations with fragmented purchasing — multiple departments buying independently, suppliers managed across different teams, and procurement processes that rely more on individual relationships than structured analysis. If that description fits your organisation, the savings from better visibility and systematic supplier management typically exceed the investment in the system within the first procurement cycle.</p>
+<p>For finance leaders evaluating the option, the key question isn't whether the technology works — it does — but whether your organisation is ready to act on the insights it surfaces. Procurement intelligence will identify savings opportunities. The harder part is having the procurement governance in place to capture them.</p>
+<p>Products like <strong>SpendShield AI</strong>, available through PrismBay, provide the complete system: AI agent configurations, spend classification workflows, supplier analysis frameworks, and implementation roadmaps — everything a procurement team needs to move from periodic reporting to continuous intelligence.</p>`,
+  },
+
+  // ── PUBLISHED: Article 3 ──
+  {
+    slug: "ai-powered-decision-support-executive-guide",
+    title: "The Executive's Guide to AI-Powered Decision Support",
+    description:
+      "AI decision support gives executives real-time visibility into operations. Learn how AI platforms monitor performance, flag exceptions, and prepare reports.",
+    category: "ai-operations",
+    readTime: 14,
+    linkedProducts: ["Empire AI", "NexusOS"],
+    seoTitle: "The Executive's Guide to AI-Powered Decision Support — PrismBay",
+    metaDescription:
+      "AI decision support gives executives real-time visibility into operations. Learn how AI platforms monitor performance, flag exceptions, and prepare reports.",
+    bodyHtml: `<p>The standard model for executive decision-making hasn't changed much in decades: teams prepare reports, executives review them, questions get asked, more data gets pulled, and decisions eventually get made — often days or weeks after the underlying numbers were current.</p>
+<p>AI-powered decision support changes that pattern. Instead of waiting for reports, executives work with systems that monitor business performance continuously, surface exceptions as they happen, and present decision-ready information on demand.</p>
+<p>This guide covers what AI decision support looks like in practice, which business functions benefit most, and what to look for when evaluating these systems.</p>
+
+<h2>What AI Decision Support Actually Does</h2>
+<p>An AI decision support system — such as <strong>Empire AI</strong>, the unified AI business command platform — acts as an intelligent layer between raw business data and executive action. It connects to the organisation's operational systems (finance, sales, HR, procurement, project management), monitors performance against targets, and presents a structured view of what needs attention.</p>
+<p>The system doesn't make decisions — that remains firmly in human hands. What it does is transform the information executives receive from periodic and fragmented to continuous and structured.</p>
+<p>Specifically, an AI decision support platform performs several functions:</p>
+<p><strong>Performance monitoring.</strong> AI agents track key metrics across departments — revenue against forecast, project milestones against timeline, expenses against budget — and flag variances that exceed defined thresholds.</p>
+<p><strong>Exception identification.</strong> Rather than presenting all data equally, the system highlights exceptions: the department that's running over budget, the project that's behind schedule, the customer account that's showing early signs of churn. This is where AI adds the most value — it filters signal from noise.</p>
+<p><strong>Executive reporting.</strong> AI agents compile structured executive summaries that combine financial results, operational activity, workforce performance, and risk indicators into a format designed for decision-making, not data exploration.</p>
+<p><strong>Forecasting and scenario analysis.</strong> By analysing historical patterns and current trajectories, AI agents can project likely outcomes and model the impact of different decisions — helping executives understand the range of possible futures rather than relying on a single forecast.</p>
+
+<h2>The Business Functions That Benefit Most</h2>
+<p>Not every part of the business needs AI-powered decision support. The functions that benefit most tend to share three characteristics: they generate significant data, their performance directly affects strategic outcomes, and their status changes frequently enough that periodic reporting creates blind spots.</p>
+<p><strong>Financial performance.</strong> Revenue tracking, margin analysis, cash flow monitoring, and budget variance — these are the classic executive dashboard metrics. AI decision support makes them continuous rather than monthly.</p>
+<p><strong>Operational monitoring.</strong> Project delivery, service levels, capacity utilisation, supply chain status — the operational metrics that determine whether strategy is actually being executed. AI agents monitor these in real time and flag deviations.</p>
+<p><strong>Workforce performance.</strong> Headcount trends, productivity indicators, hiring pipeline status, attrition signals — the people metrics that most executives track manually or not at all.</p>
+<p><strong>Risk and compliance.</strong> Regulatory deadlines, compliance status, audit findings, supplier risk indicators — the items that, when surfaced late, create the most expensive problems.</p>
+<p>Products like <strong>Empire AI</strong> and <strong>NexusOS</strong> address these functions with different scopes: Empire AI focuses on the executive command layer — the unified view across all business functions — while NexusOS goes deeper into departmental operations, connecting finance, HR, sales, marketing, procurement, and compliance through a single operating system.</p>
+
+<h2>How This Differs from Business Intelligence Tools</h2>
+<p>Traditional BI tools (Tableau, Power BI, Looker) are designed for analysis — they help you explore data, build dashboards, and answer questions you already know to ask. AI decision support systems are designed for attention management — they tell you what you need to look at, whether or not you knew to ask.</p>
+<p>This distinction matters for implementation. BI tools require someone to build the dashboard, someone to check the dashboard, and someone to interpret what the dashboard means. AI decision support systems do the checking and interpretation as part of the product design — the executive sees the exceptions, not the dashboard.</p>
+<p>That doesn't mean replacing BI tools. Most organisations use both: BI for deep analysis by specialist teams, AI decision support for the continuous monitoring that keeps executives informed without requiring them to become analysts.</p>
+
+<h2>What to Look for When Evaluating These Systems</h2>
+<p>If you're considering an AI decision support system for your organisation, here are the criteria that matter:</p>
+<p><strong>Integration breadth.</strong> The system needs to connect to your actual operational tools — your ERP, CRM, project management platform, HR system — not just import spreadsheets. The value comes from continuous connection, not periodic uploads.</p>
+<p><strong>Exception logic transparency.</strong> You should be able to see and adjust the thresholds that trigger alerts. A black box that flags "issues" without explaining why creates more confusion than clarity.</p>
+<p><strong>Executive usability.</strong> The interface should be designed for someone who needs answers in minutes, not someone who wants to explore data for hours. Structured summaries, clear priorities, and drill-down only when needed.</p>
+<p><strong>Implementation guidance.</strong> The best system design is useless without a clear path to adoption. Look for products that include implementation roadmaps, configuration guides, and workflow templates — not just technical documentation.</p>
+<p><strong>Scope fit.</strong> Empire AI is designed for executives who need a unified view across the entire business. NexusOS is designed for organisations that want deeper departmental integration alongside executive oversight. Choose the scope that matches your current need — you can always expand later.</p>
+
+<h2>Getting Started</h2>
+<p>The most successful implementations start with a single function — typically financial reporting or project oversight — and expand as executives and teams become comfortable with the system. The goal isn't to automate decision-making. It's to ensure that when decisions need to be made, the people making them have the right information, at the right time, in a format that supports action.</p>`,
+  },
+
+  // ── PUBLISHED: Article 4 ──
+  {
+    slug: "ai-payment-verification-systems-explained",
+    title: "Building Trust in AI Payments: Verification Systems Explained",
+    description:
+      "AI payment verification prevents fraud by checking supplier details, confirming identities, and detecting anomalies before funds are released.",
+    category: "ai-payment-security",
+    readTime: 10,
+    linkedProducts: ["GuardianOS"],
+    seoTitle: "Building Trust in AI Payments: Verification Systems Explained — PrismBay",
+    metaDescription:
+      "AI payment verification prevents fraud by checking supplier details, confirming identities, and detecting anomalies before funds are released.",
+    bodyHtml: `<p>Payment fraud doesn't typically announce itself. It arrives in the form of an invoice that looks legitimate, a supplier bank detail change that seems routine, or a payment request that appears to come from a known executive. By the time the discrepancy is discovered — often weeks later, during reconciliation — the funds are gone.</p>
+<p>AI payment verification systems offer a structured defence against these threats. Rather than relying on manual checks or simple rule-based flags, they apply continuous verification across the payment lifecycle — checking supplier details, confirming identities, verifying approval authority, and detecting the subtle anomalies that indicate fraud.</p>
+<p>This article explains how these systems work, the verification layers they provide, and what finance leaders should consider when evaluating them.</p>
+
+<h2>The Payment Fraud Problem</h2>
+<p>Business payment fraud typically exploits gaps in verification processes. The most common attack patterns include:</p>
+<ul>
+  <li><strong>Supplier impersonation:</strong> A fraudster poses as a legitimate supplier and requests a change to bank account details. The finance team updates the record, and the next payment goes to the fraudster's account.</li>
+  <li><strong>Executive request fraud:</strong> A payment request appears to come from a senior executive — often with a sense of urgency and a plausible business context. Approval processes designed for standard transactions are bypassed.</li>
+  <li><strong>Invoice manipulation:</strong> A genuine invoice is intercepted and modified — often subtly, changing only the payment details while leaving the rest of the document intact.</li>
+  <li><strong>Duplicate payment:</strong> A legitimate invoice is submitted and paid, then resubmitted — either by error or by fraud — and paid again before the duplicate is detected.</li>
+</ul>
+<p>Traditional defences — segregation of duties, call-back verification, manager approval thresholds — help, but they're inconsistent. When payment volumes are high, when teams are under pressure, or when the fraud is sophisticated enough to mimic normal patterns, manual checks fail.</p>
+
+<h2>How AI Payment Verification Works</h2>
+<p>AI payment verification systems like <strong>GuardianOS</strong> add automated verification layers that operate consistently across every payment request — regardless of volume, timing, or apparent urgency.</p>
+
+<h3>Layer 1: Supplier Bank Detail Verification</h3>
+<p>Before any payment is released to a new or changed bank account, AI agents verify the account details against known records. This includes checking that the account exists, that it belongs to the named payee, and that it hasn't been flagged in fraud databases. For changed details, the system compares the new information against the previous record and flags any discrepancy for human review.</p>
+
+<h3>Layer 2: Identity Confirmation</h3>
+<p>For payment requests attributed to executives or other authorised approvers, AI agents verify the identity behind the request. This goes beyond checking that the email address matches — it examines communication patterns, timing, and contextual signals that indicate whether the request is genuine.</p>
+
+<h3>Layer 3: Approval Authority Verification</h3>
+<p>Every payment request is checked against the organisation's approval matrix. AI agents confirm that the approver has the appropriate authority level for the transaction amount, category, and supplier. Requests that fall outside authorised patterns are routed to the correct approver — not processed automatically.</p>
+
+<h3>Layer 4: Anomaly Detection</h3>
+<p>Beyond the individual verification layers, AI agents continuously monitor payment patterns across the organisation. Unusual payment amounts, new payees, changed payment timing, and atypical approval chains are flagged even when they pass individual verification checks. This is where AI adds value beyond rules-based systems: it identifies the patterns that don't match any predefined rule but are statistically anomalous.</p>
+
+<h3>Layer 5: Emergency Verification Workflows</h3>
+<p>When urgent payment requests arrive — the kind that fraudsters exploit to bypass normal processes — the system enforces a structured verification workflow rather than allowing standard controls to be overridden. Urgency doesn't disable verification; it activates a different, equally rigorous path.</p>
+
+<h2>Why Finance Teams Are Adopting These Systems</h2>
+<p>The case for AI payment verification is straightforward: the cost of a single successful payment fraud incident typically exceeds the cost of the verification system by a wide margin. But beyond direct fraud prevention, these systems address several operational challenges:</p>
+<p><strong>Audit trail completeness.</strong> Every verification decision — approval, rejection, escalation — is logged with the evidence that supported it. When auditors or regulators ask why a payment was approved, the answer is documented, not reconstructed from memory.</p>
+<p><strong>Team capacity.</strong> Manual verification is time-consuming and inconsistently applied. AI verification operates continuously and consistently, freeing finance teams to focus on the exceptions the system identifies rather than reviewing every transaction.</p>
+<p><strong>Supplier trust.</strong> When suppliers know that payment detail changes require structured verification, they're more likely to report suspicious activity promptly. The system becomes part of the supplier relationship, not just an internal control.</p>
+
+<h2>What to Look for in a Verification System</h2>
+<p>If your organisation is evaluating AI payment verification, here are the key criteria:</p>
+<p><strong>Verification depth.</strong> Does the system check more than just bank account numbers? Identity verification, approval authority confirmation, and behavioural anomaly detection distinguish comprehensive systems from basic ones.</p>
+<p><strong>False positive handling.</strong> Every verification system flags transactions for review. The question is what percentage of those flags are genuine concerns versus false positives that waste team time. Look for systems designed with clear escalation logic.</p>
+<p><strong>Integration with existing payment processes.</strong> The system should fit into your current payment workflow — not require you to redesign your entire finance operation around it.</p>
+<p><strong>Human-in-the-loop design.</strong> AI verification should support human decision-making, not replace it. The best systems present findings clearly and let people make the final call on flagged transactions.</p>
+<p><strong>Implementation support.</strong> Products like <strong>GuardianOS</strong>, available through PrismBay, include complete implementation plans, agent configuration guides, verification workflow templates, and security architecture documentation — not just a technical description of the system.</p>
+
+<h2>The Bottom Line</h2>
+<p>Payment verification isn't the most visible part of business operations — until it fails. AI-powered verification systems make prevention consistent, documented, and scalable. For finance leaders managing significant payment volumes or operating in industries where payment fraud risk is elevated, the investment is straightforward to justify: the system costs less than a single undetected fraud event.</p>`,
+  },
+
+  // ── PUBLISHED: Article 5 ──
+  {
+    slug: "compliance-automation-audit-ready",
+    title: "Compliance Automation: From Months of Prep to Audit-Ready in Days",
+    description:
+      "AI compliance automation collects, classifies, and maps evidence to controls continuously. Learn how teams go from months of manual prep to audit-ready.",
+    category: "ai-compliance",
+    readTime: 13,
+    linkedProducts: ["EvidenceFlow AI"],
+    seoTitle: "Compliance Automation: From Months of Prep to Audit-Ready in Days — PrismBay",
+    metaDescription:
+      "AI compliance automation collects, classifies, and maps evidence to controls continuously. Learn how teams go from months of manual prep to audit-ready.",
+    bodyHtml: `<p>For most organisations, compliance evidence collection follows a predictable and painful pattern: an audit is announced, the scramble begins, and the following weeks or months are spent locating documents, matching evidence to controls, and discovering — often too late — which records are missing.</p>
+<p>Compliance automation changes this by making evidence collection continuous rather than episodic. Instead of assembling audit files from scratch before every review, compliance teams maintain an organised, continuously updated evidence repository that's ready when the auditors arrive — whether that's next month, next quarter, or next week.</p>
+<p>Here's how AI-powered compliance automation works, what it replaces, and what implementation looks like in practice.</p>
+
+<h2>The Manual Compliance Process (and Why It Breaks)</h2>
+<p>To understand what automation replaces, it's worth mapping the traditional compliance evidence workflow:</p>
+<ol>
+  <li><strong>Evidence identification:</strong> Someone — usually a compliance analyst — works through the control framework (SOC 2, ISO 27001, GDPR, etc.) and identifies which documents, policies, screenshots, and records are needed to demonstrate each control.</li>
+  <li><strong>Evidence collection:</strong> The analyst requests evidence from system owners, department heads, and process managers across the organisation. These requests go into inboxes, compete with other priorities, and often require follow-up.</li>
+  <li><strong>Evidence organisation:</strong> Collected evidence is filed — sometimes in a shared drive, sometimes in a GRC platform, sometimes in an email folder. The relationship between each piece of evidence and the control it supports must be maintained manually.</li>
+  <li><strong>Gap identification:</strong> As evidence comes together, gaps become apparent — the access review that wasn't documented, the vendor assessment that expired, the policy that wasn't updated. These gaps trigger a second round of collection.</li>
+  <li><strong>Audit package assembly:</strong> Everything is compiled into a structured package for the auditor, with evidence mapped to controls and gaps explained. This step alone can take weeks.</li>
+</ol>
+<p>This process works — eventually — for most organisations. But it's expensive, disruptive, and produces a snapshot that starts going stale the moment it's assembled. The next audit cycle starts from essentially zero.</p>
+
+<h2>What AI Compliance Automation Does Differently</h2>
+<p>An AI compliance automation system like <strong>EvidenceFlow AI</strong> transforms this process by making evidence collection, classification, and mapping continuous rather than episodic.</p>
+
+<h3>Continuous Evidence Collection</h3>
+<p>Instead of requesting evidence when an audit is announced, AI agents continuously gather documents, policies, certificates, system records, and screenshots from connected systems. Access logs, change management records, vendor assessments, training completion reports — the evidence that demonstrates compliance is collected as it's generated, not months later.</p>
+
+<h3>Automated Classification</h3>
+<p>AI agents classify each collected item — identifying document type, associated control, relevant framework, and evidence date. This replaces the manual tagging and filing that consumes significant analyst time in the traditional process.</p>
+
+<h3>Control Mapping</h3>
+<p>Each piece of evidence is automatically mapped to the controls it supports — across multiple frameworks when applicable. A single access review document might support SOC 2, ISO 27001, and GDPR controls simultaneously. The system maintains these mappings, so when an auditor asks for evidence of a specific control, the relevant documents are immediately available.</p>
+
+<h3>Missing Evidence Tracking</h3>
+<p>Perhaps the most valuable capability: the system continuously identifies which controls lack sufficient evidence. Instead of discovering gaps during audit preparation — when time is short — compliance teams see missing evidence in real time and can address gaps as part of normal operations.</p>
+
+<h3>Audit-Ready Export</h3>
+<p>When an audit begins, the compliance team exports a structured evidence package — documents organised by control, with mapping, dates, and status clearly presented. What previously took weeks or months of preparation becomes a matter of review and export.</p>
+
+<h2>Which Compliance Frameworks This Works For</h2>
+<p>AI compliance automation supports any framework with defined controls and evidence requirements. The most common applications include:</p>
+<ul>
+  <li><strong>SOC 2:</strong> Trust Services Criteria mapping, automated evidence collection across security, availability, processing integrity, confidentiality, and privacy controls.</li>
+  <li><strong>ISO 27001:</strong> Information security management system evidence, including policy documentation, risk assessments, treatment plans, and control effectiveness measurements.</li>
+  <li><strong>GDPR:</strong> Data protection compliance evidence, including processing records, consent management, data subject request handling, and data protection impact assessments.</li>
+  <li><strong>Industry-specific frameworks:</strong> HIPAA for healthcare, PCI DSS for payment processing, FedRAMP for government cloud services — any framework where evidence must be maintained and demonstrated.</li>
+</ul>
+
+<h2>What Implementation Looks Like</h2>
+<p>Adopting compliance automation typically follows a structured path:</p>
+<p><strong>Week 1–2: Framework configuration.</strong> Map your compliance frameworks into the system, define controls and evidence requirements, and configure the agent roles and classification rules.</p>
+<p><strong>Week 2–4: System connection.</strong> Connect the systems that generate compliance evidence — identity providers, cloud platforms, HR systems, vendor management tools, document repositories. This is where continuous collection begins.</p>
+<p><strong>Week 4–6: Initial evidence baseline.</strong> The system collects and classifies existing evidence, maps it to controls, and identifies gaps. This first pass often reveals missing evidence that the organisation didn't know was missing.</p>
+<p><strong>Ongoing: Continuous operation.</strong> AI agents monitor for new evidence, update classifications, track control status, and maintain audit readiness. The compliance team shifts from evidence collection to gap resolution and process improvement.</p>
+
+<h2>Common Concerns</h2>
+<p><strong>"Will this replace compliance analysts?"</strong><br />No. Compliance automation handles evidence collection, classification, and mapping — the repetitive, high-volume work. Compliance analysts focus on gap resolution, control design, stakeholder communication, and the judgement-intensive work that requires human expertise.</p>
+<p><strong>"What if we use multiple frameworks?"</strong><br />Modern compliance automation systems support multiple frameworks simultaneously, with evidence mapped to all applicable controls. This is one of the strongest arguments for automation: when a single piece of evidence supports five controls across three frameworks, maintaining those mappings manually is error-prone.</p>
+<p><strong>"How do we get started?"</strong><br />Products like <strong>EvidenceFlow AI</strong> include complete implementation roadmaps, agent configuration guides, compliance templates, and evidence collection workflows. The product provides the system design — your team provides the domain expertise and organisational context to put it into practice.</p>
+
+<h2>The Bottom Line</h2>
+<p>Compliance automation doesn't eliminate the work of compliance — it eliminates the scramble. For organisations that face regular audits, operate under multiple frameworks, or simply want to reduce the overhead of manual evidence management, the shift from episodic preparation to continuous readiness is one of the highest-ROI applications of AI to business operations.</p>
+<p>The technology exists. The implementation plans are available. The question is whether your compliance team is ready to stop rebuilding the evidence file from scratch before every audit.</p>`,
+  },
+
+  // ──────────── STUBS (remaining 25) ────────────
+
+  {
+    slug: "ai-business-systems-vs-saas",
+    title: "AI Business Systems vs. Traditional SaaS: What's the Difference?",
+    description:
+      "Traditional SaaS gives you a tool; an AI business system gives you the entire operating model. We break down the architectural, operational, and commercial differences that matter for builders.",
+    category: "ai-business-systems",
+    readTime: 9,
+    linkedProducts: ["Genesis Platform", "Empire AI"],
+  },
+  {
+    slug: "how-to-evaluate-ai-business-blueprints",
+    title: "How to Evaluate an AI Business Blueprint Before You Buy",
+    description:
+      "Not all blueprints are created equal. Learn the six criteria we use at PrismBay to evaluate products — from demo quality to revenue model viability to implementation feasibility.",
+    category: "ai-business-systems",
+    readTime: 8,
+    linkedProducts: [],
+  },
+  // AI Operations
+  {
+    slug: "department-automation-workflows",
+    title: "Department Automation Workflows That Actually Work",
+    description:
+      "Most department automation projects fail because they automate the wrong things. Learn which workflows deliver the highest ROI when automated with AI agents.",
+    category: "ai-operations",
+    readTime: 11,
+    linkedProducts: ["NexusOS"],
+  },
+  {
+    slug: "multi-agent-coordination-patterns",
+    title: "Multi-Agent Coordination: Patterns for AI Workforce Management",
+    description:
+      "When you have multiple AI agents working together, coordination becomes the bottleneck. Explore three proven patterns for agent orchestration and task routing.",
+    category: "ai-operations",
+    readTime: 10,
+    linkedProducts: ["Digital Humans", "Empire AI"],
+  },
+  // AI Compliance (1 stub remains)
+  {
+    slug: "regulatory-landscape-ai-business-2026",
+    title: "The Regulatory Landscape for AI Businesses in 2026",
+    description:
+      "From the EU AI Act to emerging U.S. state-level requirements, here's what every AI business builder needs to know about the current regulatory environment.",
+    category: "ai-compliance",
+    readTime: 9,
+    linkedProducts: ["GuardianOS", "EvidenceFlow AI"],
+  },
+  {
+    slug: "building-trust-through-compliance",
+    title: "Building Customer Trust Through Proactive Compliance",
+    description:
+      "Compliance isn't just about avoiding fines — it's a competitive advantage. Learn how transparent compliance practices can become your strongest marketing asset.",
+    category: "ai-compliance",
+    readTime: 7,
+    linkedProducts: ["EvidenceFlow AI"],
+  },
+  // AI Procurement (2 stubs remain)
+  {
+    slug: "procurement-savings-ai-driven",
+    title: "How AI-Driven Procurement Finds Savings Humans Miss",
+    description:
+      "AI procurement tools analyse spending patterns across thousands of transactions to surface savings opportunities that even experienced procurement teams overlook.",
+    category: "ai-procurement",
+    readTime: 8,
+    linkedProducts: ["SpendShield AI"],
+  },
+  {
+    slug: "supplier-health-monitoring",
+    title: "Continuous Supplier Health Monitoring with AI",
+    description:
+      "Instead of annual supplier reviews, AI enables real-time monitoring of financial health, compliance status, and operational performance across your entire supply chain.",
+    category: "ai-procurement",
+    readTime: 10,
+    linkedProducts: ["SpendShield AI"],
+  },
+  // AI Workforce
+  {
+    slug: "virtual-employee-platforms-explained",
+    title: "Virtual Employee Platforms: The Next Evolution of AI Workforce",
+    description:
+      "Virtual employees aren't chatbots — they're AI agents with defined roles, workflows, and performance metrics. Learn how virtual employee platforms are reshaping enterprise operations.",
+    category: "ai-workforce",
+    readTime: 15,
+    linkedProducts: ["Digital Humans"],
+  },
+  {
+    slug: "managing-human-ai-teams",
+    title: "Managing Hybrid Human-AI Teams: Best Practices",
+    description:
+      "The most effective organisations in 2026 aren't replacing humans with AI — they're building hybrid teams. Here's how to manage them effectively.",
+    category: "ai-workforce",
+    readTime: 12,
+    linkedProducts: ["Digital Humans", "Empire AI"],
+  },
+  {
+    slug: "ai-agent-onboarding",
+    title: "Onboarding AI Agents: A Framework for Success",
+    description:
+      "Just like human employees, AI agents need onboarding — role definition, access provisioning, performance expectations, and escalation paths. Here's a practical framework.",
+    category: "ai-workforce",
+    readTime: 9,
+    linkedProducts: ["Digital Humans"],
+  },
+  // AI Payment Security (2 stubs remain)
+  {
+    slug: "trust-escrow-ai-transactions",
+    title: "Trust Escrow for AI-Mediated Transactions",
+    description:
+      "As AI agents handle more transactions autonomously, trust escrow systems provide a crucial safety layer — verifying, holding, and releasing payments based on verified outcomes.",
+    category: "ai-payment-security",
+    readTime: 11,
+    linkedProducts: ["GuardianOS"],
+  },
+  {
+    slug: "secure-payment-architecture",
+    title: "Designing a Secure Payment Architecture for AI Platforms",
+    description:
+      "AI platforms have unique payment security requirements — from agent-initiated transactions to usage-based billing. Learn the architectural patterns that keep payments safe.",
+    category: "ai-payment-security",
+    readTime: 13,
+    linkedProducts: ["GuardianOS", "Nexus Network"],
+  },
+  // AI App Development
+  {
+    slug: "no-code-ai-app-builders",
+    title: "No-Code AI App Builders: Build Without Engineering",
+    description:
+      "No-code AI app builders let domain experts create AI-powered applications without writing code. We compare the leading platforms and architectural approaches.",
+    category: "ai-app-development",
+    readTime: 12,
+    linkedProducts: ["Genesis Platform"],
+  },
+  {
+    slug: "from-blueprint-to-production",
+    title: "From Blueprint to Production: The AI App Development Lifecycle",
+    description:
+      "Having a blueprint is step one. This guide walks through the full lifecycle: environment setup, agent integration, testing, deployment, and monitoring.",
+    category: "ai-app-development",
+    readTime: 16,
+    linkedProducts: ["Genesis Platform", "Empire AI"],
+  },
+  {
+    slug: "api-first-ai-architecture",
+    title: "API-First Architecture for AI Business Applications",
+    description:
+      "An API-first approach to AI app development ensures your agents, workflows, and data pipelines remain composable and future-proof. Here's the architectural blueprint.",
+    category: "ai-app-development",
+    readTime: 10,
+    linkedProducts: ["Genesis Platform"],
+  },
+  // Digital Transformation
+  {
+    slug: "ai-native-business-transformation",
+    title: "The AI-Native Business Transformation Playbook",
+    description:
+      "Digital transformation was about moving to the cloud. AI-native transformation is about rebuilding around intelligent agents. This playbook covers the strategy, people, and technology dimensions.",
+    category: "digital-transformation",
+    readTime: 18,
+    linkedProducts: ["NexusOS", "Empire AI", "Digital Humans"],
+  },
+  {
+    slug: "legacy-to-ai-native-migration",
+    title: "Migrating from Legacy Systems to AI-Native Architecture",
+    description:
+      "You don't have to rip and replace. Learn a phased approach to migrating legacy business processes to AI-native systems — starting with the highest-ROI workflows.",
+    category: "digital-transformation",
+    readTime: 14,
+    linkedProducts: ["Nexus One", "NexusOS"],
+  },
+  {
+    slug: "measuring-ai-transformation-roi",
+    title: "Measuring ROI on AI Transformation Initiatives",
+    description:
+      "How do you measure the return on AI transformation? We present a framework covering efficiency gains, revenue uplift, risk reduction, and competitive positioning.",
+    category: "digital-transformation",
+    readTime: 11,
+    linkedProducts: [],
+  },
+  // Business Automation
+  {
+    slug: "end-to-end-business-automation",
+    title: "End-to-End Business Automation: Beyond Task Automation",
+    description:
+      "Task automation tools handle individual steps. End-to-end business automation orchestrates entire processes across departments — here's the architectural difference.",
+    category: "business-automation",
+    readTime: 13,
+    linkedProducts: ["NexusOS", "Empire AI"],
+  },
+  {
+    slug: "automating-finance-operations",
+    title: "Automating Finance Operations with AI Agents",
+    description:
+      "From invoice processing to reconciliation to financial reporting, AI agents are transforming finance operations. Learn the workflows with the highest automation potential.",
+    category: "business-automation",
+    readTime: 10,
+    linkedProducts: ["SpendShield AI", "NexusOS"],
+  },
+  {
+    slug: "intelligent-workflow-orchestration",
+    title: "Intelligent Workflow Orchestration: Patterns and Anti-Patterns",
+    description:
+      "Orchestrating AI-powered workflows requires different patterns than traditional BPM. We cover the patterns that work — and the anti-patterns that create bottlenecks.",
+    category: "business-automation",
+    readTime: 12,
+    linkedProducts: ["NexusOS", "Genesis Platform"],
+  },
+  // Product Comparisons
+  {
+    slug: "nexusos-vs-genesis-platform",
+    title: "NexusOS vs. Genesis Platform: Which AI Business System Is Right for You?",
+    description:
+      "NexusOS is a complete business operating system; Genesis Platform is an AI app builder. We compare them across architecture, use cases, complexity, and ideal buyer profiles.",
+    category: "product-comparisons",
+    readTime: 10,
+    linkedProducts: ["NexusOS", "Genesis Platform"],
+  },
+  {
+    slug: "digital-humans-vs-traditional-rpa",
+    title: "Digital Humans vs. Traditional RPA: A Comprehensive Comparison",
+    description:
+      "RPA automates repetitive tasks; Digital Humans provide intelligent, role-based AI workers. Understand the capabilities, limitations, and best use cases for each approach.",
+    category: "product-comparisons",
+    readTime: 9,
+    linkedProducts: ["Digital Humans"],
+  },
+  {
+    slug: "spendshield-vs-guardianos",
+    title: "SpendShield AI vs. GuardianOS: Procurement Intelligence or Payment Security?",
+    description:
+      "Both products operate in the financial operations space but solve different problems. Learn which one matches your business needs — and when you might need both.",
+    category: "product-comparisons",
+    readTime: 8,
+    linkedProducts: ["SpendShield AI", "GuardianOS"],
+  },
+];
+
+/** Look up an article by slug. Returns undefined if not found. */
+export function getArticleBySlug(slug: string): Article | undefined {
+  return ARTICLES.find((a) => a.slug === slug);
+}
+
+/** Check whether an article is published (has full body content). */
+export function isPublished(article: Article): boolean {
+  return article.bodyHtml !== undefined && article.bodyHtml.length > 0;
+}
