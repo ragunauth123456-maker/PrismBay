@@ -126,7 +126,9 @@ function FAQItem({ faq, defaultOpen }: { faq: FAQ; defaultOpen: boolean }) {
         className="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-neutral-800 hover:bg-neutral-50 transition-colors"
       >
         {faq.question}
-        <ChevronDownIcon />
+        <span className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
+          <ChevronDownIcon />
+        </span>
       </button>
       {open && (
         <div className="px-5 pb-4 text-sm text-neutral-500 leading-relaxed">
@@ -253,97 +255,103 @@ function ProductPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="bg-white border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 py-10 lg:py-16">
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-            {/* Left: Demo video */}
-            <div className="aspect-video rounded-xl bg-neutral-100 overflow-hidden shadow-sm">
-              <iframe
-                src={product.demoVideoUrl}
-                title={`${product.name} demo`}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-
-            {/* Right: Product info */}
-            <div className="flex flex-col justify-center">
+      {/* Hero Section — Navy */}
+      <section className="bg-navy-900 border-b border-navy-700">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:py-20">
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+            {/* Left: Product info + pricing + CTA */}
+            <div className="flex flex-col justify-center order-2 lg:order-1">
               <div className="mb-3">
-                <span className="inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
+                <span className="inline-block rounded-full bg-navy-800 px-3 py-1 text-xs font-medium text-brand-300">
                   {product.category}
                 </span>
-                <span className="ml-2 inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                  Save {product.discountPercent}%
-                </span>
               </div>
-
-              <h1 className="text-3xl font-bold tracking-tight text-neutral-800 lg:text-4xl">
+              <h1 className="text-3xl font-bold tracking-tight text-white lg:text-4xl">
                 {product.name}
               </h1>
-              <p className="mt-2 text-lg text-brand-600 font-medium">{product.tagline}</p>
-
+              <p className="mt-2 text-lg text-neutral-300">{product.tagline}</p>
               <div className="mt-3">
                 <StarRating rating={product.rating} count={product.reviewCount} />
               </div>
-
-              <p className="mt-5 text-neutral-600 leading-relaxed">{product.longDescription}</p>
-
+              <p className="mt-5 text-neutral-300 leading-relaxed">{product.longDescription}</p>
               {/* Launch Pricing */}
-              <div className="mt-6 rounded-xl border-2 border-amber-200 bg-amber-50/50 p-5">
-                <div className="mb-2 flex items-center gap-2"><CountdownTimer variant="compact" /></div>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-4xl font-bold text-brand-600">${product.launchPrice}</span>
+              <div className="mt-6 rounded-xl border border-navy-700 bg-navy-800/60 p-5">
+                <div className="mb-2"><CountdownTimer variant="hero" /></div>
+                <div className="flex items-baseline gap-3 mt-3">
+                  <span className="text-2xl font-bold text-white">${product.launchPrice}</span>
                   <span className="text-lg text-neutral-400 line-through">${product.regularPrice}</span>
-                  <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-sm font-semibold text-amber-700">
+                  <span className="rounded-full bg-amber-100/20 px-2.5 py-0.5 text-sm font-semibold text-amber-300">
                     Save {product.discountPercent}%
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-neutral-500">
+                <p className="mt-2 text-xs text-neutral-400">
                   Introductory pricing — 30 days only. After that, regular price of ${product.regularPrice} applies.
                 </p>
               </div>
-
               {/* CTA */}
-              <div className="mt-5 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => handlePurchase(product.slug)}
                   disabled={checkoutLoading}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
                 >
-                  {checkoutLoading ? "Redirecting to Stripe..." : product.ctaText}
+                  {checkoutLoading ? "Redirecting to Stripe..." : `Purchase Now — $${product.launchPrice}`}
                 </button>
+                <a
+                  href="#demo"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300/50 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:bg-white/10 active:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+                >
+                  Watch Demo
+                </a>
               </div>
-
               <p className="mt-3 text-xs text-neutral-400">
                 Secure payment via Stripe. Instant delivery. Single-business licence.
-              <TrustBadges className="mt-4" />
               </p>
-
+              <TrustBadges className="mt-4" />
               {/* Bundle Callout */}
               {bundle && (
-                <div className="mt-5 rounded-lg border border-brand-200 bg-brand-50/50 p-4">
-                  <p className="text-sm font-semibold text-brand-700">
+                <div className="mt-5 rounded-lg border border-navy-700 bg-navy-800/40 p-4">
+                  <p className="text-sm font-semibold text-brand-300">
                     💰 Also available in the {bundle.name}
                   </p>
-                  <p className="mt-1 text-xs text-brand-600">
+                  <p className="mt-1 text-xs text-neutral-300">
                     Get {bundle.productNames.join(", ")} for ${bundle.launchPrice.toLocaleString()} — save ${bundle.saving.toLocaleString()}
                   </p>
                   <Link
                     to="/products"
                     search={{ category: "bundles" }}
-                    className="mt-2 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
+                    className="mt-2 inline-block text-xs font-semibold text-brand-300 hover:text-brand-200"
                   >
                     View bundles →
                   </Link>
                 </div>
               )}
             </div>
+            {/* Right: Product image (falls back to demo on error) */}
+            <div className="order-1 lg:order-2">
+              <img
+                src={`/images/products/${product.slug}.png`}
+                alt={`${product.name} product image`}
+                className="w-full max-w-sm mx-auto rounded-xl shadow-2xl shadow-navy-950/50"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = "none";
+                }}
+              />
+              {/* Demo video (linked from Watch Demo button) */}
+              <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl">
+                <iframe
+                  src={product.demoVideoUrl}
+                  title={`${product.name} demo`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
-
       {/* Features Section */}
       <section className="bg-neutral-50">
         <div className="mx-auto max-w-7xl px-6 py-14">
@@ -468,42 +476,43 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
 
-      <div className="bg-white border-b border-neutral-200">
+      {/* Breadcrumb */}
+      <div className="bg-navy-900 border-b border-navy-700">
         <div className="mx-auto max-w-7xl px-6 py-4">
           <nav className="flex items-center gap-2 text-sm text-neutral-400">
-            <Link to="/" className="hover:text-neutral-600 transition-colors">Home</Link>
+            <Link to="/" className="hover:text-neutral-300 transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/products" className="hover:text-neutral-600 transition-colors">Products</Link>
+            <Link to="/products" className="hover:text-neutral-300 transition-colors">Products</Link>
             <span>/</span>
-            <Link to="/products" search={{ category: "bundles" }} className="hover:text-neutral-600 transition-colors">Bundles</Link>
+            <Link to="/products" search={{ category: "bundles" }} className="hover:text-neutral-300 transition-colors">Bundles</Link>
             <span>/</span>
-            <span className="text-neutral-600 font-medium">{bundle.name}</span>
+            <span className="text-neutral-200 font-medium">{bundle.name}</span>
           </nav>
         </div>
       </div>
-
-      <section className="bg-white border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 py-10 lg:py-16">
+      {/* Hero Section — Navy */}
+      <section className="bg-navy-900 border-b border-navy-700">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:py-20">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 mb-3">Bundle</span>
-            <h1 className="text-3xl font-bold tracking-tight text-neutral-800 lg:text-4xl">{bundle.name}</h1>
-            <p className="mt-3 text-lg text-neutral-500">{bundle.description}</p>
-
-            <div className="mt-8 rounded-xl border-2 border-amber-200 bg-amber-50/50 p-6">
-              <p className="text-sm font-medium text-neutral-500">Regular combined price</p>
+            <span className="inline-block rounded-full bg-navy-800 px-3 py-1 text-xs font-semibold text-brand-300 mb-3">Bundle</span>
+            <h1 className="text-3xl font-bold tracking-tight text-white lg:text-4xl">{bundle.name}</h1>
+            <p className="mt-3 text-lg text-neutral-300">{bundle.description}</p>
+            {/* Pricing Box */}
+            <div className="mt-8 rounded-xl border border-navy-700 bg-navy-800/60 p-6">
+              <div className="mb-2 flex justify-center"><CountdownTimer variant="hero" /></div>
+              <p className="mt-4 text-sm font-medium text-neutral-400">Regular combined price</p>
               <p className="text-2xl text-neutral-400 line-through">${bundle.regularCombined.toLocaleString()}</p>
               <div className="mt-3 flex items-baseline justify-center gap-3">
-                <span className="text-5xl font-bold text-brand-600">${bundle.launchPrice.toLocaleString()}</span>
+                <span className="text-5xl font-bold text-white">${bundle.launchPrice.toLocaleString()}</span>
               </div>
-              <div className="mt-2 flex justify-center"><CountdownTimer variant="compact" /></div>
-              <p className="mt-2 text-lg font-semibold text-brand-700">You save ${bundle.saving.toLocaleString()}</p>
-              <p className="mt-1 text-xs text-neutral-500">
+              <p className="mt-2 text-lg font-semibold text-amber-300">You save ${bundle.saving.toLocaleString()}</p>
+              <p className="mt-1 text-xs text-neutral-400">
                 Introductory pricing — 30 days only.
               </p>
               <button
                 onClick={() => handleBundlePurchase(bundle.slug)}
                 disabled={bundleCheckoutLoading}
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
               >
                 {bundleCheckoutLoading ? "Redirecting to Stripe..." : `Get All ${bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer`}
               </button>
@@ -513,7 +522,6 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
           </div>
         </div>
       </section>
-
       {/* Bundle product list */}
       <section className="bg-neutral-50">
         <div className="mx-auto max-w-7xl px-6 py-14">
