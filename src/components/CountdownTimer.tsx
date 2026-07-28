@@ -28,17 +28,17 @@ function pad(n: number): string {
 
 interface CountdownTimerProps {
   /** Render as a compact inline string like "27d 14h 32m 07s" */
-  variant?: "compact" | "banner";
+  variant?: "compact" | "banner" | "hero";
   className?: string;
 }
 
-function TimeBlock({ value, label }: { value: string; label: string }) {
+function TimeBlock({ value, label, dark }: { value: string; label: string; dark?: boolean }) {
   return (
     <div className="flex flex-col items-center">
-      <span className="text-2xl sm:text-3xl font-bold text-neutral-800 tabular-nums leading-none">
+      <span className={`text-2xl sm:text-3xl font-bold tabular-nums leading-none ${dark ? "text-white" : "text-neutral-800"}`}>
         {value}
       </span>
-      <span className="text-[10px] sm:text-xs font-medium text-neutral-400 uppercase tracking-wider mt-1">
+      <span className={`text-[10px] sm:text-xs font-medium uppercase tracking-wider mt-1 ${dark ? "text-brand-300" : "text-neutral-400"}`}>
         {label}
       </span>
     </div>
@@ -63,16 +63,17 @@ export default function CountdownTimer({ variant = "compact", className = "" }: 
     );
   }
 
-  if (variant === "banner") {
+  if (variant === "banner" || variant === "hero") {
+    const dark = variant === "hero";
     return (
-      <div className={`flex items-center justify-center gap-3 sm:gap-5 ${className}`}>
-        <TimeBlock value={pad(timeLeft.days)} label="Days" />
-        <span className="text-2xl font-light text-neutral-300">:</span>
-        <TimeBlock value={pad(timeLeft.hours)} label="Hours" />
-        <span className="text-2xl font-light text-neutral-300">:</span>
-        <TimeBlock value={pad(timeLeft.minutes)} label="Minutes" />
-        <span className="text-2xl font-light text-neutral-300">:</span>
-        <TimeBlock value={pad(timeLeft.seconds)} label="Seconds" />
+      <div className={`flex items-center gap-3 sm:gap-5 ${className}`}>
+        <TimeBlock value={pad(timeLeft.days)} label="Days" dark={dark} />
+        <span className={`text-2xl font-light ${dark ? "text-neutral-500" : "text-neutral-300"}`}>:</span>
+        <TimeBlock value={pad(timeLeft.hours)} label="Hours" dark={dark} />
+        <span className={`text-2xl font-light ${dark ? "text-neutral-500" : "text-neutral-300"}`}>:</span>
+        <TimeBlock value={pad(timeLeft.minutes)} label="Minutes" dark={dark} />
+        <span className={`text-2xl font-light ${dark ? "text-neutral-500" : "text-neutral-300"}`}>:</span>
+        <TimeBlock value={pad(timeLeft.seconds)} label="Seconds" dark={dark} />
       </div>
     );
   }
