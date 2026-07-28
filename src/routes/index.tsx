@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { PRODUCTS } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 
@@ -57,14 +57,6 @@ const CATEGORIES = [
 
 
 
-/* ─── Compute aggregate stats ─── */
-function computeAggregateStats() {
-  const totalReviews = PRODUCTS.reduce((sum, p) => sum + p.reviewCount, 0);
-  const avgRating =
-    PRODUCTS.reduce((sum, p) => sum + p.rating * p.reviewCount, 0) / totalReviews;
-  return { totalReviews, avgRating };
-}
-
 /* ─── Inline SVG Icons ─── */
 function StarIcon({ filled }: { filled: boolean }) {
   return (
@@ -75,6 +67,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  if (rating === 0 || count === 0) {
+    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+  }
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
@@ -424,7 +419,7 @@ function HeroSection() {
               Complete AI Business Systems. No Starting From Zero.
             </h1>
             <p className="mt-6 text-lg text-neutral-300 sm:text-xl">
-              Detailed workflows, architecture, revenue models, and implementation plans — each with a real product demo and verified buyer reviews. Launch pricing available for a limited time.
+              Detailed workflows, architecture, revenue models, and implementation plans — ready to evaluate, plan, and launch. Launch pricing available for a limited time.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
@@ -507,16 +502,14 @@ function HeroSection() {
   );
 }
 
-/* ─── Trust Panel (P0 — 5-column grid, computed stats) ─── */
+/* ─── Trust Panel (P0 — 5-column grid, honest pre-launch stats) ─── */
 function TrustPanel() {
-  const { totalReviews, avgRating } = useMemo(() => computeAggregateStats(), []);
-
   const trustSignals = [
     { icon: StripeIcon, label: "Secure checkout via Stripe" },
-    { icon: StarIcon, label: `${avgRating.toFixed(1)} ★ average · ${totalReviews}+ reviews`, isStat: true },
+    { icon: BoxIcon, label: "9 AI business systems" },
     { icon: DownloadIcon, label: "Instant access after purchase" },
     { icon: LicenceIcon, label: "Clear single-business licence" },
-    { icon: ClockIcon, label: "30-day access guarantee" },
+    { icon: ClockIcon, label: "30-day launch pricing" },
   ];
 
   return (
@@ -526,35 +519,16 @@ function TrustPanel() {
           {trustSignals.map((signal, i) => (
             <div key={i} className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50">
-                {signal.isStat ? (
-                  <SignalStarIcon />
-                ) : (
-                  <signal.icon />
-                )}
+                <signal.icon />
               </div>
               <span className="text-sm text-neutral-700">
-                {signal.isStat ? (
-                  <>
-                    <span className="font-semibold text-neutral-900">{avgRating.toFixed(1)} ★</span>{" "}
-                    <span className="text-neutral-600">average · {totalReviews}+ reviews</span>
-                  </>
-                ) : (
-                  signal.label
-                )}
+                {signal.label}
               </span>
             </div>
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function SignalStarIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="#F59E0B" aria-hidden="true">
-      <path d="M8 1.5l1.76 4.86 5.17.24-4.1 3.17 1.34 5-4.17-3.08-4.17 3.08 1.34-5-4.1-3.17 5.17-.24L8 1.5z" />
-    </svg>
   );
 }
 
@@ -723,7 +697,7 @@ function FeaturedProducts() {
 function HowItWorks() {
   const steps = [
     { number: 1, title: "Browse & discover", description: "Search or explore by category to find complete AI business systems with detailed workflows and architecture." },
-    { number: 2, title: "See before you buy", description: "Watch a real demo, check all included features, and read reviews from verified buyers." },
+    { number: 2, title: "See before you buy", description: "Review the complete feature breakdown, technical architecture, and FAQ for every product before you decide." },
     { number: 3, title: "Instant access", description: "Check out with Stripe and download immediately. Your account is created automatically with full purchase history." },
   ];
 

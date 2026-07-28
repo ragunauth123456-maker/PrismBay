@@ -64,8 +64,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 25,
     category: "AI Business Systems",
     categorySlug: "ai-business-systems",
-    rating: 4.9,
-    reviewCount: 42,
+    rating: 0,
+    reviewCount: 0,
     description:
       "NexusOS provides a complete plan for building an intelligent operating system for an entire business — connecting finance, HR, sales, marketing, procurement, operations, compliance, customer service, and project management.",
     longDescription:
@@ -129,8 +129,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 25,
     category: "AI Business Systems",
     categorySlug: "ai-business-systems",
-    rating: 4.8,
-    reviewCount: 38,
+    rating: 0,
+    reviewCount: 0,
     description:
       "Nexus One provides small and medium-sized businesses with a practical AI operating system — bringing customers, sales, tasks, projects, expenses, team activity, and business reports into one connected workspace.",
     longDescription:
@@ -194,8 +194,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 27,
     category: "AI Business Systems",
     categorySlug: "ai-business-systems",
-    rating: 4.7,
-    reviewCount: 29,
+    rating: 0,
+    reviewCount: 0,
     description:
       "Empire AI provides executives and business owners with one command platform for monitoring company performance — financial results, operations, workforce, projects, risks, forecasts, and strategic priorities.",
     longDescription:
@@ -259,8 +259,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 27,
     category: "AI Business Systems",
     categorySlug: "ai-business-systems",
-    rating: 4.8,
-    reviewCount: 34,
+    rating: 0,
+    reviewCount: 0,
     description:
       "Nexus Network provides a complete plan for building an AI-powered business collaboration marketplace — connecting businesses, professionals, service providers, and AI teams through intelligent matching and structured workflows.",
     longDescription:
@@ -323,8 +323,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 24,
     category: "AI Business Systems",
     categorySlug: "ai-business-systems",
-    rating: 4.8,
-    reviewCount: 31,
+    rating: 0,
+    reviewCount: 0,
     description:
       "Digital Humans provides a complete platform plan for building and managing virtual AI employees — deployed across customer support, sales, marketing, finance, administration, research, operations, and project management.",
     longDescription:
@@ -387,8 +387,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 29,
     category: "AI Development",
     categorySlug: "ai-development",
-    rating: 4.9,
-    reviewCount: 27,
+    rating: 0,
+    reviewCount: 0,
     description:
       "Genesis Platform provides a complete plan for building an AI-powered business application builder — describe the app you need, select templates, configure workflows, add AI agents, connect data, and publish.",
     longDescription:
@@ -451,8 +451,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 26,
     category: "Trust & Compliance",
     categorySlug: "trust-compliance",
-    rating: 4.9,
-    reviewCount: 36,
+    rating: 0,
+    reviewCount: 0,
     description:
       "GuardianOS provides a structured AI trust and payment-verification system — reviewing payment requests, verifying supplier details, checking identities, confirming approval authority, and blocking high-risk transactions.",
     longDescription:
@@ -516,8 +516,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 29,
     category: "Trust & Compliance",
     categorySlug: "trust-compliance",
-    rating: 4.7,
-    reviewCount: 23,
+    rating: 0,
+    reviewCount: 0,
     description:
       "SpendShield AI provides a complete procurement intelligence system focused on cost control and supplier risk — reviewing spending, comparing suppliers, analyzing contracts, and identifying savings opportunities.",
     longDescription:
@@ -581,8 +581,8 @@ export const PRODUCTS: Product[] = [
     discountPercent: 29,
     category: "Trust & Compliance",
     categorySlug: "trust-compliance",
-    rating: 4.8,
-    reviewCount: 21,
+    rating: 0,
+    reviewCount: 0,
     description:
       "EvidenceFlow AI provides a complete system for collecting, organizing, and mapping compliance evidence — gathering documents, policies, certificates, and records, then connecting them to controls and preparing organized audit files.",
     longDescription:

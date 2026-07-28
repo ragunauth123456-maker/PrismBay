@@ -15,7 +15,7 @@ export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
       { title: "AI Business Systems Marketplace — PrismBay" },
-      { name: "description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Watch demos, read reviews, buy instantly." },
+      { name: "description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Instant access, launch pricing available." },
       { property: "og:url", content: "https://prismbay.com/products" },
     ],
     links: [
@@ -44,7 +44,6 @@ const SORT_OPTIONS = [
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
   { value: "discount", label: "Biggest Savings" },
-  { value: "rating", label: "Highest Rated" },
 ];
 
 const ITEMS_PER_PAGE = 6;
@@ -59,6 +58,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  if (rating === 0 || count === 0) {
+    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+  }
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
@@ -443,12 +445,6 @@ function ProductsPage() {
         break;
       case "discount":
         results.sort((a, b) => b.discountPercent - a.discountPercent);
-        break;
-      case "rating":
-        results.sort((a, b) => b.rating - a.rating);
-        break;
-      case "popular":
-        results.sort((a, b) => b.reviewCount - a.reviewCount);
         break;
     }
 

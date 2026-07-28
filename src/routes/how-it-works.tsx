@@ -72,8 +72,8 @@ const STEPS = [
   {
     number: 2,
     title: "See Before You Buy",
-    description: "Watch a real demo video for every product. Read verified reviews from buyers who have purchased and used the blueprints. Check the full feature breakdown and FAQ section so you know exactly what you're getting.",
-    details: "Our demo-first philosophy means you make informed decisions. No mystery boxes, no vague promises — just clear, detailed product presentations with real customer feedback from verified purchasers.",
+    description: "Review the complete feature breakdown, technical architecture, and FAQ section so you know exactly what you're getting.",
+    details: "Our transparency-first philosophy means you make informed decisions. No mystery boxes, no vague promises — just clear, detailed product presentations with complete feature breakdowns and pricing.",
   },
   {
     number: 3,
@@ -86,7 +86,6 @@ const STEPS = [
 const TRUST_SIGNALS = [
   "Secure checkout via Stripe",
   "Instant delivery after purchase",
-  "Verified reviews from real buyers",
   "14-day money-back guarantee",
   "Clear licence terms included",
   "Editable source files included",
