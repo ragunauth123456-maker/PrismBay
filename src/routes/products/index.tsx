@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { PRODUCTS, BUNDLES, CATEGORY_MAP, calculateLaunchDeadline } from "~/data/products";
+import { PRODUCTS, BUNDLES, CATEGORY_MAP } from "~/data/products";
+import CountdownTimer from "~/components/CountdownTimer";
 
 /* ─── Search params type ─── */
 type ProductSearch = {
@@ -17,8 +18,6 @@ export const Route = createFileRoute("/products/")({
   }),
   component: ProductsPage,
 });
-
-const LAUNCH_DEADLINE = calculateLaunchDeadline();
 
 /* ─── Categories with bundle option ─── */
 const CATEGORIES = [
@@ -484,9 +483,12 @@ function ProductsPage() {
               </p>
             </div>
           </div>
-          <p className="mt-2 text-xs text-neutral-400">
-            Introductory launch pricing ends {LAUNCH_DEADLINE}. After that, regular prices apply.
-          </p>
+          <div className="mt-3 flex items-center gap-4">
+            <CountdownTimer variant="compact" />
+            <p className="text-xs text-neutral-400">
+              Introductory launch pricing — 30 days only. After that, regular prices apply.
+            </p>
+          </div>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PRODUCTS, calculateLaunchDeadline } from "~/data/products";
+import { PRODUCTS } from "~/data/products";
+import CountdownTimer from "~/components/CountdownTimer";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -44,8 +45,6 @@ const REVIEWS = [
     initials: "MC",
   },
 ];
-
-const LAUNCH_DEADLINE = calculateLaunchDeadline();
 
 /* ─── Inline SVG Icons ─── */
 function StarIcon({ filled }: { filled: boolean }) {
@@ -201,9 +200,11 @@ function HeroSection() {
               How it works
             </Link>
           </div>
-          <p className="mt-4 text-xs text-neutral-400">
-            30-Day Launch Offer — Save up to 29%. Launch pricing ends {LAUNCH_DEADLINE}.
-          </p>
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <p className="text-xs font-medium text-neutral-500">30-Day Launch Offer — Save up to 29%</p>
+            <CountdownTimer variant="banner" />
+            <p className="text-xs text-neutral-400">Launch pricing ends August 27, 2026</p>
+          </div>
         </div>
       </div>
     </section>
@@ -415,7 +416,9 @@ function FinalCTA() {
               </svg>
             </Link>
           </div>
-          <p className="mt-4 text-xs text-neutral-400">Launch pricing ends {LAUNCH_DEADLINE}. After that, regular prices apply.</p>
+          <p className="mt-4 text-xs text-neutral-400">
+            Launch pricing ends August 27, 2026. After that, regular prices apply. <CountdownTimer variant="compact" />
+          </p>
         </div>
       </div>
     </section>

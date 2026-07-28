@@ -6,11 +6,12 @@ import {
   getProductBySlug,
   getRelatedProducts,
   getBundleForProduct,
-  calculateLaunchDeadline,
   type Review,
   type FAQ,
   type Bundle,
+  type Product,
 } from "~/data/products";
+import CountdownTimer from "~/components/CountdownTimer";
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/products/$slug")({
@@ -26,11 +27,36 @@ export const Route = createFileRoute("/products/$slug")({
     const bundle = getBundleForProduct(params.slug) ?? null;
     return { product, related, bundle };
   },
+  head: ({ loaderData }) => {
+    const { product, bundle } = loaderData;
+    const slug = product?.slug ?? bundle?.slug ?? "";
+    const defaultTitle = "Product | PrismBay";
+    const defaultDesc = "Complete AI business systems with detailed workflows, architecture, and implementation plans. Instant delivery.";
+    let title = defaultTitle;
+    let desc = defaultDesc;
+    if (product) {
+      title = `${product.name} — ${product.tagline} | PrismBay`;
+      desc = product.description;
+      if (desc.length > 160) desc = desc.slice(0, 157) + "...";
+    } else if (bundle) {
+      title = `${bundle.name} — Save $${bundle.saving.toLocaleString()} | PrismBay`;
+      desc = bundle.description;
+      if (desc.length > 160) desc = desc.slice(0, 157) + "...";
+    }
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+      ],
+    };
+  },
   component: ProductPage,
   notFoundComponent: ProductNotFound,
 });
 
-const LAUNCH_DEADLINE = calculateLaunchDeadline();
 
 /* ─── Inline SVG Icons ─── */
 function StarIcon({ filled }: { filled: boolean }) {
@@ -243,6 +269,7 @@ function ProductPage() {
 
               {/* Launch Pricing */}
               <div className="mt-6 rounded-xl border-2 border-amber-200 bg-amber-50/50 p-5">
+                <div className="mb-2 flex items-center gap-2"><CountdownTimer variant="compact" /></div>
                 <div className="flex items-baseline gap-3">
                   <span className="text-4xl font-bold text-brand-600">${product.launchPrice}</span>
                   <span className="text-lg text-neutral-400 line-through">${product.regularPrice}</span>
@@ -250,8 +277,8 @@ function ProductPage() {
                     Save {product.discountPercent}%
                   </span>
                 </div>
-                <p className="mt-2 text-xs text-neutral-500">
-                  Introductory pricing — 30 days only. Launch pricing ends {LAUNCH_DEADLINE}. After that, regular price of ${product.regularPrice} applies.
+                <p className="mt-1 text-xs text-neutral-500">
+                  Introductory pricing — 30 days only. After that, regular price of ${product.regularPrice} applies.
                 </p>
               </div>
 
@@ -417,9 +444,10 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
               <div className="mt-3 flex items-baseline justify-center gap-3">
                 <span className="text-5xl font-bold text-brand-600">${bundle.launchPrice.toLocaleString()}</span>
               </div>
+              <div className="mt-2 flex justify-center"><CountdownTimer variant="compact" /></div>
               <p className="mt-2 text-lg font-semibold text-brand-700">You save ${bundle.saving.toLocaleString()}</p>
-              <p className="mt-2 text-xs text-neutral-500">
-                Introductory pricing — 30 days only. Launch pricing ends {LAUNCH_DEADLINE}.
+              <p className="mt-1 text-xs text-neutral-500">
+                Introductory pricing — 30 days only.
               </p>
               <button className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0">
                 Get All {bundle.productSlugs.length} Products for ${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer
