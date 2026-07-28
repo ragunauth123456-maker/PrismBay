@@ -1,0 +1,86 @@
+/* typography.css — PrismBay typography system as CSS custom properties */
+
+/* ── Font Family Tokens ──────────────────────────────────────────── */
+:root {
+  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', 'Menlo', 'Consolas', monospace;
+
+  /* ── Type Scale Tokens ─────────────────────────────────────────── */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+
+  /* ── Line Heights ───────────────────────────────────────────────── */
+  --leading-xs:   1rem;
+  --leading-sm:   1.25rem;
+  --leading-base: 1.5rem;
+  --leading-lg:   1.75rem;
+  --leading-xl:   1.75rem;
+  --leading-2xl:  2rem;
+  --leading-3xl:  2.25rem;
+  --leading-4xl:  2.75rem;
+  --leading-5xl:  3.5rem;
+  --leading-6xl:  4.25rem;
+
+  /* ── Letter Spacing ─────────────────────────────────────────────── */
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.02em;
+  --tracking-snug:    -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.005em;
+  --tracking-wider:   0.01em;
+  --tracking-widest:  0.05em;
+
+  /* ── Font Weights ───────────────────────────────────────────────── */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+}
+
+/* ── Google Fonts Import ─────────────────────────────────────────── */
+/* Include this in your <head> or CSS entrypoint: */
+/*
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*/
+
+/* ── Base Application ────────────────────────────────────────────── */
+html {
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.2;
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl);  font-weight: var(--weight-semibold); }
+h5 { font-size: var(--text-lg);  font-weight: var(--weight-semibold); }
+h6 { font-size: var(--text-base); font-weight: var(--weight-semibold); }
+
+p {
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
