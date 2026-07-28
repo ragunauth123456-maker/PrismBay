@@ -4,7 +4,7 @@ export const Route = createFileRoute("/trust")({
   head: () => ({
     meta: [
       { title: "Trust Centre — Secure Payments, Privacy & Quality | PrismBay" },
-      { name: "description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, verified reviews, and 14-day refund policy." },
+      { name: "description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, demo-first philosophy, and 14-day refund policy." },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/trust" },
@@ -138,8 +138,8 @@ const TRUST_SECTIONS = [
   {
     icon: StarIcon,
     title: "Product Quality",
-    body: "Every product on PrismBay includes a real demo video so you can see exactly what you're getting before you buy. We don't allow reviews from anyone who hasn't purchased the product — every review badge you see represents a verified buyer. Our product pages show detailed feature breakdowns, technical requirements, and FAQ content so you can make an informed decision with no surprises.",
-    takeaway: "Demo-first, verified reviews only — we believe you should see before you buy.",
+    body: "Every product on PrismBay includes detailed feature breakdowns, technical requirements, and FAQ content so you can make an informed decision with no surprises. Our product pages are designed for transparency — complete architecture descriptions, workflow details, licensing terms, and upfront pricing so you know exactly what you're getting before you buy.",
+    takeaway: "Full transparency — we believe you should know exactly what you're buying.",
   },
   {
     icon: MessageIcon,

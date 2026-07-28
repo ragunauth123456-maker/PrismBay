@@ -70,12 +70,12 @@ function AboutPage() {
         <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20 space-y-16">
           <div>
             <h2 className="text-2xl font-bold text-neutral-800">Our Mission</h2>
-            <p className="mt-4 text-neutral-600 leading-relaxed">Every AI business system on PrismBay is a complete blueprint — detailed workflows, technical architecture, revenue models, implementation plans, and commercial launch guidance. We don't sell vague ideas or hype documents. Every product has a real demo, transparent pricing, and verified reviews from buyers who have used the blueprints to build real businesses.</p>
+            <p className="mt-4 text-neutral-600 leading-relaxed">Every AI business system on PrismBay is a complete blueprint — detailed workflows, technical architecture, revenue models, implementation plans, and commercial launch guidance. We don't sell vague ideas or hype documents. Every product has transparent pricing, detailed feature breakdowns, and clear licensing terms.</p>
             <p className="mt-4 text-neutral-600 leading-relaxed">Our mission is to accelerate the AI-native business revolution by making battle-tested business system blueprints accessible to founders, executives, and technical teams worldwide.</p>
           </div>
           <div>
             <h2 className="text-2xl font-bold text-neutral-800">The Demo-First Philosophy</h2>
-            <p className="mt-4 text-neutral-600 leading-relaxed">Most digital product marketplaces ask you to buy based on a sales page and some bullet points. We think that's backwards. Every PrismBay product includes an embedded demo video so you can see exactly what you're getting before you commit. Combined with detailed feature breakdowns, verified reviews, and transparent launch pricing, you make an informed decision every time.</p>
+            <p className="mt-4 text-neutral-600 leading-relaxed">Most digital product marketplaces ask you to buy based on a sales page and some bullet points. We think that's backwards. Every PrismBay product includes a detailed feature breakdown, technical architecture documentation, FAQ section, and transparent launch pricing so you make an informed decision every time.</p>
           </div>
           <div>
             <h2 className="text-2xl font-bold text-neutral-800">What Makes Our Products Different</h2>

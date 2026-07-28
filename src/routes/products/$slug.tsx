@@ -182,6 +182,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  if (rating === 0 || count === 0) {
+    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+  }
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
