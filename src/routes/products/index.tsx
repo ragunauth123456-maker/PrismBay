@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { PRODUCTS, BUNDLES, CATEGORY_MAP, calculateLaunchDeadline } from "~/data/products";
 
 /* ─── Search params type ─── */
 type ProductSearch = {
@@ -17,135 +18,23 @@ export const Route = createFileRoute("/products/")({
   component: ProductsPage,
 });
 
-/* ─── Product Data ─── */
-interface Product {
-  slug: string;
-  name: string;
-  price: number;
-  category: string;
-  categorySlug: string;
-  rating: number;
-  reviewCount: number;
-  description: string;
-  typeIcon: string;
-  gradient: string;
-}
+const LAUNCH_DEADLINE = calculateLaunchDeadline();
 
-const PRODUCTS: Product[] = [
-  {
-    slug: "mergekit",
-    name: "MergeKit",
-    price: 49,
-    category: "Software Tools",
-    categorySlug: "software-tools",
-    rating: 4.8,
-    reviewCount: 127,
-    description: "Merge multiple Notion workspaces without losing data or formatting",
-    typeIcon: "monitor",
-    gradient: "from-brand-50 via-neutral-50 to-neutral-100",
-  },
-  {
-    slug: "clientflow-os",
-    name: "ClientFlow OS",
-    price: 79,
-    category: "Business Systems",
-    categorySlug: "business-systems",
-    rating: 4.9,
-    reviewCount: 89,
-    description: "Complete CRM, invoicing, and project tracking system for freelancers",
-    typeIcon: "cog",
-    gradient: "from-brand-50/60 via-neutral-50 to-accent-50/40",
-  },
-  {
-    slug: "plain-talk",
-    name: "Plain Talk",
-    price: 59,
-    category: "AI Solutions",
-    categorySlug: "ai-solutions",
-    rating: 4.6,
-    reviewCount: 203,
-    description: "Transform robotic AI text into natural, brand-consistent writing",
-    typeIcon: "sparkle",
-    gradient: "from-accent-50 via-neutral-50 to-brand-50/60",
-  },
-  {
-    slug: "pitchforge",
-    name: "PitchForge",
-    price: 89,
-    category: "Templates",
-    categorySlug: "templates",
-    rating: 4.7,
-    reviewCount: 54,
-    description: "Build compelling investor pitch decks with battle-tested templates",
-    typeIcon: "file",
-    gradient: "from-neutral-50 via-brand-50/40 to-neutral-100",
-  },
-  {
-    slug: "datasweep",
-    name: "DataSweep",
-    price: 39,
-    category: "Software Tools",
-    categorySlug: "software-tools",
-    rating: 4.5,
-    reviewCount: 78,
-    description: "Automate data cleaning and normalization across spreadsheets and databases",
-    typeIcon: "monitor",
-    gradient: "from-brand-50 via-neutral-50 to-neutral-100",
-  },
-  {
-    slug: "launchkit",
-    name: "LaunchKit",
-    price: 149,
-    category: "Business Systems",
-    categorySlug: "business-systems",
-    rating: 4.8,
-    reviewCount: 36,
-    description: "Complete product launch playbook with checklists, timelines, and templates",
-    typeIcon: "cog",
-    gradient: "from-brand-50/60 via-neutral-50 to-accent-50/40",
-  },
-  {
-    slug: "codeloom",
-    name: "CodeLoom",
-    price: 29,
-    category: "Resources",
-    categorySlug: "resources",
-    rating: 4.4,
-    reviewCount: 162,
-    description: "Searchable library of production-ready code snippets across 12 languages",
-    typeIcon: "box",
-    gradient: "from-neutral-50 via-neutral-100 to-brand-50/40",
-  },
-  {
-    slug: "learnfast",
-    name: "LearnFast",
-    price: 199,
-    category: "Courses",
-    categorySlug: "courses",
-    rating: 4.9,
-    reviewCount: 41,
-    description: "Everything you need to build, market, and sell an online course",
-    typeIcon: "cap",
-    gradient: "from-neutral-50 via-accent-50/40 to-neutral-100",
-  },
-];
-
+/* ─── Categories with bundle option ─── */
 const CATEGORIES = [
   { slug: "all", name: "All", count: PRODUCTS.length },
-  { slug: "software-tools", name: "Software Tools", count: PRODUCTS.filter((p) => p.categorySlug === "software-tools").length },
-  { slug: "templates", name: "Templates", count: PRODUCTS.filter((p) => p.categorySlug === "templates").length },
-  { slug: "ai-solutions", name: "AI Solutions", count: PRODUCTS.filter((p) => p.categorySlug === "ai-solutions").length },
-  { slug: "business-systems", name: "Business Systems", count: PRODUCTS.filter((p) => p.categorySlug === "business-systems").length },
-  { slug: "courses", name: "Courses", count: PRODUCTS.filter((p) => p.categorySlug === "courses").length },
-  { slug: "resources", name: "Resources", count: PRODUCTS.filter((p) => p.categorySlug === "resources").length },
+  { slug: "ai-business-systems", name: "AI Business Systems", count: CATEGORY_MAP["ai-business-systems"]?.count ?? 0 },
+  { slug: "ai-development", name: "AI Development", count: CATEGORY_MAP["ai-development"]?.count ?? 0 },
+  { slug: "trust-compliance", name: "Trust & Compliance", count: CATEGORY_MAP["trust-compliance"]?.count ?? 0 },
+  { slug: "bundles", name: "Bundles", count: BUNDLES.length },
 ];
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Newest" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
+  { value: "discount", label: "Biggest Savings" },
   { value: "rating", label: "Highest Rated" },
-  { value: "popular", label: "Most Popular" },
 ];
 
 const ITEMS_PER_PAGE = 6;
@@ -196,40 +85,11 @@ function XIcon() {
   );
 }
 
-function MonitorIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2" y="3" width="20" height="14" rx="2" stroke="#16B3A7" strokeWidth="1.5" />
-      <path d="M8 21h8" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M12 17v4" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function CogIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="3" stroke="#16B3A7" strokeWidth="1.5" />
       <path d="M12 1v3m0 16v3M1 12h3m16 0h3M4.93 4.93l2.12 2.12m9.9 9.9l2.12 2.12M4.93 19.07l2.12-2.12m9.9-9.9l2.12-2.12" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function CapIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3L2 8l10 5 8-4-2-2-6 3-6-3 6-3 6 3 1-.5L12 3z" fill="#16B3A7" />
-      <path d="M6 10v4c0 2 3 4 6 4s6-2 6-4v-4" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function FileIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M14 2v6h6" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16 13H8m8 4H8" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -252,6 +112,35 @@ function BoxIcon() {
   );
 }
 
+function FileIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14 2v6h6" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 13H8m8 4H8" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MonitorIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="3" width="20" height="14" rx="2" stroke="#16B3A7" strokeWidth="1.5" />
+      <path d="M8 21h8" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M12 17v4" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BundleIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16l4-2 4 2z" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 7h4m-4 4h4" stroke="#16B3A7" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function EmptySearchIcon() {
   return (
     <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -263,13 +152,43 @@ function EmptySearchIcon() {
 }
 
 const typeIcons: Record<string, React.FC> = {
-  monitor: MonitorIcon,
   cog: CogIcon,
-  cap: CapIcon,
-  file: FileIcon,
   sparkle: SparkleIcon,
   box: BoxIcon,
+  file: FileIcon,
+  monitor: MonitorIcon,
 };
+
+type ProductCardItem = {
+  slug: string;
+  name: string;
+  price: number;
+  launchPrice: number;
+  discountPercent: number;
+  category: string;
+  categorySlug: string;
+  rating: number;
+  reviewCount: number;
+  description: string;
+  typeIcon: string;
+  gradient: string;
+};
+
+// Map products to card format
+const marketableProducts: ProductCardItem[] = PRODUCTS.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  price: p.regularPrice,
+  launchPrice: p.launchPrice,
+  discountPercent: p.discountPercent,
+  category: p.category,
+  categorySlug: p.categorySlug,
+  rating: p.rating,
+  reviewCount: p.reviewCount,
+  description: p.tagline,
+  typeIcon: p.typeIcon,
+  gradient: p.gradient,
+}));
 
 /* ─── Navbar ─── */
 function Navbar() {
@@ -292,17 +211,11 @@ function Navbar() {
           </svg>
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
-          <Link to="/products" className="text-sm font-semibold text-brand-600">
-            Products
-          </Link>
-          <Link to="/categories" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
-            Categories
-          </Link>
+          <Link to="/products" className="text-sm font-semibold text-brand-600">Products</Link>
+          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
         </nav>
         <div className="flex items-center gap-5">
-          <Link to="/sign-in" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
-            Sign In
-          </Link>
+          <Link to="/sign-in" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Sign In</Link>
         </div>
       </div>
     </header>
@@ -328,17 +241,15 @@ function Footer() {
               </text>
             </g>
           </svg>
-          <p className="mt-3 text-sm text-neutral-400">Clear value. Instant access.</p>
+          <p className="mt-3 text-sm text-neutral-400">Complete AI business systems. Instant access.</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Categories</h4>
             <ul className="space-y-2">
-              {CATEGORIES.filter((c) => c.slug !== "all").map((cat) => (
+              {CATEGORIES.filter((c) => c.slug !== "all" && c.slug !== "bundles").map((cat) => (
                 <li key={cat.slug}>
-                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-400 transition-colors hover:text-white">
-                    {cat.name}
-                  </Link>
+                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-400 transition-colors hover:text-white">{cat.name}</Link>
                 </li>
               ))}
             </ul>
@@ -369,6 +280,93 @@ function Footer() {
   );
 }
 
+/* ─── Product Card ─── */
+function ProductCard({ product }: { product: ProductCardItem }) {
+  const Icon = typeIcons[product.typeIcon] ?? MonitorIcon;
+  return (
+    <Link
+      to={`/products/${product.slug}`}
+      className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5"
+    >
+      <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${product.gradient}`}>
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
+          <Icon />
+        </div>
+        <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
+          {product.category}
+        </div>
+        <div className="absolute top-3 right-3 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+          Save {product.discountPercent}%
+        </div>
+        <div className="absolute bottom-3 left-3 rounded-lg bg-amber-50/90 px-2 py-0.5 text-[11px] font-medium text-amber-700">
+          30-day launch offer
+        </div>
+      </div>
+      <div className="p-5">
+        <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
+        <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{product.description}</p>
+        <div className="mt-2">
+          <StarRating rating={product.rating} count={product.reviewCount} />
+        </div>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-bold text-brand-600">${product.launchPrice}</span>
+            <span className="text-sm text-neutral-400 line-through">${product.price}</span>
+          </div>
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+/* ─── Bundle Card ─── */
+function BundleCard({ bundle }: { bundle: typeof BUNDLES[number] }) {
+  return (
+    <Link
+      to={`/products/${bundle.slug}`}
+      className="group cursor-pointer rounded-xl border-2 border-amber-200 bg-amber-50/30 p-0 transition-all duration-200 hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5"
+    >
+      <div className="relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br from-amber-50 via-amber-100/50 to-brand-50">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
+          <BundleIcon />
+        </div>
+        <div className="absolute top-3 left-3 rounded-lg bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+          Bundle
+        </div>
+        <div className="absolute top-3 right-3 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700">
+          Save ${bundle.saving.toLocaleString()}
+        </div>
+        <div className="absolute bottom-3 left-3 rounded-lg bg-amber-50/90 px-2 py-0.5 text-[11px] font-medium text-amber-700">
+          30-day launch offer
+        </div>
+      </div>
+      <div className="p-5">
+        <h3 className="text-base font-semibold text-neutral-800">{bundle.name}</h3>
+        <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{bundle.description}</p>
+        <p className="mt-2 text-xs text-neutral-400">
+          Includes: {bundle.productNames.join(", ")}
+        </p>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-bold text-brand-600">${bundle.launchPrice.toLocaleString()}</span>
+            <span className="text-sm text-neutral-400 line-through">${bundle.regularCombined.toLocaleString()}</span>
+          </div>
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 /* ─── Main Products Page ─── */
 function ProductsPage() {
   const searchParams = useSearch({ from: "/products/" }) as ProductSearch;
@@ -381,32 +379,33 @@ function ProductsPage() {
   const [searchInput, setSearchInput] = useState(activeSearch);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
+  const showingBundles = activeCategory === "bundles";
+
   /* ─── Filter + Sort Logic ─── */
   const filtered = useMemo(() => {
-    let results = [...PRODUCTS];
+    if (showingBundles) return [];
+    let results = [...marketableProducts];
 
-    // Search filter
     if (activeSearch.trim()) {
       const query = activeSearch.toLowerCase().trim();
       results = results.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query) ||
-          p.description.toLowerCase().includes(query)
+        (p) => p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query)
       );
     }
 
-    // Category filter
-    if (activeCategory && activeCategory !== "all") {
+    if (activeCategory && activeCategory !== "all" && activeCategory !== "bundles") {
       results = results.filter((p) => p.categorySlug === activeCategory);
     }
 
-    // Sort
     switch (activeSort) {
       case "price-asc":
-        results.sort((a, b) => a.price - b.price);
+        results.sort((a, b) => a.launchPrice - b.launchPrice);
         break;
       case "price-desc":
-        results.sort((a, b) => b.price - a.price);
+        results.sort((a, b) => b.launchPrice - a.launchPrice);
+        break;
+      case "discount":
+        results.sort((a, b) => b.discountPercent - a.discountPercent);
         break;
       case "rating":
         results.sort((a, b) => b.rating - a.rating);
@@ -414,16 +413,11 @@ function ProductsPage() {
       case "popular":
         results.sort((a, b) => b.reviewCount - a.reviewCount);
         break;
-      case "newest":
-      default:
-        // Keep original order (assumed newest-first in product list)
-        break;
     }
 
     return results;
-  }, [activeSearch, activeCategory, activeSort]);
+  }, [activeSearch, activeCategory, activeSort, showingBundles]);
 
-  // Reset pagination when filters change
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
   }, [activeSearch, activeCategory, activeSort]);
@@ -431,13 +425,12 @@ function ProductsPage() {
   const visibleProducts = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
-  /* ─── Active filter count ─── */
-  const activeFilterCount = [activeSearch ? 1 : 0, activeCategory && activeCategory !== "all" ? 1 : 0, activeSort && activeSort !== "newest" ? 1 : 0].reduce(
-    (a, b) => a + b,
-    0
-  );
+  const activeFilterCount = [
+    activeSearch ? 1 : 0,
+    activeCategory && activeCategory !== "all" ? 1 : 0,
+    activeSort && activeSort !== "newest" ? 1 : 0,
+  ].reduce((a, b) => a + b, 0);
 
-  /* ─── URL update helper ─── */
   const updateParams = useCallback(
     (updates: Partial<ProductSearch>) => {
       const params: Record<string, string> = {};
@@ -449,11 +442,7 @@ function ProductsPage() {
       if (c && c !== "all") params.category = c;
       if (so && so !== "newest") params.sort = so;
 
-      navigate({
-        to: "/products",
-        search: params as any,
-        replace: true,
-      });
+      navigate({ to: "/products", search: params as any, replace: true });
     },
     [activeSearch, activeCategory, activeSort, navigate]
   );
@@ -476,32 +465,35 @@ function ProductsPage() {
       {/* Page Header */}
       <section className="bg-white border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-6 py-8">
-          {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-neutral-400 mb-3">
-            <Link to="/" className="hover:text-neutral-600 transition-colors">
-              Home
-            </Link>
+            <Link to="/" className="hover:text-neutral-600 transition-colors">Home</Link>
             <span>/</span>
             <span className="text-neutral-600 font-medium">Products</span>
           </nav>
-
           <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
             <div>
-              <h1 className="text-3xl font-bold text-neutral-800">Browse products</h1>
+              <h1 className="text-3xl font-bold text-neutral-800">
+                {showingBundles ? "Product Bundles" : "Build Smarter AI Businesses"}
+              </h1>
               <p className="mt-1 text-neutral-500">
-                {filtered.length} {filtered.length === 1 ? "product" : "products"} available
+                {showingBundles
+                  ? `${BUNDLES.length} bundles available — save up to $1,542`
+                  : activeCategory !== "all"
+                    ? `${filtered.length} products in this category · 9 products + 3 bundles available`
+                    : `9 products + 3 bundles available`}
               </p>
             </div>
           </div>
+          <p className="mt-2 text-xs text-neutral-400">
+            Introductory launch pricing ends {LAUNCH_DEADLINE}. After that, regular prices apply.
+          </p>
         </div>
       </section>
 
-      {/* Search + Filter Bar (sticky) */}
+      {/* Search + Filter Bar */}
       <div className="sticky top-16 z-40 bg-white border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-6 py-4">
-          {/* Search + Sort Row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            {/* Search input */}
             <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
               <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                 <SearchIcon />
@@ -516,52 +508,38 @@ function ProductsPage() {
               {searchInput && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setSearchInput("");
-                    updateParams({ search: undefined });
-                  }}
+                  onClick={() => { setSearchInput(""); updateParams({ search: undefined }); }}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 hover:text-neutral-600"
                 >
                   <XIcon />
                 </button>
               )}
             </form>
-
-            {/* Sort dropdown */}
-            <div className="relative">
-              <select
-                value={activeSort}
-                onChange={(e) => updateParams({ sort: e.target.value })}
-                className="appearance-none block w-full sm:w-auto rounded-lg border border-neutral-300 bg-white pl-4 pr-10 py-2.5 text-sm font-medium text-neutral-700 transition-colors duration-200 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 cursor-pointer"
-              >
-                {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400">
-                <ChevronDownIcon />
+            {!showingBundles && (
+              <div className="relative">
+                <select
+                  value={activeSort}
+                  onChange={(e) => updateParams({ sort: e.target.value })}
+                  className="appearance-none block w-full sm:w-auto rounded-lg border border-neutral-300 bg-white pl-4 pr-10 py-2.5 text-sm font-medium text-neutral-700 transition-colors duration-200 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 cursor-pointer"
+                >
+                  {SORT_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400">
+                  <ChevronDownIcon />
+                </div>
               </div>
-            </div>
-
-            {/* Active filters badge + clear */}
+            )}
             {activeFilterCount > 0 && (
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700">
                   {activeFilterCount} {activeFilterCount === 1 ? "filter" : "filters"} active
                 </span>
-                <button
-                  onClick={clearAll}
-                  className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
-                >
-                  Clear all
-                </button>
+                <button onClick={clearAll} className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors">Clear all</button>
               </div>
             )}
           </div>
-
-          {/* Category chips */}
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -583,54 +561,29 @@ function ProductsPage() {
         </div>
       </div>
 
-      {/* Product Grid or Empty State */}
+      {/* Product Grid or Bundles or Empty */}
       <section className="bg-neutral-50">
         <div className="mx-auto max-w-7xl px-6 py-10">
-          {visibleProducts.length > 0 ? (
-            <>
-              {/* Product Grid */}
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {visibleProducts.map((product) => {
-                  const Icon = typeIcons[product.typeIcon] ?? MonitorIcon;
-                  return (
-                    <Link
-                      key={product.slug}
-                      to={`/products/${product.slug}`}
-                      className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5"
-                    >
-                      {/* Thumbnail */}
-                      <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${product.gradient}`}>
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-                          <Icon />
-                        </div>
-                        {/* Type badge */}
-                        <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
-                          {product.category}
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-5">
-                        <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
-                        <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{product.description}</p>
-                        <div className="mt-2">
-                          <StarRating rating={product.rating} count={product.reviewCount} />
-                        </div>
-                        <div className="mt-4 flex items-center justify-between">
-                          <span className="text-lg font-bold text-neutral-800">${product.price}</span>
-                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                              <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+          {showingBundles ? (
+            /* Bundle Grid */
+            <div>
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-neutral-800">Bundle & Save</h2>
+                <p className="mt-2 text-neutral-500">Get multiple AI business systems together and save up to $1,542 during our 30-day launch.</p>
               </div>
-
-              {/* Pagination / Load More */}
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {BUNDLES.map((bundle) => (
+                  <BundleCard key={bundle.slug} bundle={bundle} />
+                ))}
+              </div>
+            </div>
+          ) : visibleProducts.length > 0 ? (
+            <>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {visibleProducts.map((product) => (
+                  <ProductCard key={product.slug} product={product} />
+                ))}
+              </div>
               {hasMore && (
                 <div className="mt-10 text-center">
                   <button
@@ -642,16 +595,26 @@ function ProductsPage() {
                   </button>
                 </div>
               )}
-
-              {/* Showing X of Y */}
               {filtered.length > ITEMS_PER_PAGE && (
                 <p className="mt-4 text-center text-sm text-neutral-400">
                   Showing {visibleProducts.length} of {filtered.length} products
                 </p>
               )}
+
+              {/* Bundles callout below product grid */}
+              <div className="mt-16 border-t border-neutral-200 pt-12">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-neutral-800">Save more with bundles</h2>
+                  <p className="mt-2 text-neutral-500">Get multiple AI business systems together and save during our 30-day launch.</p>
+                </div>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {BUNDLES.map((bundle) => (
+                    <BundleCard key={bundle.slug} bundle={bundle} />
+                  ))}
+                </div>
+              </div>
             </>
           ) : (
-            /* Empty State */
             <div className="flex flex-col items-center justify-center py-20">
               <EmptySearchIcon />
               <h3 className="mt-6 text-xl font-semibold text-neutral-700">No products match your filters</h3>
