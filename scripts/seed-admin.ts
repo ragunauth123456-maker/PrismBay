@@ -7,7 +7,7 @@
  */
 
 import { neon } from "@neondatabase/serverless";
-import { bcrypt } from "@node-rs/bcrypt";
+import { hash as bcryptHash } from "@node-rs/bcrypt";
 
 const DEFAULT_EMAIL = "admin@prismbay.com";
 const DEFAULT_PASSWORD = "PrismBay2026!"; // Change in production!
@@ -34,7 +34,7 @@ async function main() {
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await bcryptHash(password, 12);
 
   const result = await sql`
     INSERT INTO admin_users (email, password_hash, name, role)

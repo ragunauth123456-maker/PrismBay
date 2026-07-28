@@ -39,9 +39,18 @@ async function main() {
     console.log(`\nRunning ${file}...`);
 
     try {
-      // Execute the entire migration file in a single statement batch.
-      // neon() supports multiple statements separated by semicolons.
-      await sql(content);
+      // Remove comment lines, then split into individual statements
+      const cleanSQL = content
+        .split("\n")
+        .filter((line) => !line.trim().startsWith("--"))
+        .join("\n");
+      const statements = cleanSQL
+        .split(";")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      for (const stmt of statements) {
+        await sql.query(stmt);
+      }
       console.log(`  ✓ ${file} complete`);
     } catch (err) {
       console.error(`  ✗ ${file} failed:`, err);
