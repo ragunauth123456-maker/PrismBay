@@ -44,6 +44,113 @@ export const Route = createFileRoute("/products/$slug")({
       if (desc.length > 160) desc = desc.slice(0, 157) + "...";
     }
     const canonicalPath = product ? `/products/${product.slug}` : bundle ? `/products/${bundle.slug}` : "";
+    const canonicalUrl = `https://prismbay.com${canonicalPath}`;
+
+    // Build JSON-LD scripts
+    const jsonLdScripts = [];
+
+    // Price valid until: launch day + 30 (Aug 27, 2026)
+    const priceValidUntil = "2026-08-27";
+
+    if (product) {
+      // --- Product schema ---
+      jsonLdScripts.push({
+        tag: "script",
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          description: product.description,
+          sku: product.slug,
+          brand: { "@type": "Brand", name: "PrismBay" },
+          image: `https://prismbay.com/images/products/${product.slug}.png`,
+          offers: {
+            "@type": "Offer",
+            price: product.launchPrice.toFixed(2),
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: canonicalUrl,
+            priceValidUntil,
+          },
+        }),
+      });
+
+      // --- FAQPage schema ---
+      if (product.faqs && product.faqs.length > 0) {
+        jsonLdScripts.push({
+          tag: "script",
+          attrs: { type: "application/ld+json" },
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: product.faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
+          }),
+        });
+      }
+
+      // --- BreadcrumbList ---
+      jsonLdScripts.push({
+        tag: "script",
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
+            { "@type": "ListItem", position: 2, name: "Products", item: "https://prismbay.com/products" },
+            { "@type": "ListItem", position: 3, name: product.name, item: canonicalUrl },
+          ],
+        }),
+      });
+    } else if (bundle) {
+      // --- Product schema for bundle ---
+      jsonLdScripts.push({
+        tag: "script",
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: bundle.name,
+          description: bundle.description,
+          sku: bundle.slug,
+          brand: { "@type": "Brand", name: "PrismBay" },
+          image: `https://prismbay.com/images/products/${bundle.slug}.png`,
+          offers: {
+            "@type": "Offer",
+            price: bundle.launchPrice.toFixed(2),
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: canonicalUrl,
+            priceValidUntil,
+          },
+        }),
+      });
+
+      // --- BreadcrumbList for bundle ---
+      jsonLdScripts.push({
+        tag: "script",
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
+            { "@type": "ListItem", position: 2, name: "Products", item: "https://prismbay.com/products" },
+            { "@type": "ListItem", position: 3, name: "Bundles", item: "https://prismbay.com/products?category=bundles" },
+            { "@type": "ListItem", position: 4, name: bundle.name, item: canonicalUrl },
+          ],
+        }),
+      });
+    }
+
     return {
       meta: [
         { title },
@@ -51,12 +158,13 @@ export const Route = createFileRoute("/products/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "product" },
-        { property: "og:url", content: `https://prismbay.com${canonicalPath}` },
+        { property: "og:url", content: canonicalUrl },
         { property: "og:image", content: `https://prismbay.com/images/products/${slug}.png` },
       ],
       links: [
-        { rel: "canonical", href: `https://prismbay.com${canonicalPath}` },
+        { rel: "canonical", href: canonicalUrl },
       ],
+      scripts: jsonLdScripts,
     };
   },
   component: ProductPage,
