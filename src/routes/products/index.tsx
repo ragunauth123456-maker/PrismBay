@@ -16,6 +16,10 @@ export const Route = createFileRoute("/products/")({
     meta: [
       { title: "AI Business Systems Marketplace — PrismBay" },
       { name: "description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Instant access, launch pricing available." },
+      { property: "og:title", content: "AI Business Systems Marketplace — PrismBay" },
+      { property: "og:description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Instant access, launch pricing available." },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
       { property: "og:url", content: "https://prismbay.com/products" },
     ],
     links: [
@@ -305,7 +309,7 @@ function ProductCard({ product }: { product: ProductCardItem }) {
         <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${product.gradient}`}>
           <img
             src={`/images/products/${product.slug}.png`}
-            alt={product.name}
+            alt={`${product.name} — AI Business System Blueprint document package`}
             className="h-full w-full object-cover rounded-t-xl"
             loading="lazy"
           />

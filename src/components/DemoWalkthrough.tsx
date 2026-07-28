@@ -220,7 +220,7 @@ export default function DemoWalkthroughPage({
               {/* Product image as visual backdrop */}
               <img
                 src={productImage}
-                alt={`${demo.productName} product image`}
+                alt=""
                 className="absolute inset-0 w-full h-full object-cover opacity-30"
               />
               {/* Gradient overlay */}
