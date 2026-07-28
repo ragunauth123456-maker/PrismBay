@@ -415,12 +415,12 @@ function ProductPage() {
                   {checkoutLoading ? "Redirecting to Stripe..." : `Purchase Now — $${product.launchPrice}`}
                 </button>
                 {product.demoVideoUrl ? (
-                  <a
-                    href="#demo"
+                  <Link
+                    to={product.demoVideoUrl}
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300/50 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:bg-white/10 active:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
                   >
-                    Watch Demo
-                  </a>
+                    View Demo
+                  </Link>
                 ) : (
                   <span className="inline-flex items-center justify-center gap-2 rounded-lg border border-navy-700/50 px-8 py-4 text-lg font-semibold text-neutral-500 cursor-default">
                     Demo coming soon
@@ -461,19 +461,36 @@ function ProductPage() {
                   target.style.display = "none";
                 }}
               />
-              {/* Demo video — only shown when a demo URL exists */}
+              {/* Demo preview — links to interactive walkthrough */}
               {product.demoVideoUrl ? (
-                <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl">
-                  <iframe
-                    src={product.demoVideoUrl}
-                    title={`${product.name} demo`}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
+                <Link
+                  to={product.demoVideoUrl}
+                  className="mt-6 block rounded-xl bg-navy-800 overflow-hidden shadow-2xl group transition-shadow hover:shadow-brand-500/10"
+                >
+                  <div className="aspect-video flex items-center justify-center relative">
+                    <img
+                      src={`/images/products/${product.slug}.png`}
+                      alt={`${product.name} preview`}
+                      className="absolute inset-0 w-full h-full object-cover opacity-25"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-900/40 to-transparent" />
+                    <div className="relative z-10 text-center p-6">
+                      <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-brand-500/20 border border-brand-400/40 mb-4 group-hover:scale-110 transition-transform">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M8 5l11 7-11 7V5z" fill="#16B3A7" stroke="#16B3A7" strokeWidth="1" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                      <p className="text-lg font-semibold text-white">
+                        View Interactive Demo
+                      </p>
+                      <p className="text-sm text-brand-200/70 mt-1">
+                        Step-by-step guided walkthrough of {product.name}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               ) : (
-                <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl flex items-center justify-center">
+                <div className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl flex items-center justify-center">
                   <div className="text-center">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" className="mx-auto mb-3">
                       <circle cx="24" cy="24" r="22" stroke="#16B3A7" strokeWidth="1.5" opacity="0.4" />
