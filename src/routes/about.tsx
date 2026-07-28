@@ -6,6 +6,9 @@ export const Route = createFileRoute("/about")({
       { title: "About PrismBay — Premium AI Business Systems Marketplace" },
       { name: "description", content: "Learn about PrismBay: our mission to provide complete AI business systems with real demos, transparent pricing, and instant digital delivery for modern builders." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/about" },
+    ],
   }),
   component: AboutPage,
 });

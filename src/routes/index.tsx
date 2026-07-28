@@ -4,6 +4,11 @@ import { PRODUCTS } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/" },
+    ],
+  }),
   component: Home,
 });
 

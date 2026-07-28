@@ -6,6 +6,9 @@ export const Route = createFileRoute("/privacy")({
       { title: "Privacy Policy — PrismBay" },
       { name: "description", content: "PrismBay privacy policy: how we collect, use, and protect your personal data when you browse and purchase AI business systems on our marketplace." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/privacy" },
+    ],
   }),
   component: PrivacyPage,
 });

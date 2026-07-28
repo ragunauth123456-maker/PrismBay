@@ -16,6 +16,10 @@ export const Route = createFileRoute("/products/")({
     meta: [
       { title: "AI Business Systems Marketplace — PrismBay" },
       { name: "description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Watch demos, read reviews, buy instantly." },
+      { property: "og:url", content: "https://prismbay.com/products" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/products" },
     ],
   }),
   validateSearch: (search: Record<string, unknown>): ProductSearch => ({
@@ -351,9 +355,12 @@ function BundleCard({ bundle }: { bundle: typeof BUNDLES[number] }) {
       className="group cursor-pointer rounded-xl border-2 border-amber-200 bg-amber-50/30 p-0 transition-all duration-200 hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5"
     >
       <div className="relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br from-amber-50 via-amber-100/50 to-brand-50">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-          <BundleIcon />
-        </div>
+        <img
+          src={`/images/products/${bundle.slug}.png`}
+          alt={`${bundle.name} bundle collection`}
+          className="h-full w-full object-cover rounded-t-xl"
+          loading="lazy"
+        />
         <div className="absolute top-3 left-3 rounded-lg bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
           Bundle
         </div>

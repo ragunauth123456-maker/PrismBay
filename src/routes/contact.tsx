@@ -7,6 +7,9 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact PrismBay — Get Support & Inquiries | PrismBay" },
       { name: "description", content: "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/contact" },
+    ],
   }),
   component: ContactPage,
 });

@@ -6,6 +6,9 @@ export const Route = createFileRoute("/trust")({
       { title: "Trust Centre — Secure Payments, Privacy & Quality | PrismBay" },
       { name: "description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, verified reviews, and 14-day refund policy." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/trust" },
+    ],
   }),
   component: TrustPage,
 });
