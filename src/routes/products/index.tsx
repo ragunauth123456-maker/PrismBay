@@ -182,6 +182,7 @@ type ProductCardItem = {
   description: string;
   typeIcon: string;
   gradient: string;
+  demoVideoUrl: string;
 };
 
 // Map products to card format
@@ -198,6 +199,7 @@ const marketableProducts: ProductCardItem[] = PRODUCTS.map((p) => ({
   description: p.tagline,
   typeIcon: p.typeIcon,
   gradient: p.gradient,
+  demoVideoUrl: p.demoVideoUrl,
 }));
 
 /* ─── Navbar ─── */
@@ -336,12 +338,21 @@ function ProductCard({ product }: { product: ProductCardItem }) {
         >
           View Product
         </Link>
-        <a
-          href={`/products/${product.slug}#demo`}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
-        >
-          Watch Demo
-        </a>
+        {product.demoVideoUrl ? (
+          <a
+            href={`/products/${product.slug}#demo`}
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
+          >
+            Watch Demo
+          </a>
+        ) : (
+          <Link
+            to={`/products/${product.slug}`}
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
+          >
+            Details
+          </Link>
+        )}
       </div>
     </div>
   );

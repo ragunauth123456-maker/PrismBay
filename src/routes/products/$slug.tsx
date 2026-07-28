@@ -6,7 +6,6 @@ import {
   getProductBySlug,
   getRelatedProducts,
   getBundleForProduct,
-  type Review,
   type FAQ,
   type Bundle,
   type Product,
@@ -303,12 +302,18 @@ function ProductPage() {
                 >
                   {checkoutLoading ? "Redirecting to Stripe..." : `Purchase Now — $${product.launchPrice}`}
                 </button>
-                <a
-                  href="#demo"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300/50 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:bg-white/10 active:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
-                >
-                  Watch Demo
-                </a>
+                {product.demoVideoUrl ? (
+                  <a
+                    href="#demo"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300/50 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:bg-white/10 active:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+                  >
+                    Watch Demo
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center justify-center gap-2 rounded-lg border border-navy-700/50 px-8 py-4 text-lg font-semibold text-neutral-500 cursor-default">
+                    Demo coming soon
+                  </span>
+                )}
               </div>
               <p className="mt-3 text-xs text-neutral-400">
                 Secure payment via Stripe. Instant delivery. Single-business licence.
@@ -344,16 +349,29 @@ function ProductPage() {
                   target.style.display = "none";
                 }}
               />
-              {/* Demo video (linked from Watch Demo button) */}
-              <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl">
-                <iframe
-                  src={product.demoVideoUrl}
-                  title={`${product.name} demo`}
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+              {/* Demo video — only shown when a demo URL exists */}
+              {product.demoVideoUrl ? (
+                <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl">
+                  <iframe
+                    src={product.demoVideoUrl}
+                    title={`${product.name} demo`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <div id="demo" className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl flex items-center justify-center">
+                  <div className="text-center">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" className="mx-auto mb-3">
+                      <circle cx="24" cy="24" r="22" stroke="#16B3A7" strokeWidth="1.5" opacity="0.4" />
+                      <path d="M19 16l14 8-14 8V16z" fill="#16B3A7" opacity="0.5" />
+                    </svg>
+                    <p className="text-brand-200/70 font-medium">Demo coming soon</p>
+                    <p className="text-xs text-neutral-500 mt-1">We're producing a walkthrough video for {product.name}.</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -384,40 +402,7 @@ function ProductPage() {
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="bg-neutral-50">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-bold text-neutral-800 text-center">Customer Reviews</h2>
-          <p className="mt-2 text-neutral-500 text-center">Feedback from verified buyers who purchased {product.name}.</p>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {product.reviews.map((review: Review, i: number) => (
-              <div key={i} className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-                <div className="mb-3 flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <StarIcon key={s} filled={s <= review.rating} />
-                  ))}
-                </div>
-                <blockquote className="text-sm leading-relaxed text-neutral-600">
-                  &ldquo;{review.text}&rdquo;
-                </blockquote>
-                <div className="mt-4 flex items-center gap-3 border-t border-neutral-100 pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700">
-                    {review.initials}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-neutral-800">{review.name}</p>
-                    <p className="text-xs text-neutral-400">{review.role}</p>
-                  </div>
-                  <div className="ml-auto flex shrink-0 items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
-                    <VerifiedBadgeIcon />
-                    Verified
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (

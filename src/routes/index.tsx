@@ -24,33 +24,7 @@ const CATEGORIES = [
   { slug: "trust-compliance", name: "Trust & Compliance", description: "Verification, procurement intelligence, and compliance evidence systems", icon: "file", count: 3 },
 ];
 
-/* ─── Reviews ─── */
-const REVIEWS = [
-  {
-    quote:
-      "NexusOS saved us six months of architecture planning. The department automation workflows were immediately actionable, and the AI agent coordination framework is now the backbone of our internal platform.",
-    author: "David Kim",
-    role: "CTO",
-    product: "NexusOS",
-    initials: "DK",
-  },
-  {
-    quote:
-      "Genesis Platform is the most comprehensive product blueprint I've seen. The no-code builder architecture alone saved us months of R&D. We're now building our platform and the subscription billing model was immediately actionable.",
-    author: "Raj Mehta",
-    role: "CTO & Co-Founder",
-    product: "Genesis Platform",
-    initials: "RM",
-  },
-  {
-    quote:
-      "GuardianOS is the blueprint every fintech needs. The payment verification workflows caught a pattern in our existing process that would have let through a $340K fraudulent invoice. We've rebuilt our entire approval chain on this architecture.",
-    author: "Marcus Chen",
-    role: "Head of InfoSec",
-    product: "GuardianOS",
-    initials: "MC",
-  },
-];
+
 
 /* ─── Compute aggregate stats ─── */
 function computeAggregateStats() {
@@ -654,12 +628,12 @@ function FeaturedProducts() {
                   >
                     View Product
                   </Link>
-                  <a
-                    href={`/products/${product.slug}#demo`}
+                  <Link
+                    to={`/products/${product.slug}`}
                     className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
                   >
-                    Watch Demo
-                  </a>
+                    Details
+                  </Link>
                 </div>
               </div>
             );
@@ -782,46 +756,6 @@ function CategoryBrowse() {
   );
 }
 
-/* ─── Reviews Section ─── */
-function ReviewsSection() {
-  return (
-    <section className="bg-neutral-50">
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-        <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">Testimonials</p>
-          <h2 className="mt-2 text-3xl font-bold text-neutral-800">What buyers say</h2>
-          <p className="mt-3 text-base text-neutral-600">Honest feedback from founders and executives who purchased through PrismBay.</p>
-        </div>
-
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {REVIEWS.map((review) => (
-            <div key={review.author} className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
-              <div className="mb-4 flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <StarIcon key={i} filled={true} />
-                ))}
-              </div>
-              <blockquote className="text-base leading-relaxed text-neutral-600">&ldquo;{review.quote}&rdquo;</blockquote>
-              <div className="mt-5 flex items-center gap-3 border-t border-neutral-100 pt-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700">{review.initials}</div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-neutral-800 truncate">{review.author}</p>
-                  <p className="text-xs text-neutral-400">{review.role} · on {review.product}</p>
-                </div>
-                <div className="ml-auto flex shrink-0 items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
-                  <VerifiedBadgeIcon />
-                  Verified Buyer
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Final CTA (P2 — navy background) ─── */
 function FinalCTA() {
   return (
     <section className="bg-navy-900">
@@ -924,7 +858,6 @@ function Home() {
       <FeaturedProducts />
       <HowItWorks />
       <CategoryBrowse />
-      <ReviewsSection />
       <FinalCTA />
       <Footer />
     </div>
