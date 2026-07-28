@@ -3,34 +3,38 @@
  * Return the currently authenticated admin, or 401.
  */
 
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+import { createFileRoute } from "@tanstack/react-router";
 import { getAdminSessionCookieName, validateAdminSession } from "~/lib/admin-auth";
 
-export const APIRoute = createAPIFileRoute("/api/admin/auth/me")({
-  GET: async ({ request }) => {
-    const cookieHeader = request.headers.get("cookie") ?? "";
-    const cookies = parseCookies(cookieHeader);
-    const sessionId = cookies[getAdminSessionCookieName()];
+export const Route = createFileRoute("/api/admin/auth/me")({
+  server: {
+    handlers: {
+      GET: async ({ request }) => {
+        const cookieHeader = request.headers.get("cookie") ?? "";
+        const cookies = parseCookies(cookieHeader);
+        const sessionId = cookies[getAdminSessionCookieName()];
 
-    if (!sessionId) {
-      return new Response(
-        JSON.stringify({ error: "Not authenticated" }),
-        { status: 401, headers: { "Content-Type": "application/json" } },
-      );
-    }
+        if (!sessionId) {
+          return new Response(
+            JSON.stringify({ error: "Not authenticated" }),
+            { status: 401, headers: { "Content-Type": "application/json" } },
+          );
+        }
 
-    const result = await validateAdminSession(sessionId);
-    if (!result) {
-      return new Response(
-        JSON.stringify({ error: "Session expired or invalid" }),
-        { status: 401, headers: { "Content-Type": "application/json" } },
-      );
-    }
+        const result = await validateAdminSession(sessionId);
+        if (!result) {
+          return new Response(
+            JSON.stringify({ error: "Session expired or invalid" }),
+            { status: 401, headers: { "Content-Type": "application/json" } },
+          );
+        }
 
-    return new Response(
-      JSON.stringify({ admin: result.admin }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
-    );
+        return new Response(
+          JSON.stringify({ admin: result.admin }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        );
+      },
+    },
   },
 });
 

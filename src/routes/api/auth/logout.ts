@@ -3,34 +3,37 @@
  * Clear the customer session.
  */
 
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   deleteSession,
   getClearSessionCookieHeader,
   getSessionCookieName,
-  validateSession,
 } from "~/lib/auth";
 
-export const APIRoute = createAPIFileRoute("/api/auth/logout")({
-  POST: async ({ request }) => {
-    const cookieHeader = request.headers.get("cookie") ?? "";
-    const cookies = parseCookies(cookieHeader);
-    const sessionId = cookies[getSessionCookieName()];
+export const Route = createFileRoute("/api/auth/logout")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const cookieHeader = request.headers.get("cookie") ?? "";
+        const cookies = parseCookies(cookieHeader);
+        const sessionId = cookies[getSessionCookieName()];
 
-    if (sessionId) {
-      await deleteSession(sessionId);
-    }
+        if (sessionId) {
+          await deleteSession(sessionId);
+        }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": getClearSessionCookieHeader(),
-        },
+        return new Response(
+          JSON.stringify({ success: true }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Set-Cookie": getClearSessionCookieHeader(),
+            },
+          },
+        );
       },
-    );
+    },
   },
 });
 

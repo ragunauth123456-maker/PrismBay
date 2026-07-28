@@ -3,33 +3,37 @@
  * Clear the admin session.
  */
 
-import { createAPIFileRoute } from "@tanstack/react-start/api";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   deleteAdminSession,
   getAdminSessionCookieName,
   getClearAdminSessionCookieHeader,
 } from "~/lib/admin-auth";
 
-export const APIRoute = createAPIFileRoute("/api/admin/auth/logout")({
-  POST: async ({ request }) => {
-    const cookieHeader = request.headers.get("cookie") ?? "";
-    const cookies = parseCookies(cookieHeader);
-    const sessionId = cookies[getAdminSessionCookieName()];
+export const Route = createFileRoute("/api/admin/auth/logout")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        const cookieHeader = request.headers.get("cookie") ?? "";
+        const cookies = parseCookies(cookieHeader);
+        const sessionId = cookies[getAdminSessionCookieName()];
 
-    if (sessionId) {
-      await deleteAdminSession(sessionId);
-    }
+        if (sessionId) {
+          await deleteAdminSession(sessionId);
+        }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": getClearAdminSessionCookieHeader(),
-        },
+        return new Response(
+          JSON.stringify({ success: true }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Set-Cookie": getClearAdminSessionCookieHeader(),
+            },
+          },
+        );
       },
-    );
+    },
   },
 });
 
