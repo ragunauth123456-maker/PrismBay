@@ -8,6 +8,37 @@ export const Route = createFileRoute("/")({
     links: [
       { rel: "canonical", href: "https://prismbay.com/" },
     ],
+    scripts: [
+      {
+        tag: "script" as const,
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "PrismBay",
+          url: "https://prismbay.com",
+          logo: "https://prismbay.com/images/prismbay-logo.png",
+        }),
+      },
+      {
+        tag: "script" as const,
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "PrismBay",
+          url: "https://prismbay.com",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: "https://prismbay.com/products?search={search_term_string}",
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+    ],
   }),
   component: Home,
 });
