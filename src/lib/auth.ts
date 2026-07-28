@@ -3,7 +3,7 @@
  * Sessions stored in the `sessions` table, separate from admin sessions.
  */
 
-import { bcrypt } from "@node-rs/bcrypt";
+import { hash as bcryptHash, verify as bcryptVerify } from "@node-rs/bcrypt";
 import { generateRandomString, type RandomReader } from "@oslojs/crypto/random";
 import { sql } from "~/db";
 import type { PublicUser, Session, User } from "~/types";
@@ -35,14 +35,14 @@ function generateToken(length: number): string {
 // ── Password helpers ───────────────────────────────────────────────────
 
 export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, BCRYPT_COST);
+  return bcryptHash(password, BCRYPT_COST);
 }
 
 export async function verifyPassword(
   password: string,
   hash: string,
 ): Promise<boolean> {
-  return bcrypt.verify(password, hash);
+  return bcryptVerify(password, hash);
 }
 
 // ── Session management ─────────────────────────────────────────────────

@@ -3,7 +3,7 @@
  * Sessions stored in the `admin_sessions` table.
  */
 
-import { bcrypt } from "@node-rs/bcrypt";
+import { hash as bcryptHash, verify as bcryptVerify } from "@node-rs/bcrypt";
 import { generateRandomString, type RandomReader } from "@oslojs/crypto/random";
 import { sql } from "~/db";
 import type { AdminSession, AdminUser, PublicAdmin } from "~/types";
@@ -31,14 +31,14 @@ function generateId(length: number): string {
 // ── Password helpers ───────────────────────────────────────────────────
 
 export async function hashAdminPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, BCRYPT_COST);
+  return bcryptHash(password, BCRYPT_COST);
 }
 
 export async function verifyAdminPassword(
   password: string,
   hash: string,
 ): Promise<boolean> {
-  return bcrypt.verify(password, hash);
+  return bcryptVerify(password, hash);
 }
 
 // ── Session management ─────────────────────────────────────────────────
