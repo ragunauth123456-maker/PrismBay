@@ -204,6 +204,28 @@ function Footer() {
 /* ─── Product Page ─── */
 function ProductPage() {
   const { product, related, bundle } = Route.useLoaderData();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  async function handlePurchase(productSlug: string) {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productSlug }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Checkout failed. Please try again.");
+        setCheckoutLoading(false);
+      }
+    } catch (err) {
+      alert("Checkout failed. Please try again.");
+      setCheckoutLoading(false);
+    }
+  }
 
   // Handle bundle page
   if (!product && bundle) {

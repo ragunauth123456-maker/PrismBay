@@ -53,6 +53,21 @@ export default {
           950: "#0F0E0D",
         },
 
+        // ── Navy (for premium hero backgrounds) ───────────────────────
+        navy: {
+          50:  '#F0F4FA',
+          100: '#D9E2F0',
+          200: '#B3C5E0',
+          300: '#8DA8D0',
+          400: '#668BC0',
+          500: '#406EB0',
+          600: '#335890',
+          700: '#264270',
+          800: '#1A2C50',
+          900: '#0F172A',
+          950: '#0A0F1E',
+        },
+
         // ── Surface / background shortcuts ────────────────────────────
         surface: {
           light:   "#FFFFFF",
