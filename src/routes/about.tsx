@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/about")({
+  head: () => ({
+    meta: [
+      { title: "About PrismBay — Premium AI Business Systems Marketplace" },
+      { name: "description", content: "Learn about PrismBay: our mission to provide complete AI business systems with real demos, transparent pricing, and instant digital delivery for modern builders." },
+    ],
+  }),
   component: AboutPage,
 });
 

@@ -180,7 +180,7 @@ function HeroSection() {
           <h1 className="text-4xl font-bold tracking-tight text-neutral-800 sm:text-5xl lg:text-6xl">
             Build Smarter AI Businesses Without Starting From Zero
           </h1>
-          <p className="mt-6 text-lg text-neutral-500 sm:text-xl">
+          <p className="mt-6 text-lg text-neutral-600 sm:text-xl">
             Complete AI business systems with detailed workflows, architecture, revenue models, and implementation plans. Every product has a demo, clear launch pricing, and real reviews.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -219,7 +219,7 @@ function FeaturedProducts() {
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">Marketplace</p>
           <h2 className="mt-2 text-3xl font-bold text-neutral-800">Featured products</h2>
-          <p className="mt-3 text-lg text-neutral-500">Complete AI business systems our buyers are investing in right now.</p>
+          <p className="mt-3 text-lg text-neutral-600">Complete AI business systems our buyers are investing in right now.</p>
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -227,41 +227,57 @@ function FeaturedProducts() {
             const Icon = typeIcons[product.typeIcon] ?? CogIcon;
             const gradient = typeGradients[product.category] ?? "from-neutral-50 to-neutral-100";
             return (
-              <Link
+              <div
                 key={product.slug}
-                to={`/products/${product.slug}`}
                 className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5"
               >
-                <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${gradient}`}>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-                    <Icon />
-                  </div>
-                  <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
-                    {product.category}
-                  </div>
-                  <div className="absolute top-3 right-3 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
-                    Save {product.discountPercent}%
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
-                  <p className="mt-1 text-sm text-neutral-500 truncate">{product.tagline}</p>
-                  <div className="mt-2">
-                    <StarRating rating={product.rating} count={product.reviewCount} />
-                  </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-bold text-brand-600">${product.launchPrice}</span>
-                      <span className="text-sm text-neutral-400 line-through">${product.regularPrice}</span>
+                <Link
+                  to={`/products/${product.slug}`}
+                  className="block"
+                >
+                  <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${gradient}`}>
+                    <img
+                      src={`/images/products/${product.slug}.png`}
+                      alt={product.name}
+                      className="h-full w-full object-cover rounded-t-xl"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
+                      {product.category}
                     </div>
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
+                    <div className="absolute top-3 right-3 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                      Save {product.discountPercent}%
+                    </div>
                   </div>
+                  <div className="p-5">
+                    <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
+                    <p className="mt-1 text-sm text-neutral-600 truncate">{product.tagline}</p>
+                    <div className="mt-2">
+                      <StarRating rating={product.rating} count={product.reviewCount} />
+                    </div>
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-brand-600">${product.launchPrice}</span>
+                        <span className="text-sm text-neutral-400 line-through">${product.regularPrice}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-5 pb-5 flex gap-2">
+                  <Link
+                    to={`/products/${product.slug}`}
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+                  >
+                    View Product
+                  </Link>
+                  <a
+                    href={`/products/${product.slug}#demo`}
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
+                  >
+                    Watch Demo
+                  </a>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -284,7 +300,7 @@ function HowItWorks() {
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">How It Works</p>
           <h2 className="mt-2 text-3xl font-bold text-neutral-800">Three steps to your next AI business</h2>
-          <p className="mt-3 text-lg text-neutral-500">No mystery boxes. No surprise subscriptions. Just transparent buying.</p>
+          <p className="mt-3 text-lg text-neutral-600">No mystery boxes. No surprise subscriptions. Just transparent buying.</p>
         </div>
 
         <div className="mt-12 grid gap-8 sm:grid-cols-3">
@@ -292,7 +308,7 @@ function HowItWorks() {
             <div key={step.number} className="rounded-xl border border-neutral-200 bg-white p-6 transition-shadow duration-200 hover:shadow-sm">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-sm font-bold text-brand-600">{step.number}</div>
               <h3 className="text-lg font-semibold text-neutral-800">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-neutral-500">{step.description}</p>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-600">{step.description}</p>
             </div>
           ))}
         </div>
@@ -329,7 +345,7 @@ function CategoryBrowse() {
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">Categories</p>
           <h2 className="mt-2 text-3xl font-bold text-neutral-800">Browse by category</h2>
-          <p className="mt-3 text-lg text-neutral-500">Find exactly what you need — every product is organized by type.</p>
+          <p className="mt-3 text-lg text-neutral-600">Find exactly what you need — every product is organized by type.</p>
         </div>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -347,7 +363,7 @@ function CategoryBrowse() {
                 </div>
                 <div>
                   <h3 className="text-base font-semibold text-neutral-800 transition-colors group-hover:text-brand-600">{cat.name}</h3>
-                  <p className="mt-1 text-sm text-neutral-500">{cat.description}</p>
+                  <p className="mt-1 text-sm text-neutral-600">{cat.description}</p>
                 </div>
               </Link>
             );
@@ -366,7 +382,7 @@ function ReviewsSection() {
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">Testimonials</p>
           <h2 className="mt-2 text-3xl font-bold text-neutral-800">What buyers say</h2>
-          <p className="mt-3 text-lg text-neutral-500">Honest feedback from founders and executives who purchased through PrismBay.</p>
+          <p className="mt-3 text-lg text-neutral-600">Honest feedback from founders and executives who purchased through PrismBay.</p>
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -404,7 +420,7 @@ function FinalCTA() {
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-neutral-800 sm:text-4xl">Ready to build smarter?</h2>
-          <p className="mt-4 text-lg text-neutral-500">Browse the marketplace, watch demos, and find the AI business system that fits your vision.</p>
+          <p className="mt-4 text-lg text-neutral-600">Browse the marketplace, watch demos, and find the AI business system that fits your vision.</p>
           <div className="mt-8">
             <Link
               to="/products"
@@ -444,7 +460,7 @@ function Footer() {
               </text>
             </g>
           </svg>
-          <p className="mt-3 text-sm text-neutral-400">Complete AI business systems. Instant access.</p>
+          <p className="mt-3 text-sm text-neutral-300">Complete AI business systems. Instant access.</p>
         </div>
 
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
@@ -453,7 +469,7 @@ function Footer() {
             <ul className="space-y-2">
               {CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
-                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-400 transition-colors hover:text-white">
+                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-300 transition-colors hover:text-white">
                     {cat.name}
                   </Link>
                 </li>
@@ -463,18 +479,18 @@ function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
             <ul className="space-y-2">
-              <li><Link to="/about" className="text-sm text-neutral-400 transition-colors hover:text-white">About</Link></li>
-              <li><Link to="/how-it-works" className="text-sm text-neutral-400 transition-colors hover:text-white">How It Works</Link></li>
-              <li><Link to="/contact" className="text-sm text-neutral-400 transition-colors hover:text-white">Contact</Link></li>
+              <li><Link to="/about" className="text-sm text-neutral-300 transition-colors hover:text-white">About</Link></li>
+              <li><Link to="/how-it-works" className="text-sm text-neutral-300 transition-colors hover:text-white">How It Works</Link></li>
+              <li><Link to="/contact" className="text-sm text-neutral-300 transition-colors hover:text-white">Contact</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Legal</h4>
             <ul className="space-y-2">
-              <li><Link to="/terms" className="text-sm text-neutral-400 transition-colors hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy" className="text-sm text-neutral-400 transition-colors hover:text-white">Privacy</Link></li>
-              <li><Link to="/cookies" className="text-sm text-neutral-400 transition-colors hover:text-white">Cookies</Link></li>
-              <li><Link to="/refunds" className="text-sm text-neutral-400 transition-colors hover:text-white">Refunds</Link></li>
+              <li><Link to="/terms" className="text-sm text-neutral-300 transition-colors hover:text-white">Terms</Link></li>
+              <li><Link to="/privacy" className="text-sm text-neutral-300 transition-colors hover:text-white">Privacy</Link></li>
+              <li><Link to="/cookies" className="text-sm text-neutral-300 transition-colors hover:text-white">Cookies</Link></li>
+              <li><Link to="/refunds" className="text-sm text-neutral-300 transition-colors hover:text-white">Refunds</Link></li>
             </ul>
           </div>
         </div>

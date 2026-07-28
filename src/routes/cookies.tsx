@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/cookies")({
+  head: () => ({
+    meta: [
+      { title: "Cookie Policy — PrismBay" },
+      { name: "description", content: "PrismBay cookie policy: learn how we use essential, analytics, and functional cookies to keep our marketplace secure and improve your browsing experience." },
+    ],
+  }),
   component: CookiesPage,
 });
 

@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/how-it-works")({
+  head: () => ({
+    meta: [
+      { title: "How It Works — Browse, Watch Demos, Buy & Download | PrismBay" },
+      { name: "description", content: "How PrismBay works: browse AI business systems, watch real product demos, check out securely via Stripe, and download your purchase instantly. No mystery boxes." },
+    ],
+  }),
   component: HowItWorksPage,
 });
 

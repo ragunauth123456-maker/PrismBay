@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-r
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRODUCTS, BUNDLES, CATEGORY_MAP } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
+import TrustBadges from "~/components/TrustBadges";
 
 /* ─── Search params type ─── */
 type ProductSearch = {
@@ -11,6 +12,12 @@ type ProductSearch = {
 };
 
 export const Route = createFileRoute("/products/")({
+  head: () => ({
+    meta: [
+      { title: "AI Business Systems Marketplace — PrismBay" },
+      { name: "description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Watch demos, read reviews, buy instantly." },
+    ],
+  }),
   validateSearch: (search: Record<string, unknown>): ProductSearch => ({
     search: typeof search.search === "string" ? search.search : undefined,
     category: typeof search.category === "string" ? search.category : undefined,
@@ -240,7 +247,7 @@ function Footer() {
               </text>
             </g>
           </svg>
-          <p className="mt-3 text-sm text-neutral-400">Complete AI business systems. Instant access.</p>
+          <p className="mt-3 text-sm text-neutral-300">Complete AI business systems. Instant access.</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           <div>
@@ -248,7 +255,7 @@ function Footer() {
             <ul className="space-y-2">
               {CATEGORIES.filter((c) => c.slug !== "all" && c.slug !== "bundles").map((cat) => (
                 <li key={cat.slug}>
-                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-400 transition-colors hover:text-white">{cat.name}</Link>
+                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-300 transition-colors hover:text-white">{cat.name}</Link>
                 </li>
               ))}
             </ul>
@@ -256,18 +263,18 @@ function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
             <ul className="space-y-2">
-              <li><Link to="/about" className="text-sm text-neutral-400 transition-colors hover:text-white">About</Link></li>
-              <li><Link to="/how-it-works" className="text-sm text-neutral-400 transition-colors hover:text-white">How It Works</Link></li>
-              <li><Link to="/contact" className="text-sm text-neutral-400 transition-colors hover:text-white">Contact</Link></li>
+              <li><Link to="/about" className="text-sm text-neutral-300 transition-colors hover:text-white">About</Link></li>
+              <li><Link to="/how-it-works" className="text-sm text-neutral-300 transition-colors hover:text-white">How It Works</Link></li>
+              <li><Link to="/contact" className="text-sm text-neutral-300 transition-colors hover:text-white">Contact</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Legal</h4>
             <ul className="space-y-2">
-              <li><Link to="/terms" className="text-sm text-neutral-400 transition-colors hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy" className="text-sm text-neutral-400 transition-colors hover:text-white">Privacy</Link></li>
-              <li><Link to="/cookies" className="text-sm text-neutral-400 transition-colors hover:text-white">Cookies</Link></li>
-              <li><Link to="/refunds" className="text-sm text-neutral-400 transition-colors hover:text-white">Refunds</Link></li>
+              <li><Link to="/terms" className="text-sm text-neutral-300 transition-colors hover:text-white">Terms</Link></li>
+              <li><Link to="/privacy" className="text-sm text-neutral-300 transition-colors hover:text-white">Privacy</Link></li>
+              <li><Link to="/cookies" className="text-sm text-neutral-300 transition-colors hover:text-white">Cookies</Link></li>
+              <li><Link to="/refunds" className="text-sm text-neutral-300 transition-colors hover:text-white">Refunds</Link></li>
             </ul>
           </div>
         </div>
@@ -281,45 +288,58 @@ function Footer() {
 
 /* ─── Product Card ─── */
 function ProductCard({ product }: { product: ProductCardItem }) {
-  const Icon = typeIcons[product.typeIcon] ?? MonitorIcon;
   return (
-    <Link
-      to={`/products/${product.slug}`}
-      className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5"
-    >
-      <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${product.gradient}`}>
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-          <Icon />
-        </div>
-        <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
-          {product.category}
-        </div>
-        <div className="absolute top-3 right-3 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
-          Save {product.discountPercent}%
-        </div>
-        <div className="absolute bottom-3 left-3 rounded-lg bg-amber-50/90 px-2 py-0.5 text-[11px] font-medium text-amber-700">
-          30-day launch offer
-        </div>
-      </div>
-      <div className="p-5">
-        <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
-        <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{product.description}</p>
-        <div className="mt-2">
-          <StarRating rating={product.rating} count={product.reviewCount} />
-        </div>
-        <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-brand-600">${product.launchPrice}</span>
-            <span className="text-sm text-neutral-400 line-through">${product.price}</span>
+    <div className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5">
+      <Link
+        to={`/products/${product.slug}`}
+        className="block"
+      >
+        <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${product.gradient}`}>
+          <img
+            src={`/images/products/${product.slug}.png`}
+            alt={product.name}
+            className="h-full w-full object-cover rounded-t-xl"
+            loading="lazy"
+          />
+          <div className="absolute top-3 left-3 rounded-lg bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 shadow-sm">
+            {product.category}
           </div>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
+          <div className="absolute top-3 right-3 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+            Save {product.discountPercent}%
+          </div>
+          <div className="absolute bottom-3 left-3 rounded-lg bg-amber-50/90 px-2 py-0.5 text-[11px] font-medium text-amber-700">
+            30-day launch offer
+          </div>
         </div>
+        <div className="p-5">
+          <h3 className="text-base font-semibold text-neutral-800">{product.name}</h3>
+          <p className="mt-1 text-sm text-neutral-600 line-clamp-2">{product.description}</p>
+          <div className="mt-2">
+            <StarRating rating={product.rating} count={product.reviewCount} />
+          </div>
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg font-bold text-brand-600">${product.launchPrice}</span>
+              <span className="text-sm text-neutral-400 line-through">${product.price}</span>
+            </div>
+          </div>
+        </div>
+      </Link>
+      <div className="px-5 pb-5 flex gap-2">
+        <Link
+          to={`/products/${product.slug}`}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+        >
+          View Product
+        </Link>
+        <a
+          href={`/products/${product.slug}#demo`}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200"
+        >
+          Watch Demo
+        </a>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -346,7 +366,7 @@ function BundleCard({ bundle }: { bundle: typeof BUNDLES[number] }) {
       </div>
       <div className="p-5">
         <h3 className="text-base font-semibold text-neutral-800">{bundle.name}</h3>
-        <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{bundle.description}</p>
+        <p className="mt-1 text-sm text-neutral-600 line-clamp-2">{bundle.description}</p>
         <p className="mt-2 text-xs text-neutral-400">
           Includes: {bundle.productNames.join(", ")}
         </p>
@@ -474,7 +494,7 @@ function ProductsPage() {
               <h1 className="text-3xl font-bold text-neutral-800">
                 {showingBundles ? "Product Bundles" : "Build Smarter AI Businesses"}
               </h1>
-              <p className="mt-1 text-neutral-500">
+              <p className="mt-1 text-neutral-600">
                 {showingBundles
                   ? `${BUNDLES.length} bundles available — save up to $1,542`
                   : activeCategory !== "all"
@@ -571,7 +591,7 @@ function ProductsPage() {
             <div>
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-neutral-800">Bundle & Save</h2>
-                <p className="mt-2 text-neutral-500">Get multiple AI business systems together and save up to $1,542 during our 30-day launch.</p>
+                <p className="mt-2 text-neutral-600">Get multiple AI business systems together and save up to $1,542 during our 30-day launch.</p>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {BUNDLES.map((bundle) => (
@@ -607,7 +627,7 @@ function ProductsPage() {
               <div className="mt-16 border-t border-neutral-200 pt-12">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-neutral-800">Save more with bundles</h2>
-                  <p className="mt-2 text-neutral-500">Get multiple AI business systems together and save during our 30-day launch.</p>
+                  <p className="mt-2 text-neutral-600">Get multiple AI business systems together and save during our 30-day launch.</p>
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {BUNDLES.map((bundle) => (
@@ -620,7 +640,7 @@ function ProductsPage() {
             <div className="flex flex-col items-center justify-center py-20">
               <EmptySearchIcon />
               <h3 className="mt-6 text-xl font-semibold text-neutral-700">No products match your filters</h3>
-              <p className="mt-2 text-neutral-500 max-w-md text-center">
+              <p className="mt-2 text-neutral-600 max-w-md text-center">
                 Try adjusting your search terms or clearing some filters to find what you're looking for.
               </p>
               <button
@@ -634,6 +654,7 @@ function ProductsPage() {
         </div>
       </section>
 
+      <TrustBadges className="mt-12 mb-4" />
       <Footer />
     </div>
   );

@@ -5,6 +5,18 @@
 
 @config "../../tailwind-colors.js";
 
+/* ── Keyframes ────────────────────────────────────────────────────── */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* ── Base Styles ──────────────────────────────────────────────────── */
 @layer base {
   html,

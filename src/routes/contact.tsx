@@ -2,6 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/contact")({
+  head: () => ({
+    meta: [
+      { title: "Contact PrismBay — Get Support & Inquiries | PrismBay" },
+      { name: "description", content: "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours." },
+    ],
+  }),
   component: ContactPage,
 });
 
