@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   PRODUCTS,
@@ -284,8 +284,12 @@ function ProductPage() {
 
               {/* CTA */}
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
-                <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0">
-                  {product.ctaText}
+                <button
+                  onClick={() => handlePurchase(product.slug)}
+                  disabled={checkoutLoading}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {checkoutLoading ? "Redirecting to Stripe..." : product.ctaText}
                 </button>
               </div>
 
@@ -409,6 +413,29 @@ function ProductPage() {
 
 /* ─── Bundle Page ─── */
 function BundlePage({ bundle }: { bundle: Bundle }) {
+  const [bundleCheckoutLoading, setBundleCheckoutLoading] = useState(false);
+
+  async function handleBundlePurchase(bundleSlug: string) {
+    setBundleCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productSlug: bundleSlug }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Checkout failed. Please try again.");
+      }
+    } catch (err) {
+      alert("Checkout failed. Please try again.");
+    } finally {
+      setBundleCheckoutLoading(false);
+    }
+  }
+
   const bundleProducts = bundle.productSlugs
     .map((slug) => getProductBySlug(slug))
     .filter(Boolean);
@@ -449,8 +476,12 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
               <p className="mt-1 text-xs text-neutral-500">
                 Introductory pricing — 30 days only.
               </p>
-              <button className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0">
-                Get All {bundle.productSlugs.length} Products for ${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer
+              <button
+                onClick={() => handleBundlePurchase(bundle.slug)}
+                disabled={bundleCheckoutLoading}
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {bundleCheckoutLoading ? "Redirecting to Stripe..." : `Get All ${bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer`}
               </button>
               <p className="mt-3 text-xs text-neutral-400">Secure payment via Stripe. Instant delivery. Single-business licence.</p>
             </div>
