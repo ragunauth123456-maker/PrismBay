@@ -145,7 +145,7 @@ export const Route = createFileRoute("/products/$slug")({
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
             { "@type": "ListItem", position: 2, name: "Products", item: "https://prismbay.com/products" },
-            { "@type": "ListItem", position: 3, name: "Bundles", item: "https://prismbay.com/products?category=bundles" },
+            { "@type": "ListItem", position: 3, name: "Bundles", item: "https://prismbay.com/bundles" },
             { "@type": "ListItem", position: 4, name: bundle.name, item: canonicalUrl },
           ],
         }),
@@ -278,7 +278,7 @@ function Navbar() {
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
           <Link to="/products" className="text-sm font-semibold text-brand-600">Products</Link>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
+          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
         </nav>
         <div className="flex items-center gap-5">
           <Link to="/sign-in" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Sign In</Link>
@@ -441,8 +441,7 @@ function ProductPage() {
                     Get {bundle.productNames.join(", ")} for ${bundle.launchPrice.toLocaleString()} — save ${bundle.saving.toLocaleString()}
                   </p>
                   <Link
-                    to="/products"
-                    search={{ category: "bundles" }}
+                    to="/bundles"
                     className="mt-2 inline-block text-xs font-semibold text-brand-300 hover:text-brand-200"
                   >
                     View bundles →
@@ -635,7 +634,7 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
             <span>/</span>
             <Link to="/products" className="hover:text-neutral-300 transition-colors">Products</Link>
             <span>/</span>
-            <Link to="/products" search={{ category: "bundles" }} className="hover:text-neutral-300 transition-colors">Bundles</Link>
+            <Link to="/bundles" className="hover:text-neutral-300 transition-colors">Bundles</Link>
             <span>/</span>
             <span className="text-neutral-200 font-medium">{bundle.name}</span>
           </nav>

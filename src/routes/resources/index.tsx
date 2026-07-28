@@ -71,7 +71,7 @@ function Navbar() {
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
           <Link to="/products" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Products</Link>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Bundles</Link>
+          <Link to="/bundles" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Bundles</Link>
           <Link to="/how-it-works" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">How It Works</Link>
         </nav>
         <Link to="/sign-in" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Sign In</Link>
@@ -125,7 +125,7 @@ function Footer() {
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Products</h4>
             <ul className="space-y-2">
               <li><Link to="/products" className="text-sm text-neutral-300 transition-colors hover:text-white">All Products</Link></li>
-              <li><Link to="/products" search={{ category: "bundles" }} className="text-sm text-neutral-300 transition-colors hover:text-white">Bundles</Link></li>
+              <li><Link to="/bundles" className="text-sm text-neutral-300 transition-colors hover:text-white">Bundles</Link></li>
             </ul>
           </div>
         </div>

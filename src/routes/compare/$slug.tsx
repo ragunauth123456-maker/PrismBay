@@ -57,7 +57,7 @@ function Navbar() {
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
           <Link to="/products" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Products</Link>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
+          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
           <Link to="/compare" className="text-sm font-semibold text-brand-600">Compare</Link>
         </nav>
         <div className="flex items-center gap-5">

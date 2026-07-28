@@ -44,7 +44,7 @@ function Navbar() {
           <Link to="/products" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
             Products
           </Link>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
+          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
             Bundles
           </Link>
         </nav>

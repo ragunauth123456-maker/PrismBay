@@ -327,7 +327,7 @@ function Navbar() {
               </>
             )}
           </div>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
+          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
             Bundles
           </Link>
           <Link to="/how-it-works" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
@@ -377,8 +377,7 @@ function Navbar() {
                 Products
               </Link>
               <Link
-                to="/products"
-                search={{ category: "bundles" }}
+                to="/bundles"
                 onClick={() => setMobileOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
               >
@@ -667,11 +666,10 @@ function FeaturedProducts() {
                 </div>
                 <div className="mt-4">
                   <Link
-                    to="/products"
-                    search={{ category: "bundles" }}
+                    to="/bundles"
                     className="inline-flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-3 text-base font-semibold text-neutral-900 shadow-sm transition-all duration-200 hover:bg-accent-600 hover:shadow-md hover:-translate-y-px active:bg-accent-700 active:translate-y-0"
                   >
-                    View Bundle →
+                    View Bundles →
                   </Link>
                 </div>
               </div>

@@ -66,7 +66,7 @@ function Navbar() {
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
           <Link to="/products" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Products</Link>
-          <Link to="/products" search={{ category: "bundles" }} className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
+          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">Bundles</Link>
           <Link to="/compare" className="text-sm font-semibold text-brand-600">Compare</Link>
         </nav>
         <div className="flex items-center gap-5">
@@ -180,8 +180,7 @@ function CompareIndexPage() {
               Browse all products
             </Link>
             <Link
-              to="/products"
-              search={{ category: "bundles" }}
+              to="/bundles"
               className="rounded-lg border border-neutral-200 bg-white px-6 py-2.5 text-sm font-semibold text-neutral-700 transition-all hover:border-brand-200 hover:text-brand-600"
             >
               View bundles
