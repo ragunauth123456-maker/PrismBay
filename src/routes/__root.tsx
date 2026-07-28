@@ -7,21 +7,29 @@ import {
 import type { ReactNode } from "react";
 
 import appCss from "~/styles/app.css?url";
+import CookieConsent from "~/components/CookieConsent";
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PrismBay — Premium Digital Products" },
-      { name: "description", content: "Clear value. Instant access. Premium software, templates, AI tools, and courses for modern builders." },
-      { property: "og:title", content: "PrismBay — Premium Digital Products" },
-      { property: "og:description", content: "Clear value. Instant access. Premium software, templates, AI tools, and courses." },
+      { title: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
+      { name: "description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Watch demos, read reviews, download instantly." },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
+      { property: "og:description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Watch demos, read reviews, download instantly." },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/images/og-default.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
+      { name: "twitter:description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Watch demos, read reviews, download instantly." },
       { name: "theme-color", content: "#16B3A7" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "canonical", href: "https://prismbay.com" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
     ],
@@ -46,6 +54,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        <CookieConsent />
         <Scripts />
       </body>
     </html>

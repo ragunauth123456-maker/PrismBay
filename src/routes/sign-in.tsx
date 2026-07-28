@@ -2,6 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/sign-in")({
+  head: () => ({
+    meta: [
+      { title: "Sign In — Access Your Purchases | PrismBay" },
+      { name: "description", content: "Sign in to your PrismBay account to access your AI business system purchases, download files, view your order history, and manage your licences." },
+    ],
+  }),
   component: SignInPage,
 });
 

@@ -12,6 +12,7 @@ import {
   type Product,
 } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
+import TrustBadges from "~/components/TrustBadges";
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/products/$slug")({
@@ -295,6 +296,7 @@ function ProductPage() {
 
               <p className="mt-3 text-xs text-neutral-400">
                 Secure payment via Stripe. Instant delivery. Single-business licence.
+              <TrustBadges className="mt-4" />
               </p>
 
               {/* Bundle Callout */}
@@ -484,6 +486,7 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
                 {bundleCheckoutLoading ? "Redirecting to Stripe..." : `Get All ${bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer`}
               </button>
               <p className="mt-3 text-xs text-neutral-400">Secure payment via Stripe. Instant delivery. Single-business licence.</p>
+              <TrustBadges className="mt-4" />
             </div>
           </div>
         </div>
