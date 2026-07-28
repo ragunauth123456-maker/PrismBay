@@ -11,6 +11,11 @@ interface Order {
 }
 
 export const Route = createFileRoute("/admin/orders")({
+  head: () => ({
+    meta: [
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: AdminOrders,
 });
 

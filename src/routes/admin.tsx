@@ -24,6 +24,12 @@ interface DashboardStats {
 }
 
 export const Route = createFileRoute("/admin")({
+  head: () => ({
+    meta: [
+      { title: "Admin Dashboard — PrismBay" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: AdminDashboard,
 });
 

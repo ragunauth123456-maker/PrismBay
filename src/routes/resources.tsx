@@ -7,6 +7,9 @@ export const Route = createFileRoute("/resources")({
       { title: "Resources & Guides — AI Business Systems | PrismBay" },
       { name: "description", content: "Explore guides, articles, and resources on AI business systems, digital transformation, AI compliance, AI workforce platforms, and building AI-native businesses." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/resources" },
+    ],
   }),
   component: ResourcesPage,
 });

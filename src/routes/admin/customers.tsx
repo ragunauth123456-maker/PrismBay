@@ -10,6 +10,11 @@ interface Customer {
 }
 
 export const Route = createFileRoute("/admin/customers")({
+  head: () => ({
+    meta: [
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: AdminCustomers,
 });
 

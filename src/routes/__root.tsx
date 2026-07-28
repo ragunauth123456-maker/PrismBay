@@ -21,6 +21,7 @@ export const Route = createRootRoute({
       { property: "og:description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Watch demos, read reviews, download instantly." },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/images/og-default.png" },
+      { property: "og:url", content: "https://prismbay.com" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
       { name: "twitter:description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Watch demos, read reviews, download instantly." },
@@ -29,7 +30,6 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      { rel: "canonical", href: "https://prismbay.com" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
     ],

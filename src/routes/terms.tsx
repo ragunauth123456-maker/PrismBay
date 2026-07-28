@@ -6,6 +6,9 @@ export const Route = createFileRoute("/terms")({
       { title: "Terms of Service — PrismBay" },
       { name: "description", content: "PrismBay terms of service: licence terms, usage rights, payment policies, and legal agreements for purchasing AI business systems and digital products." },
     ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/terms" },
+    ],
   }),
   component: TermsPage,
 });

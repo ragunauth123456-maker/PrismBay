@@ -44,6 +44,7 @@ export const Route = createFileRoute("/products/$slug")({
       desc = bundle.description;
       if (desc.length > 160) desc = desc.slice(0, 157) + "...";
     }
+    const canonicalPath = product ? `/products/${product.slug}` : bundle ? `/products/${bundle.slug}` : "";
     return {
       meta: [
         { title },
@@ -51,6 +52,11 @@ export const Route = createFileRoute("/products/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "product" },
+        { property: "og:url", content: `https://prismbay.com${canonicalPath}` },
+        { property: "og:image", content: `https://prismbay.com/images/products/${slug}.png` },
+      ],
+      links: [
+        { rel: "canonical", href: `https://prismbay.com${canonicalPath}` },
       ],
     };
   },
@@ -331,7 +337,7 @@ function ProductPage() {
             <div className="order-1 lg:order-2">
               <img
                 src={`/images/products/${product.slug}.png`}
-                alt={`${product.name} product image`}
+                alt={`${product.name} AI business system dashboard interface and implementation blueprint`}
                 className="w-full max-w-sm mx-auto rounded-xl shadow-2xl shadow-navy-950/50"
                 onError={(e) => {
                   const target = e.currentTarget;
@@ -495,6 +501,14 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
         <div className="mx-auto max-w-7xl px-6 py-12 lg:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-block rounded-full bg-navy-800 px-3 py-1 text-xs font-semibold text-brand-300 mb-3">Bundle</span>
+            {/* Bundle image */}
+            <div className="flex justify-center mb-6">
+              <img
+                src={`/images/products/${bundle.slug}.png`}
+                alt={`${bundle.name} bundle collection of AI business systems`}
+                className="w-full max-w-md rounded-xl shadow-2xl shadow-navy-950/50"
+              />
+            </div>
             <h1 className="text-3xl font-bold tracking-tight text-white lg:text-4xl">{bundle.name}</h1>
             <p className="mt-3 text-lg text-neutral-300">{bundle.description}</p>
             {/* Pricing Box */}

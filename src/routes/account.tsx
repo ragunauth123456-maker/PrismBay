@@ -23,6 +23,16 @@ interface DownloadToken {
 }
 
 export const Route = createFileRoute("/account")({
+  head: () => ({
+    meta: [
+      { title: "My Account — PrismBay" },
+      { name: "description", content: "Access your PrismBay account to manage downloads, view purchase history, and access your AI business system purchases." },
+      { property: "og:url", content: "https://prismbay.com/account" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://prismbay.com/account" },
+    ],
+  }),
   component: AccountPage,
 });
 
