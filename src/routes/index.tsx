@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
           "@type": "Organization",
           name: "PrismBay",
           url: "https://prismbay.com",
-          logo: "https://prismbay.com/images/prismbay-logo.png",
+          logo: "https://prismbay.com/favicon.svg",
         }),
       },
       {
@@ -601,7 +601,7 @@ function FeaturedProducts() {
                   <div className={`relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br ${gradient}`}>
                     <img
                       src={`/images/products/${product.slug}.png`}
-                      alt={product.name}
+                      alt={`${product.name} — AI Business System Blueprint document package`}
                       className="h-full w-full object-cover rounded-t-xl"
                       loading="lazy"
                     />

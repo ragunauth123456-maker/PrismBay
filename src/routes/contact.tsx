@@ -6,6 +6,11 @@ export const Route = createFileRoute("/contact")({
     meta: [
       { title: "Contact PrismBay — Get Support & Inquiries | PrismBay" },
       { name: "description", content: "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours." },
+      { property: "og:title", content: "Contact PrismBay — Get Support & Inquiries | PrismBay" },
+      { property: "og:description", content: "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours." },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
+      { property: "og:url", content: "https://prismbay.com/contact" },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/contact" },

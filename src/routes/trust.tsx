@@ -5,6 +5,11 @@ export const Route = createFileRoute("/trust")({
     meta: [
       { title: "Trust Centre — Secure Payments, Privacy & Quality | PrismBay" },
       { name: "description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, demo-first philosophy, and 14-day refund policy." },
+      { property: "og:title", content: "Trust Centre — Secure Payments, Privacy & Quality | PrismBay" },
+      { property: "og:description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, demo-first philosophy, and 14-day refund policy." },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
+      { property: "og:url", content: "https://prismbay.com/trust" },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/trust" },

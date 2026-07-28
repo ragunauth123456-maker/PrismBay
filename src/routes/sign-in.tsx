@@ -6,6 +6,7 @@ export const Route = createFileRoute("/sign-in")({
     meta: [
       { title: "Sign In — Access Your Purchases | PrismBay" },
       { name: "description", content: "Sign in to your PrismBay account to access your AI business system purchases, download files, view your order history, and manage your licences." },
+      { name: "robots", content: "noindex" },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/sign-in" },

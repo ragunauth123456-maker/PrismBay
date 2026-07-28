@@ -5,6 +5,11 @@ export const Route = createFileRoute("/about")({
     meta: [
       { title: "About PrismBay — Premium AI Business Systems Marketplace" },
       { name: "description", content: "Learn about PrismBay: our mission to provide complete AI business systems with real demos, transparent pricing, and instant digital delivery for modern builders." },
+      { property: "og:title", content: "About PrismBay — Premium AI Business Systems Marketplace" },
+      { property: "og:description", content: "Learn about PrismBay: our mission to provide complete AI business systems with real demos, transparent pricing, and instant digital delivery for modern builders." },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
+      { property: "og:url", content: "https://prismbay.com/about" },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/about" },

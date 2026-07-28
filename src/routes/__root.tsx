@@ -20,7 +20,7 @@ export const Route = createRootRoute({
       { property: "og:title", content: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
       { property: "og:description", content: "Complete AI business systems with workflows, architecture diagrams, revenue models & implementation plans. Browse, evaluate, and download instantly." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/images/og-default.png" },
+      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
       { property: "og:url", content: "https://prismbay.com" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Business Systems & Blueprints — Build Smarter | PrismBay" },
