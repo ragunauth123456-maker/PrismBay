@@ -33,3 +33,39 @@
     @apply text-brand-600 hover:text-brand-700 transition-colors;
   }
 }
+
+/* ── Article Body Styles ─────────────────────────────────────────────── */
+@layer components {
+  .article-body h2 {
+    @apply mt-12 mb-4 text-2xl font-bold text-navy-900 tracking-tight;
+  }
+
+  .article-body h3 {
+    @apply mt-8 mb-3 text-xl font-semibold text-navy-800;
+  }
+
+  .article-body p {
+    @apply mb-5 text-base leading-relaxed text-neutral-700;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    @apply mb-5 ml-6 space-y-2;
+  }
+
+  .article-body ul {
+    @apply list-disc;
+  }
+
+  .article-body ol {
+    @apply list-decimal;
+  }
+
+  .article-body li {
+    @apply text-base leading-relaxed text-neutral-700;
+  }
+
+  .article-body strong {
+    @apply font-semibold text-navy-900;
+  }
+}
