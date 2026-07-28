@@ -4,8 +4,17 @@
  */
 
 import { createFileRoute } from "@tanstack/react-router";
-import { verifyStripeWebhook } from "~/lib/stripe";
+import { verifyStripeWebhook, getStripe } from "~/lib/stripe";
 import { sql } from "~/db";
+import { sendEmailQuietly } from "~/lib/email";
+import {
+  purchaseConfirmation,
+  downloadAccess,
+  getFirstName,
+  formatCents,
+  formatDate,
+  getSiteUrl,
+} from "~/lib/email-templates";
 
 export const Route = createFileRoute("/api/webhooks/stripe")({
   server: {
@@ -117,9 +126,9 @@ async function handleCheckoutCompleted(event: any) {
   `;
   const orderItemId = (itemRows[0] as any).id;
 
-  // Generate download token
+  // Generate download token (24-hour expiry for emailed links)
   const token = crypto.randomUUID();
-  const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 1 year
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
   await sql()`
     INSERT INTO download_tokens (order_item_id, token, max_downloads, expires_at)
@@ -135,8 +144,74 @@ async function handleCheckoutCompleted(event: any) {
     `;
   }
 
-  // TODO: Send fulfillment email (Phase 10 — email service)
-  console.log(`  ℹ Fulfillment email for ${customerEmail} — not yet implemented`);
+  // ── Send transactional emails ──────────────────────────────────────
+
+  // Determine customer name from user record or fall back
+  let customerName = "";
+  if (userId) {
+    const userRows = await sql()`SELECT name FROM users WHERE id = ${userId}`;
+    if (userRows.length > 0) {
+      customerName = (userRows[0] as any).name || "";
+    }
+  }
+
+  const firstName = getFirstName(customerName);
+  const siteUrl = getSiteUrl();
+  const accountDownloadsUrl = `${siteUrl}/account`;
+  const orderDate = formatDate(new Date().toISOString());
+
+  // Get payment method details from Stripe
+  let paymentMethodBrief = "card";
+  try {
+    if (paymentIntentId) {
+      const stripe = getStripe();
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      const paymentMethod = paymentIntent.payment_method;
+      if (typeof paymentMethod === "object" && paymentMethod && "card" in paymentMethod) {
+        const card = (paymentMethod as any).card;
+        if (card) {
+          paymentMethodBrief = `${card.brand || "Card"} ending ${card.last4 || "****"}`;
+        }
+      }
+    }
+  } catch {
+    // Fall back to "card" if Stripe lookup fails
+  }
+
+  // Template 1: Purchase confirmation
+  const purchaseEmail = purchaseConfirmation({
+    customerFirstName: firstName,
+    orderId: orderId.slice(0, 8), // Use shortened ID for readability
+    orderDate,
+    productName: productTitle,
+    pricePaid: formatCents(amountTotal),
+    paymentMethodBrief,
+    accountDownloadsUrl,
+  });
+
+  await sendEmailQuietly({
+    to: customerEmail,
+    subject: purchaseEmail.subject,
+    body: purchaseEmail.body,
+  });
+
+  // Template 2: Download access (with the generated token link)
+  const downloadUrl = `${siteUrl}/api/downloads/${token}`;
+  const downloadEmail = downloadAccess({
+    customerFirstName: firstName,
+    productName: productTitle,
+    downloadUrl,
+    tokenExpiryDuration: "24 hours",
+    accountDownloadsUrl,
+  });
+
+  await sendEmailQuietly({
+    to: customerEmail,
+    subject: downloadEmail.subject,
+    body: downloadEmail.body,
+  });
+
+  console.log(`  ✓ Emails sent to ${customerEmail}`);
 }
 
 async function handleCheckoutExpired(event: any) {

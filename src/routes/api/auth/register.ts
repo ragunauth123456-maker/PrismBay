@@ -12,6 +12,8 @@ import {
   getUserByEmail,
 } from "~/lib/auth";
 import { checkRateLimit } from "~/lib/rate-limit";
+import { sendEmailQuietly } from "~/lib/email";
+import { welcome, getFirstName, getSiteUrl } from "~/lib/email-templates";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -65,6 +67,24 @@ export const Route = createFileRoute("/api/auth/register")({
 
         const user = await createUser(email, password, name);
         const session = await createSession(user.id);
+
+        // ── Send welcome email (Template 3) ──────────────────────────
+
+        const siteUrl = getSiteUrl();
+        const welcomeEmail = welcome({
+          customerFirstName: getFirstName(name),
+          marketplaceUrl: `${siteUrl}/products`,
+          resourcesUrl: `${siteUrl}/resources`,
+          trustUrl: `${siteUrl}/trust`,
+        });
+
+        await sendEmailQuietly({
+          to: email,
+          subject: welcomeEmail.subject,
+          body: welcomeEmail.body,
+        });
+
+        // ─────────────────────────────────────────────────────────────
 
         const { password_hash: _, ...publicUser } = user;
 
