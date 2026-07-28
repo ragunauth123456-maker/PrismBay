@@ -12,6 +12,7 @@ import {
 } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
+import { getComparisonsForProduct } from "~/data/comparisons";
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/products/$slug")({
@@ -512,6 +513,37 @@ function ProductPage() {
           </div>
         </div>
       </section>
+      {/* Compare Products */}
+      {(() => {
+        const comparisons = getComparisonsForProduct(product.slug);
+        if (comparisons.length === 0) return null;
+        return (
+          <section className="bg-white">
+            <div className="mx-auto max-w-3xl px-6 py-14">
+              <h2 className="text-2xl font-bold text-neutral-800 text-center">Compare Products</h2>
+              <p className="mt-2 text-neutral-500 text-center">See how {product.name} stacks up against similar products.</p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                {comparisons.map((comp) => (
+                  <Link
+                    key={comp.slug}
+                    to={`/compare/${comp.slug}`}
+                    className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-all hover:border-brand-200 hover:text-brand-600 hover:shadow-sm"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <rect x="2" y="3" width="5" height="4" rx="1" stroke="#16B3A7" strokeWidth="1.5" />
+                      <rect x="9" y="9" width="5" height="4" rx="1" stroke="#F59E0B" strokeWidth="1.5" />
+                      <path d="M4.5 7v2m7-6v2" stroke="#9F9E99" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                    {comp.label} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+
 
 
 
