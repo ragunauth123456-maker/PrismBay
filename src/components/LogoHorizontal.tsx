@@ -1,11 +1,9 @@
 import { Link } from "@tanstack/react-router";
-
 interface LogoHorizontalProps {
   className?: string;
   /** Use light text variant (for dark backgrounds like the footer) */
   light?: boolean;
 }
-
 export default function LogoHorizontal({ className, light }: LogoHorizontalProps) {
   return (
     <Link to="/" className={`inline-flex items-center gap-3 ${className ?? ""}`}>
