@@ -158,6 +158,17 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens (
 CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_token ON password_reset_tokens (token);
 CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_email ON password_reset_tokens (email);
 
+-- Newsletter subscribers
+CREATE TABLE IF NOT EXISTS subscribers (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email           TEXT NOT NULL UNIQUE,
+  subscribed_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  unsubscribed_at TIMESTAMPTZ,
+  ip_address      TEXT,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers (email);
+
 -- Email verification tokens
 CREATE TABLE IF NOT EXISTS email_verification_tokens (
   id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),

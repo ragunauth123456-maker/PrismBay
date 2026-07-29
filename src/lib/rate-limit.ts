@@ -6,6 +6,7 @@
  *   register:     3 per hour per IP
  *   forgot-pw:    3 per 15 minutes per IP
  *   downloads:    10 per minute per token
+ *   subscribe:    3 per hour per IP
  */
 
 interface WindowEntry {
@@ -18,6 +19,7 @@ const stores: Record<string, Map<string, WindowEntry>> = {
   register: new Map(),
   "forgot-password": new Map(),
   download: new Map(),
+  subscribe: new Map(),
 };
 
 const WINDOWS: Record<string, number> = {
@@ -25,6 +27,7 @@ const WINDOWS: Record<string, number> = {
   register: 3_600_000, // 1 hour
   "forgot-password": 900_000, // 15 minutes
   download: 60_000, // 1 minute
+  subscribe: 3_600_000, // 1 hour
 };
 
 const MAX_REQUESTS: Record<string, number> = {
@@ -32,6 +35,7 @@ const MAX_REQUESTS: Record<string, number> = {
   register: 3,
   "forgot-password": 3,
   download: 10,
+  subscribe: 3,
 };
 
 /**
@@ -39,7 +43,7 @@ const MAX_REQUESTS: Record<string, number> = {
  * Returns `true` if the request is allowed, `false` if rate-limited.
  */
 export function checkRateLimit(
-  action: "login" | "register" | "forgot-password" | "download",
+  action: "login" | "register" | "forgot-password" | "download" | "subscribe",
   key: string,
 ): boolean {
   const store = stores[action];

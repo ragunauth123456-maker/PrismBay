@@ -1,15 +1,47 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import LogoHorizontal from "./LogoHorizontal";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setStatus("success");
+        setMessage(data.message || "You're subscribed!");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong.");
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Network error. Please try again.");
+    }
+  }
+
   return (
     <footer className="bg-neutral-900">
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-12">
         <div className="mb-12">
           <LogoHorizontal light />
         </div>
-        <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-          <div>
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          <nav aria-label="Footer navigation">
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
             <ul className="space-y-2">
               <li>
@@ -37,8 +69,46 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+          </nav>
+
+          {/* Newsletter signup */}
+          <div className="sm:col-span-2 lg:col-span-2">
+            <h4 className="mb-2 text-sm font-semibold text-neutral-100">
+              Get new articles by email
+            </h4>
+            <p className="mb-4 text-sm text-neutral-400">
+              One email every two weeks. No spam, unsubscribe anytime.
+            </p>
+            {status === "success" ? (
+              <p className="text-sm font-medium text-brand-400">{message}</p>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
+                <label htmlFor="footer-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="footer-email"
+                  type="email"
+                  required
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="min-w-0 flex-1 rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2.5 text-sm text-white placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600 disabled:opacity-60"
+                >
+                  {status === "loading" ? "Subscribing…" : "Subscribe"}
+                </button>
+              </form>
+            )}
+            {status === "error" && (
+              <p className="mt-2 text-sm text-red-400">{message}</p>
+            )}
           </div>
-        </nav>
+        </div>
         <div className="mt-12 border-t border-neutral-800 pt-8">
           <p className="text-xs text-neutral-500">
             &copy; PrismBay 2026. All rights reserved.
