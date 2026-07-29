@@ -200,6 +200,8 @@ export default function DemoWalkthroughPage({
         </div>
       </div>
 
+      <h1 className="sr-only">{demo.productName} — Interactive Product Demo</h1>
+
       {/* ── Main Content ── */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-16">
         {/* ── Video Walkthrough ── */}
