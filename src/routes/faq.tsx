@@ -25,6 +25,96 @@ export const Route = createFileRoute("/faq")({
     ],
     links: [{ rel: "canonical", href: "https://www.prismbayai.com/faq" }],
     scripts: [
+      {
+        tag: "script" as const,
+        attrs: { type: "application/ld+json" },
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "What is PrismBay?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "PrismBay is a premium marketplace for complete AI business system blueprints. Each product is a comprehensive document package that includes detailed workflows, technical architecture, revenue models, implementation plans, and commercial launch guidance — everything you need to understand and build a specific type of AI-native business.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What exactly do I receive when I purchase?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Every purchase includes a downloadable ZIP file containing the complete blueprint package: architecture diagrams, workflow documentation, technical specifications, financial models, and a launch roadmap. Files are delivered as PDFs and editable source documents (Markdown, draw.io diagrams, spreadsheet templates). You get instant access after purchase.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Are these working software products?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "No. These are business system blueprints — detailed plans, architectures, and implementation guides. They are not pre-built software applications, SaaS platforms, or installable code. Think of them as the complete architectural plans for a building, not the building itself. They give you everything needed to build the system yourself or with a development team.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is the refund policy?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "We offer a 14-day money-back guarantee. If the blueprint doesn't meet your expectations, contact us within 14 days of purchase for a full refund. See our full refund policy at /refunds.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "How is payment handled?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "All payments are processed securely through Stripe. We never handle or store your credit card details. Stripe is PCI-DSS Level 1 compliant — the highest standard in payment security.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is the licensing?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Every product comes with a single-business perpetual license. You can use the blueprint to build one business or internal system. You cannot resell, redistribute, or sublicense the blueprint itself. For multi-entity or agency use, contact us.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "How do I access my purchase?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Immediately after completing checkout, you'll receive a confirmation email with a unique download link. You can also access all your purchases from your PrismBay account dashboard. Download links never expire.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do you offer custom or consulting work?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Not at this time. PrismBay sells standardized, self-service blueprint products. We don't offer custom development, implementation consulting, or one-on-one advisory services.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "How are launch prices different from regular prices?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Launch pricing is a limited-time introductory discount available during our first 30 days (through August 27, 2026). After the launch period, products return to their regular prices. The current discount percentage is clearly displayed on every product page.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can I see what's in a product before buying?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes. Every product has a detailed page with feature breakdowns, technical requirements, FAQ content, and an interactive walkthrough showing exactly what's included. We believe in informed purchases — no mystery boxes.",
+              },
+            },
+          ],
+        }),
+      },
       breadcrumbListScript([
         { name: "Home", url: "https://www.prismbayai.com" },
         { name: "FAQ", url: "https://www.prismbayai.com/faq" },
