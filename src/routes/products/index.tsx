@@ -21,11 +21,11 @@ export const Route = createFileRoute("/products/")({
       { property: "og:title", content: "AI Business Systems Marketplace — PrismBay" },
       { property: "og:description", content: "Browse premium AI business systems: complete blueprints with workflows, architecture, revenue models & implementation plans. Instant access, launch pricing available." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/products" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/products" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/products" },
+      { rel: "canonical", href: "https://www.prismbayai.com/products" },
     ],
   }),
   validateSearch: (search: Record<string, unknown>): ProductSearch => ({

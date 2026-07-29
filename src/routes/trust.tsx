@@ -10,11 +10,11 @@ export const Route = createFileRoute("/trust")({
       { property: "og:title", content: "Trust Centre — Secure Payments, Privacy & Quality | PrismBay" },
       { property: "og:description", content: "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, demo-first philosophy, and 14-day refund policy." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/trust" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/trust" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/trust" },
+      { rel: "canonical", href: "https://www.prismbayai.com/trust" },
     ],
   }),
   component: TrustPage,
@@ -151,7 +151,7 @@ const TRUST_SECTIONS = [
   {
     icon: MessageIcon,
     title: "Customer Support",
-    body: "We respond to every support inquiry within 24 hours — typically much faster. You can reach us directly by email at support@prismbay.com, and every message goes to a real human on our team. Whether you have a pre-sale question, a technical issue, or just want to understand which product fits your needs, we're here to help. No chatbots, no ticket systems that go into a void — just direct, helpful responses from people who know the products.",
+    body: "We respond to every support inquiry within 24 hours — typically much faster. You can reach us directly by email at support@www.prismbayai.com, and every message goes to a real human on our team. Whether you have a pre-sale question, a technical issue, or just want to understand which product fits your needs, we're here to help. No chatbots, no ticket systems that go into a void — just direct, helpful responses from people who know the products.",
     takeaway: "Real human support, within 24 hours — direct email, no runaround.",
   },
   {

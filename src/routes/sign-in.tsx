@@ -12,7 +12,7 @@ export const Route = createFileRoute("/sign-in")({
       { name: "robots", content: "noindex" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/sign-in" },
+      { rel: "canonical", href: "https://www.prismbayai.com/sign-in" },
     ],
   }),
   component: SignInPage,

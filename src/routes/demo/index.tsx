@@ -22,10 +22,10 @@ export const Route = createFileRoute("/demo/")({
           "Interactive guided tours for all 9 PrismBay AI business systems. Step-by-step walkthroughs covering features, architecture, and pricing for each product.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/demo" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/demo" },
     ],
-    links: [{ rel: "canonical", href: "https://prismbay.com/demo" }],
+    links: [{ rel: "canonical", href: "https://www.prismbayai.com/demo" }],
   }),
   component: DemoIndexPage,
 });

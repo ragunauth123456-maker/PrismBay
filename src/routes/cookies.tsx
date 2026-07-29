@@ -10,7 +10,7 @@ export const Route = createFileRoute("/cookies")({
       { name: "description", content: "PrismBay cookie policy: learn how we use essential, analytics, and functional cookies to keep our marketplace secure and improve your browsing experience." },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/cookies" },
+      { rel: "canonical", href: "https://www.prismbayai.com/cookies" },
     ],
   }),
   component: CookiesPage,

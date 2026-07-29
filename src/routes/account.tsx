@@ -28,10 +28,10 @@ export const Route = createFileRoute("/account")({
       { title: "My Account — PrismBay" },
       { name: "description", content: "Access your PrismBay account to manage downloads, view purchase history, and access your AI business system purchases." },
       { name: "robots", content: "noindex" },
-      { property: "og:url", content: "https://prismbay.com/account" },
+      { property: "og:url", content: "https://www.prismbayai.com/account" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/account" },
+      { rel: "canonical", href: "https://www.prismbayai.com/account" },
     ],
   }),
   component: AccountPage,

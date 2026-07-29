@@ -24,7 +24,7 @@ export const Route = createFileRoute("/resources/$slug")({
       links: [
         {
           rel: "canonical",
-          href: `https://prismbay.com/resources/${article.slug}`,
+          href: `https://www.prismbayai.com/resources/${article.slug}`,
         },
       ],
     };

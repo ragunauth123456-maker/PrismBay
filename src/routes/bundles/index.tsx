@@ -12,11 +12,11 @@ export const Route = createFileRoute("/bundles/")({
       { property: "og:title", content: "AI Business System Bundles — Save Up to $1,542 | PrismBay" },
       { property: "og:description", content: "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/bundles" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/bundles" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/bundles" },
+      { rel: "canonical", href: "https://www.prismbayai.com/bundles" },
     ],
     scripts: [
       {
@@ -26,8 +26,8 @@ export const Route = createFileRoute("/bundles/")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
-            { "@type": "ListItem", position: 2, name: "Bundles", item: "https://prismbay.com/bundles" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.prismbayai.com" },
+            { "@type": "ListItem", position: 2, name: "Bundles", item: "https://www.prismbayai.com/bundles" },
           ],
         }),
       },

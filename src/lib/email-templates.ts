@@ -74,7 +74,7 @@ export function getSiteUrl(): string {
   if (process.env.SITE_URL) {
     return process.env.SITE_URL.replace(/\/$/, "");
   }
-  return "https://prismbay.com";
+  return "https://www.prismbayai.com";
 }
 
 // ── Template Renderers ─────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ What happens next:
    each time you request it. You can re-download at any time.
 
 3. Every PrismBay purchase includes 30 days of priority support. Reply
-   to this email or write to support@prismbay.com — a real person will
+   to this email or write to support@www.prismbayai.com — a real person will
    get back to you, typically within a few hours.
 
 4. If the product isn't what you expected, you're covered by our 14-day
@@ -118,7 +118,7 @@ A few things to know:
 
 —
 The PrismBay Team
-support@prismbay.com`,
+support@www.prismbayai.com`,
   };
 }
 
@@ -148,7 +148,7 @@ Need to download again later? Visit your account:
 
 —
 The PrismBay Team
-support@prismbay.com`,
+support@www.prismbayai.com`,
   };
 }
 
@@ -185,7 +185,7 @@ email — we're happy to help.
 
 —
 The PrismBay Team
-support@prismbay.com`,
+support@www.prismbayai.com`,
   };
 }
 
@@ -233,7 +233,7 @@ available at its regular price after the launch period ends.
 
 —
 The PrismBay Team
-support@prismbay.com`,
+support@www.prismbayai.com`,
   };
 }
 
@@ -268,6 +268,6 @@ going smoothly, that's great to hear too.
 
 —
 The PrismBay Team
-support@prismbay.com`,
+support@www.prismbayai.com`,
   };
 }

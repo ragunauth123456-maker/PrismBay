@@ -19,9 +19,9 @@ export const Route = createFileRoute("/faq")({
           "Common questions about PrismBay: how purchases work, what's included in a blueprint, licensing, refunds, delivery, and more.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://prismbay.com/faq" },
+      { property: "og:url", content: "https://www.prismbayai.com/faq" },
     ],
-    links: [{ rel: "canonical", href: "https://prismbay.com/faq" }],
+    links: [{ rel: "canonical", href: "https://www.prismbayai.com/faq" }],
   }),
   component: FAQPage,
 });

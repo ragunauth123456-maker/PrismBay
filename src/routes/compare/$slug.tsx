@@ -17,7 +17,7 @@ export const Route = createFileRoute("/compare/$slug")({
     const products = comparison.productSlugs
       .map((s) => getProductBySlug(s))
       .filter(Boolean);
-    const canonicalUrl = `https://prismbay.com/compare/${comparison.slug}`;
+    const canonicalUrl = `https://www.prismbayai.com/compare/${comparison.slug}`;
 
     return {
       meta: [

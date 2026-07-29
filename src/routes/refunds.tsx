@@ -10,7 +10,7 @@ export const Route = createFileRoute("/refunds")({
       { name: "description", content: "PrismBay refund policy: our 14-day money-back guarantee for AI business system purchases. Learn about eligibility, the refund process, and our commitment." },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/refunds" },
+      { rel: "canonical", href: "https://www.prismbayai.com/refunds" },
     ],
   }),
   component: RefundsPage,
@@ -42,7 +42,7 @@ function RefundsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">How to Request a Refund</h2>
-            <p>Email us at <a href="mailto:support@prismbay.com" className="text-brand-600 hover:text-brand-700">support@prismbay.com</a> with your order number and the reason for your refund request. We process refunds within 5 business days.</p>
+            <p>Email us at <a href="mailto:support@www.prismbayai.com" className="text-brand-600 hover:text-brand-700">support@www.prismbayai.com</a> with your order number and the reason for your refund request. We process refunds within 5 business days.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">After Refund</h2>

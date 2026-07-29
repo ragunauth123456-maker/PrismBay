@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
-Sitemap: https://prismbay.com/sitemap.xml
+Disallow: /account/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /sign-in
+Sitemap: https://www.prismbayai.com/sitemap.xml

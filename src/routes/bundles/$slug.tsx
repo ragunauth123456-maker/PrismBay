@@ -25,7 +25,7 @@ export const Route = createFileRoute("/bundles/$slug")({
     const title = `${bundle.name} — Bundle | PrismBay`;
     let desc = bundle.description;
     if (desc.length > 160) desc = desc.slice(0, 157) + "...";
-    const canonicalUrl = `https://prismbay.com/bundles/${bundle.slug}`;
+    const canonicalUrl = `https://www.prismbayai.com/bundles/${bundle.slug}`;
     return {
       meta: [
         { title },
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/bundles/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
-        { property: "og:image", content: `https://prismbay.com/images/products/${bundle.slug}.png` },
+        { property: "og:image", content: `https://www.prismbayai.com/images/products/${bundle.slug}.png` },
         { property: "og:url", content: canonicalUrl },
       ],
       links: [
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/bundles/$slug")({
             description: bundle.description,
             sku: bundle.slug,
             brand: { "@type": "Brand", name: "PrismBay" },
-            image: `https://prismbay.com/images/products/${bundle.slug}.png`,
+            image: `https://www.prismbayai.com/images/products/${bundle.slug}.png`,
             offers: {
               "@type": "Offer",
               price: bundle.launchPrice.toFixed(2),
@@ -97,7 +97,7 @@ export const Route = createFileRoute("/bundles/$slug")({
                 name: "What is your refund policy?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Due to the digital nature of these business blueprints, all sales are final. We encourage you to review the product details, demo walkthroughs, and included deliverables carefully before purchasing. If you have any pre-sale questions, contact us at support@prismbay.com.",
+                  text: "Due to the digital nature of these business blueprints, all sales are final. We encourage you to review the product details, demo walkthroughs, and included deliverables carefully before purchasing. If you have any pre-sale questions, contact us at support@www.prismbayai.com.",
                 },
               },
             ],
@@ -110,8 +110,8 @@ export const Route = createFileRoute("/bundles/$slug")({
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
-              { "@type": "ListItem", position: 2, name: "Bundles", item: "https://prismbay.com/bundles" },
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://www.prismbayai.com" },
+              { "@type": "ListItem", position: 2, name: "Bundles", item: "https://www.prismbayai.com/bundles" },
               { "@type": "ListItem", position: 3, name: bundle.name, item: canonicalUrl },
             ],
           }),
@@ -314,7 +314,7 @@ function BundleDetailPage() {
     },
     {
       question: "What is your refund policy?",
-      answer: "Due to the digital nature of these business blueprints, all sales are final. We encourage you to review the product details, demo walkthroughs, and included deliverables carefully before purchasing. If you have any pre-sale questions, our team is happy to help at support@prismbay.com.",
+      answer: "Due to the digital nature of these business blueprints, all sales are final. We encourage you to review the product details, demo walkthroughs, and included deliverables carefully before purchasing. If you have any pre-sale questions, our team is happy to help at support@www.prismbayai.com.",
     },
     {
       question: "Are these actual working software products?",

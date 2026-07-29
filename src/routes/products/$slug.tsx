@@ -47,7 +47,7 @@ export const Route = createFileRoute("/products/$slug")({
       if (desc.length > 160) desc = desc.slice(0, 157) + "...";
     }
     const canonicalPath = product ? `/products/${product.slug}` : bundle ? `/products/${bundle.slug}` : "";
-    const canonicalUrl = `https://prismbay.com${canonicalPath}`;
+    const canonicalUrl = `https://www.prismbayai.com${canonicalPath}`;
 
     // Build JSON-LD scripts
     const jsonLdScripts = [];
@@ -67,7 +67,7 @@ export const Route = createFileRoute("/products/$slug")({
           description: product.description,
           sku: product.slug,
           brand: { "@type": "Brand", name: "PrismBay" },
-          image: `https://prismbay.com/images/products/${product.slug}.png`,
+          image: `https://www.prismbayai.com/images/products/${product.slug}.png`,
           offers: {
             "@type": "Offer",
             price: product.launchPrice.toFixed(2),
@@ -107,8 +107,8 @@ export const Route = createFileRoute("/products/$slug")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
-            { "@type": "ListItem", position: 2, name: "Products", item: "https://prismbay.com/products" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.prismbayai.com" },
+            { "@type": "ListItem", position: 2, name: "Products", item: "https://www.prismbayai.com/products" },
             { "@type": "ListItem", position: 3, name: product.name, item: canonicalUrl },
           ],
         }),
@@ -125,7 +125,7 @@ export const Route = createFileRoute("/products/$slug")({
           description: bundle.description,
           sku: bundle.slug,
           brand: { "@type": "Brand", name: "PrismBay" },
-          image: `https://prismbay.com/images/products/${bundle.slug}.png`,
+          image: `https://www.prismbayai.com/images/products/${bundle.slug}.png`,
           offers: {
             "@type": "Offer",
             price: bundle.launchPrice.toFixed(2),
@@ -145,9 +145,9 @@ export const Route = createFileRoute("/products/$slug")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://prismbay.com" },
-            { "@type": "ListItem", position: 2, name: "Products", item: "https://prismbay.com/products" },
-            { "@type": "ListItem", position: 3, name: "Bundles", item: "https://prismbay.com/bundles" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.prismbayai.com" },
+            { "@type": "ListItem", position: 2, name: "Products", item: "https://www.prismbayai.com/products" },
+            { "@type": "ListItem", position: 3, name: "Bundles", item: "https://www.prismbayai.com/bundles" },
             { "@type": "ListItem", position: 4, name: bundle.name, item: canonicalUrl },
           ],
         }),
@@ -162,7 +162,7 @@ export const Route = createFileRoute("/products/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "product" },
         { property: "og:url", content: canonicalUrl },
-        { property: "og:image", content: `https://prismbay.com/images/products/${slug}.png` },
+        { property: "og:image", content: `https://www.prismbayai.com/images/products/${slug}.png` },
       ],
       links: [
         { rel: "canonical", href: canonicalUrl },

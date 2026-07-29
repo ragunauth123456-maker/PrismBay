@@ -10,7 +10,7 @@ export const Route = createFileRoute("/privacy")({
       { name: "description", content: "PrismBay privacy policy: how we collect, use, and protect your personal data when you browse and purchase AI business systems on our marketplace." },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/privacy" },
+      { rel: "canonical", href: "https://www.prismbayai.com/privacy" },
     ],
   }),
   component: PrivacyPage,
@@ -62,7 +62,7 @@ function PrivacyPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">8. Contact</h2>
-            <p>For privacy inquiries, contact us at <a href="mailto:privacy@prismbay.com" className="text-brand-600 hover:text-brand-700">privacy@prismbay.com</a>.</p>
+            <p>For privacy inquiries, contact us at <a href="mailto:privacy@www.prismbayai.com" className="text-brand-600 hover:text-brand-700">privacy@www.prismbayai.com</a>.</p>
           </section>
         </div>
       </div>

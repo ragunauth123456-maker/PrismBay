@@ -3,13 +3,13 @@
  *
  * Usage:
  *   bun run seed-admin
- *   ADMIN_EMAIL=admin@prismbay.com ADMIN_PASSWORD=changeme bun run seed-admin
+ *   ADMIN_EMAIL=admin@www.prismbayai.com ADMIN_PASSWORD=changeme bun run seed-admin
  */
 
 import { neon } from "@neondatabase/serverless";
 import { hash as bcryptHash } from "@node-rs/bcrypt";
 
-const DEFAULT_EMAIL = "admin@prismbay.com";
+const DEFAULT_EMAIL = "admin@www.prismbayai.com";
 const DEFAULT_PASSWORD = "PrismBay2026!"; // Change in production!
 
 async function main() {

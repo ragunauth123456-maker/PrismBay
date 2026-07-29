@@ -25,15 +25,15 @@ export const Route = createFileRoute("/demo/$slug")({
         { property: "og:type", content: "website" },
         {
           property: "og:url",
-          content: `https://prismbay.com/demo/${demo.productSlug}`,
+          content: `https://www.prismbayai.com/demo/${demo.productSlug}`,
         },
         {
           property: "og:image",
-          content: `https://prismbay.com/images/products/${demo.productSlug}.png`,
+          content: `https://www.prismbayai.com/images/products/${demo.productSlug}.png`,
         },
         {
           property: "og:video",
-          content: `https://prismbay.com${videoUrl}`,
+          content: `https://www.prismbayai.com${videoUrl}`,
         },
         {
           property: "og:video:type",
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/demo/$slug")({
       links: [
         {
           rel: "canonical",
-          href: `https://prismbay.com/demo/${demo.productSlug}`,
+          href: `https://www.prismbayai.com/demo/${demo.productSlug}`,
         },
       ],
     };

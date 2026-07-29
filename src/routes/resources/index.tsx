@@ -23,10 +23,10 @@ export const Route = createFileRoute("/resources/")({
           "Explore guides, articles, and resources on AI business systems, digital transformation, AI compliance, AI workforce platforms, and building AI-native businesses.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/resources" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/resources" },
     ],
-    links: [{ rel: "canonical", href: "https://prismbay.com/resources" }],
+    links: [{ rel: "canonical", href: "https://www.prismbayai.com/resources" }],
   }),
   component: ResourcesPage,
 });

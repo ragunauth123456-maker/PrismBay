@@ -12,11 +12,11 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact PrismBay — Get Support & Inquiries | PrismBay" },
       { property: "og:description", content: "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://prismbay.com/images/og-default.png" },
-      { property: "og:url", content: "https://prismbay.com/contact" },
+      { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
+      { property: "og:url", content: "https://www.prismbayai.com/contact" },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/contact" },
+      { rel: "canonical", href: "https://www.prismbayai.com/contact" },
     ],
   }),
   component: ContactPage,
@@ -106,7 +106,7 @@ function ContactPage() {
                 Send Message
               </button>
               <p className="text-xs text-center text-neutral-400">
-                Or email us directly at <a href="mailto:support@prismbay.com" className="text-brand-600 hover:text-brand-700">support@prismbay.com</a>
+                Or email us directly at <a href="mailto:support@www.prismbayai.com" className="text-brand-600 hover:text-brand-700">support@www.prismbayai.com</a>
               </p>
             </form>
           )}

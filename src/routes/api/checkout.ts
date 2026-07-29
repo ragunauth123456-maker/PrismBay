@@ -22,7 +22,7 @@ export const Route = createFileRoute("/api/checkout")({
     handlers: {
       POST: async ({ request }) => {
         // Get origin for success/cancel URLs
-        const origin = request.headers.get("origin") || "https://prismbay.com";
+        const origin = request.headers.get("origin") || "https://www.prismbayai.com";
 
         let body: unknown;
         try {

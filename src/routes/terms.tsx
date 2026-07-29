@@ -10,7 +10,7 @@ export const Route = createFileRoute("/terms")({
       { name: "description", content: "PrismBay terms of service: licence terms, usage rights, payment policies, and legal agreements for purchasing AI business systems and digital products." },
     ],
     links: [
-      { rel: "canonical", href: "https://prismbay.com/terms" },
+      { rel: "canonical", href: "https://www.prismbayai.com/terms" },
     ],
   }),
   component: TermsPage,
@@ -69,7 +69,7 @@ function TermsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">9. Contact</h2>
-            <p>For questions about these terms, contact us at <a href="mailto:legal@prismbay.com" className="text-brand-600 hover:text-brand-700">legal@prismbay.com</a> or through our <Link to="/contact" className="text-brand-600 hover:text-brand-700">contact page</Link>.</p>
+            <p>For questions about these terms, contact us at <a href="mailto:legal@www.prismbayai.com" className="text-brand-600 hover:text-brand-700">legal@www.prismbayai.com</a> or through our <Link to="/contact" className="text-brand-600 hover:text-brand-700">contact page</Link>.</p>
           </section>
         </div>
       </div>

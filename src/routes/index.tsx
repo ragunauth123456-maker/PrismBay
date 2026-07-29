@@ -9,7 +9,11 @@ import LogoHorizontal from '~/components/LogoHorizontal';
 export const Route = createFileRoute("/")({
   head: () => ({
     links: [
-      { rel: "canonical", href: "https://prismbay.com/" },
+      { rel: "canonical", href: "https://www.prismbayai.com/" },
+    ],
+    meta: [
+      { title: "AI Business Systems & Blueprints | PrismBay" },
+      { name: "description", content: "Premium AI business system blueprints — complete workflows, architecture, revenue models, and implementation plans. Browse 9 products with interactive demos." },
     ],
     scripts: [
       {
@@ -19,8 +23,8 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "PrismBay",
-          url: "https://prismbay.com",
-          logo: "https://prismbay.com/favicon.svg",
+          url: "https://www.prismbayai.com",
+          logo: "https://www.prismbayai.com/favicon.svg",
         }),
       },
       {
@@ -30,12 +34,12 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "PrismBay",
-          url: "https://prismbay.com",
+          url: "https://www.prismbayai.com",
           potentialAction: {
             "@type": "SearchAction",
             target: {
               "@type": "EntryPoint",
-              urlTemplate: "https://prismbay.com/products?search={search_term_string}",
+              urlTemplate: "https://www.prismbayai.com/products?search={search_term_string}",
             },
             "query-input": "required name=search_term_string",
           },
@@ -243,7 +247,7 @@ function HeroSection() {
           {/* Left column — text */}
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Complete AI Business Systems. No Starting From Zero.
+              AI Business Systems & Blueprints
             </h1>
             <p className="mt-6 text-lg text-neutral-300 sm:text-xl">
               Detailed workflows, architecture, revenue models, and implementation plans — ready to evaluate, plan, and launch. Launch pricing available for a limited time.
