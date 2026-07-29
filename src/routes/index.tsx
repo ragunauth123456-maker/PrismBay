@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { PRODUCTS } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
+import Navbar from '~/components/Navbar';
+import Footer from '~/components/Footer';
+import LogoHorizontal from '~/components/LogoHorizontal';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,8 +57,6 @@ const CATEGORIES = [
   { slug: "ai-development", name: "AI Development", description: "App builders, agent platforms, and no-code AI creation tools", icon: "box", count: 1 },
   { slug: "trust-compliance", name: "Trust & Compliance", description: "Verification, procurement intelligence, and compliance evidence systems", icon: "file", count: 3 },
 ];
-
-
 
 /* ─── Inline SVG Icons ─── */
 function StarIcon({ filled }: { filled: boolean }) {
@@ -172,26 +173,10 @@ function StripeIcon() {
   );
 }
 
-function ChevronDownIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function CloseIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -208,27 +193,6 @@ const typeGradients: Record<string, string> = {
   "AI Development": "from-neutral-50 via-neutral-100 to-brand-50/40",
   "Trust & Compliance": "from-brand-50/60 via-neutral-50 to-accent-50/40",
 };
-
-/* ─── Logo ─── */
-function LogoHorizontal({ className }: { className?: string }) {
-  return (
-    <Link to="/" className={`inline-flex items-center gap-3 ${className ?? ""}`}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" className="h-9 w-auto" aria-label="PrismBay">
-        <g transform="translate(0, 6)">
-          <polygon points="4,52 28,4 52,52" fill="#16B3A7" />
-          <line x1="28" y1="4" x2="20" y2="52" stroke="white" strokeWidth="2.5" />
-          <circle cx="20" cy="52" r="3" fill="#F59E0B" />
-        </g>
-        <g transform="translate(68, 0)">
-          <text x="0" y="44" fontFamily="Inter, system-ui, sans-serif" fontWeight="700" fontSize="36" letterSpacing="-0.02em">
-            <tspan fill="#16B3A7">Prism</tspan>
-            <tspan fill="#282724">Bay</tspan>
-          </text>
-        </g>
-      </svg>
-    </Link>
-  );
-}
 
 /* ─── Announcement Bar ─── */
 function AnnouncementBar() {
@@ -267,142 +231,6 @@ function AnnouncementBar() {
         </button>
       </div>
     </div>
-  );
-}
-
-/* ─── Navbar ─── */
-function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
-
-  return (
-    <header className="sticky top-0 z-50 h-16 border-b border-neutral-200 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
-        <LogoHorizontal />
-
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 lg:flex">
-          <div className="relative">
-            <button
-              onClick={() => setProductsOpen(!productsOpen)}
-              className="inline-flex items-center gap-1 text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900"
-            >
-              Products
-              <ChevronDownIcon />
-            </button>
-            {productsOpen && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setProductsOpen(false)} />
-                <div className="absolute left-0 top-full z-20 mt-2 w-64 rounded-xl border border-neutral-200 bg-white p-3 shadow-lg">
-                  {CATEGORIES.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      to="/products"
-                      search={{ category: cat.slug }}
-                      onClick={() => setProductsOpen(false)}
-                      className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 hover:text-neutral-900"
-                    >
-                      <span>{cat.name}</span>
-                      <span className="text-xs text-neutral-400">{cat.count}</span>
-                    </Link>
-                  ))}
-                  <hr className="my-1 border-neutral-100" />
-                  <Link
-                    to="/products"
-                    onClick={() => setProductsOpen(false)}
-                    className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-brand-600 transition-colors hover:bg-brand-50"
-                  >
-                    View all products →
-                  </Link>
-                </div>
-              </>
-            )}
-          </div>
-          <Link to="/bundles" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
-            Bundles
-          </Link>
-          <Link to="/how-it-works" className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900">
-            How It Works
-          </Link>
-        </nav>
-
-        <div className="flex items-center gap-5">
-          <Link to="/sign-in" className="hidden text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900 lg:inline">
-            Sign In
-          </Link>
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100 lg:hidden"
-            aria-label="Open menu"
-          >
-            <MenuIcon />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile slide-out drawer */}
-      {mobileOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-50 bg-black/40 transition-opacity"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="fixed right-0 top-0 z-50 h-full w-72 bg-white shadow-xl transition-transform duration-300 ease-in-out">
-            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
-              <span className="text-base font-semibold text-neutral-800">Menu</span>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100"
-                aria-label="Close menu"
-              >
-                <CloseIcon />
-              </button>
-            </div>
-            <nav className="flex flex-col gap-1 px-4 py-4">
-              <Link
-                to="/products"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-              >
-                Products
-              </Link>
-              <Link
-                to="/bundles"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-              >
-                Bundles
-              </Link>
-              <Link
-                to="/how-it-works"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-              >
-                How It Works
-              </Link>
-              <hr className="my-2 border-neutral-100" />
-              <Link
-                to="/sign-in"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-base font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-              >
-                Sign In
-              </Link>
-            </nav>
-          </div>
-        </>
-      )}
-    </header>
   );
 }
 
@@ -783,70 +611,6 @@ function FinalCTA() {
         </div>
       </div>
     </section>
-  );
-}
-
-/* ─── Footer (P2 — navy background) ─── */
-function Footer() {
-  return (
-    <footer className="bg-navy-900">
-      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12">
-        <div className="mb-12">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" className="h-9 w-auto" aria-label="PrismBay">
-            <g transform="translate(0, 6)">
-              <polygon points="4,52 28,4 52,52" fill="#16B3A7" />
-              <line x1="28" y1="4" x2="20" y2="52" stroke="white" strokeWidth="2.5" />
-              <circle cx="20" cy="52" r="3" fill="#F59E0B" />
-            </g>
-            <g transform="translate(68, 0)">
-              <text x="0" y="44" fontFamily="Inter, system-ui, sans-serif" fontWeight="700" fontSize="36" letterSpacing="-0.02em">
-                <tspan fill="#16B3A7">Prism</tspan>
-                <tspan fill="#EDEDEB">Bay</tspan>
-              </text>
-            </g>
-          </svg>
-          <p className="mt-3 text-sm text-neutral-300">Complete AI business systems. Instant access.</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Categories</h4>
-            <ul className="space-y-2">
-              {CATEGORIES.map((cat) => (
-                <li key={cat.slug}>
-                  <Link to="/products" search={{ category: cat.slug }} className="text-sm text-neutral-300 transition-colors hover:text-white">
-                    {cat.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-sm text-neutral-300 transition-colors hover:text-white">About</Link></li>
-              <li><Link to="/how-it-works" className="text-sm text-neutral-300 transition-colors hover:text-white">How It Works</Link></li>
-              <li><Link to="/trust" className="text-sm text-neutral-300 transition-colors hover:text-white">Trust Centre</Link></li>
-              <li><Link to="/resources" className="text-sm text-neutral-300 transition-colors hover:text-white">Resources</Link></li>
-              <li><Link to="/contact" className="text-sm text-neutral-300 transition-colors hover:text-white">Contact</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Legal</h4>
-            <ul className="space-y-2">
-              <li><Link to="/terms" className="text-sm text-neutral-300 transition-colors hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy" className="text-sm text-neutral-300 transition-colors hover:text-white">Privacy</Link></li>
-              <li><Link to="/cookies" className="text-sm text-neutral-300 transition-colors hover:text-white">Cookies</Link></li>
-              <li><Link to="/refunds" className="text-sm text-neutral-300 transition-colors hover:text-white">Refunds</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 border-t border-navy-700 pt-8">
-          <p className="text-xs text-neutral-500">&copy; PrismBay 2026. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
   );
 }
 

@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import Navbar from '~/components/Navbar';
+import Footer from '~/components/Footer';
 
 export const Route = createFileRoute("/trust")({
   head: () => ({
@@ -171,94 +173,6 @@ const TRUST_SECTIONS = [
     takeaway: "14 days to decide — if it's not right for you, you get your money back, no questions asked.",
   },
 ];
-
-/* ─── Navbar (matching existing pattern) ─── */
-function Navbar() {
-  return (
-    <header className="sticky top-0 z-50 h-16 border-b border-navy-700 bg-navy-900/90 backdrop-blur-md">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="inline-flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" className="h-9 w-auto" aria-label="PrismBay">
-            <g transform="translate(0, 6)">
-              <polygon points="4,52 28,4 52,52" fill="#16B3A7" />
-              <line x1="28" y1="4" x2="20" y2="52" stroke="white" strokeWidth="2.5" />
-              <circle cx="20" cy="52" r="3" fill="#F59E0B" />
-            </g>
-            <g transform="translate(68, 0)">
-              <text x="0" y="44" fontFamily="Inter, system-ui, sans-serif" fontWeight="700" fontSize="36" letterSpacing="-0.02em">
-                <tspan fill="#16B3A7">Prism</tspan>
-                <tspan fill="#EDEDEB">Bay</tspan>
-              </text>
-            </g>
-          </svg>
-        </Link>
-        <nav className="hidden items-center gap-8 lg:flex">
-          <Link to="/products" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Products</Link>
-          <Link to="/bundles" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Bundles</Link>
-          <Link to="/how-it-works" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">How It Works</Link>
-        </nav>
-        <Link to="/sign-in" className="text-sm font-medium text-neutral-300 transition-colors hover:text-white">Sign In</Link>
-      </div>
-    </header>
-  );
-}
-
-/* ─── Footer ─── */
-function Footer() {
-  return (
-    <footer className="bg-navy-900">
-      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12">
-        <div className="mb-12">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" className="h-9 w-auto" aria-label="PrismBay">
-            <g transform="translate(0, 6)">
-              <polygon points="4,52 28,4 52,52" fill="#16B3A7" />
-              <line x1="28" y1="4" x2="20" y2="52" stroke="white" strokeWidth="2.5" />
-              <circle cx="20" cy="52" r="3" fill="#F59E0B" />
-            </g>
-            <g transform="translate(68, 0)">
-              <text x="0" y="44" fontFamily="Inter, system-ui, sans-serif" fontWeight="700" fontSize="36" letterSpacing="-0.02em">
-                <tspan fill="#16B3A7">Prism</tspan>
-                <tspan fill="#EDEDEB">Bay</tspan>
-              </text>
-            </g>
-          </svg>
-          <p className="mt-3 text-sm text-neutral-300">Complete AI business systems. Instant access.</p>
-        </div>
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-sm text-neutral-300 transition-colors hover:text-white">About</Link></li>
-              <li><Link to="/how-it-works" className="text-sm text-neutral-300 transition-colors hover:text-white">How It Works</Link></li>
-              <li><Link to="/contact" className="text-sm text-neutral-300 transition-colors hover:text-white">Contact</Link></li>
-              <li><Link to="/trust" className="text-sm text-neutral-300 transition-colors hover:text-white">Trust Centre</Link></li>
-              <li><Link to="/resources" className="text-sm text-neutral-300 transition-colors hover:text-white">Resources</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Legal</h4>
-            <ul className="space-y-2">
-              <li><Link to="/terms" className="text-sm text-neutral-300 transition-colors hover:text-white">Terms</Link></li>
-              <li><Link to="/privacy" className="text-sm text-neutral-300 transition-colors hover:text-white">Privacy</Link></li>
-              <li><Link to="/cookies" className="text-sm text-neutral-300 transition-colors hover:text-white">Cookies</Link></li>
-              <li><Link to="/refunds" className="text-sm text-neutral-300 transition-colors hover:text-white">Refunds</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Products</h4>
-            <ul className="space-y-2">
-              <li><Link to="/products" className="text-sm text-neutral-300 transition-colors hover:text-white">All Products</Link></li>
-              <li><Link to="/bundles" className="text-sm text-neutral-300 transition-colors hover:text-white">Bundles</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="mt-12 border-t border-navy-700 pt-8">
-          <p className="text-xs text-neutral-500">&copy; PrismBay 2026. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 /* ─── Trust Page ─── */
 function TrustPage() {

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getAllDemos } from "~/data/demos";
 import { getProductBySlug } from "~/data/products";
+import Navbar from '~/components/Navbar';
 
 export const Route = createFileRoute("/demo/")({
   head: () => ({
@@ -84,32 +85,6 @@ function ClockIcon() {
       <circle cx="7" cy="7" r="5.5" stroke="#9F9E99" strokeWidth="1.2" />
       <path d="M7 4.5V7l2 1.5" stroke="#9F9E99" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
-}
-
-function Navbar() {
-  return (
-    <header className="sticky top-0 z-50 h-16 border-b border-neutral-200 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl text-navy-900">
-          <span className="text-brand-500">◆</span> PrismBay
-        </Link>
-        <nav className="flex items-center gap-6 text-sm font-medium text-neutral-600">
-          <Link to="/products" className="hover:text-brand-600 transition-colors">
-            Products
-          </Link>
-          <Link to="/compare" className="hover:text-brand-600 transition-colors">
-            Compare
-          </Link>
-          <Link to="/demo" className="text-brand-600 hover:text-brand-700 transition-colors">
-            Demos
-          </Link>
-          <Link to="/resources" className="hover:text-brand-600 transition-colors">
-            Resources
-          </Link>
-        </nav>
-      </div>
-    </header>
   );
 }
 
