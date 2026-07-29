@@ -43,7 +43,22 @@ for (let attempt = 1; ; attempt++) {
         const { pathname } = new URL(req.url);
         if (pathname !== "/") {
           const file = Bun.file(CLIENT_DIR + pathname);
-          if (await file.exists()) return new Response(file);
+          if (await file.exists()) {
+            const headers = new Headers();
+            // Hashed JS/CSS assets: immutable long cache
+            if (/\/assets\/.+[.-][a-f0-9]{8,}\.(js|css)$/.test(pathname)) {
+              headers.set("Cache-Control", "public, max-age=31536000, immutable");
+            }
+            // Images and fonts: 1-day cache
+            else if (/\.(png|jpg|jpeg|gif|svg|ico|webp|woff2?|ttf|otf)$/.test(pathname)) {
+              headers.set("Cache-Control", "public, max-age=86400");
+            }
+            // HTML pages: no cache (must-revalidate)
+            else if (/\.html?$/.test(pathname)) {
+              headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+            }
+            return new Response(file, { headers });
+          }
         }
         return (
           handler as { fetch: (r: Request) => Response | Promise<Response> }

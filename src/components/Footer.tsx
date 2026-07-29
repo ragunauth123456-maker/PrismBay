@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="mb-12">
           <LogoHorizontal light />
         </div>
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           <div>
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
             <ul className="space-y-2">
@@ -38,7 +38,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-        </div>
+        </nav>
         <div className="mt-12 border-t border-neutral-800 pt-8">
           <p className="text-xs text-neutral-500">
             &copy; PrismBay 2026. All rights reserved.
