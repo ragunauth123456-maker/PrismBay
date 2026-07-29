@@ -17,6 +17,8 @@ export interface DemoWalkthrough {
   productName: string;
   totalSteps: number;
   steps: DemoStep[];
+  /** Path to the screen-recorded demo video webm, e.g. /videos/demos/nexusos.webm */
+  videoUrl?: string;
 }
 
 /* ─── 1. Nexus Network ─── */

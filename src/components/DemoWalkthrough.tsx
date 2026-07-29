@@ -96,6 +96,7 @@ export default function DemoWalkthroughPage({
   demo: DemoWalkthrough;
   productImage: string;
 }) {
+  const videoUrl = demo.videoUrl ?? `/videos/demos/${demo.productSlug}.webm`;
   const [currentStep, setCurrentStep] = useState(0);
   const [autoAdvance, setAutoAdvance] = useState(false);
   const totalSteps = demo.totalSteps;
@@ -201,6 +202,20 @@ export default function DemoWalkthroughPage({
 
       {/* ── Main Content ── */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pb-16">
+        {/* ── Video Walkthrough ── */}
+        <div className="mb-8 rounded-xl overflow-hidden bg-navy-950 shadow-lg border border-navy-800">
+          <video
+            key={videoUrl}
+            controls
+            preload="metadata"
+            className="w-full aspect-video"
+            poster={productImage}
+          >
+            <source src={videoUrl} type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
         {/* Step counter */}
         <div className="mb-6 flex items-center gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-brand-500">

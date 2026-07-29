@@ -15,6 +15,7 @@ export const Route = createFileRoute("/demo/$slug")({
     const desc =
       product?.description ??
       `Interactive guided tour of ${demo.productName}. Step-by-step walkthrough covering features, architecture, pricing, and who it's built for.`;
+    const videoUrl = `/videos/demos/${demo.productSlug}.webm`;
     return {
       meta: [
         { title },
@@ -29,6 +30,22 @@ export const Route = createFileRoute("/demo/$slug")({
         {
           property: "og:image",
           content: `https://prismbay.com/images/products/${demo.productSlug}.png`,
+        },
+        {
+          property: "og:video",
+          content: `https://prismbay.com${videoUrl}`,
+        },
+        {
+          property: "og:video:type",
+          content: "video/webm",
+        },
+        {
+          property: "og:video:width",
+          content: "1280",
+        },
+        {
+          property: "og:video:height",
+          content: "720",
         },
       ],
       links: [
@@ -45,7 +62,8 @@ export const Route = createFileRoute("/demo/$slug")({
 export default function DemoSlugPage() {
   const { demo, product } = Route.useLoaderData();
   const productImage = `/images/products/${demo.productSlug}.png`;
+  const videoUrl = demo.videoUrl ?? `/videos/demos/${demo.productSlug}.webm`;
   return (
-    <DemoWalkthroughPage demo={demo} productImage={productImage} />
+    <DemoWalkthroughPage demo={{ ...demo, videoUrl }} productImage={productImage} />
   );
 }
