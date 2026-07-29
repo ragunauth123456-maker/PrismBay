@@ -4,7 +4,7 @@ export const Route = createFileRoute("/refunds")({
   head: () => ({
     meta: [
       { title: "Refund Policy — PrismBay" },
-      { name: "description", content: "PrismBay refund policy: our 30-day satisfaction guarantee for AI business system purchases. Learn about eligibility, the refund process, and our commitment." },
+      { name: "description", content: "PrismBay refund policy: our 14-day money-back guarantee for AI business system purchases. Learn about eligibility, the refund process, and our commitment." },
     ],
     links: [
       { rel: "canonical", href: "https://prismbay.com/refunds" },

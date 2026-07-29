@@ -161,7 +161,7 @@ const TRUST_SECTIONS = [
   {
     icon: RefreshIcon,
     title: "Continuous Improvement",
-    body: "Our products don't sit still. Based on buyer feedback and real-world usage, we release updates to our blueprints — improved workflows, updated architecture patterns, new revenue model insights, and expanded implementation guides. When you purchase a product, you get access to the latest version, and we notify existing customers when significant updates are available so you always have the best version.",
+    body: "Our products don't sit still. We release updates to our blueprints based on industry developments and evolving best practices — improved workflows, updated architecture patterns, new revenue model insights, and expanded implementation guides. When you purchase a product, you get access to the latest version, and we notify existing customers when significant updates are available so you always have the best version.",
     takeaway: "Your blueprint evolves with the technology — updates based on real feedback, not theoretical roadmaps.",
   },
   {

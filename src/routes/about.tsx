@@ -76,7 +76,7 @@ function AboutPage() {
           <div>
             <h2 className="text-2xl font-bold text-neutral-800">Our Mission</h2>
             <p className="mt-4 text-neutral-600 leading-relaxed">Every AI business system on PrismBay is a complete blueprint — detailed workflows, technical architecture, revenue models, implementation plans, and commercial launch guidance. We don't sell vague ideas or hype documents. Every product has transparent pricing, detailed feature breakdowns, and clear licensing terms.</p>
-            <p className="mt-4 text-neutral-600 leading-relaxed">Our mission is to accelerate the AI-native business revolution by making battle-tested business system blueprints accessible to founders, executives, and technical teams worldwide.</p>
+            <p className="mt-4 text-neutral-600 leading-relaxed">Our mission is to accelerate the AI-native business revolution by making comprehensive business system blueprints accessible to founders, executives, and technical teams worldwide.</p>
           </div>
           <div>
             <h2 className="text-2xl font-bold text-neutral-800">The Demo-First Philosophy</h2>
@@ -87,10 +87,10 @@ function AboutPage() {
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {[
                 { title: "Complete Systems", desc: "Not just ideas — full architecture, workflows, revenue models, and launch plans." },
-                { title: "Demo-Verified", desc: "Every product has a demo video. No mystery purchases." },
+                { title: "Interactive Walkthroughs", desc: "Every product has a detailed, step-by-step interactive walkthrough you can explore before buying." },
                 { title: "Transparent Pricing", desc: "Clear regular price, launch discount, and deadline. No hidden fees." },
                 { title: "Instant Delivery", desc: "Download immediately after purchase. Start building today." },
-                { title: "Verified Reviews", desc: "Feedback from real buyers who have used the blueprints." },
+                { title: "Transparent Details", desc: "Complete feature breakdowns, technical requirements, and FAQ content so you know exactly what you're buying." },
                 { title: "Clear Licensing", desc: "Single-business perpetual licence. No subscription traps." },
               ].map((item) => (
                 <div key={item.title} className="rounded-lg border border-neutral-200 bg-white p-5">

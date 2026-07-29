@@ -554,7 +554,7 @@ function FeaturedProducts() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">Marketplace</p>
             <h2 className="mt-2 text-3xl font-bold text-neutral-800">Featured products</h2>
-            <p className="mt-3 text-base text-neutral-600">Complete AI business systems our buyers are investing in right now.</p>
+            <p className="mt-3 text-base text-neutral-600">Complete AI business systems ready to evaluate</p>
           </div>
           <Link
             to="/products"
