@@ -368,7 +368,7 @@ function ProductCard({ product }: { product: ProductCardItem }) {
 function BundleCard({ bundle }: { bundle: typeof BUNDLES[number] }) {
   return (
     <Link
-      to={`/products/${bundle.slug}`}
+      to={`/bundles/${bundle.slug}`}
       className="group cursor-pointer rounded-xl border-2 border-amber-200 bg-amber-50/30 p-0 transition-all duration-200 hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5"
     >
       <div className="relative flex aspect-[16/10] items-center justify-center rounded-t-xl bg-gradient-to-br from-amber-50 via-amber-100/50 to-brand-50">

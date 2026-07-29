@@ -176,9 +176,9 @@ function BundlesPage() {
         <div className="mx-auto max-w-7xl px-6 py-14 lg:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-block rounded-full bg-navy-800 px-3 py-1 text-xs font-semibold text-brand-300 mb-4">Bundles</span>
-            <h1 className="text-3xl font-bold tracking-tight text-white lg:text-4xl">AI Business System Bundles</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-white lg:text-4xl">Complete AI Business Bundles</h1>
             <p className="mt-4 text-lg text-neutral-300">
-              Save up to <span className="font-semibold text-amber-300">${maxSaving.toLocaleString()}</span> by purchasing multiple AI business systems together. Each bundle includes complete blueprints with workflows, architecture, revenue models, and implementation plans.
+              Save up to <span className="font-semibold text-amber-300">${maxSaving.toLocaleString()}</span> by purchasing multiple complete AI business systems together. Each bundle includes full blueprints with detailed workflows, technical architecture, revenue models, implementation plans, and commercial launch guidance.
             </p>
             <div className="mt-6 flex justify-center">
               <CountdownTimer variant="hero" />

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/bundles/$slug")({
   },
   head: ({ loaderData }) => {
     const { bundle } = loaderData;
-    const title = `${bundle.name} — Save $${bundle.saving.toLocaleString()} | PrismBay`;
+    const title = `${bundle.name} — Bundle | PrismBay`;
     let desc = bundle.description;
     if (desc.length > 160) desc = desc.slice(0, 157) + "...";
     const canonicalUrl = `https://prismbay.com/bundles/${bundle.slug}`;
