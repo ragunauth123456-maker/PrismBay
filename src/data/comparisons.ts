@@ -443,6 +443,266 @@ export const COMPARISONS: ComparisonConfig[] = [
     ],
     bundleSlug: "ai-business-operations",
   },
+  {
+    slug: "spendshield-ai-vs-evidenceflow-ai",
+    title: "SpendShield AI vs EvidenceFlow AI: Procurement Intelligence or Compliance Automation?",
+    productSlugs: ["spendshield-ai", "evidenceflow-ai"],
+    oneLiner: "Control costs before you spend vs prove compliance after the fact — same bundle, different mandate.",
+    seoDescription:
+      "Compare SpendShield AI and EvidenceFlow AI: AI procurement intelligence for cost control vs AI compliance automation for audit readiness. Both in the Trust, Risk & Compliance bundle at the same $249 launch price — which fits your team?",
+    decisionGuide: {
+      titleA: "Choose SpendShield AI if you need to control procurement spending",
+      descriptionA:
+        "Your team reviews purchases, compares suppliers, analyses contracts, and identifies savings opportunities. Your priority is reducing costs and managing vendor risk before money leaves the organisation.",
+      titleB: "Choose EvidenceFlow AI if you need to prove compliance after the fact",
+      descriptionB:
+        "Your compliance team collects evidence for audits — policies, certificates, screenshots, and records. AI agents classify, map to controls, and prepare audit-ready files. Your priority is documentation and audit readiness.",
+    },
+    quickComparison: [
+      { name: "Primary mandate", values: ["Cost control & savings", "Audit readiness & evidence"] },
+      { name: "Regular price", values: ["$349", "$349"] },
+      { name: "Launch price", values: ["$249", "$249"] },
+      { name: "Timing", values: ["Before procurement decisions", "Before auditors arrive"] },
+      { name: "Key strength", values: ["Supplier analysis & savings ID", "Evidence classification & control mapping"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "Core Capability",
+        features: [
+          { name: "Spend analysis", values: ["✓", "—"] },
+          { name: "Supplier comparison", values: ["✓", "—"] },
+          { name: "Contract review", values: ["✓", "—"] },
+          { name: "Document classification", values: ["—", "✓"] },
+          { name: "Control-to-evidence mapping", values: ["—", "✓"] },
+          { name: "Audit package export", values: ["—", "✓"] },
+        ],
+      },
+      {
+        groupName: "Risk & Monitoring",
+        features: [
+          { name: "Vendor risk assessment", values: ["✓", "—"] },
+          { name: "Price variance analysis", values: ["✓", "—"] },
+          { name: "Duplicate charge detection", values: ["✓", "—"] },
+          { name: "Missing evidence tracking", values: ["—", "✓"] },
+          { name: "Evidence status dashboard", values: ["—", "✓"] },
+        ],
+      },
+      {
+        groupName: "Buyer Persona",
+        features: [
+          { name: "Primary user", values: ["Procurement manager / CFO", "Compliance officer / CISO"] },
+          { name: "Reports to", values: ["CFO", "CFO / Board"] },
+          { name: "Launch savings", values: ["$100 (29%)", "$100 (29%)"] },
+          { name: "Complementary use case", values: ["Find savings, then prove controls around procurement process are compliant"] },
+        ],
+      },
+    ],
+    bundleSlug: "trust-risk-compliance",
+  },
+  {
+    slug: "digital-humans-vs-nexusos",
+    title: "Digital Humans vs NexusOS: AI Workforce or AI Operating System?",
+    productSlugs: ["digital-humans", "nexusos"],
+    oneLiner: "Build AI employees that do the work, or an AI OS that connects departments — the C-suite's strategic choice.",
+    seoDescription:
+      "Compare Digital Humans and NexusOS: AI virtual workforce platform vs intelligent business operating system. Both are premium products at $379–$449 launch — which strategic investment fits your organisation?",
+    decisionGuide: {
+      titleA: "Choose Digital Humans if you need AI employees that execute",
+      descriptionA:
+        "You want role-based AI workers — sales agents, support agents, analysts — that perform tasks, handle workflows, and deliver measurable output. Your focus is on building execution capacity through an AI workforce.",
+      titleB: "Choose NexusOS if you need an intelligent operating system that coordinates",
+      descriptionB:
+        "You need to connect finance, HR, sales, procurement, operations, and compliance into one coordinated platform. AI agents orchestrate workflows across departments, prepare reports, and surface exceptions. Your focus is on building systems that connect your existing teams.",
+    },
+    quickComparison: [
+      { name: "Core concept", values: ["AI employees that do work", "AI system that coordinates work"] },
+      { name: "Regular price", values: ["$499", "$599"] },
+      { name: "Launch price", values: ["$379", "$449"] },
+      { name: "Strategic question", values: ["'Who does the work?'", "'How does work flow?'"] },
+      { name: "Key strength", values: ["Execution capacity at scale", "Cross-department integration"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "What You're Building",
+        features: [
+          { name: "Output", values: ["AI workforce with defined roles", "Connected departmental OS"] },
+          { name: "Agent type", values: ["Role-based virtual employees", "Coordination & orchestration agents"] },
+          { name: "Primary benefit", values: ["Scale output without hiring", "Eliminate departmental friction"] },
+          { name: "Complexity level", values: ["High — agent role design", "High — multi-department rollout"] },
+        ],
+      },
+      {
+        groupName: "Organisational Fit",
+        features: [
+          { name: "Best for", values: ["Organisations scaling output", "Organisations fixing coordination"] },
+          { name: "Pain point addressed", values: ["Labour capacity constraints", "Departmental silos & friction"] },
+          { name: "Departments covered", values: ["Role-based (sales, support, ops)", "Full suite (8+ departments)"] },
+          { name: "Implementation approach", values: ["Role-by-role deployment", "Department-by-department rollout"] },
+        ],
+      },
+      {
+        groupName: "Strategic Value",
+        features: [
+          { name: "Launch savings", values: ["$120 (24%)", "$150 (25%)"] },
+          { name: "Long-term impact", values: ["Permanent capacity expansion", "Permanent operational efficiency"] },
+          { name: "C-suite champion", values: ["COO / CPO", "COO / CIO"] },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "nexus-network-vs-genesis-platform",
+    title: "Nexus Network vs Genesis Platform: Build a Marketplace or an App Builder?",
+    productSlugs: ["nexus-network", "genesis-platform"],
+    oneLiner: "Two platform-creation blueprints for founders — collaboration marketplace or no-code app builder?",
+    seoDescription:
+      "Compare Nexus Network and Genesis Platform: build an AI business collaboration marketplace vs build a no-code AI app builder platform. Both are platform-creation blueprints for founders — which model fits your vision?",
+    decisionGuide: {
+      titleA: "Choose Nexus Network if you want to build a collaboration marketplace",
+      descriptionA:
+        "You're building a platform where AI businesses connect, collaborate, and transact. Your customers come for the network — to find partners, list services, and build relationships. You're creating a community-driven marketplace at the most accessible price point.",
+      titleB: "Choose Genesis Platform if you want to build an app creation platform",
+      descriptionB:
+        "You're building a no-code AI app builder where users create and deploy AI-powered applications. Your customers come to build — using templates, agent builders, and workflow designers. You're creating the tool that lets others create.",
+    },
+    quickComparison: [
+      { name: "Platform type", values: ["Collaboration marketplace", "No-code app builder"] },
+      { name: "Regular price", values: ["$299", "$699"] },
+      { name: "Launch price", values: ["$219", "$499"] },
+      { name: "Your customers", values: ["AI businesses & service providers", "App creators & domain experts"] },
+      { name: "Key strength", values: ["Network effects & community", "Tool creation & extensibility"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "Platform Model",
+        features: [
+          { name: "Core offering", values: ["Business discovery & matching", "App builder engine & templates"] },
+          { name: "Revenue model", values: ["Marketplace fees + listings", "Subscription billing + enterprise"] },
+          { name: "User activity", values: ["Browsing, connecting, transacting", "Building, configuring, deploying"] },
+          { name: "Network effects", values: ["Strong — more users attract more businesses", "Moderate — more templates attract more builders"] },
+        ],
+      },
+      {
+        groupName: "Technical Scope",
+        features: [
+          { name: "No-code builder", values: ["—", "✓"] },
+          { name: "Template marketplace", values: ["Service listings", "App templates"] },
+          { name: "Multi-tenant SaaS", values: ["Vendor storefronts", "End-user app hosting"] },
+          { name: "Est. time to MVP", values: ["10–14 weeks", "16–20 weeks"] },
+        ],
+      },
+      {
+        groupName: "Founder Fit",
+        features: [
+          { name: "Launch savings", values: ["$80 (27%)", "$200 (29%)"] },
+          { name: "Best for founders who", values: ["Understand community dynamics", "Have technical platform experience"] },
+          { name: "Risk profile", values: ["Lower technical risk, higher adoption risk", "Higher technical risk, clearer monetisation path"] },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "digital-humans-vs-empire-ai",
+    title: "Digital Humans vs Empire AI: Do the Work or Oversee the Work?",
+    productSlugs: ["digital-humans", "empire-ai"],
+    oneLiner: "AI agents that execute vs AI agents that observe — workforce deployment or executive oversight?",
+    seoDescription:
+      "Compare Digital Humans and Empire AI: AI virtual workforce for execution vs AI command platform for oversight. Similar launch pricing ($379–$399) — do you need AI that does the work or AI that helps you oversee it?",
+    decisionGuide: {
+      titleA: "Choose Digital Humans if you need AI that executes",
+      descriptionA:
+        "You want role-based AI employees — sales agents, support agents, operations agents — that perform tasks and deliver output. Your focus is on building execution capacity: getting more work done through an AI workforce.",
+      titleB: "Choose Empire AI if you need AI that oversees",
+      descriptionB:
+        "You want a unified command centre that monitors financial results, operations, workforce, projects, and risks. AI agents observe, report, and surface exceptions. Your focus is on executive visibility and strategic oversight.",
+    },
+    quickComparison: [
+      { name: "Agent role", values: ["Execute tasks & workflows", "Monitor, report & alert"] },
+      { name: "Regular price", values: ["$499", "$549"] },
+      { name: "Launch price", values: ["$379", "$399"] },
+      { name: "Metaphor", values: ["COO tool — gets things done", "CEO tool — sees everything"] },
+      { name: "Key strength", values: ["Workforce deployment at scale", "Strategic visibility & decision support"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "What the AI Does",
+        features: [
+          { name: "Primary function", values: ["Performs work in defined roles", "Monitors work across departments"] },
+          { name: "Output", values: ["Completed tasks & workflows", "Reports, alerts & forecasts"] },
+          { name: "Interaction model", values: ["Agents act on your behalf", "Agents inform your decisions"] },
+          { name: "Value metric", values: ["Output volume & quality", "Decision speed & accuracy"] },
+        ],
+      },
+      {
+        groupName: "Organisational Impact",
+        features: [
+          { name: "Best for", values: ["Scaling operations without hiring", "Improving executive decision-making"] },
+          { name: "Teams affected", values: ["Operations, sales, support", "Executive team, department heads"] },
+          { name: "Implementation focus", values: ["Role design & agent training", "Dashboard configuration & data integration"] },
+          { name: "Risk if over-adopted", values: ["Over-automation without oversight", "Analysis paralysis without execution"] },
+        ],
+      },
+      {
+        groupName: "Strategic Fit",
+        features: [
+          { name: "Launch savings", values: ["$120 (24%)", "$150 (27%)"] },
+          { name: "C-suite champion", values: ["COO / VP Operations", "CEO / CFO"] },
+          { name: "Complementary?", values: ["Digital Humans execute; Empire AI monitors the execution — they work best together"] },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "genesis-platform-vs-digital-humans",
+    title: "Genesis Platform vs Digital Humans: Build Apps or Build Workers?",
+    productSlugs: ["genesis-platform", "digital-humans"],
+    oneLiner: "Two meta-platform products — build a platform where others create apps, or a platform where AI employees work?",
+    seoDescription:
+      "Compare Genesis Platform and Digital Humans: build a no-code AI app builder vs build an AI virtual workforce platform. Both are technically ambitious meta-platform products — which direction fits your vision?",
+    decisionGuide: {
+      titleA: "Choose Genesis Platform if you want to build an app creation platform",
+      descriptionA:
+        "You're a technical founder building a no-code AI app builder for others to use. Your customers create applications — you provide the platform, templates, builder engine, and infrastructure. You're building the tool that empowers creation.",
+      titleB: "Choose Digital Humans if you want to build an AI workforce platform",
+      descriptionB:
+        "You're building a platform where AI employees — virtual sales agents, support agents, analysts — perform work in defined roles. Your customers deploy AI workers into their operations. You're building the workforce, not the tools.",
+    },
+    quickComparison: [
+      { name: "What you build", values: ["A platform for creating apps", "A platform for deploying AI workers"] },
+      { name: "Regular price", values: ["$699", "$499"] },
+      { name: "Launch price", values: ["$499", "$379"] },
+      { name: "Your customer does", values: ["Builds apps without code", "Deploys AI employees into roles"] },
+      { name: "Key strength", values: ["App builder engine & templates", "Role-based AI workforce design"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "Platform Architecture",
+        features: [
+          { name: "Core engine", values: ["No-code app builder", "Virtual employee deployment"] },
+          { name: "User output", values: ["AI-powered applications", "Completed business tasks"] },
+          { name: "Templates", values: ["App templates & components", "Agent role definitions & workflows"] },
+          { name: "Technical complexity", values: ["Very high — builder platform", "Very high — workforce orchestration"] },
+        ],
+      },
+      {
+        groupName: "Business Model",
+        features: [
+          { name: "Revenue model", values: ["Subscription billing + enterprise", "Service revenue + enterprise pricing"] },
+          { name: "Target customer", values: ["Domain experts & citizen developers", "Operations leaders & department heads"] },
+          { name: "Go-to-market", values: ["Platform adoption playbook", "Workforce transformation playbook"] },
+          { name: "Est. time to MVP", values: ["16–20 weeks", "14–18 weeks"] },
+        ],
+      },
+      {
+        groupName: "Founder Considerations",
+        features: [
+          { name: "Launch savings", values: ["$200 (29%)", "$120 (24%)"] },
+          { name: "Best for founders who", values: ["Love building tools for builders", "Love designing systems of work"] },
+          { name: "Technical prerequisite", values: ["Platform engineering experience", "AI/ML + operations experience"] },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ─── Helpers ─── */
