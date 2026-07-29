@@ -13,7 +13,7 @@ function getStripe(): Stripe {
       "STRIPE_SECRET_KEY is not set. Connect Stripe in the dashboard to enable payments.",
     );
   }
-  return new Stripe(key, { apiVersion: "2025-06-16.basil" });
+  return new Stripe(key, { apiVersion: "2024-11-20.acacia" });
 }
 
 /**
