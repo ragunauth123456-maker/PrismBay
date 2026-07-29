@@ -1,20 +1,14 @@
-/**
- * GET /api/downloads/$token
- * Validates download token, logs download, returns a download response.
- * Currently returns a JSON response with download info — actual file delivery
- * will be implemented when product files are uploaded.
- */
-
 import { createFileRoute } from "@tanstack/react-router";
 import { sql } from "~/db";
 import { checkRateLimit } from "~/lib/rate-limit";
+import { getZipPath } from "~/lib/storage";
+import { existsSync, statSync } from "node:fs";
 
 export const Route = createFileRoute("/api/downloads/$token")({
   server: {
     handlers: {
       GET: async ({ request, params }) => {
         const { token } = params as { token: string };
-
         if (!token) {
           return new Response(
             JSON.stringify({ error: "Missing download token" }),
@@ -27,10 +21,11 @@ export const Route = createFileRoute("/api/downloads/$token")({
           request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
           request.headers.get("x-real-ip") ??
           "127.0.0.1";
-
         if (!checkRateLimit("download", token)) {
           return new Response(
-            JSON.stringify({ error: "Too many download requests. Please try again later." }),
+            JSON.stringify({
+              error: "Too many download requests. Please try again later.",
+            }),
             { status: 429, headers: { "Content-Type": "application/json" } },
           );
         }
@@ -39,7 +34,7 @@ export const Route = createFileRoute("/api/downloads/$token")({
         const rows = await sql()`
           SELECT dt.id, dt.token, dt.downloads_used, dt.max_downloads, dt.expires_at,
                  dt.order_item_id, dt.created_at,
-                 oi.product_title, oi.order_id,
+                 oi.product_title, oi.product_slug, oi.order_id,
                  o.user_id, o.status
           FROM download_tokens dt
           JOIN order_items oi ON oi.id = dt.order_item_id
@@ -70,7 +65,6 @@ export const Route = createFileRoute("/api/downloads/$token")({
         // Check download count
         const downloadsUsed = (record.downloads_used as number) || 0;
         const maxDownloads = (record.max_downloads as number) || 10;
-
         if (downloadsUsed >= maxDownloads) {
           return new Response(
             JSON.stringify({ error: "Download limit reached" }),
@@ -87,34 +81,55 @@ export const Route = createFileRoute("/api/downloads/$token")({
           );
         }
 
-        // Increment download count
+        // Resolve the ZIP file from product_slug
+        const productSlug = (record.product_slug as string) || "";
+        const productTitle = (record.product_title as string) || "product";
+
+        if (!productSlug) {
+          console.error(`No product_slug for order_item ${record.order_item_id}`);
+          return new Response(
+            JSON.stringify({ error: "Product file mapping not found" }),
+            { status: 500, headers: { "Content-Type": "application/json" } },
+          );
+        }
+
+        const zipPath = getZipPath(productSlug);
+
+        if (!existsSync(zipPath)) {
+          console.error(`ZIP file not found: ${zipPath}`);
+          return new Response(
+            JSON.stringify({ error: "Product file not found on server" }),
+            { status: 404, headers: { "Content-Type": "application/json" } },
+          );
+        }
+
+        // Increment download count before streaming
         await sql()`
           UPDATE download_tokens
           SET downloads_used = downloads_used + 1, updated_at = now()
           WHERE id = ${record.id as string}
         `;
 
-        const productTitle = record.product_title as string;
+        const fileSize = statSync(zipPath).size;
+        const fileName = `${productSlug}.zip`;
         const remaining = maxDownloads - downloadsUsed - 1;
 
-        console.log(`Download: ${productTitle} — token ${token} — ${remaining} downloads remaining`);
-
-        // Return download info (actual file delivery will be added when files exist)
-        return new Response(
-          JSON.stringify({
-            success: true,
-            product: productTitle,
-            downloads_remaining: remaining,
-            message: "Your download is ready. Product files will be delivered here once uploaded.",
-          }),
-          {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json",
-              "Cache-Control": "no-store",
-            },
-          },
+        console.log(
+          `Download: ${productTitle} (${productSlug}) — token ${token} — ${remaining} downloads remaining`,
         );
+
+        // Stream the file using Bun.file()
+        const file = Bun.file(zipPath);
+
+        return new Response(file, {
+          status: 200,
+          headers: {
+            "Content-Type": "application/zip",
+            "Content-Disposition": `attachment; filename="${fileName}"`,
+            "Content-Length": String(fileSize),
+            "Cache-Control": "no-store",
+          },
+        });
       },
     },
   },

@@ -7,6 +7,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { verifyStripeWebhook, getStripe } from "~/lib/stripe";
 import { sql } from "~/db";
 import { sendEmailQuietly } from "~/lib/email";
+import { BUNDLES } from "~/data/products";
+import { isBundle, getBundleProductSlugs } from "~/lib/storage";
 import {
   purchaseConfirmation,
   downloadAccess,
@@ -104,38 +106,56 @@ async function handleCheckoutCompleted(event: any) {
     WHERE id = ${orderId}
   `;
 
-  // Find the product in DB (or use the slug)
-  let productId: string | null = null;
-  let productTitle = productSlug;
+  // Determine if this is a bundle purchase
+  const bundleMode = productSlug ? isBundle(productSlug) : false;
 
-  if (productSlug) {
+  // Collect the slugs we need to process
+  let slugsToProcess: string[];
+
+  if (bundleMode) {
+    // Bundle: create order_item for each constituent product
+    slugsToProcess = getBundleProductSlugs(productSlug);
+    console.log(`  Bundle purchase: ${productSlug} → ${slugsToProcess.length} products`);
+  } else {
+    slugsToProcess = [productSlug];
+  }
+
+  const createdTokens: Array<{ token: string; productTitle: string; productSlug: string }> = [];
+
+  for (const slug of slugsToProcess) {
+    // Find the product in DB
+    let productId: string | null = null;
+    let productTitle = slug;
+
     const productRows = await sql()`
-      SELECT id, title FROM products WHERE slug = ${productSlug}
+      SELECT id, title FROM products WHERE slug = ${slug}
     `;
     if (productRows.length > 0) {
       productId = (productRows[0] as any).id;
       productTitle = (productRows[0] as any).title;
     }
+
+    // Create order item with product_slug
+    const itemRows = await sql()`
+      INSERT INTO order_items (order_id, product_id, product_slug, product_title, price_cents, quantity)
+      VALUES (${orderId}, ${productId || null}, ${slug}, ${productTitle}, ${amountTotal}, 1)
+      RETURNING id
+    `;
+    const orderItemId = (itemRows[0] as any).id;
+
+    // Generate download token (24-hour expiry for emailed links)
+    const token = crypto.randomUUID();
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    await sql()`
+      INSERT INTO download_tokens (order_item_id, token, max_downloads, expires_at)
+      VALUES (${orderItemId}, ${token}, 10, ${expiresAt.toISOString()})
+    `;
+
+    createdTokens.push({ token, productTitle, productSlug: slug });
+
+    console.log(`  ✓ Order item created for "${productTitle}" (${slug}). Download token: ${token}`);
   }
-
-  // Create order item
-  const itemRows = await sql()`
-    INSERT INTO order_items (order_id, product_id, product_title, price_cents, quantity)
-    VALUES (${orderId}, ${productId || null}, ${productTitle}, ${amountTotal}, 1)
-    RETURNING id
-  `;
-  const orderItemId = (itemRows[0] as any).id;
-
-  // Generate download token (24-hour expiry for emailed links)
-  const token = crypto.randomUUID();
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
-  await sql()`
-    INSERT INTO download_tokens (order_item_id, token, max_downloads, expires_at)
-    VALUES (${orderItemId}, ${token}, 10, ${expiresAt.toISOString()})
-  `;
-
-  console.log(`  ✓ Order ${orderId} fulfilled. Download token: ${token}`);
 
   // If the user is logged in, update their Stripe customer ID
   if (userId && customerId) {
@@ -178,12 +198,17 @@ async function handleCheckoutCompleted(event: any) {
     // Fall back to "card" if Stripe lookup fails
   }
 
+  // Build a display name for the purchase
+  const purchaseName = bundleMode
+    ? BUNDLES.find((b) => b.slug === productSlug)?.name || productSlug
+    : createdTokens[0]?.productTitle || productSlug;
+
   // Template 1: Purchase confirmation
   const purchaseEmail = purchaseConfirmation({
     customerFirstName: firstName,
     orderId: orderId.slice(0, 8), // Use shortened ID for readability
     orderDate,
-    productName: productTitle,
+    productName: purchaseName,
     pricePaid: formatCents(amountTotal),
     paymentMethodBrief,
     accountDownloadsUrl,
@@ -195,21 +220,54 @@ async function handleCheckoutCompleted(event: any) {
     body: purchaseEmail.body,
   });
 
-  // Template 2: Download access (with the generated token link)
-  const downloadUrl = `${siteUrl}/api/downloads/${token}`;
-  const downloadEmail = downloadAccess({
-    customerFirstName: firstName,
-    productName: productTitle,
-    downloadUrl,
-    tokenExpiryDuration: "24 hours",
-    accountDownloadsUrl,
-  });
+  // Template 2: Download access email(s)
+  // For bundles, include all download links in one email
+  if (createdTokens.length === 1) {
+    // Single product — one download link
+    const { token, productTitle: pt } = createdTokens[0];
+    const downloadUrl = `${siteUrl}/api/downloads/${token}`;
+    const downloadEmail = downloadAccess({
+      customerFirstName: firstName,
+      productName: pt,
+      downloadUrl,
+      tokenExpiryDuration: "24 hours",
+      accountDownloadsUrl,
+    });
 
-  await sendEmailQuietly({
-    to: customerEmail,
-    subject: downloadEmail.subject,
-    body: downloadEmail.body,
-  });
+    await sendEmailQuietly({
+      to: customerEmail,
+      subject: downloadEmail.subject,
+      body: downloadEmail.body,
+    });
+  } else {
+    // Bundle — build multi-product download email
+    const downloadLinks = createdTokens
+      .map(
+        ({ token, productTitle: pt }) =>
+          `• ${pt}: ${siteUrl}/api/downloads/${token}`,
+      )
+      .join("\n");
+
+    const bundleDownloadEmail = downloadAccess({
+      customerFirstName: firstName,
+      productName: purchaseName,
+      downloadUrl: `${siteUrl}/account`,
+      tokenExpiryDuration: "24 hours",
+      accountDownloadsUrl,
+    });
+
+    // Override the body to include all links
+    const multiBody = bundleDownloadEmail.body.replace(
+      /(download your .+ at:).+(\n)/,
+      `$1\n${downloadLinks}$2`,
+    );
+
+    await sendEmailQuietly({
+      to: customerEmail,
+      subject: `Your ${purchaseName} downloads are ready`,
+      body: multiBody,
+    });
+  }
 
   console.log(`  ✓ Emails sent to ${customerEmail}`);
 }

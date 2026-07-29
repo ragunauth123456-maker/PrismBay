@@ -85,12 +85,14 @@ CREATE TABLE IF NOT EXISTS order_items (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id      UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   product_id    UUID REFERENCES products(id) ON DELETE SET NULL,
+  product_slug  TEXT,
   product_title TEXT NOT NULL,
   price_cents   INTEGER NOT NULL DEFAULT 0,
   quantity      INTEGER NOT NULL DEFAULT 1,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items (order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_product_slug ON order_items (product_slug);
 
 -- Download tokens
 CREATE TABLE IF NOT EXISTS download_tokens (
