@@ -8,6 +8,7 @@ import {
 } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
+import { twitterMeta } from "~/utils/seo";
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/bundles/$slug")({
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/bundles/$slug")({
         { property: "og:type", content: "website" },
         { property: "og:image", content: `https://www.prismbayai.com/images/products/${bundle.slug}.png` },
         { property: "og:url", content: canonicalUrl },
+        ...twitterMeta(title, desc, `https://www.prismbayai.com/images/products/${bundle.slug}.png`),
       ],
       links: [
         { rel: "canonical", href: canonicalUrl },

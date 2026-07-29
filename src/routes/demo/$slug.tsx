@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { getDemoBySlug } from "~/data/demos";
 import { getProductBySlug } from "~/data/products";
 import DemoWalkthroughPage from "~/components/DemoWalkthrough";
-
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 export const Route = createFileRoute("/demo/$slug")({
   loader: ({ params }) => {
     const demo = getDemoBySlug(params.slug);
@@ -16,6 +16,8 @@ export const Route = createFileRoute("/demo/$slug")({
       product?.description ??
       `Interactive guided tour of ${demo.productName}. Step-by-step walkthrough covering features, architecture, pricing, and who it's built for.`;
     const videoUrl = `/videos/demos/${demo.productSlug}.webm`;
+    const canonicalUrl = `https://www.prismbayai.com/demo/${demo.productSlug}`;
+    const imageUrl = `https://www.prismbayai.com/images/products/${demo.productSlug}.png`;
     return {
       meta: [
         { title },
@@ -25,11 +27,11 @@ export const Route = createFileRoute("/demo/$slug")({
         { property: "og:type", content: "website" },
         {
           property: "og:url",
-          content: `https://www.prismbayai.com/demo/${demo.productSlug}`,
+          content: canonicalUrl,
         },
         {
           property: "og:image",
-          content: `https://www.prismbayai.com/images/products/${demo.productSlug}.png`,
+          content: imageUrl,
         },
         {
           property: "og:video",
@@ -47,18 +49,25 @@ export const Route = createFileRoute("/demo/$slug")({
           property: "og:video:height",
           content: "720",
         },
+        ...twitterMeta(title, desc, imageUrl),
       ],
       links: [
         {
           rel: "canonical",
-          href: `https://www.prismbayai.com/demo/${demo.productSlug}`,
+          href: canonicalUrl,
         },
+      ],
+      scripts: [
+        breadcrumbListScript([
+          { name: "Home", url: "https://www.prismbayai.com" },
+          { name: "Demos", url: "https://www.prismbayai.com/demo" },
+          { name: demo.productName, url: canonicalUrl },
+        ]),
       ],
     };
   },
   component: DemoSlugPage,
 });
-
 export default function DemoSlugPage() {
   const { demo, product } = Route.useLoaderData();
   const productImage = `/images/products/${demo.productSlug}.png`;

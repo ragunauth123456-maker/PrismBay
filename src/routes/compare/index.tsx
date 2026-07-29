@@ -3,6 +3,7 @@ import { COMPARISONS, type ComparisonConfig } from "~/data/comparisons";
 import { getProductBySlug, PRODUCTS } from "~/data/products";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/compare/")({
   head: () => ({
@@ -14,9 +15,16 @@ export const Route = createFileRoute("/compare/")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/compare" },
+      ...twitterMeta("Compare AI Business Systems — PrismBay", "Compare PrismBay AI business systems side by side. See features, pricing, and find the right system for your organization."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/compare" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Compare", url: "https://www.prismbayai.com/compare" },
+      ]),
     ],
   }),
   component: CompareIndexPage,

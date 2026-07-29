@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -13,9 +14,16 @@ export const Route = createFileRoute("/about")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/about" },
+      ...twitterMeta("About PrismBay — Premium AI Business Systems Marketplace", "Learn about PrismBay: our mission to provide complete AI business systems with real demos, transparent pricing, and instant digital delivery for modern builders."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/about" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "About", url: "https://www.prismbayai.com/about" },
+      ]),
     ],
   }),
   component: AboutPage,

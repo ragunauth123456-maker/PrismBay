@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
@@ -20,8 +21,15 @@ export const Route = createFileRoute("/faq")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://www.prismbayai.com/faq" },
+      ...twitterMeta("Frequently Asked Questions — PrismBay", "Common questions about PrismBay: how purchases work, what's included in a blueprint, licensing, refunds, delivery, and more."),
     ],
     links: [{ rel: "canonical", href: "https://www.prismbayai.com/faq" }],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "FAQ", url: "https://www.prismbayai.com/faq" },
+      ]),
+    ],
   }),
   component: FAQPage,
 });

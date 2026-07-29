@@ -13,6 +13,7 @@ import {
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
 import { getComparisonsForProduct } from "~/data/comparisons";
+import { twitterMeta } from "~/utils/seo";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 
@@ -163,6 +164,7 @@ export const Route = createFileRoute("/products/$slug")({
         { property: "og:type", content: "product" },
         { property: "og:url", content: canonicalUrl },
         { property: "og:image", content: `https://www.prismbayai.com/images/products/${slug}.png` },
+        ...twitterMeta(title, desc, `https://www.prismbayai.com/images/products/${slug}.png`),
       ],
       links: [
         { rel: "canonical", href: canonicalUrl },

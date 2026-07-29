@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -14,9 +15,16 @@ export const Route = createFileRoute("/contact")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/contact" },
+      ...twitterMeta("Contact PrismBay — Get Support & Inquiries | PrismBay", "Contact the PrismBay team for product inquiries, support questions, licensing information, or partnership opportunities. We respond within 24 hours."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/contact" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Contact", url: "https://www.prismbayai.com/contact" },
+      ]),
     ],
   }),
   component: ContactPage,

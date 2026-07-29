@@ -3,6 +3,7 @@ import { BUNDLES } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
+import { twitterMeta } from '~/utils/seo';
 
 export const Route = createFileRoute("/bundles/")({
   head: () => ({
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/bundles/")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/bundles" },
+      ...twitterMeta("AI Business System Bundles — Save Up to $1,542 | PrismBay", "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/bundles" },

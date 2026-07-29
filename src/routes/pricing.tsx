@@ -83,6 +83,9 @@ export const Route = createFileRoute("/pricing")({
         },
         { property: "og:url", content: "https://www.prismbayai.com/pricing" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: metaTitle },
+        { name: "twitter:description", content: metaDesc },
+        { name: "twitter:image", content: "https://www.prismbayai.com/images/og-default.png" },
       ],
       links: [
         { rel: "canonical", href: "https://www.prismbayai.com/pricing" },

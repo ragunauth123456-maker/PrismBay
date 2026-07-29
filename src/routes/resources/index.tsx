@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { ARTICLES, CATEGORIES, isPublished } from "~/data/articles";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/resources/")({
   head: () => ({
@@ -25,10 +26,17 @@ export const Route = createFileRoute("/resources/")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/resources" },
+      ...twitterMeta("Resources & Guides — AI Business Systems | PrismBay", "Explore guides, articles, and resources on AI business systems, digital transformation, AI compliance, AI workforce platforms, and building AI-native businesses."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/resources" },
       { rel: "alternate", type: "application/rss+xml", title: "PrismBay Blog", href: "/resources/rssxml" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Resources", url: "https://www.prismbayai.com/resources" },
+      ]),
     ],
   }),
   component: ResourcesPage,

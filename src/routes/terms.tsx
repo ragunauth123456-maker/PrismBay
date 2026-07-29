@@ -2,15 +2,23 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { title: "Terms of Service — PrismBay" },
       { name: "description", content: "PrismBay terms of service: licence terms, usage rights, payment policies, and legal agreements for purchasing AI business systems and digital products." },
+      ...twitterMeta("Terms of Service — PrismBay", "PrismBay terms of service: licence terms, usage rights, payment policies, and legal agreements for purchasing AI business systems and digital products."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/terms" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Terms of Service", url: "https://www.prismbayai.com/terms" },
+      ]),
     ],
   }),
   component: TermsPage,

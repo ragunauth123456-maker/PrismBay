@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getArticleBySlug, isPublished, CATEGORIES } from "~/data/articles";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
-
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 export const Route = createFileRoute("/resources/$slug")({
   head: ({ loaderData }) => {
     const article = loaderData;
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/resources/$slug")({
     }
     const seoTitle = article.seoTitle ?? `${article.title} — PrismBay`;
     const seoDesc = article.metaDescription ?? article.description;
+    const canonicalUrl = `https://www.prismbayai.com/resources/${article.slug}`;
     return {
       meta: [
         { title: seoTitle },
@@ -20,12 +21,20 @@ export const Route = createFileRoute("/resources/$slug")({
         { property: "og:title", content: seoTitle },
         { property: "og:description", content: seoDesc },
         { property: "og:type", content: "article" },
+        ...twitterMeta(seoTitle, seoDesc),
       ],
       links: [
         {
           rel: "canonical",
-          href: `https://www.prismbayai.com/resources/${article.slug}`,
+          href: canonicalUrl,
         },
+      ],
+      scripts: [
+        breadcrumbListScript([
+          { name: "Home", url: "https://www.prismbayai.com" },
+          { name: "Resources", url: "https://www.prismbayai.com/resources" },
+          { name: article.title, url: canonicalUrl },
+        ]),
       ],
     };
   },
@@ -38,21 +47,19 @@ export const Route = createFileRoute("/resources/$slug")({
   },
   notFoundComponent: () => (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-6 text-center">
-      <h1 className="text-3xl font-bold text-navy-900">Article not found</h1>
-      <p className="mt-4 text-neutral-500">
-        This article hasn't been published yet or the link may be incorrect.
-      </p>
-      <Link
-        to="/resources"
-        className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-600"
-      >
-        ← Back to Resources
-      </Link>
+      <Navbar />
+      <div className="mt-20">
+        <h1 className="text-3xl font-bold text-neutral-800">Article not found</h1>
+        <p className="mt-4 text-neutral-500">The article you're looking for doesn't exist or hasn't been published yet.</p>
+        <Link to="/resources" className="mt-6 inline-block rounded-lg bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-600">
+          Browse all resources
+        </Link>
+      </div>
+      <Footer />
     </div>
   ),
-  component: ArticlePage,
+  component: ResourceArticlePage,
 });
-
 function ClockIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -61,18 +68,13 @@ function ClockIcon() {
     </svg>
   );
 }
-
-/* ─── Article Page ─── */
-function ArticlePage() {
+function ResourceArticlePage() {
   const article = Route.useLoaderData();
-
   const categoryName =
     CATEGORIES.find((c) => c.slug === article.category)?.name ?? article.category;
-
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-
       {/* Article header */}
       <section className="bg-navy-900">
         <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
@@ -88,7 +90,6 @@ function ArticlePage() {
               All Resources
             </Link>
           </div>
-
           {/* Category + read time */}
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center rounded-full bg-brand-500/15 px-3 py-1 text-xs font-medium text-brand-300">
@@ -99,14 +100,12 @@ function ArticlePage() {
               {article.readTime} min read
             </span>
           </div>
-
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {article.title}
           </h1>
           <p className="mt-4 text-lg text-neutral-300 leading-relaxed">
             {article.description}
           </p>
-
           {/* Linked products */}
           {article.linkedProducts.length > 0 && (
             <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -124,7 +123,6 @@ function ArticlePage() {
           )}
         </div>
       </section>
-
       {/* Article body */}
       <section className="bg-white">
         <div className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
@@ -134,7 +132,6 @@ function ArticlePage() {
           />
         </div>
       </section>
-
       {/* Back to resources */}
       <section className="border-t border-neutral-100 bg-neutral-50">
         <div className="mx-auto max-w-3xl px-6 py-12 text-center">
@@ -149,7 +146,6 @@ function ArticlePage() {
           </Link>
         </div>
       </section>
-
       {/* Final CTA */}
       <section className="bg-navy-900">
         <div className="mx-auto max-w-4xl px-6 py-16 text-center sm:py-20">
@@ -168,7 +164,6 @@ function ArticlePage() {
           </Link>
         </div>
       </section>
-
       <Footer />
     </div>
   );

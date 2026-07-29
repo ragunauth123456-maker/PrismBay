@@ -4,7 +4,7 @@ import { getProductBySlug } from "~/data/products";
 import ComparisonContent from "~/components/ComparisonTable";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
-
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 export const Route = createFileRoute("/compare/$slug")({
   loader: ({ params }) => {
     const comparison = getComparisonBySlug(params.slug);
@@ -18,7 +18,6 @@ export const Route = createFileRoute("/compare/$slug")({
       .map((s) => getProductBySlug(s))
       .filter(Boolean);
     const canonicalUrl = `https://www.prismbayai.com/compare/${comparison.slug}`;
-
     return {
       meta: [
         { title },
@@ -27,16 +26,23 @@ export const Route = createFileRoute("/compare/$slug")({
         { property: "og:description", content: comparison.seoDescription },
         { property: "og:type", content: "website" },
         { property: "og:url", content: canonicalUrl },
+        ...twitterMeta(title, comparison.seoDescription),
       ],
       links: [
         { rel: "canonical", href: canonicalUrl },
+      ],
+      scripts: [
+        breadcrumbListScript([
+          { name: "Home", url: "https://www.prismbayai.com" },
+          { name: "Compare", url: "https://www.prismbayai.com/compare" },
+          { name: comparison.title, url: canonicalUrl },
+        ]),
       ],
     };
   },
   component: ComparePage,
   notFoundComponent: CompareNotFound,
 });
-
 function CompareNotFound() {
   return (
     <div>
@@ -54,10 +60,8 @@ function CompareNotFound() {
     </div>
   );
 }
-
 function ComparePage() {
   const { comparison } = Route.useLoaderData();
-
   return (
     <div>
       <Navbar />

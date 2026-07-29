@@ -2,15 +2,23 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
       { title: "Privacy Policy — PrismBay" },
       { name: "description", content: "PrismBay privacy policy: how we collect, use, and protect your personal data when you browse and purchase AI business systems on our marketplace." },
+      ...twitterMeta("Privacy Policy — PrismBay", "PrismBay privacy policy: how we collect, use, and protect your personal data when you browse and purchase AI business systems on our marketplace."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/privacy" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Privacy Policy", url: "https://www.prismbayai.com/privacy" },
+      ]),
     ],
   }),
   component: PrivacyPage,

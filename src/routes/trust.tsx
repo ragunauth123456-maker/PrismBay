@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
+import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 
 export const Route = createFileRoute("/trust")({
   head: () => ({
@@ -12,9 +13,16 @@ export const Route = createFileRoute("/trust")({
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/trust" },
+      ...twitterMeta("Trust Centre — Secure Payments, Privacy & Quality | PrismBay", "Learn how PrismBay protects your data and transactions: Stripe PCI-DSS Level 1 payments, bcrypt password hashing, SSL/TLS encryption, demo-first philosophy, and 14-day refund policy."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/trust" },
+    ],
+    scripts: [
+      breadcrumbListScript([
+        { name: "Home", url: "https://www.prismbayai.com" },
+        { name: "Trust Centre", url: "https://www.prismbayai.com/trust" },
+      ]),
     ],
   }),
   component: TrustPage,
