@@ -132,6 +132,32 @@ function ResourceArticlePage() {
           />
         </div>
       </section>
+      {/* Bundle CTA */}
+      {article.bundleCta && (
+        <section className="border-t border-neutral-100 bg-gradient-to-b from-white to-brand-50/30">
+          <div className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+            <div className="rounded-2xl border border-brand-200 bg-white p-8 shadow-sm sm:p-10">
+              <h2 className="text-2xl font-bold text-navy-900">Get the Complete System</h2>
+              <p className="mt-3 text-neutral-600 leading-relaxed">
+                {article.bundleCta.type === 'ai-business-operations'
+                  ? 'NexusOS, Nexus One, and Empire AI are available together in the AI Business Operations Bundle at $999, saving $548.'
+                  : 'SpendShield AI, GuardianOS, and EvidenceFlow AI are available together in the Trust, Risk & Compliance Bundle at $749, saving $448.'}
+              </p>
+              <Link
+                to={article.bundleCta.type === 'ai-business-operations' ? '/bundles/ai-business-operations' : '/bundles/trust-risk-compliance'}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2"
+              >
+                {article.bundleCta.type === 'ai-business-operations'
+                  ? 'View AI Business Operations Bundle'
+                  : 'View Trust, Risk & Compliance Bundle'}
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                  <path d="M4 10h12m0 0l-5-5m5 5l-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
       {/* Back to resources */}
       <section className="border-t border-neutral-100 bg-neutral-50">
         <div className="mx-auto max-w-3xl px-6 py-12 text-center">
