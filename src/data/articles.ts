@@ -1060,7 +1060,7 @@ export const ARTICLES: Article[] = [
     description:
       "From the EU AI Act to emerging U.S. state-level requirements, here's what every AI business builder needs to know about the current regulatory environment.",
     category: "ai-compliance",
-    readTime: 9,
+    readTime: 13,
     linkedProducts: ["GuardianOS", "EvidenceFlow AI"],
     keywords: [
       "EU AI Act business compliance 2026",
@@ -1075,7 +1075,6 @@ export const ARTICLES: Article[] = [
     seoTitle: "AI Business Regulation in 2026: EU AI Act, US Laws & What SMBs Need to Know — PrismBay",
     metaDescription:
       "From the EU AI Act to Colorado's new AI law, here's what every business adopting AI systems needs to know about the 2026 regulatory landscape — and how to build compliance into your operations.",
-    readTime: 13,
     bodyHtml: `<p><em>This article provides an overview of the regulatory landscape as of mid-2026. It is not legal advice. Consult qualified legal counsel for your specific situation.</em></p>
 
 <p>For the past three years, businesses adopting AI have been watching the regulatory horizon with a mix of anticipation and unease. Frameworks were proposed, debated, and revised. Deadlines were set, then extended. The question was always "when does this become real?"</p>
