@@ -40,8 +40,82 @@ export default function Footer() {
         <div className="mb-12">
           <LogoHorizontal light />
         </div>
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-          <nav aria-label="Footer navigation">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          <nav aria-label="Browse navigation">
+            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Browse</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="/products"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/bundles"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Bundles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pricing"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Pricing
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Learn navigation">
+            <h4 className="mb-4 text-sm font-semibold text-neutral-100">Learn</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="/resources"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Resources
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/faq"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/trust"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Trust Centre
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/compare"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Compare
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/demo"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Demos
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Company navigation">
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Company</h4>
             <ul className="space-y-2">
               <li>
@@ -72,7 +146,7 @@ export default function Footer() {
           </nav>
 
           {/* Newsletter signup */}
-          <div className="sm:col-span-2 lg:col-span-2">
+          <div>
             <h4 className="mb-2 text-sm font-semibold text-neutral-100">
               Get new articles by email
             </h4>

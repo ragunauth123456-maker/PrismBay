@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   PRODUCTS,
   BUNDLES,
@@ -346,7 +346,7 @@ function ProductPage() {
                 </p>
               </div>
               {/* CTA */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <div ref={heroCtaRef} className="mt-6 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => handlePurchase(product.slug)}
                   disabled={checkoutLoading}
@@ -362,9 +362,12 @@ function ProductPage() {
                     View Demo
                   </Link>
                 ) : (
-                  <span className="inline-flex items-center justify-center gap-2 rounded-lg border border-navy-700/50 px-8 py-4 text-lg font-semibold text-neutral-500 cursor-default">
-                    Demo coming soon
-                  </span>
+                  <Link
+                    to="/how-it-works"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300/50 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:bg-white/10 active:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+                  >
+                    Explore how our products work →
+                  </Link>
                 )}
               </div>
               <p className="mt-3 text-xs text-neutral-400">
@@ -429,16 +432,19 @@ function ProductPage() {
                   </div>
                 </Link>
               ) : (
-                <div className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl flex items-center justify-center">
+                <Link
+                  to="/how-it-works"
+                  className="mt-6 aspect-video rounded-xl bg-navy-800 overflow-hidden shadow-2xl flex items-center justify-center group transition-shadow hover:shadow-brand-500/10"
+                >
                   <div className="text-center">
                     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true" className="mx-auto mb-3">
                       <circle cx="24" cy="24" r="22" stroke="#16B3A7" strokeWidth="1.5" opacity="0.4" />
                       <path d="M19 16l14 8-14 8V16z" fill="#16B3A7" opacity="0.5" />
                     </svg>
-                    <p className="text-brand-200/70 font-medium">Demo coming soon</p>
-                    <p className="text-xs text-neutral-500 mt-1">We're producing a walkthrough video for {product.name}.</p>
+                    <p className="text-brand-200/70 font-medium">Explore how our products work →</p>
+                    <p className="text-xs text-neutral-500 mt-1">Learn about the platform, delivery, and what's included in every product.</p>
                   </div>
-                </div>
+                </Link>
               )}
             </div>
           </div>
