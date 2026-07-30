@@ -376,7 +376,7 @@ function FeaturedProducts() {
   ];
 
   const filteredProducts = activeFilter === "All"
-    ? FEATURED
+    ? allProducts
     : allProducts.filter((p) => p.category === activeFilter);
 
   return (
