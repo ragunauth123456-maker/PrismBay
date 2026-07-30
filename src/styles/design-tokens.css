@@ -1,0 +1,161 @@
+/* design-tokens.css — PrismBay design tokens as CSS custom properties */
+/* Drop this into your global CSS and reference via var(--token-name) anywhere. */
+
+:root {
+  /* ── Colors: Primary (brand teal) ──────────────────────────────── */
+  --color-brand-50:  #EFFBFA;
+  --color-brand-100: #D5F5F2;
+  --color-brand-200: #ABEBE5;
+  --color-brand-300: #73DED6;
+  --color-brand-400: #3DCCC2;
+  --color-brand-500: #16B3A7;
+  --color-brand-600: #12948A;
+  --color-brand-700: #0F766E;
+  --color-brand-800: #0E5F58;
+  --color-brand-900: #0C4E48;
+  --color-brand-950: #08332F;
+
+  /* ── Colors: Accent (golden amber) ─────────────────────────────── */
+  --color-accent-50:  #FFFBF0;
+  --color-accent-100: #FEF3D6;
+  --color-accent-200: #FDE4A0;
+  --color-accent-300: #FBD26A;
+  --color-accent-400: #F9BD35;
+  --color-accent-500: #F59E0B;
+  --color-accent-600: #D98A09;
+  --color-accent-700: #B47007;
+  --color-accent-800: #925B06;
+  --color-accent-900: #784A05;
+  --color-accent-950: #513202;
+
+  /* ── Colors: Neutral (warm gray) ───────────────────────────────── */
+  --color-neutral-50:  #F8F8F7;
+  --color-neutral-100: #EDEDEB;
+  --color-neutral-200: #DEDDDA;
+  --color-neutral-300: #C5C4C0;
+  --color-neutral-400: #9F9E99;
+  --color-neutral-500: #7A7974;
+  --color-neutral-600: #5C5B57;
+  --color-neutral-700: #3F3E3B;
+  --color-neutral-800: #282724;
+  --color-neutral-900: #1A1917;
+  --color-neutral-950: #0F0E0D;
+
+  /* ── Colors: Semantic ──────────────────────────────────────────── */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error:   #EF4444;
+  --color-info:    #3B82F6;
+
+  /* ── Colors: Surface / Background ──────────────────────────────── */
+  --surface-light:       #FFFFFF;
+  --surface-dark:        #1A1917;
+  --bg-page-light:       #F8F8F7;
+  --bg-page-dark:        #0F0E0D;
+  --text-body-light:     #5C5B57;
+  --text-body-dark:      #C5C4C0;
+  --text-heading-light:  #3F3E3B;
+  --text-heading-dark:   #EDEDEB;
+  --text-muted-light:    #9F9E99;
+  --text-muted-dark:     #7A7974;
+  --border-light:        #DEDDDA;
+  --border-dark:         #3F3E3B;
+
+  /* ── Typography: Font Families ─────────────────────────────────── */
+  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', 'Menlo', 'Consolas', monospace;
+
+  /* ── Typography: Scale ─────────────────────────────────────────── */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+
+  /* ── Typography: Leading ───────────────────────────────────────── */
+  --leading-xs:   1rem;
+  --leading-sm:   1.25rem;
+  --leading-base: 1.5rem;
+  --leading-lg:   1.75rem;
+  --leading-xl:   1.75rem;
+  --leading-2xl:  2rem;
+  --leading-3xl:  2.25rem;
+  --leading-4xl:  2.75rem;
+  --leading-5xl:  3.5rem;
+  --leading-6xl:  4.25rem;
+
+  /* ── Typography: Tracking ──────────────────────────────────────── */
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.02em;
+  --tracking-snug:    -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.005em;
+  --tracking-wider:   0.01em;
+  --tracking-widest:  0.05em;
+
+  /* ── Typography: Weights ───────────────────────────────────────── */
+  --weight-normal:   400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ── Spacing ───────────────────────────────────────────────────── */
+  --space-0:   0px;
+  --space-px:  1px;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-32:  128px;
+
+  /* ── Border Radius ─────────────────────────────────────────────── */
+  --radius-xs:  2px;
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────────────────── */
+  --shadow-xs:    0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm:    0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md:    0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg:    0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl:    0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  --shadow-2xl:   0 25px 50px -12px rgb(0 0 0 / 0.15);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.04);
+
+  /* ── Containers ────────────────────────────────────────────────── */
+  --container-sm:    640px;
+  --container-md:    768px;
+  --container-lg:    1024px;
+  --container-xl:    1280px;
+  --container-2xl:   1400px;
+  --container-narrow: 720px;
+
+  /* ── Animation ─────────────────────────────────────────────────── */
+  --duration-fast:   150ms;
+  --duration-normal: 200ms;
+  --duration-slow:   300ms;
+  --duration-slower: 500ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+}
