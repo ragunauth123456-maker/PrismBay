@@ -1,0 +1,40 @@
+// Auto-generated body HTML for article: ai-powered-decision-support-executive-guide
+// Source: src/data/articles.ts migration — do not edit here; edit the source.
+
+export const bodyHtml = `<p>The standard model for executive decision-making hasn't changed much in decades: teams prepare reports, executives review them, questions get asked, more data gets pulled, and decisions eventually get made — often days or weeks after the underlying numbers were current.</p>
+<p>AI-powered decision support changes that pattern. Instead of waiting for reports, executives work with systems that monitor business performance continuously, surface exceptions as they happen, and present decision-ready information on demand.</p>
+<p>This guide covers what AI decision support looks like in practice, which business functions benefit most, and what to look for when evaluating these systems.</p>
+
+<h2>What AI Decision Support Actually Does</h2>
+<p>An AI decision support system — such as <a href="/products/empire-ai"><strong>Empire AI</strong></a>, the unified AI business command platform — acts as an intelligent layer between raw business data and executive action. It connects to the organisation's operational systems (finance, sales, HR, procurement, project management), monitors performance against targets, and presents a structured view of what needs attention.</p>
+<p>The system doesn't make decisions — that remains firmly in human hands. What it does is transform the information executives receive from periodic and fragmented to continuous and structured.</p>
+<p>Specifically, an AI decision support platform performs several functions:</p>
+<p><strong>Performance monitoring.</strong> AI agents track key metrics across departments — revenue against forecast, project milestones against timeline, expenses against budget — and flag variances that exceed defined thresholds.</p>
+<p><strong>Exception identification.</strong> Rather than presenting all data equally, the system highlights exceptions: the department that's running over budget, the project that's behind schedule, the customer account that's showing early signs of churn. This is where AI adds the most value — it filters signal from noise.</p>
+<p><strong>Executive reporting.</strong> AI agents compile structured executive summaries that combine financial results, operational activity, workforce performance, and risk indicators into a format designed for decision-making, not data exploration.</p>
+<p><strong>Forecasting and scenario analysis.</strong> By analysing historical patterns and current trajectories, AI agents can project likely outcomes and model the impact of different decisions — helping executives understand the range of possible futures rather than relying on a single forecast.</p>
+
+<h2>The Business Functions That Benefit Most</h2>
+<p>Not every part of the business needs AI-powered decision support. The functions that benefit most tend to share three characteristics: they generate significant data, their performance directly affects strategic outcomes, and their status changes frequently enough that periodic reporting creates blind spots.</p>
+<p><strong>Financial performance.</strong> Revenue tracking, margin analysis, cash flow monitoring, and budget variance — these are the classic executive dashboard metrics. AI decision support makes them continuous rather than monthly.</p>
+<p><strong>Operational monitoring.</strong> Project delivery, service levels, capacity utilisation, supply chain status — the operational metrics that determine whether strategy is actually being executed. AI agents monitor these in real time and flag deviations.</p>
+<p><strong>Workforce performance.</strong> Headcount trends, productivity indicators, hiring pipeline status, attrition signals — the people metrics that most executives track manually or not at all.</p>
+<p><strong>Risk and compliance.</strong> Regulatory deadlines, compliance status, audit findings, supplier risk indicators — the items that, when surfaced late, create the most expensive problems.</p>
+<p>Products like <strong>Empire AI</strong> and <a href="/products/nexusos"><strong>NexusOS</strong></a> address these functions with different scopes: Empire AI focuses on the executive command layer — the unified view across all business functions — while NexusOS goes deeper into departmental operations, connecting finance, HR, sales, marketing, procurement, and compliance through a single operating system.</p>
+
+<h2>How This Differs from Business Intelligence Tools</h2>
+<p>Traditional BI tools (Tableau, Power BI, Looker) are designed for analysis — they help you explore data, build dashboards, and answer questions you already know to ask. AI decision support systems are designed for attention management — they tell you what you need to look at, whether or not you knew to ask.</p>
+<p>This distinction matters for implementation. BI tools require someone to build the dashboard, someone to check the dashboard, and someone to interpret what the dashboard means. AI decision support systems do the checking and interpretation as part of the product design — the executive sees the exceptions, not the dashboard.</p>
+<p>That doesn't mean replacing BI tools. Most organisations use both: BI for deep analysis by specialist teams, AI decision support for the continuous monitoring that keeps executives informed without requiring them to become analysts.</p>
+<p>For a broader comparison of how AI business platforms differ from traditional software-as-a-service tools — across cost models, customization, and operational approach — see our analysis of <a href="/resources/ai-business-systems-vs-saas">AI business systems vs. traditional SaaS</a>.</p>
+
+<h2>What to Look for When Evaluating These Systems</h2>
+<p>If you're considering an AI decision support system for your organisation, here are the criteria that matter:</p>
+<p><strong>Integration breadth.</strong> The system needs to connect to your actual operational tools — your ERP, CRM, project management platform, HR system — not just import spreadsheets. The value comes from continuous connection, not periodic uploads.</p>
+<p><strong>Exception logic transparency.</strong> You should be able to see and adjust the thresholds that trigger alerts. A black box that flags "issues" without explaining why creates more confusion than clarity.</p>
+<p><strong>Executive usability.</strong> The interface should be designed for someone who needs answers in minutes, not someone who wants to explore data for hours. Structured summaries, clear priorities, and drill-down only when needed.</p>
+<p><strong>Implementation guidance.</strong> The best system design is useless without a clear path to adoption. Look for products that include implementation roadmaps, configuration guides, and workflow templates — not just technical documentation.</p>
+<p><strong>Scope fit.</strong> Empire AI is designed for executives who need a unified view across the entire business. NexusOS is designed for organisations that want deeper departmental integration alongside executive oversight. Choose the scope that matches your current need — you can always expand later. For a side-by-side breakdown of how these systems differ by company size, see our <a href="/resources/nexus-one-vs-nexusos">Nexus One vs NexusOS comparison</a>.</p>
+
+<h2>Getting Started</h2>
+<p>The most successful implementations start with a single function — typically financial reporting or project oversight — and expand as executives and teams become comfortable with the system. The goal isn't to automate decision-making. It's to ensure that when decisions need to be made, the people making them have the right information, at the right time, in a format that supports action. For a broader perspective on how AI decision support fits into the category of AI business operating systems — including how to evaluate the full platform, not just the decision-support layer — see our <a href="/resources/what-is-an-ai-business-operating-system">complete guide to AI business operating systems</a>.</p>`;
