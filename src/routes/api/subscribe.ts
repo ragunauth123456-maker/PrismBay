@@ -9,10 +9,32 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod/v4";
 import { checkRateLimit } from "~/lib/rate-limit";
 import { sql } from "~/db";
+import { sendEmail } from "~/lib/email";
+import { newsletterWelcome, getSiteUrl } from "~/lib/email-templates";
 
 const subscribeSchema = z.object({
   email: z.string().email("Please enter a valid email address.").min(1),
 });
+
+/**
+ * Send the welcome-to-newsletter email to a new subscriber.
+ * Non-blocking — failures are logged but don't affect the subscription.
+ */
+async function sendWelcomeNewsletter(email: string): Promise<void> {
+  const siteUrl = getSiteUrl();
+  const template = newsletterWelcome({
+    customerFirstName: "there",
+    resourcesUrl: `${siteUrl}/resources`,
+    marketplaceUrl: `${siteUrl}/products`,
+    unsubscribeUrl: `${siteUrl}/cookies`, // placeholder — real unsubscribe tokens TBD
+  });
+
+  await sendEmail({
+    to: email,
+    subject: template.subject,
+    body: template.body,
+  });
+}
 
 export const Route = createFileRoute("/api/subscribe")({
   server: {
@@ -68,6 +90,11 @@ export const Route = createFileRoute("/api/subscribe")({
               unsubscribed_at = NULL,
               ip_address = ${ip}
           `;
+
+          // Send welcome-to-newsletter email (non-blocking)
+          sendWelcomeNewsletter(normalizedEmail).catch((err) => {
+            console.error("Failed to send newsletter welcome:", (err as Error).message);
+          });
 
           return new Response(
             JSON.stringify({ success: true, message: "You're subscribed! Check your inbox." }),

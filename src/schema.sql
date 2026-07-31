@@ -216,3 +216,18 @@ CREATE TABLE IF NOT EXISTS email_campaign_log (
 CREATE INDEX IF NOT EXISTS idx_email_campaign_log_email ON email_campaign_log (recipient_email);
 CREATE INDEX IF NOT EXISTS idx_email_campaign_log_campaign ON email_campaign_log (campaign_name);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_email_campaign_log_unique ON email_campaign_log (campaign_name, recipient_email, template_name);
+
+-- Checkout events (tracks checkout initiations for abandoned cart analysis)
+CREATE TABLE IF NOT EXISTS checkout_events (
+  id              SERIAL PRIMARY KEY,
+  email           TEXT NOT NULL,
+  product_slug    TEXT NOT NULL,
+  session_id      TEXT,
+  ip_address      TEXT,
+  completed       BOOLEAN NOT NULL DEFAULT false,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+  completed_at    TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_checkout_events_email ON checkout_events (email);
+CREATE INDEX IF NOT EXISTS idx_checkout_events_completed ON checkout_events (completed, created_at);
+CREATE INDEX IF NOT EXISTS idx_checkout_events_session ON checkout_events (session_id);
