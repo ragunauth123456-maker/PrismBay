@@ -25,6 +25,9 @@ import { bodyHtml as body_how_to_implement_ai_business_system } from './articles
 import { bodyHtml as body_ai_for_small_business_getting_started } from './articles/ai-for-small-business-getting-started';
 import { bodyHtml as body_ai_business_platform_buyers_guide } from './articles/ai-business-platform-buyers-guide';
 import { bodyHtml as body_ai_business_system_pricing_guide } from './articles/ai-business-system-pricing-guide';
+import { bodyHtml as body_ai_readiness_checklist_10_point } from './articles/ai-readiness-checklist-10-point';
+import { bodyHtml as body_build_vs_buy_vs_blueprint_ai_business_automation } from './articles/build-vs-buy-vs-blueprint-ai-business-automation';
+import { bodyHtml as body_ai_customer_service_automation_intelligent_support_system } from './articles/ai-customer-service-automation-intelligent-support-system';
 
 const _bodyHtmlByFile: Record<string, string> = {
   'how-ai-business-systems-save-smbs-time': body_how_ai_business_systems_save_smbs_time,
@@ -53,6 +56,9 @@ const _bodyHtmlByFile: Record<string, string> = {
   'ai-for-small-business-getting-started': body_ai_for_small_business_getting_started,
   'ai-business-platform-buyers-guide': body_ai_business_platform_buyers_guide,
   'ai-business-system-pricing-guide': body_ai_business_system_pricing_guide,
+  'ai-readiness-checklist-10-point': body_ai_readiness_checklist_10_point,
+  'build-vs-buy-vs-blueprint-ai-business-automation': body_build_vs_buy_vs_blueprint_ai_business_automation,
+  'ai-customer-service-automation-intelligent-support-system': body_ai_customer_service_automation_intelligent_support_system,
 };
 
 export interface Article {
@@ -731,6 +737,78 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "A clear, honest breakdown of AI business system pricing in 2026 — from one-time blueprint purchases to SaaS subscriptions and custom builds. Learn what you get at each price tier and how to calculate TCO.",
     bodyHtmlFile: "ai-business-system-pricing-guide",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
+
+  // ── PUBLISHED: AI Readiness Checklist ──
+  {
+    slug: "ai-readiness-checklist-10-point",
+    title: "Is Your Business Ready for AI? A 10-Point Readiness Checklist",
+    description:
+      "Use this practical 10-point checklist to assess whether your business has the processes, data, people, and alignment to successfully adopt an AI business system — and what to do if you're not ready yet.",
+    category: "ai-business-systems",
+    readTime: 12,
+    linkedProducts: ["Nexus One", "NexusOS", "SpendShield AI", "EvidenceFlow AI"],
+    keywords: [
+      "AI readiness checklist",
+      "is my business ready for AI",
+      "AI readiness assessment",
+      "AI adoption readiness",
+      "business AI readiness",
+    ],
+    seoTitle: "Is Your Business Ready for AI? A 10-Point Readiness Checklist — PrismBay",
+    metaDescription:
+      "Use this practical 10-point checklist to assess whether your business has the processes, data, people, and alignment to successfully adopt an AI business system — and what to do if you're not ready yet.",
+    bodyHtmlFile: "ai-readiness-checklist-10-point",
+  },
+
+  // ── PUBLISHED: Build vs Buy vs Blueprint ──
+  {
+    slug: "build-vs-buy-vs-blueprint-ai-business-automation",
+    title: "AI Business Automation: Build vs. Buy vs. Blueprint — Which Path Is Right for You?",
+    description:
+      "Compare the three paths to AI business automation — custom development, SaaS platforms, and blueprint purchases — across cost, timeline, control, and technical requirements to find the right fit for your organisation.",
+    category: "ai-business-systems",
+    readTime: 14,
+    linkedProducts: ["NexusOS", "Nexus One", "Genesis Platform", "Empire AI"],
+    keywords: [
+      "build vs buy AI business system",
+      "AI blueprint vs custom development",
+      "AI business system build vs buy",
+      "AI automation build or buy",
+      "AI business automation path",
+    ],
+    seoTitle: "AI Business Automation: Build vs. Buy vs. Blueprint — Which Path Is Right for You? — PrismBay",
+    metaDescription:
+      "Compare the three paths to AI business automation — custom development, SaaS platforms, and blueprint purchases — across cost, timeline, control, and technical requirements to find the right fit for your organisation.",
+    bodyHtmlFile: "build-vs-buy-vs-blueprint-ai-business-automation",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
+
+  // ── PUBLISHED: AI Customer Service Automation ──
+  {
+    slug: "ai-customer-service-automation-intelligent-support-system",
+    title: "AI Customer Service Automation: How to Build an Intelligent Support System",
+    description:
+      "A practical guide to AI-powered customer service — from the three levels of automation and the build-vs-buy decision to key design choices that determine whether your system helps customers or frustrates them.",
+    category: "ai-workforce",
+    readTime: 13,
+    linkedProducts: ["Digital Humans", "Nexus One", "NexusOS"],
+    keywords: [
+      "AI customer service automation",
+      "AI customer support platform",
+      "intelligent customer service AI",
+      "AI customer support automation 2026",
+      "build AI customer service system",
+    ],
+    seoTitle: "AI Customer Service Automation: How to Build an Intelligent Support System — PrismBay",
+    metaDescription:
+      "A practical guide to AI-powered customer service — from the three levels of automation and the build-vs-buy decision to key design choices that determine whether your system helps customers or frustrates them.",
+    bodyHtmlFile: "ai-customer-service-automation-intelligent-support-system",
     bundleCta: {
       type: 'ai-business-operations',
     },
