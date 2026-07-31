@@ -703,6 +703,66 @@ export const COMPARISONS: ComparisonConfig[] = [
       },
     ],
   },
+  {
+    slug: "digital-humans-vs-nexus-network",
+    title: "Digital Humans vs Nexus Network: Build a Workforce or a Marketplace?",
+    productSlugs: ["digital-humans", "nexus-network"],
+    oneLiner: "Deploy AI employees into your business, or build a marketplace where AI businesses connect — two founder paths, two different products.",
+    seoDescription:
+      "Compare Digital Humans and Nexus Network: build an AI virtual workforce platform vs build an AI business collaboration marketplace. Features, pricing, founder fit, and which platform model matches your vision.",
+    decisionGuide: {
+      titleA: "Choose Digital Humans if you want to deploy AI workers",
+      descriptionA:
+        "You're building a platform where AI employees — sales agents, support agents, analysts — perform work in defined roles with clear permissions and approval controls. Your focus is on creating execution capacity through an AI workforce that operates inside your business or your customers' businesses.",
+      titleB: "Choose Nexus Network if you want to build a collaboration marketplace",
+      descriptionB:
+        "You're building a platform where AI businesses, service providers, and professionals discover each other, collaborate, and transact. Your focus is on creating the network — intelligent matching, trust frameworks, and marketplace dynamics that attract both buyers and providers.",
+    },
+    quickComparison: [
+      { name: "Platform model", values: ["AI workforce deployment", "Business collaboration marketplace"] },
+      { name: "Regular price", values: ["$499", "$299"] },
+      { name: "Launch price", values: ["$379", "$219"] },
+      { name: "Your customer does", values: ["Deploys AI employees into roles", "Finds partners & collaborates"] },
+      { name: "Key strength", values: ["AI workforce at scale", "Network effects & community"] },
+    ],
+    featureGroups: [
+      {
+        groupName: "What You're Building",
+        features: [
+          { name: "Core concept", values: ["Virtual AI employee platform", "AI-powered marketplace platform"] },
+          { name: "User activity", values: ["Assigning roles, managing AI workers", "Browsing listings, connecting, transacting"] },
+          { name: "Value driver", values: ["Execution capacity without hiring", "Business discovery & matching"] },
+          { name: "Technical focus", values: ["Agent role design & orchestration", "Search, matching & trust systems"] },
+        ],
+      },
+      {
+        groupName: "Platform Mechanics",
+        features: [
+          { name: "AI agents", values: ["Role-based virtual employees", "AI recommendation & matching"] },
+          { name: "Trust layer", values: ["Human approval controls", "Verification & ratings framework"] },
+          { name: "Workflow type", values: ["Task execution & escalation", "Collaboration requests & messaging"] },
+          { name: "Multi-tenancy", values: ["Department-level allocation", "Vendor storefronts & profiles"] },
+        ],
+      },
+      {
+        groupName: "Business Model",
+        features: [
+          { name: "Revenue model", values: ["Service revenue + enterprise", "Marketplace fees + subscriptions"] },
+          { name: "Launch savings", values: ["$120 (24%)", "$80 (27%)"] },
+          { name: "Est. time to MVP", values: ["14–18 weeks", "10–14 weeks"] },
+          { name: "Risk profile", values: ["Higher technical risk — AI orchestration", "Lower technical risk — adoption risk"] },
+        ],
+      },
+      {
+        groupName: "Founder Fit",
+        features: [
+          { name: "Best for founders who", values: ["Love designing systems of work", "Understand community dynamics"] },
+          { name: "Go-to-market", values: ["Workforce transformation playbook", "Marketplace launch strategy"] },
+          { name: "Long-term moat", values: ["Workforce quality & reliability", "Network effects & liquidity"] },
+        ],
+      },
+    ],
+  },
 ];
 
 /* ─── Helpers ─── */
