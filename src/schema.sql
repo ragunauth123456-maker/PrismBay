@@ -169,6 +169,18 @@ CREATE TABLE IF NOT EXISTS subscribers (
 );
 CREATE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers (email);
 
+-- Page views (privacy-friendly analytics — no cookies, no PII, server-side only)
+CREATE TABLE IF NOT EXISTS page_views (
+  id          BIGSERIAL PRIMARY KEY,
+  path        TEXT NOT NULL,
+  referrer    TEXT,
+  user_agent  TEXT,
+  ip_hash     TEXT,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_page_views_path ON page_views (path);
+CREATE INDEX IF NOT EXISTS idx_page_views_created_at ON page_views (created_at);
+
 -- Email verification tokens
 CREATE TABLE IF NOT EXISTS email_verification_tokens (
   id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),

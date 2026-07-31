@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 
 import appCss from "~/styles/app.css?url";
 import CookieConsent from "~/components/CookieConsent";
+import PageViewTracker from "~/components/PageViewTracker";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -60,6 +61,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <main id="main-content">
           {children}
         </main>
+        <PageViewTracker />
         <CookieConsent />
         <Scripts />
       </body>
