@@ -17,14 +17,12 @@ function getStripe(): Stripe {
 }
 
 /**
- * Create a Stripe Checkout Session for a single product or bundle.
+ * Create a Stripe Checkout Session for a single product.
  */
 export async function createProductCheckoutSession(params: {
   productSlug: string;
   customerEmail?: string;
   origin: string;
-  couponCode?: string;
-  extraMetadata?: Record<string, string>;
 }): Promise<{ url: string | null; sessionId: string }> {
   const stripe = getStripe();
 
@@ -50,16 +48,6 @@ export async function createProductCheckoutSession(params: {
     throw new Error(`Product or bundle not found: ${params.productSlug}`);
   }
 
-  // Validate coupon if provided
-  if (params.couponCode) {
-    try {
-      await stripe.coupons.retrieve(params.couponCode);
-    } catch {
-      console.warn(`Stripe coupon not found: ${params.couponCode} — proceeding without discount`);
-      params.couponCode = undefined;
-    }
-  }
-
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: params.customerEmail || undefined,
@@ -76,10 +64,8 @@ export async function createProductCheckoutSession(params: {
         quantity: 1,
       },
     ],
-    discounts: params.couponCode ? [{ coupon: params.couponCode }] : undefined,
     metadata: {
       product_slug: params.productSlug,
-      ...(params.extraMetadata || {}),
     },
     success_url: `${params.origin}/account?checkout=success`,
     cancel_url: `${params.origin}/products/${params.productSlug}`,

@@ -54,20 +54,6 @@ function RootDocument({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
-        {/* Affiliate referral tracking: read ?ref=CODE from URL and set 30-day cookie */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-(function(){
-  var m = location.search.match(/[?&]ref=([a-z0-9-]+)/i);
-  if (m) {
-    var d = new Date();
-    d.setDate(d.getDate() + 30);
-    document.cookie = "prismbay_ref=" + encodeURIComponent(m[1]) + ";path=/;expires=" + d.toUTCString() + ";SameSite=Lax";
-  }
-})();`,
-          }}
-        />
       </head>
       <body>
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-600 focus:text-white focus:rounded">Skip to content</a>
