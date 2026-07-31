@@ -23,6 +23,8 @@ import { bodyHtml as body_no_code_ai_app_builders_guide } from './articles/no-co
 import { bodyHtml as body_ai_business_collaboration_marketplaces } from './articles/ai-business-collaboration-marketplaces';
 import { bodyHtml as body_how_to_implement_ai_business_system } from './articles/how-to-implement-ai-business-system';
 import { bodyHtml as body_ai_for_small_business_getting_started } from './articles/ai-for-small-business-getting-started';
+import { bodyHtml as body_ai_business_platform_buyers_guide } from './articles/ai-business-platform-buyers-guide';
+import { bodyHtml as body_ai_business_system_pricing_guide } from './articles/ai-business-system-pricing-guide';
 
 const _bodyHtmlByFile: Record<string, string> = {
   'how-ai-business-systems-save-smbs-time': body_how_ai_business_systems_save_smbs_time,
@@ -49,6 +51,8 @@ const _bodyHtmlByFile: Record<string, string> = {
   'ai-business-collaboration-marketplaces': body_ai_business_collaboration_marketplaces,
   'how-to-implement-ai-business-system': body_how_to_implement_ai_business_system,
   'ai-for-small-business-getting-started': body_ai_for_small_business_getting_started,
+  'ai-business-platform-buyers-guide': body_ai_business_platform_buyers_guide,
+  'ai-business-system-pricing-guide': body_ai_business_system_pricing_guide,
 };
 
 export interface Article {
@@ -682,7 +686,55 @@ export const ARTICLES: Article[] = [
     readTime: 13,
     linkedProducts: ["Nexus One"],
     bodyHtmlFile: "ai-for-small-business-getting-started",
-  }
+  },
+  // ── PUBLISHED: AI Business Platform Buyer's Guide ──
+  {
+    slug: "ai-business-platform-buyers-guide",
+    title: "AI Business Platform Buyer's Guide: How to Choose the Right System in 2026",
+    description:
+      "Navigate the AI business system landscape with confidence. Understand the six categories of AI business platforms, match the right type to your organisation, and evaluate products against criteria that matter — scope fit, integration, implementation complexity, governance, and total cost.",
+    category: "ai-business-systems",
+    readTime: 14,
+    linkedProducts: ["NexusOS", "Nexus One", "Empire AI", "Genesis Platform", "Digital Humans", "Nexus Network", "SpendShield AI", "GuardianOS", "EvidenceFlow AI"],
+    keywords: [
+      "AI business platform buyer's guide",
+      "how to choose AI business software",
+      "best AI business systems 2026",
+      "AI business platform comparison",
+      "AI business system categories",
+    ],
+    seoTitle: "AI Business Platform Buyer's Guide: How to Choose the Right System in 2026 — PrismBay",
+    metaDescription:
+      "Navigate the AI business system landscape with confidence. Understand the six categories of AI business platforms, match the right type to your organisation, and evaluate products against criteria that matter.",
+    bodyHtmlFile: "ai-business-platform-buyers-guide",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
+  // ── PUBLISHED: AI Business System Pricing Guide ──
+  {
+    slug: "ai-business-system-pricing-guide",
+    title: "How Much Does an AI Business System Cost in 2026? Complete Pricing Guide",
+    description:
+      "A clear, honest breakdown of AI business system pricing in 2026 — from one-time blueprint purchases to SaaS subscriptions and custom builds. Learn what you get at each price tier, the hidden costs to budget for, and how to calculate total cost of ownership.",
+    category: "ai-business-systems",
+    readTime: 13,
+    linkedProducts: ["NexusOS", "Nexus One", "Empire AI", "Genesis Platform", "Digital Humans", "Nexus Network", "SpendShield AI", "GuardianOS", "EvidenceFlow AI"],
+    keywords: [
+      "AI business system pricing",
+      "AI business platform cost 2026",
+      "how much does an AI business operating system cost",
+      "AI business system total cost of ownership",
+      "AI blueprint pricing guide",
+    ],
+    seoTitle: "How Much Does an AI Business System Cost in 2026? Complete Pricing Guide — PrismBay",
+    metaDescription:
+      "A clear, honest breakdown of AI business system pricing in 2026 — from one-time blueprint purchases to SaaS subscriptions and custom builds. Learn what you get at each price tier and how to calculate TCO.",
+    bodyHtmlFile: "ai-business-system-pricing-guide",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
 ];
 
 // ── Resolve bodyHtml from static imports at module load time ──
