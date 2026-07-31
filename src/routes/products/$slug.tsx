@@ -346,7 +346,7 @@ function ProductPage() {
                 </p>
               </div>
               {/* CTA */}
-              <div ref={heroCtaRef} className="mt-6 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => handlePurchase(product.slug)}
                   disabled={checkoutLoading}
