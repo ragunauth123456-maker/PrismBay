@@ -2,12 +2,14 @@
  * POST /api/checkout
  * Creates a Stripe Checkout Session for a product or bundle.
  * Body: { productSlug: string }
+ * Reads prismbay_ref cookie for affiliate referral tracking.
  * Creates a pending order record in the database.
  */
 
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod/v4";
 import { createProductCheckoutSession } from "~/lib/stripe";
+import { getStripe } from "~/lib/stripe";
 import { getSessionCookieName, validateSession } from "~/lib/auth";
 import { sql } from "~/db";
 import { getProductBySlug } from "~/data/products";
@@ -69,24 +71,61 @@ export const Route = createFileRoute("/api/checkout")({
           }
         }
 
+        // ── Affiliate referral tracking ────────────────────────────
+        let referralCode: string | null = null;
+        let affiliateId: string | null = null;
+        let couponCode: string | undefined = undefined;
+
+        const refCookie = cookies["prismbay_ref"];
+        if (refCookie) {
+          // Look up the affiliate by code
+          const affRows = await sql()`
+            SELECT id, code, stripe_coupon_id, status
+            FROM affiliates
+            WHERE code = ${refCookie} AND status = 'active'
+          `;
+
+          if (affRows.length > 0) {
+            const aff = affRows[0] as any;
+            referralCode = aff.code;
+            affiliateId = aff.id;
+
+            // Resolve stripe_coupon_id to a coupon code
+            if (aff.stripe_coupon_id) {
+              try {
+                const stripe = getStripe();
+                const coupon = await stripe.coupons.retrieve(aff.stripe_coupon_id);
+                couponCode = coupon.id; // Stripe coupon ID is the code
+              } catch {
+                console.warn(`Affiliate ${aff.code}: Stripe coupon ${aff.stripe_coupon_id} not found`);
+              }
+            }
+          }
+        }
+
         try {
           const session = await createProductCheckoutSession({
             productSlug,
             customerEmail,
             origin,
+            couponCode,
+            extraMetadata: referralCode
+              ? { referral_code: referralCode }
+              : undefined,
           });
 
           // Create pending order in database
           const item = product || bundle!;
           const amount = product ? product.launchPrice * 100 : bundle!.launchPrice * 100;
-          const name = product ? product.name : bundle!.name;
 
           await sql()`
             INSERT INTO orders (
-              user_id, stripe_session_id, status, total_cents, currency, customer_email
+              user_id, stripe_session_id, status, total_cents, currency, customer_email,
+              referral_code, affiliate_id
             ) VALUES (
               ${userId || null}, ${session.sessionId}, 'pending', ${amount}, 'usd',
-              ${customerEmail || ''}
+              ${customerEmail || ''},
+              ${referralCode || null}, ${affiliateId || null}
             )
           `;
 

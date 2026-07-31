@@ -85,7 +85,8 @@ async function handleCheckoutCompleted(event: any) {
 
   // Find the order by stripe_session_id
   const orderRows = await sql()`
-    SELECT id, user_id FROM orders WHERE stripe_session_id = ${sessionId}
+    SELECT id, user_id, referral_code, affiliate_id
+    FROM orders WHERE stripe_session_id = ${sessionId}
   `;
 
   if (orderRows.length === 0) {
@@ -162,6 +163,31 @@ async function handleCheckoutCompleted(event: any) {
     await sql()`
       UPDATE users SET stripe_customer_id = ${customerId} WHERE id = ${userId}
     `;
+  }
+
+  // ── Affiliate commission calculation ──────────────────────────────
+  const orderReferralCode = (orderRows[0] as any).referral_code;
+  const orderAffiliateId = (orderRows[0] as any).affiliate_id;
+
+  if (orderReferralCode && orderAffiliateId) {
+    // Determine commission rate: 25% for bundles, 35% for individual products
+    const commissionRate = bundleMode ? 25 : 35;
+    const commissionCents = Math.floor(amountTotal * commissionRate / 100);
+
+    await sql()`
+      INSERT INTO commissions (
+        affiliate_id, order_id, order_amount_cents, commission_cents,
+        commission_rate, status
+      ) VALUES (
+        ${orderAffiliateId}, ${orderId}, ${amountTotal}, ${commissionCents},
+        ${commissionRate}, 'pending'
+      )
+    `;
+
+    console.log(
+      `  ✓ Commission created: affiliate=${orderReferralCode} rate=${commissionRate}% ` +
+      `commission=${(commissionCents / 100).toFixed(2)}`
+    );
   }
 
   // ── Send transactional emails ──────────────────────────────────────
