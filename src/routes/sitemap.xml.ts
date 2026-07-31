@@ -120,6 +120,16 @@ export const Route = createFileRoute("/sitemap/xml")({
           });
         }
 
+        // Preview pages
+        for (const product of PRODUCTS) {
+          urls.push({
+            loc: `${BASE_URL}/preview/${product.slug}`,
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.6",
+          });
+        }
+
         // Resource articles
         const publishedArticles = ARTICLES.filter(isPublished);
         for (const article of publishedArticles) {

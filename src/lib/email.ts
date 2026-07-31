@@ -83,3 +83,52 @@ export async function sendEmailQuietly(params: SendEmailParams): Promise<void> {
     // Silently ignore — email is non-critical
   }
 }
+
+/* ─── Campaign deduplication ─── */
+
+/**
+ * Check whether a recipient has already received a specific campaign email.
+ * Uses the email_campaign_log table to prevent duplicate sends.
+ */
+export async function hasReceived(email: string, campaignSlug: string): Promise<boolean> {
+  const { neon } = await import("@neondatabase/serverless");
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    console.warn("[EMAIL] DATABASE_URL not set — cannot check campaign log, assuming not received.");
+    return false;
+  }
+  const db = neon(url);
+  try {
+    const result = await db.query(
+      `SELECT 1 FROM email_campaign_log WHERE recipient_email = $1 AND campaign_slug = $2 LIMIT 1`,
+      [email.toLowerCase().trim(), campaignSlug],
+    );
+    return (result as unknown[]).length > 0;
+  } catch (err) {
+    console.error("[EMAIL] Failed to check campaign log:", (err as Error).message);
+    // On error, assume not received to avoid blocking legitimate sends
+    return false;
+  }
+}
+
+/**
+ * Record that a campaign email was sent to a recipient.
+ * Call this after successfully sending to prevent future duplicates.
+ */
+export async function logSent(email: string, campaignSlug: string): Promise<void> {
+  const { neon } = await import("@neondatabase/serverless");
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    console.warn("[EMAIL] DATABASE_URL not set — cannot log campaign send.");
+    return;
+  }
+  const db = neon(url);
+  try {
+    await db.query(
+      `INSERT INTO email_campaign_log (recipient_email, campaign_slug) VALUES ($1, $2) ON CONFLICT (recipient_email, campaign_slug) DO NOTHING`,
+      [email.toLowerCase().trim(), campaignSlug],
+    );
+  } catch (err) {
+    console.error("[EMAIL] Failed to log campaign send:", (err as Error).message);
+  }
+}

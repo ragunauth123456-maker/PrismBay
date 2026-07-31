@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { PRODUCTS, BUNDLES } from "~/data/products";
 
 interface PublicUser {
   id: string;
@@ -107,6 +108,99 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function CompleteYourToolkit({ downloads }: { downloads: DownloadToken[] }) {
+  // Build a name → slug lookup from PRODUCTS
+  const nameToSlug = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const p of PRODUCTS) {
+      map.set(p.name.toLowerCase(), p.slug);
+    }
+    return map;
+  }, []);
+
+  // Determine which product slugs the customer already owns
+  const ownedSlugs = useMemo(() => {
+    const slugs = new Set<string>();
+    for (const dl of downloads) {
+      const slug = nameToSlug.get(dl.product_title.toLowerCase());
+      if (slug) slugs.add(slug);
+    }
+    return slugs;
+  }, [downloads, nameToSlug]);
+
+  // Find complementary products (from relatedSlugs of owned products) that aren't owned
+  const suggestions = useMemo(() => {
+    const seen = new Set<string>();
+    const result: Array<{ slug: string; name: string; tagline: string; launchPrice: number; regularPrice: number }> = [];
+
+    // First: related products from owned products
+    for (const slug of ownedSlugs) {
+      const product = PRODUCTS.find((p) => p.slug === slug);
+      if (!product) continue;
+      for (const relatedSlug of product.relatedSlugs) {
+        if (ownedSlugs.has(relatedSlug) || seen.has(relatedSlug)) continue;
+        const related = PRODUCTS.find((p) => p.slug === relatedSlug);
+        if (related) {
+          seen.add(relatedSlug);
+          result.push({
+            slug: related.slug,
+            name: related.name,
+            tagline: related.tagline,
+            launchPrice: related.launchPrice,
+            regularPrice: related.regularPrice,
+          });
+        }
+      }
+    }
+
+    // Second: bundles that contain at least one owned product (but not all owned)
+    for (const bundle of BUNDLES) {
+      if (seen.has(bundle.slug)) continue;
+      const ownedCount = bundle.productSlugs.filter((s) => ownedSlugs.has(s)).length;
+      const allOwned = bundle.productSlugs.every((s) => ownedSlugs.has(s));
+      if (ownedCount > 0 && !allOwned && !ownedSlugs.has(bundle.slug)) {
+        seen.add(bundle.slug);
+        result.push({
+          slug: bundle.slug,
+          name: bundle.name,
+          tagline: `Bundle — save ${bundle.saving.toLocaleString()}`,
+          launchPrice: bundle.launchPrice,
+          regularPrice: bundle.regularCombined,
+        });
+      }
+    }
+
+    return result.slice(0, 3);
+  }, [ownedSlugs]);
+
+  if (suggestions.length === 0) return null;
+
+  return (
+    <section className="mt-10">
+      <h2 className="text-xl font-bold text-neutral-800">Complete Your Toolkit</h2>
+      <p className="mt-1 text-sm text-neutral-500">
+        Based on your purchases, you might also find these useful.
+      </p>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {suggestions.map((item) => (
+          <Link
+            key={item.slug}
+            to={item.slug.includes("bundle") || item.slug.includes("portfolio") ? `/bundles/${item.slug}` : `/products/${item.slug}`}
+            className="group rounded-xl border border-neutral-200 bg-white p-5 transition-all duration-200 hover:border-brand-200 hover:shadow-sm hover:-translate-y-0.5"
+          >
+            <h3 className="font-semibold text-neutral-800">{item.name}</h3>
+            <p className="mt-1 text-sm text-neutral-500 line-clamp-2">{item.tagline}</p>
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="font-bold text-brand-600">${item.launchPrice.toLocaleString()}</span>
+              <span className="text-xs text-neutral-400 line-through">${item.regularPrice.toLocaleString()}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -255,6 +349,12 @@ function AccountPage() {
             </p>
           </div>
         </section>
+
+        {/* Upsell: Complete your toolkit */}
+        {downloads.length > 0 && (
+          <CompleteYourToolkit downloads={downloads} />
+        )}
+
       </div>
 
       <Footer />

@@ -203,3 +203,14 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages (created_at);
+
+-- Email campaign log (tracks which emails received which campaigns to prevent duplicates)
+CREATE TABLE IF NOT EXISTS email_campaign_log (
+  id              BIGSERIAL PRIMARY KEY,
+  recipient_email TEXT NOT NULL,
+  campaign_slug   TEXT NOT NULL,
+  sent_at         TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_email_campaign_log_email ON email_campaign_log (recipient_email);
+CREATE INDEX IF NOT EXISTS idx_email_campaign_log_slug ON email_campaign_log (campaign_slug);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_email_campaign_log_unique ON email_campaign_log (recipient_email, campaign_slug);
