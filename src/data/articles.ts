@@ -28,6 +28,9 @@ import { bodyHtml as body_ai_business_system_pricing_guide } from './articles/ai
 import { bodyHtml as body_ai_readiness_checklist_10_point } from './articles/ai-readiness-checklist-10-point';
 import { bodyHtml as body_build_vs_buy_vs_blueprint_ai_business_automation } from './articles/build-vs-buy-vs-blueprint-ai-business-automation';
 import { bodyHtml as body_ai_customer_service_automation_intelligent_support_system } from './articles/ai-customer-service-automation-intelligent-support-system';
+import { bodyHtml as body_business_processes_automate_with_ai_first } from './articles/business-processes-automate-with-ai-first';
+import { bodyHtml as body_ai_integration_guide_connecting_existing_tools } from './articles/ai-integration-guide-connecting-existing-tools';
+import { bodyHtml as body_ai_business_models_build_monetize_ai_platform } from './articles/ai-business-models-build-monetize-ai-platform';
 
 const _bodyHtmlByFile: Record<string, string> = {
   'how-ai-business-systems-save-smbs-time': body_how_ai_business_systems_save_smbs_time,
@@ -59,6 +62,9 @@ const _bodyHtmlByFile: Record<string, string> = {
   'ai-readiness-checklist-10-point': body_ai_readiness_checklist_10_point,
   'build-vs-buy-vs-blueprint-ai-business-automation': body_build_vs_buy_vs_blueprint_ai_business_automation,
   'ai-customer-service-automation-intelligent-support-system': body_ai_customer_service_automation_intelligent_support_system,
+  'business-processes-automate-with-ai-first': body_business_processes_automate_with_ai_first,
+  'ai-integration-guide-connecting-existing-tools': body_ai_integration_guide_connecting_existing_tools,
+  'ai-business-models-build-monetize-ai-platform': body_ai_business_models_build_monetize_ai_platform,
 };
 
 export interface Article {
@@ -812,6 +818,78 @@ export const ARTICLES: Article[] = [
     bundleCta: {
       type: 'ai-business-operations',
     },
+  },
+
+  // ── PUBLISHED: 10 Business Processes to Automate with AI First ──
+  {
+    slug: "business-processes-automate-with-ai-first",
+    title: "10 Business Processes You Should Automate with AI First",
+    description:
+      "Discover the ten business processes that deliver the highest impact when automated with AI — from weekly reporting and expense approval to multi-department workflow coordination — and learn how to prioritise where to start.",
+    category: "business-automation",
+    readTime: 12,
+    linkedProducts: ["Nexus One", "NexusOS", "SpendShield AI", "EvidenceFlow AI", "Digital Humans"],
+    keywords: [
+      "business processes to automate with AI",
+      "AI automation ideas for business",
+      "AI workflow automation",
+      "AI automation for small business",
+      "business process automation AI",
+    ],
+    seoTitle: "10 Business Processes You Should Automate with AI First — PrismBay",
+    metaDescription:
+      "Discover the ten business processes that deliver the highest impact when automated with AI — from weekly reporting and expense approval to multi-department workflow coordination.",
+    bodyHtmlFile: "business-processes-automate-with-ai-first",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
+
+  // ── PUBLISHED: AI Integration Guide ──
+  {
+    slug: "ai-integration-guide-connecting-existing-tools",
+    title: "AI Integration Guide: Connecting AI Business Systems to Your Existing Tools",
+    description:
+      "A comprehensive guide to integrating AI business systems with your current tool stack — covering CRM, accounting, project management, and communication platforms with three integration patterns, security principles, and a phased implementation sequence.",
+    category: "digital-transformation",
+    readTime: 14,
+    linkedProducts: ["NexusOS", "Nexus One", "Empire AI", "Genesis Platform"],
+    keywords: [
+      "AI integration with business tools",
+      "connect AI to CRM",
+      "AI business system integration guide",
+      "AI integration patterns",
+      "AI integration with existing software",
+    ],
+    seoTitle: "AI Integration Guide: Connecting AI Business Systems to Your Existing Tools — PrismBay",
+    metaDescription:
+      "A comprehensive guide to integrating AI business systems with your current tool stack — covering CRM, accounting, project management, and communication platforms with three integration patterns and a phased implementation sequence.",
+    bodyHtmlFile: "ai-integration-guide-connecting-existing-tools",
+    bundleCta: {
+      type: 'ai-business-operations',
+    },
+  },
+
+  // ── PUBLISHED: AI Business Models ──
+  {
+    slug: "ai-business-models-build-monetize-ai-platform",
+    title: "AI Business Models: How to Build and Monetize an AI Platform",
+    description:
+      "Explore the four AI platform business models that are working in 2026 — marketplace, app builder, workforce, and operating system — with guidance on monetisation, cost structures, and how to choose the model that fits your market and capabilities.",
+    category: "ai-business-systems",
+    readTime: 13,
+    linkedProducts: ["Nexus Network", "Genesis Platform", "Digital Humans", "Empire AI"],
+    keywords: [
+      "AI business model",
+      "how to monetize AI platform",
+      "AI platform business",
+      "AI business blueprint",
+      "AI platform monetisation",
+    ],
+    seoTitle: "AI Business Models: How to Build and Monetize an AI Platform — PrismBay",
+    metaDescription:
+      "Explore the four AI platform business models that are working in 2026 — marketplace, app builder, workforce, and operating system — with guidance on monetisation, cost structures, and how to choose the right model.",
+    bodyHtmlFile: "ai-business-models-build-monetize-ai-platform",
   },
 ];
 
