@@ -89,8 +89,15 @@ export async function sendEmailQuietly(params: SendEmailParams): Promise<void> {
 /**
  * Check whether a recipient has already received a specific campaign email.
  * Uses the email_campaign_log table to prevent duplicate sends.
+ *
+ * @param campaignName — e.g. "post-purchase-onboarding"
+ * @param templateName — e.g. "post-purchase-day-1"
  */
-export async function hasReceived(email: string, campaignSlug: string): Promise<boolean> {
+export async function hasReceived(
+  email: string,
+  campaignName: string,
+  templateName: string,
+): Promise<boolean> {
   const { neon } = await import("@neondatabase/serverless");
   const url = process.env.DATABASE_URL;
   if (!url) {
@@ -100,8 +107,8 @@ export async function hasReceived(email: string, campaignSlug: string): Promise<
   const db = neon(url);
   try {
     const result = await db.query(
-      `SELECT 1 FROM email_campaign_log WHERE recipient_email = $1 AND campaign_slug = $2 LIMIT 1`,
-      [email.toLowerCase().trim(), campaignSlug],
+      `SELECT 1 FROM email_campaign_log WHERE recipient_email = $1 AND campaign_name = $2 AND template_name = $3 LIMIT 1`,
+      [email.toLowerCase().trim(), campaignName, templateName],
     );
     return (result as unknown[]).length > 0;
   } catch (err) {
@@ -114,8 +121,16 @@ export async function hasReceived(email: string, campaignSlug: string): Promise<
 /**
  * Record that a campaign email was sent to a recipient.
  * Call this after successfully sending to prevent future duplicates.
+ *
+ * @param campaignName — e.g. "post-purchase-onboarding"
+ * @param templateName — e.g. "post-purchase-day-1"
  */
-export async function logSent(email: string, campaignSlug: string): Promise<void> {
+export async function logSent(
+  email: string,
+  campaignName: string,
+  templateName: string,
+  metadata?: Record<string, unknown>,
+): Promise<void> {
   const { neon } = await import("@neondatabase/serverless");
   const url = process.env.DATABASE_URL;
   if (!url) {
@@ -125,8 +140,10 @@ export async function logSent(email: string, campaignSlug: string): Promise<void
   const db = neon(url);
   try {
     await db.query(
-      `INSERT INTO email_campaign_log (recipient_email, campaign_slug) VALUES ($1, $2) ON CONFLICT (recipient_email, campaign_slug) DO NOTHING`,
-      [email.toLowerCase().trim(), campaignSlug],
+      `INSERT INTO email_campaign_log (campaign_name, recipient_email, template_name, metadata)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (campaign_name, recipient_email, template_name) DO NOTHING`,
+      [campaignName, email.toLowerCase().trim(), templateName, JSON.stringify(metadata ?? {})],
     );
   } catch (err) {
     console.error("[EMAIL] Failed to log campaign send:", (err as Error).message);

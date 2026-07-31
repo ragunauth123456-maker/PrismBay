@@ -69,6 +69,24 @@ export const Route = createFileRoute("/api/checkout")({
           }
         }
 
+        // Track checkout initiation (abandoned cart tracking)
+        const ip =
+          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+          request.headers.get("x-real-ip") ||
+          null;
+        const checkoutEmail = customerEmail || "";
+        const sessionToken = sessionId || null;
+
+        try {
+          await sql()`
+            INSERT INTO checkout_events (email, product_slug, session_id, ip_address)
+            VALUES (${checkoutEmail}, ${productSlug}, ${sessionToken}, ${ip})
+          `;
+        } catch (err) {
+          console.error("Checkout event tracking error:", (err as Error).message);
+          // Non-blocking — don't fail checkout if tracking fails
+        }
+
         try {
           const session = await createProductCheckoutSession({
             productSlug,
