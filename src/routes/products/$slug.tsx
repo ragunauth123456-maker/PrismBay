@@ -374,6 +374,19 @@ function ProductPage() {
                 Secure payment via Stripe. Instant delivery. Single-business licence.
               </p>
               <TrustBadges className="mt-4" />
+              {/* Preview what's inside */}
+              <div className="mt-4">
+                <Link
+                  to={`/preview/${product.slug}`}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-brand-300 hover:text-brand-200 transition-colors"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 2.5h4l1.5 1.5H13a1 1 0 011 1V12a1 1 0 01-1 1H3a1 1 0 01-1-1V3.5a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M6 8l2 2 4-4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Preview what's inside — table of contents & sample pages
+                </Link>
+              </div>
               {/* Bundle Callout */}
               {bundle && (
                 <div className="mt-5 rounded-lg border border-navy-700 bg-navy-800/40 p-4">
