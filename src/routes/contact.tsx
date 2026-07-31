@@ -33,12 +33,33 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setError("");
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSent(true);
+      } else {
+        setError(data.error || "Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -71,6 +92,11 @@ function ContactPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="rounded-xl border border-neutral-200 bg-white p-8 shadow-sm space-y-6">
+              {error && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1.5">Name</label>
                 <input
@@ -96,6 +122,17 @@ function ContactPage() {
                 />
               </div>
               <div>
+                <label htmlFor="subject" className="block text-sm font-medium text-neutral-700 mb-1.5">Subject (optional)</label>
+                <input
+                  id="subject"
+                  type="text"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="What's this about?"
+                  className="block w-full rounded-lg border border-neutral-300 bg-neutral-50 px-4 py-3 text-base text-neutral-700 placeholder:text-neutral-400 transition-colors duration-200 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                />
+              </div>
+              <div>
                 <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1.5">Message</label>
                 <textarea
                   id="message"
@@ -109,9 +146,10 @@ function ContactPage() {
               </div>
               <button
                 type="submit"
-                className="w-full rounded-lg bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2"
+                disabled={sending}
+                className="w-full rounded-lg bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2"
               >
-                Send Message
+                {sending ? "Sending..." : "Send Message"}
               </button>
               <p className="text-xs text-center text-neutral-400">
                 Or email us directly at <a href="mailto:admin@prismbay.com" className="text-brand-600 hover:text-brand-700">admin@prismbay.com</a>

@@ -25,9 +25,6 @@ function RefundsPage() {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Legal</p>
           <h1 className="text-3xl font-bold text-neutral-800">Refund Policy</h1>
           <p className="mt-2 text-sm text-neutral-500">Effective: July 28, 2026</p>
-          <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            <strong>⚠️ Draft — Pending Legal Review.</strong> This policy has not been reviewed by a qualified lawyer.
-          </div>
         </div>
       </div>
       <div className="mx-auto max-w-3xl px-6 py-12">

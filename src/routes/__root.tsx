@@ -1,5 +1,6 @@
 import {
   HeadContent,
+  Link,
   Outlet,
   Scripts,
   createRootRoute,
@@ -9,6 +10,8 @@ import type { ReactNode } from "react";
 import appCss from "~/styles/app.css?url";
 import CookieConsent from "~/components/CookieConsent";
 import PageViewTracker from "~/components/PageViewTracker";
+import Navbar from "~/components/Navbar";
+import Footer from "~/components/Footer";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -38,9 +41,42 @@ export const Route = createRootRoute({
       { rel: "alternate", type: "application/rss+xml", title: "PrismBay Blog", href: "/resources/rssxml" },
     ],
   }),
-  notFoundComponent: () => <div>Page not found</div>,
+  notFoundComponent: NotFoundPage,
   component: RootComponent,
 });
+
+function NotFoundPage() {
+  return (
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center px-6 py-24">
+        <div className="text-center max-w-lg">
+          <p className="text-8xl font-bold text-brand-500 mb-4">404</p>
+          <h1 className="text-3xl font-bold text-neutral-800 mb-3">Page not found</h1>
+          <p className="text-neutral-600 mb-8 leading-relaxed">
+            The page you're looking for doesn't exist or has been moved.
+            It might have been renamed, or the link you followed may be outdated.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600"
+            >
+              Go to Homepage
+            </Link>
+            <Link
+              to="/products"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white px-6 py-3 text-base font-semibold text-neutral-700 transition-all duration-200 hover:bg-neutral-50"
+            >
+              Browse Products
+            </Link>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
 
 function RootComponent() {
   return (
