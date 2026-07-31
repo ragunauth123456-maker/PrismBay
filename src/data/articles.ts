@@ -1,3 +1,56 @@
+// ── Static imports for all article body HTML ──
+import { bodyHtml as body_how_ai_business_systems_save_smbs_time } from './articles/how-ai-business-systems-save-smbs-time';
+import { bodyHtml as body_procurement_intelligence_cfo_guide } from './articles/procurement-intelligence-cfo-guide';
+import { bodyHtml as body_ai_powered_decision_support_executive_guide } from './articles/ai-powered-decision-support-executive-guide';
+import { bodyHtml as body_ai_payment_verification_systems_explained } from './articles/ai-payment-verification-systems-explained';
+import { bodyHtml as body_compliance_automation_audit_ready } from './articles/compliance-automation-audit-ready';
+import { bodyHtml as body_nexus_one_vs_nexusos } from './articles/nexus-one-vs-nexusos';
+import { bodyHtml as body_5_signs_smb_ready_ai_business_os } from './articles/5-signs-smb-ready-ai-business-os';
+import { bodyHtml as body_ai_executive_dashboards_ceo_guide } from './articles/ai-executive-dashboards-ceo-guide';
+import { bodyHtml as body_ai_business_systems_vs_saas } from './articles/ai-business-systems-vs-saas';
+import { bodyHtml as body_what_is_an_ai_business_operating_system } from './articles/what-is-an-ai-business-operating-system';
+import { bodyHtml as body_how_to_evaluate_ai_business_blueprints } from './articles/how-to-evaluate-ai-business-blueprints';
+import { bodyHtml as body_department_automation_workflows } from './articles/department-automation-workflows';
+import { bodyHtml as body_multi_agent_coordination_patterns } from './articles/multi-agent-coordination-patterns';
+import { bodyHtml as body_regulatory_landscape_ai_business_2026 } from './articles/regulatory-landscape-ai-business-2026';
+import { bodyHtml as body_building_trust_through_compliance } from './articles/building-trust-through-compliance';
+import { bodyHtml as body_procurement_savings_ai_driven } from './articles/procurement-savings-ai-driven';
+import { bodyHtml as body_supplier_health_monitoring } from './articles/supplier-health-monitoring';
+import { bodyHtml as body_virtual_employee_platforms_explained } from './articles/virtual-employee-platforms-explained';
+import { bodyHtml as body_spendshield_vs_guardianos } from './articles/spendshield-vs-guardianos';
+import { bodyHtml as body_ai_business_systems_roi_business_case } from './articles/ai-business-systems-roi-business-case';
+import { bodyHtml as body_no_code_ai_app_builders_guide } from './articles/no-code-ai-app-builders-guide';
+import { bodyHtml as body_ai_business_collaboration_marketplaces } from './articles/ai-business-collaboration-marketplaces';
+import { bodyHtml as body_how_to_implement_ai_business_system } from './articles/how-to-implement-ai-business-system';
+import { bodyHtml as body_ai_for_small_business_getting_started } from './articles/ai-for-small-business-getting-started';
+
+const _bodyHtmlByFile: Record<string, string> = {
+  'how-ai-business-systems-save-smbs-time': body_how_ai_business_systems_save_smbs_time,
+  'procurement-intelligence-cfo-guide': body_procurement_intelligence_cfo_guide,
+  'ai-powered-decision-support-executive-guide': body_ai_powered_decision_support_executive_guide,
+  'ai-payment-verification-systems-explained': body_ai_payment_verification_systems_explained,
+  'compliance-automation-audit-ready': body_compliance_automation_audit_ready,
+  'nexus-one-vs-nexusos': body_nexus_one_vs_nexusos,
+  '5-signs-smb-ready-ai-business-os': body_5_signs_smb_ready_ai_business_os,
+  'ai-executive-dashboards-ceo-guide': body_ai_executive_dashboards_ceo_guide,
+  'ai-business-systems-vs-saas': body_ai_business_systems_vs_saas,
+  'what-is-an-ai-business-operating-system': body_what_is_an_ai_business_operating_system,
+  'how-to-evaluate-ai-business-blueprints': body_how_to_evaluate_ai_business_blueprints,
+  'department-automation-workflows': body_department_automation_workflows,
+  'multi-agent-coordination-patterns': body_multi_agent_coordination_patterns,
+  'regulatory-landscape-ai-business-2026': body_regulatory_landscape_ai_business_2026,
+  'building-trust-through-compliance': body_building_trust_through_compliance,
+  'procurement-savings-ai-driven': body_procurement_savings_ai_driven,
+  'supplier-health-monitoring': body_supplier_health_monitoring,
+  'virtual-employee-platforms-explained': body_virtual_employee_platforms_explained,
+  'spendshield-vs-guardianos': body_spendshield_vs_guardianos,
+  'ai-business-systems-roi-business-case': body_ai_business_systems_roi_business_case,
+  'no-code-ai-app-builders-guide': body_no_code_ai_app_builders_guide,
+  'ai-business-collaboration-marketplaces': body_ai_business_collaboration_marketplaces,
+  'how-to-implement-ai-business-system': body_how_to_implement_ai_business_system,
+  'ai-for-small-business-getting-started': body_ai_for_small_business_getting_started,
+};
+
 export interface Article {
   slug: string;
   title: string;
@@ -195,8 +248,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Traditional SaaS gives you a tool you rent; an AI business system gives you a blueprint for an entire operating model. Compare cost, customization, time-to-value, and scalability to find the right fit.",
     bodyHtmlFile: "ai-business-systems-vs-saas",
-  }
-,
+  },
 
   // ── PUBLISHED: Pillar — What Is an AI Business Operating System? ──
   {
@@ -573,7 +625,6 @@ export const ARTICLES: Article[] = [
       "SpendShield AI controls procurement costs; GuardianOS prevents payment fraud. Compare features, pricing, and find which protects your business — or use both.",
     bodyHtmlFile: "spendshield-vs-guardianos",
   },
-,
   // ── PUBLISHED: AI Business Systems ROI ──
   {
     slug: "ai-business-systems-roi-business-case",
@@ -634,6 +685,13 @@ export const ARTICLES: Article[] = [
   }
 ];
 
+// ── Resolve bodyHtml from static imports at module load time ──
+for (const a of ARTICLES) {
+  if (a && a.bodyHtmlFile && _bodyHtmlByFile[a.bodyHtmlFile]) {
+    a.bodyHtml = _bodyHtmlByFile[a.bodyHtmlFile];
+  }
+}
+
 /** Look up an article by slug. Returns undefined if not found. */
 export function getArticleBySlug(slug: string): Article | undefined {
   return ARTICLES.find((a) => a.slug === slug);
@@ -641,5 +699,5 @@ export function getArticleBySlug(slug: string): Article | undefined {
 
 /** Check whether an article is published (has full body content). */
 export function isPublished(article: Article): boolean {
-  return (article.bodyHtml !== undefined && article.bodyHtml.length > 0) || article.bodyHtmlFile !== undefined;
+  return article.bodyHtml !== undefined && article.bodyHtml.length > 0;
 }
