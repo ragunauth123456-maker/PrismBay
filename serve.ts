@@ -41,6 +41,19 @@ for (let attempt = 1; ; attempt++) {
       hostname: HOST,
       async fetch(req) {
         const { pathname } = new URL(req.url);
+
+        // Rewrite /sitemap.xml to the TanStack Start route at /sitemap/xml
+        // (TanStack Router splits on dots in filenames: sitemap.xml.ts → /sitemap/xml)
+        if (pathname === "/sitemap.xml") {
+          const rewritten = new Request(
+            new URL("/sitemap/xml", req.url),
+            req,
+          );
+          return (
+            handler as { fetch: (r: Request) => Response | Promise<Response> }
+          ).fetch(rewritten);
+        }
+
         if (pathname !== "/") {
           const file = Bun.file(CLIENT_DIR + pathname);
           if (await file.exists()) {

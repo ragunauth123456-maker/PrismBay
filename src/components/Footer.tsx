@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import LogoHorizontal from "./LogoHorizontal";
+
+const COOKIE_CONSENT_KEY = "prismbay_cookie_consent";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [consentDeclined, setConsentDeclined] = useState(false);
+
+  useEffect(() => {
+    if (typeof localStorage !== "undefined") {
+      setConsentDeclined(localStorage.getItem(COOKIE_CONSENT_KEY) === "declined");
+    }
+  }, []);
 
   async function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -153,7 +162,14 @@ export default function Footer() {
             <p className="mb-4 text-sm text-neutral-400">
               One email every two weeks. No spam, unsubscribe anytime.
             </p>
-            {status === "success" ? (
+            {consentDeclined ? (
+              <p className="text-sm text-neutral-500">
+                Newsletter signup requires functional cookies.{" "}
+                <Link to="/cookies" className="text-brand-400 hover:text-brand-300 underline underline-offset-2">
+                  Manage cookie preferences
+                </Link>
+              </p>
+            ) : status === "success" ? (
               <p className="text-sm font-medium text-brand-400">{message}</p>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
