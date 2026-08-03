@@ -1,5 +1,8 @@
 /* ─── PrismBay Demo Walkthrough Data ─── */
-/* Extracted from demo-video-scripts.md — web-based guided tours for each product. */
+/* Web-based guided tours for each product.
+   NOTE: fabricated buyer testimonials removed (July 2026 strategist audit).
+   The original scripts in /home/team/shared/products/demo-video-scripts.md still
+   contain those quotes and are flagged for re-recording — do NOT copy them back. */
 
 export interface DemoStep {
   /** Short heading shown above the visual */
@@ -74,11 +77,11 @@ const nexusNetworkSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "Real-World Results",
+    title: "What's Inside the Blueprint",
     narration:
-      "One of our buyers, Carla Mendez, a founder, launched her AI services marketplace in fourteen weeks using this blueprint. She had her first fifty transactions by month two. Nexus Network is for founders and product teams who see the gap in B2B collaboration marketplaces and want to build something real.",
-    visualLabel: "Buyer success story",
-    icon: "value",
+      "The package includes the full AI business-matching team design — matching, recommendation, and vetting agents with operating instructions — plus business profile structure, project and opportunity listings, the collaboration request system, marketplace search and filtering, messaging workflows, and the trust and verification framework. You also get marketplace templates you can adapt, a product demonstration video, and thirty days of priority support.",
+    visualLabel: "Deliverable breakdown",
+    icon: "feature",
   },
   {
     title: "Get Nexus Network",
@@ -142,11 +145,11 @@ const digitalHumansSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "Real-World Validation",
+    title: "Key Workflows You'll Implement",
     narration:
-      "Jonathan Webb, a CEO building an insurance processing platform, told us his Series A investors were impressed by how thoroughly the human oversight layer was designed. Amara Chen, a VP of AI, said the task assignment workflows and approval controls 'solve the real problems that come after just add an LLM.'",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The blueprint walks through the workflows you'll implement: onboarding a digital employee into a role with defined permissions, running the task lifecycle from detection to human sign-off, handling escalations when a digital employee hits something outside its boundaries, and running the periodic permission and quality reviews that keep the workforce controlled. Every workflow has defined approval points — human oversight stays lightweight and structured, not bolted on.",
+    visualLabel: "Implementation workflow overview",
+    icon: "feature",
   },
   {
     title: "Get Digital Humans",
@@ -210,11 +213,11 @@ const nexusosSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "Proven Impact",
+    title: "Design Rationale",
     narration:
-      "David Kim, a CTO, told us it saved his team six months of architecture planning — the AI agent coordination framework became the backbone of their internal platform. Sarah Mitchell, a CEO, used the executive command system to clarify her vision before raising a seed round.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The architecture is integration-first: one data layer, one identity and permission model, and one reporting framework across every department — because that's the only way cross-department AI agents can share context and escalate coherently. Security, governance, and compliance mappings are designed in from the start rather than added later. That's the core design decision that separates an operating system from another collection of point tools.",
+    visualLabel: "Architecture design rationale",
+    icon: "feature",
   },
   {
     title: "Get NexusOS",
@@ -278,11 +281,11 @@ const empireAiSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "Leadership Impact",
+    title: "What's Inside the Blueprint",
     narration:
-      "Michael Torres, a CFO, told us it transformed how his leadership team makes decisions — the financial monitoring and risk alerts gave them visibility they'd been missing for years. Rachel Foster, a COO, implemented it across five business units and had real-time operational visibility within two months.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The package includes executive command dashboard wireframes, financial performance monitoring specifications, operational and workforce tracking, strategic planning and forecasting workflows, decision-support agent designs, the risk and exception alert framework, and executive reporting templates. The implementation roadmap covers how to connect existing systems — accounting, ERP, operations — into one command view.",
+    visualLabel: "Deliverable breakdown",
+    icon: "feature",
   },
   {
     title: "Get Empire AI",
@@ -341,16 +344,16 @@ const genesisPlatformSteps: DemoStep[] = [
   {
     title: "Enterprise Deployment",
     narration:
-      "Multi-tenant architecture, white-label deployment, SLA frameworks, and enterprise sales motion. Platform security requirements cover authentication, data isolation, and compliance. Kevin O'Brien, a technical founder, called the enterprise licensing strategy 'a standout' that gave his team 'a clear path to monetization.'",
+      "Multi-tenant architecture, white-label deployment, SLA frameworks, and enterprise sales motion. Platform security requirements cover authentication, data isolation, and compliance. The enterprise licensing strategy gives platform builders a clear path to monetization beyond consumer subscriptions.",
     visualLabel: "Enterprise Licensing Strategy and Security",
     icon: "feature",
   },
   {
-    title: "Developer Validation",
+    title: "Design Rationale",
     narration:
-      "Raj Mehta, a CTO and co-founder, said the no-code builder architecture alone saved his team months of R&D. The roadmap estimates sixteen to twenty weeks to MVP for a team of three to five engineers.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The core design decision: let users describe the app they need instead of configuring it. The prompt-to-application pipeline — prompt parsing, template matching, workflow generation, agent configuration, and deployment — turns a description into a working application while keeping a full no-code builder for users who prefer to build visually. The template marketplace is the defensibility layer: the more templates users publish, the more value the platform holds. The development roadmap estimates sixteen to twenty weeks to MVP for a team of three to five engineers.",
+    visualLabel: "Architecture design rationale",
+    icon: "feature",
   },
   {
     title: "Get Genesis Platform",
@@ -414,11 +417,11 @@ const nexusOneSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "SMB Impact",
+    title: "Key Workflows You'll Implement",
     narration:
-      "Priya Patel, an operations director at a forty-five-person logistics company, had department agents and task coordination running across her operations floor. Lisa Chang, a CTO, had core workflows in prototype within three weeks. Designed to be implemented by a technically-minded operations lead, not a large IT department.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The blueprint covers the workflows an SMB actually needs: task handoffs and deadline tracking, customer follow-up reminders, expense approvals, sales pipeline and activity logging, project status coordination, and the weekly executive summary that surfaces what needs a decision. It's designed to be implemented by a technically-minded operations lead — not a large IT department.",
+    visualLabel: "Implementation workflow overview",
+    icon: "feature",
   },
   {
     title: "Get Nexus One",
@@ -477,16 +480,16 @@ const spendShieldAiSteps: DemoStep[] = [
   {
     title: "Negotiation Intelligence",
     narration:
-      "Structured briefs for supplier negotiations: current spend, contract terms, market benchmarks, alternative suppliers, recommended positions. Victoria Nash, a head of procurement, said the contract review workflows and negotiation tools 'gave our team an edge in every supplier conversation.'",
+      "Structured briefs for supplier negotiations: current spend, contract terms, market benchmarks, alternative suppliers, recommended positions. A procurement team enters every supplier conversation with a defensible position, not a guess.",
     visualLabel: "Negotiation Preparation and Procurement Reporting",
     icon: "feature",
   },
   {
-    title: "Real Savings Achieved",
+    title: "Illustrative Scenario",
     narration:
-      "Victoria's team identified two-point-one million dollars in savings opportunities in the first quarter. Robert Kimani, a CPO who's implemented six-figure procurement systems, said the SpendShield blueprint delivered what those expensive systems didn't.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "Illustrative scenario: a typical mid-market company spends across a fragmented supplier base. The blueprint walks through how a procurement team would use the system — classify spend by category and supplier, flag suppliers whose prices have drifted from contracted terms, surface duplicate charges, and produce a structured negotiation brief — before each purchasing decision, not after. This scenario is illustrative; outcomes depend on the data you feed the system.",
+    visualLabel: "Illustrative procurement scenario",
+    icon: "feature",
   },
   {
     title: "Get SpendShield AI",
@@ -545,16 +548,16 @@ const guardianosSteps: DemoStep[] = [
   {
     title: "Emergency Response Protocol",
     narration:
-      "What happens when the system flags a transaction as high-risk — a structured process for rapid investigation, evidence collection, and decision-making. Marcus Chen, a head of InfoSec, said these workflows caught a pattern that would have let through a three-hundred-forty-thousand-dollar fraudulent invoice.",
+      "What happens when the system flags a transaction as high-risk — a structured process for rapid investigation, evidence collection, and decision-making. The protocol ensures a flagged transaction is reviewed thoroughly before any money moves.",
     visualLabel: "Emergency Verification and Human Approval Controls",
     icon: "feature",
   },
   {
-    title: "Protection That Pays for Itself",
+    title: "Illustrative Scenario",
     narration:
-      "Angela Rossi, a CFO who lost one hundred eighty thousand dollars to wire fraud, said this blueprint gave her engineering team the exact plan they needed. The security architecture maps to SOC 2, ISO 27001, and PCI DSS.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "Illustrative scenario: a typical finance team receives a supplier payment request with newly changed bank details. The blueprint walks through the verification chain — confirm the details match verified supplier records, verify the requester's identity, check the approver's authority, and scan for suspicious patterns — with the emergency response protocol ready if any check fails. Multi-layered verification, not a single check. The security architecture maps to SOC 2, ISO 27001, and PCI DSS.",
+    visualLabel: "Illustrative payment-verification scenario",
+    icon: "feature",
   },
   {
     title: "Get GuardianOS",
@@ -606,7 +609,7 @@ const evidenceflowAiSteps: DemoStep[] = [
   {
     title: "Audit-Ready Packages",
     narration:
-      "The audit preparation module generates organized evidence packages — complete with index, control mappings, and evidence summaries. The evidence status dashboard shows real-time compliance posture: what's covered, what's missing, what's due for renewal. Catherine Wu, a CISO, told us EvidenceFlow AI cut her SOC 2 audit prep time by sixty percent.",
+      "The audit preparation module generates organized evidence packages — complete with index, control mappings, and evidence summaries. The evidence status dashboard shows real-time compliance posture: what's covered, what's missing, what's due for renewal.",
     visualLabel: "Audit Preparation and Evidence Status Dashboard",
     icon: "feature",
   },
@@ -618,11 +621,11 @@ const evidenceflowAiSteps: DemoStep[] = [
     icon: "feature",
   },
   {
-    title: "Compliance Teams Love It",
+    title: "What's Inside the Blueprint",
     narration:
-      "Andre Dupont, managing compliance across six frameworks, said the control mapping alone saved his team from maintaining six separate evidence spreadsheets. Jessica Moore, a VP of engineering, built the core evidence collection pipeline in about five weeks.",
-    visualLabel: "Buyer testimonials",
-    icon: "value",
+      "The package includes the compliance evidence AI team design, automated collection connectors for your existing tools, document classification and control mapping, missing-evidence tracking, the audit preparation module, the evidence status dashboard, compliance reporting templates, the audit-readiness scoring model, and the subscription revenue model for commercializing the platform.",
+    visualLabel: "Deliverable breakdown",
+    icon: "feature",
   },
   {
     title: "Get EvidenceFlow AI",
