@@ -174,6 +174,11 @@ export const PRODUCTS: Product[] = [
           "Same as all PrismBay products: structured documentation with architecture diagrams, workflow maps, technical specs, and a development roadmap — delivered as PDFs and editable source files.",
       },
       {
+        question: "Is Nexus One a software product or a blueprint?",
+        answer:
+          "Nexus One is a complete AI business system blueprint — a detailed documentation package covering the system design, workflows, technical architecture, and implementation roadmap. It is not pre-built software; your team uses the package to build and operate its own system.",
+      },
+      {
         question: "What's the licence?",
         answer:
           "Single-business perpetual licence. You can build one commercial product from the blueprint. Agency and multi-client licences available separately.",
@@ -289,6 +294,11 @@ export const PRODUCTS: Product[] = [
           "Nexus Network is a complete business system blueprint — strategy documents, workflow designs, technical architecture, and launch plans. It's the plan for building a marketplace, not the marketplace software itself.",
       },
       {
+        question: "What's the licence?",
+        answer:
+          "Single-business perpetual licence. You may use this blueprint to build one commercial product for one organization. Redistribution, resale, and use across multiple client businesses are not permitted without a separate licence.",
+      },
+      {
         question: "What kind of marketplace is this designed for?",
         answer:
           "Nexus Network is designed for B2B collaboration marketplaces — think platforms that connect businesses with service providers, consultants, AI solutions, or technology partners. The trust and moderation framework is built for high-value B2B transactions.",
@@ -368,6 +378,11 @@ export const PRODUCTS: Product[] = [
           "Structured documentation including workforce design frameworks, workflow diagrams, governance policies, architecture specs, and a product roadmap — delivered as downloadable PDFs and editable source documents.",
       },
       {
+        question: "Is Digital Humans a software product or a blueprint?",
+        answer:
+          "Digital Humans is a complete AI business system blueprint — a detailed documentation package covering the virtual workforce design, workflows, technical architecture, and implementation roadmap. It is not pre-built software; your team uses the package to build its own platform.",
+      },
+      {
         question: "What's the licence?",
         answer:
           "Single-business perpetual licence. Build one commercial AI workforce platform. Enterprise licensing available for consultancies and platform vendors.",
@@ -415,6 +430,11 @@ export const PRODUCTS: Product[] = [
         question: "Is this a software product or a blueprint?",
         answer:
           "Genesis Platform is a complete blueprint for building your own AI app builder platform. It's the architectural plan, business model, and development roadmap — not pre-built software.",
+      },
+      {
+        question: "What's the licence?",
+        answer:
+          "Single-business perpetual licence. You may use this blueprint to build one commercial product for one organization. Redistribution, resale, and use across multiple client businesses are not permitted without a separate licence.",
       },
       {
         question: "Who is this designed for?",

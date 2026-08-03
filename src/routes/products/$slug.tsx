@@ -9,6 +9,7 @@ import {
   type FAQ,
   type Bundle,
   type Product,
+  calculateLaunchDeadline,
 } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
@@ -327,6 +328,7 @@ function ProductPage() {
                 {product.name}
               </h1>
               <p className="mt-2 text-lg text-neutral-300">{product.tagline}</p>
+              <p className="mt-3 text-xl font-semibold leading-relaxed text-brand-200">{product.valueStatement}</p>
               <div className="mt-3">
                 <StarRating rating={product.rating} count={product.reviewCount} />
               </div>
@@ -334,6 +336,7 @@ function ProductPage() {
               {/* Launch Pricing */}
               <div className="mt-6 rounded-xl border border-navy-700 bg-navy-800/60 p-5">
                 <div className="mb-2"><CountdownTimer variant="hero" /></div>
+                <p className="text-sm font-medium text-amber-200">Launch pricing ends {calculateLaunchDeadline()}</p>
                 <div className="flex items-baseline gap-3 mt-3">
                   <span className="text-2xl font-bold text-white">${product.launchPrice}</span>
                   <span className="text-lg text-neutral-400 line-through">${product.regularPrice}</span>
@@ -373,6 +376,7 @@ function ProductPage() {
               <p className="mt-3 text-xs text-neutral-400">
                 Secure payment via Stripe. Instant delivery. Single-business licence.
               </p>
+              <Link to="/how-it-works" className="mt-2 text-sm text-brand-200 underline underline-offset-4 hover:text-brand-100">See how purchase and download works →</Link>
               <TrustBadges className="mt-4" />
               {/* Preview what's inside */}
               <div className="mt-4">
