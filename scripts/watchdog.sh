@@ -21,7 +21,7 @@ backoff=1
 while :; do
   if ! curl -fsS --max-time 5 -o /dev/null "$HEALTH_URL"; then
     # serve.ts frees :3000 itself, making this safe after a partial publish.
-    (cd "$SITE_DIR" && nohup bun run start >>"$RUN_DIR/server.log" 2>&1 & echo $! > "$RUN_DIR/server.pid")
+    (cd "$SITE_DIR" && set -a; source "$RUN_DIR/server.env" 2>/dev/null || true; set +a; nohup bun run start >>"$RUN_DIR/server.log" 2>&1 & echo $! > "$RUN_DIR/server.pid")
     sleep 1
     if curl -fsS --max-time 5 -o /dev/null "$HEALTH_URL"; then
       backoff=1

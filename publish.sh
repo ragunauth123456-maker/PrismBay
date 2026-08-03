@@ -16,7 +16,24 @@ mkdir -p .run
 # once node_modules is current.
 bun install
 bun run build
-setsid nohup bun run start > .run/server.log 2>&1 < /dev/null &
+# Persist env vars so the watchdog can recover the full environment.
+# Only overwrite when DATABASE_URL is present (platform-managed publish).
+if [ -n "${DATABASE_URL:-}" ]; then
+  cat > .run/server.env <<ENVEOF
+DATABASE_URL=${DATABASE_URL:-}
+STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+RESEND_API_KEY=${RESEND_API_KEY:-}
+EMAIL_FROM=${EMAIL_FROM:-}
+SITE_URL=${SITE_URL:-}
+ENVEOF
+fi
+# If we have a persisted env file, use it; otherwise rely on the current environment.
+if [ -s .run/server.env ]; then
+  setsid nohup bash -c 'set -a; source .run/server.env; set +a; bun run start' > .run/server.log 2>&1 < /dev/null &
+else
+  setsid nohup bun run start > .run/server.log 2>&1 < /dev/null &
+fi
 
 # Wait for the new server to actually answer before reporting success, so a
 # startup crash surfaces here instead of silently leaving the old page live.
