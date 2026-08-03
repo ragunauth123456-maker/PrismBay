@@ -9,7 +9,7 @@ export const Route = createFileRoute("/compare/")({
   head: () => ({
     meta: [
       { title: "Compare AI Business Systems — PrismBay" },
-      { name: "description", content: "Compare PrismBay AI business systems side by side. See features, pricing, and find the right system for your organization. 7 detailed comparisons available." },
+      { name: "description", content: "Compare PrismBay AI business systems side by side. See features, pricing, and find the right system for your organization. 13 detailed comparisons available." },
       { property: "og:title", content: "Compare AI Business Systems — PrismBay" },
       { property: "og:description", content: "Compare PrismBay AI business systems side by side. See features, pricing, and find the right system for your organization." },
       { property: "og:type", content: "website" },

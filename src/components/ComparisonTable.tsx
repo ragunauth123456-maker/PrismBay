@@ -308,12 +308,11 @@ export default function ComparisonContent({ config }: { config: ComparisonConfig
               </p>
             </div>
             {/* Third product for 3-way */}
-            {isThreeWay && products.length > 2 && (
+            {isThreeWay && products.length > 2 && config.decisionGuide.titleC && (
               <div className="rounded-xl border border-accent-100 bg-accent-50/40 p-6">
-                <h3 className="text-lg font-bold text-accent-700">Choose {products[2].name}</h3>
+                <h3 className="text-lg font-bold text-accent-700">{config.decisionGuide.titleC}</h3>
                 <p className="mt-2 text-sm text-neutral-600 leading-relaxed">
-                  You need one command centre to monitor financial results, operations, workforce,
-                  projects, risks, and forecasts — with strategic planning and decision-support agents.
+                  {config.decisionGuide.descriptionC}
                 </p>
               </div>
             )}

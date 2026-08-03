@@ -34,6 +34,8 @@ export interface ComparisonConfig {
     descriptionA: string;
     titleB: string;
     descriptionB: string;
+    titleC?: string;
+    descriptionC?: string;
   };
   /** Quick comparison rows */
   quickComparison: ComparisonDimension[];
@@ -405,6 +407,9 @@ const RAW_COMPARISONS: ComparisonConfig[] = [
       titleB: "Choose Nexus One",
       descriptionB:
         "You run an SMB (10–250 people) and need a practical connected workspace. Speed and simplicity matter more than enterprise departmental depth.",
+      titleC: "Choose Empire AI",
+      descriptionC:
+        "You need one command centre to monitor financial results, operations, workforce, projects, risks, and forecasts — with strategic planning and decision-support agents.",
     },
     quickComparison: [
       { name: "Target company size", values: ["250+ employees", "10–250 employees", "Any size"] },
