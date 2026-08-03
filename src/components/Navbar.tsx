@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { to: "/pricing", label: "Pricing" },
   { to: "/faq", label: "FAQ" },
   { to: "/trust", label: "Trust Centre" },
+  { to: "/jvzoo/resources", label: "Partners" },
 ];
 
 export default function Navbar() {
@@ -64,6 +65,12 @@ export default function Navbar() {
             className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900"
           >
             Resources
+          </Link>
+          <Link
+            to="/jvzoo/resources"
+            className="text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900"
+          >
+            Partners
           </Link>
         </nav>
 

@@ -151,6 +151,14 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/jvzoo/resources"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Affiliate Program
+                </Link>
+              </li>
             </ul>
           </nav>
 
