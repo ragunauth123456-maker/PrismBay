@@ -7,14 +7,14 @@ import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
 export const Route = createFileRoute("/how-it-works")({
   head: () => ({
     meta: [
-      { title: "How It Works — Browse, Watch Demos, Buy & Download | PrismBay" },
+      { title: "How It Works — Browse, Preview, Buy & Download | PrismBay" },
       { name: "description", content: "How PrismBay works: browse AI business systems, watch real product demos, check out securely via Stripe, and download your purchase instantly. No mystery boxes." },
-      { property: "og:title", content: "How It Works — Browse, Watch Demos, Buy & Download | PrismBay" },
+      { property: "og:title", content: "How It Works — Browse, Preview, Buy & Download | PrismBay" },
       { property: "og:description", content: "How PrismBay works: browse AI business systems, watch real product demos, check out securely via Stripe, and download your purchase instantly. No mystery boxes." },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/how-it-works" },
-      ...twitterMeta("How It Works — Browse, Watch Demos, Buy & Download | PrismBay", "How PrismBay works: browse AI business systems, watch real product demos, check out securely via Stripe, and download your purchase instantly. No mystery boxes."),
+      ...twitterMeta("How It Works — Browse, Preview, Buy & Download | PrismBay", "How PrismBay works: browse AI business systems, watch real product demos, check out securely via Stripe, and download your purchase instantly. No mystery boxes."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/how-it-works" },

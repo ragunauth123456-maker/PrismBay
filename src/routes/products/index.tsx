@@ -458,7 +458,9 @@ function ProductsPage() {
           <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
             <div>
               <h1 className="text-3xl font-bold text-neutral-800">
-                {showingBundles ? "Product Bundles" : "Build Smarter AI Businesses"}
+                {showingBundles
+                  ? `Bundles — Save up to $${MAX_BUNDLE_SAVING.toLocaleString()}`
+                  : "AI Business Systems"}
               </h1>
               <p className="mt-1 text-neutral-600">
                 {showingBundles
@@ -468,6 +470,14 @@ function ProductsPage() {
                     : `9 products + 3 bundles available`}
               </p>
             </div>
+            {showingBundles && (
+              <Link
+                to="/bundles"
+                className="shrink-0 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+              >
+                Browse the full Bundles page →
+              </Link>
+            )}
           </div>
           <div className="mt-3 flex items-center gap-4">
             <CountdownTimer variant="compact" />

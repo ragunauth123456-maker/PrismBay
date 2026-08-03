@@ -61,7 +61,7 @@ export const Route = createFileRoute("/demo/$slug")({
         breadcrumbListScript([
           { name: "Home", url: "https://www.prismbayai.com" },
           { name: "Demos", url: "https://www.prismbayai.com/demo" },
-          { name: demo.productName, url: canonicalUrl },
+          { name: `${demo.productName} Demo`, url: canonicalUrl },
         ]),
       ],
     };

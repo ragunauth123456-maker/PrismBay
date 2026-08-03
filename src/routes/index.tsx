@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       { rel: "canonical", href: "https://www.prismbayai.com/" },
     ],
     meta: [
-      { title: "AI Business Systems & Blueprints | PrismBay" },
+      { title: "AI Business System Blueprints | PrismBay" },
       { name: "description", content: "Premium AI business system blueprints — complete workflows, architecture, revenue models, and implementation plans. Browse 9 products with interactive demos." },
     ],
     scripts: [
@@ -252,7 +252,7 @@ function HeroSection() {
           {/* Left column — text */}
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              AI Business Systems & Blueprints
+              AI Business System Blueprints
             </h1>
             <p className="mt-6 text-lg text-neutral-300 sm:text-xl">
               Detailed workflows, architecture, revenue models, and implementation plans — ready to evaluate, plan, and launch. Launch pricing available for a limited time.
