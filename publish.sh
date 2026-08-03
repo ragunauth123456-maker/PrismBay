@@ -22,7 +22,10 @@ setsid nohup bun run start > .run/server.log 2>&1 < /dev/null &
 # startup crash surfaces here instead of silently leaving the old page live.
 for _ in $(seq 1 50); do
   if curl -sf -o /dev/null http://localhost:3000; then
-    echo "site published; serving on port 3000"
+    # Keep the production server available after an unexpected process exit.
+    # The watchdog is idempotent and does not rebuild during recovery.
+    setsid nohup bash ./scripts/watchdog.sh >> .run/watchdog.log 2>&1 < /dev/null &
+    echo "site published; serving on port 3000 (watchdog enabled)"
     exit 0
   fi
   sleep 0.2
