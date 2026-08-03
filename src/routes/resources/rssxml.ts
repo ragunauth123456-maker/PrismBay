@@ -6,23 +6,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ARTICLES, isPublished } from "~/data/articles";
 
+/**
+ * Convert an ISO 8601 date (e.g. "2026-07-30") to RFC 822 format for RSS
+ * <pubDate> (e.g. "Thu, 30 Jul 2026 00:00:00 GMT"). Date-only strings are
+ * interpreted as UTC midnight so the output never shifts by timezone.
+ */
+function toRfc822(isoDate: string): string {
+  const datePart = isoDate.slice(0, 10);
+  return new Date(`${datePart}T00:00:00Z`).toUTCString();
+}
+
 export const Route = createFileRoute("/resources/rssxml")({
   server: {
     handlers: {
       GET: async () => {
         const published = ARTICLES.filter(isPublished);
         const baseUrl = "https://www.prismbayai.com";
+        // Fixed fallback publication date for any article missing `published`.
+        const FALLBACK_PUBLISHED = "2026-08-01";
 
         const items = published
-          .map(
-            (article) => `    <item>
+          .map((article) => {
+            const pubDate = article.published
+              ? toRfc822(article.published)
+              : toRfc822(FALLBACK_PUBLISHED);
+            return `    <item>
       <title><![CDATA[${article.title}]]></title>
       <link>${baseUrl}/resources/${article.slug}</link>
       <description><![CDATA[${article.description}]]></description>
       <guid isPermaLink="true">${baseUrl}/resources/${article.slug}</guid>
-      <pubDate>${new Date().toUTCString()}</pubDate>
-    </item>`,
-          )
+      <pubDate>${pubDate}</pubDate>
+    </item>`;
+          })
           .join("\n");
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>
