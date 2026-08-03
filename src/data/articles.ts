@@ -80,6 +80,10 @@ export interface Article {
   bodyHtml?: string;
   /** Slug reference for lazy-loaded body HTML */
   bodyHtmlFile?: string;
+  /** Publication date for Article structured data (ISO 8601). */
+  published?: string;
+  /** Last modification date for Article structured data (ISO 8601). */
+  modified?: string;
   /** Custom SEO title (defaults to title + " — PrismBay") */
   seoTitle?: string;
   /** Custom meta description (defaults to description) */

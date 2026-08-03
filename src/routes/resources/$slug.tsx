@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getArticleBySlug, isPublished, CATEGORIES } from "~/data/articles";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
-import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
+import { articleScript, breadcrumbListScript, twitterMeta } from "~/utils/seo";
 export const Route = createFileRoute("/resources/$slug")({
   head: ({ loaderData }) => {
     const article = loaderData;
@@ -30,6 +30,7 @@ export const Route = createFileRoute("/resources/$slug")({
         },
       ],
       scripts: [
+        articleScript(article),
         breadcrumbListScript([
           { name: "Home", url: "https://www.prismbayai.com" },
           { name: "Resources", url: "https://www.prismbayai.com/resources" },

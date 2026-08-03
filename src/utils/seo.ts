@@ -8,9 +8,47 @@
  *   meta: [...existingMeta, ...twitterMeta(title, description, imageUrl)],
  */
 
+import type { Article } from "~/data/articles";
+
 export interface BreadcrumbItem {
   name: string;
   url: string;
+}
+
+/** Build an Article JSON-LD script tag for a resource article page. */
+export function articleScript(article: Article) {
+  const published = article.published ?? new Date().toISOString().slice(0, 10);
+  const canonicalUrl = `https://www.prismbayai.com/resources/${article.slug}`;
+
+  return {
+    tag: "script" as const,
+    attrs: { type: "application/ld+json" },
+    children: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.title,
+      description: article.description,
+      author: {
+        "@type": "Organization",
+        name: "PrismBay",
+      },
+      datePublished: published,
+      dateModified: article.modified ?? published,
+      image: "https://www.prismbayai.com/favicon.svg",
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "PrismBay",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://www.prismbayai.com/favicon.svg",
+        },
+      },
+    }),
+  };
 }
 
 /** Build a JSON-LD BreadcrumbList script tag object for TanStack Router's `scripts` array. */
