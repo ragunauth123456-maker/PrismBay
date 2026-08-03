@@ -14,7 +14,7 @@ export default function TrustBadges({ className }: { className?: string }) {
     },
     {
       icon: ClockIcon,
-      text: "30-Day Access Guarantee",
+      text: "14-Day Money-Back Guarantee",
     },
     {
       icon: DocCheckIcon,

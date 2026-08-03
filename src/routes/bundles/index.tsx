@@ -5,17 +5,20 @@ import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import { twitterMeta } from '~/utils/seo';
 
+/* Max bundle saving — derived from products.ts so the meta title stays in sync. */
+const MAX_BUNDLE_SAVING = Math.max(...BUNDLES.map((b) => b.saving)).toLocaleString();
+
 export const Route = createFileRoute("/bundles/")({
   head: () => ({
     meta: [
-      { title: "AI Business System Bundles — Save Up to $1,542 | PrismBay" },
+      { title: `AI Business System Bundles — Save Up to $${MAX_BUNDLE_SAVING} | PrismBay` },
       { name: "description", content: "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans." },
-      { property: "og:title", content: "AI Business System Bundles — Save Up to $1,542 | PrismBay" },
+      { property: "og:title", content: `AI Business System Bundles — Save Up to $${MAX_BUNDLE_SAVING} | PrismBay` },
       { property: "og:description", content: "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans." },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://www.prismbayai.com/images/og-default.png" },
       { property: "og:url", content: "https://www.prismbayai.com/bundles" },
-      ...twitterMeta("AI Business System Bundles — Save Up to $1,542 | PrismBay", "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans."),
+      ...twitterMeta(`AI Business System Bundles — Save Up to $${MAX_BUNDLE_SAVING} | PrismBay`, "Save big with PrismBay bundles. Get multiple complete AI business systems at a discount — each includes workflows, architecture, revenue models, and implementation plans."),
     ],
     links: [
       { rel: "canonical", href: "https://www.prismbayai.com/bundles" },

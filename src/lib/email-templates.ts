@@ -2,6 +2,7 @@
  * PrismBay transactional email templates.
  * All 5 templates from the email-templates.md spec, with placeholder substitution.
  */
+import { PRODUCTS, BUNDLES } from "~/data/products";
 
 export interface EmailTemplate {
   subject: string;
@@ -190,21 +191,13 @@ admin@prismbay.com`,
 }
 
 export function launchPricingEnding(p: LaunchReminderPlaceholders): EmailTemplate {
-  const products = [
-    { name: "Nexus Network", launch: "$219", regular: "$299" },
-    { name: "Digital Humans", launch: "$379", regular: "$499" },
-    { name: "NexusOS", launch: "$449", regular: "$599" },
-    { name: "Empire AI", launch: "$399", regular: "$549" },
-    { name: "Genesis Platform", launch: "$499", regular: "$699" },
-    { name: "Nexus One", launch: "$299", regular: "$399" },
-    { name: "SpendShield AI", launch: "$249", regular: "$349" },
-    { name: "GuardianOS", launch: "$369", regular: "$499" },
-    { name: "EvidenceFlow AI", launch: "$249", regular: "$349" },
-  ];
-
-  const productLines = products
-    .map((p) => `  ${p.name.padEnd(22)} ${p.launch} → ${p.regular}`)
-    .join("\n");
+  /* Prices derived from the product database (products.ts) so emails stay in sync with the catalogue. */
+  const productLines = PRODUCTS.map(
+    (prod) => `  ${prod.name.padEnd(22)} $${prod.launchPrice} → $${prod.regularPrice}`,
+  ).join("\n");
+  const bundleLines = BUNDLES.map(
+    (b) => `  ${b.name.padEnd(22)} $${b.launchPrice} → $${b.regularCombined}`,
+  ).join("\n");
 
   return {
     subject: "Launch pricing ends in 48 hours — a quick heads-up",
@@ -217,9 +210,7 @@ When the countdown reaches zero, all products return to regular prices:
 ${productLines}
 
 Bundles:
-  AI Business Operations Bundle       $999   → $1,547
-  Trust, Risk & Compliance Bundle     $749   → $1,197
-  Complete AI Business Portfolio     $2,699 → $4,241
+${bundleLines}
 
 We're sending this because you registered for a PrismBay account and
 we want you to have the full picture before the deadline passes. The

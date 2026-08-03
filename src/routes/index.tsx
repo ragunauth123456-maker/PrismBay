@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { PRODUCTS } from "~/data/products";
+import { PRODUCTS, BUNDLES } from "~/data/products";
+
+/* Derived pricing — stays in sync with products.ts */
+const MAX_DISCOUNT_PERCENT = Math.max(...PRODUCTS.map((p) => p.discountPercent));
+const COMPLETE_PORTFOLIO = BUNDLES.find((b) => b.slug === "complete-portfolio")!;
 import CountdownTimer from "~/components/CountdownTimer";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
@@ -72,8 +76,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  // No reviews yet — hide the rating UI entirely rather than showing "No reviews yet" or empty stars.
   if (rating === 0 || count === 0) {
-    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+    return null;
   }
   return (
     <div className="flex items-center gap-0.5">
@@ -270,7 +275,7 @@ function HeroSection() {
               </Link>
             </div>
             <div className="mt-8 flex flex-col items-start gap-2">
-              <p className="text-sm font-medium text-brand-300">30-Day Launch Offer — Save up to 29%</p>
+              <p className="text-sm font-medium text-brand-300">30-Day Launch Offer — Save up to {MAX_DISCOUNT_PERCENT}%</p>
               <CountdownTimer variant="hero" />
               <p className="text-xs text-neutral-400">Launch pricing ends August 27, 2026</p>
             </div>
@@ -490,10 +495,10 @@ function FeaturedProducts() {
                   All 9 AI business systems in one bundle — NexusOS, Genesis Platform, GuardianOS, and 6 more. Everything you need to evaluate, plan, and launch multiple AI-powered businesses.
                 </p>
                 <div className="mt-4 flex flex-wrap items-baseline gap-2">
-                  <span className="text-2xl font-bold text-accent-600">$2,699</span>
-                  <span className="text-base text-neutral-400 line-through">$4,241</span>
+                  <span className="text-2xl font-bold text-accent-600">${COMPLETE_PORTFOLIO.launchPrice.toLocaleString()}</span>
+                  <span className="text-base text-neutral-400 line-through">${COMPLETE_PORTFOLIO.regularCombined.toLocaleString()}</span>
                   <span className="rounded-full bg-accent-100 px-2.5 py-0.5 text-sm font-semibold text-accent-700">
-                    Save $1,542
+                    Save ${COMPLETE_PORTFOLIO.saving.toLocaleString()}
                   </span>
                 </div>
                 <div className="mt-4">

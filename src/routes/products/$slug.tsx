@@ -187,8 +187,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  // No reviews yet — hide the rating UI entirely rather than showing "No reviews yet" or empty stars.
   if (rating === 0 || count === 0) {
-    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+    return null;
   }
   return (
     <div className="flex items-center gap-0.5">
@@ -372,6 +373,9 @@ function ProductPage() {
               </div>
               <p className="mt-3 text-xs text-neutral-400">
                 Secure payment via Stripe. Instant delivery. Single-business licence.
+              </p>
+              <p className="mt-2 text-xs text-neutral-400">
+                Purchased products remain available through your PrismBay account. Security-protected email download links expire, while account access continues under the applicable licence terms.
               </p>
               <TrustBadges className="mt-4" />
               {/* Preview what's inside */}

@@ -3,6 +3,10 @@ import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import LogoHorizontal from '~/components/LogoHorizontal';
 import { breadcrumbListScript, twitterMeta } from "~/utils/seo";
+import { BUNDLES } from "~/data/products";
+
+/* "saves you over $X" — derived from products.ts (Complete Portfolio saving rounded down to nearest $500). */
+const COMPLETE_PORTFOLIO_SAVING_OVER = Math.floor(BUNDLES.find((b) => b.slug === "complete-portfolio")!.saving / 500) * 500;
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
@@ -158,7 +162,7 @@ const generalFaqs: FAQItem[] = [
   },
   {
     q: "How do I access my purchase?",
-    a: "Immediately after completing checkout, you'll receive a confirmation email with a unique download link. You can also access all your purchases from your PrismBay account dashboard. Download links never expire.",
+    a: "Immediately after completing checkout, you'll receive a confirmation email with a unique download link. You can also access all your purchases from your PrismBay account dashboard. Security-protected email download links expire, while account access continues under the applicable licence terms.",
   },
   {
     q: "Do you offer custom or consulting work?",
@@ -181,7 +185,7 @@ const productFaqs: FAQItem[] = [
   },
   {
     q: "Do bundles include everything from the individual products?",
-    a: "Yes. Every bundle includes the complete blueprints for all constituent products at a significant discount. For example, the Complete Portfolio bundle includes all 9 products and saves you over $1,500 compared to buying individually.",
+    a: `Yes. Every bundle includes the complete blueprints for all constituent products at a significant discount. For example, the Complete Portfolio bundle includes all 9 products and saves you over $${COMPLETE_PORTFOLIO_SAVING_OVER.toLocaleString()} compared to buying individually.`,
   },
   {
     q: "Can I upgrade from a single product to a bundle later?",

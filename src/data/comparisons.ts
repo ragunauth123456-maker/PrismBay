@@ -1,7 +1,7 @@
 /* ─── PrismBay Comparison Data ─── */
 /* Defines all product comparison configurations used by /compare routes. */
 
-import { PRODUCTS, BUNDLES, getProductBySlug, type Product, type Bundle } from "~/data/products";
+import { PRODUCTS, BUNDLES, getProductBySlug } from "~/data/products";
 
 export interface ComparisonDimension {
   /** Label for the dimension row */
@@ -45,7 +45,7 @@ export interface ComparisonConfig {
 
 /* ─── Comparison configurations ─── */
 
-export const COMPARISONS: ComparisonConfig[] = [
+const RAW_COMPARISONS: ComparisonConfig[] = [
   {
     slug: "nexusos-vs-nexus-one",
     title: "NexusOS vs Nexus One",
@@ -68,11 +68,11 @@ export const COMPARISONS: ComparisonConfig[] = [
       },
       {
         name: "Regular price",
-        values: ["$599", "$399"],
+        values: [ /* derived from products.ts — see COMPARISONS derivation below */ ],
       },
       {
         name: "Launch price",
-        values: ["$449", "$299"],
+        values: [ /* derived from products.ts — see COMPARISONS derivation below */ ],
         winnerIndex: 1,
       },
       {
@@ -112,7 +112,7 @@ export const COMPARISONS: ComparisonConfig[] = [
         groupName: "Pricing & Commercial",
         features: [
           { name: "SaaS revenue model", values: ["Enterprise-tier", "SMB-tier"] },
-          { name: "Launch savings", values: ["$150 (25%)", "$100 (25%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Licence", values: ["Single-business perpetual", "Single-business perpetual"] },
         ],
       },
@@ -136,10 +136,10 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Primary user", values: ["COO / Operations leadership", "CEO / Executive leadership"] },
-      { name: "Regular price", values: ["$599", "$549"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       {
         name: "Launch price",
-        values: ["$449", "$399"],
+        values: [ /* derived from products.ts — see COMPARISONS derivation below */ ],
         winnerIndex: 1,
       },
       { name: "Focus", values: ["Running the business", "Overseeing the business"] },
@@ -193,8 +193,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Primary risk", values: ["Wasted procurement spend", "Payment fraud"] },
-      { name: "Regular price", values: ["$349", "$499"] },
-      { name: "Launch price", values: ["$249", "$369"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Integration", values: ["Procurement workflows", "Finance / AP workflows"] },
       { name: "Key strength", values: ["Savings identification", "Fraud detection & blocking"] },
     ],
@@ -225,7 +225,7 @@ export const COMPARISONS: ComparisonConfig[] = [
         groupName: "Business Model",
         features: [
           { name: "Revenue model", values: ["Service revenue", "Enterprise pricing"] },
-          { name: "Launch savings", values: ["$100 (29%)", "$130 (26%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Target org spend", values: ["$10M+ procurement", "Any transaction volume"] },
         ],
       },
@@ -250,8 +250,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     quickComparison: [
       { name: "Your role", values: ["Platform founder", "Business operator"] },
       { name: "End user", values: ["Your customers (app creators)", "Your team (department staff)"] },
-      { name: "Regular price", values: ["$699", "$599"] },
-      { name: "Launch price", values: ["$499", "$449"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Key strength", values: ["Platform business model", "Operational integration"] },
     ],
     featureGroups: [
@@ -277,7 +277,7 @@ export const COMPARISONS: ComparisonConfig[] = [
         groupName: "Commercial",
         features: [
           { name: "Revenue model", values: ["Subscription billing + enterprise", "SaaS revenue"] },
-          { name: "Launch savings", values: ["$200 (29%)", "$150 (25%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Est. time to MVP", values: ["16–20 weeks", "12–16 weeks"] },
         ],
       },
@@ -300,8 +300,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Primary function", values: ["Real-time fraud prevention", "Evidence collection & audit prep"] },
-      { name: "Regular price", values: ["$499", "$349"] },
-      { name: "Launch price", values: ["$369", "$249"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Timing", values: ["Before money moves", "Before auditors arrive"] },
       { name: "Key strength", values: ["Active threat blocking", "Automated evidence organization"] },
     ],
@@ -355,8 +355,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Primary user", values: ["CEO / Executive", "SMB owner / ops lead"] },
-      { name: "Regular price", values: ["$549", "$399"] },
-      { name: "Launch price", values: ["$399", "$299"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Focus", values: ["Strategic oversight", "Daily operations"] },
       { name: "Key strength", values: ["Decision support", "Workflow automation"] },
     ],
@@ -383,7 +383,7 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Pricing",
         features: [
-          { name: "Launch savings", values: ["$150 (27%)", "$100 (25%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Target company size", values: ["Any size", "10–250 employees"] },
           { name: "Implementation complexity", values: ["Moderate", "Lower"] },
         ],
@@ -409,8 +409,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     quickComparison: [
       { name: "Target company size", values: ["250+ employees", "10–250 employees", "Any size"] },
       { name: "Primary user", values: ["COO / Operations lead", "SMB owner / ops lead", "CEO / Executive"] },
-      { name: "Regular price", values: ["$599", "$399", "$549"] },
-      { name: "Launch price", values: ["$449", "$299", "$399"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Key strength", values: ["Departmental integration", "SMB simplicity", "Strategic oversight"] },
     ],
     featureGroups: [
@@ -435,9 +435,9 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Pricing & Value",
         features: [
-          { name: "Launch savings", values: ["$150 (25%)", "$100 (25%)", "$150 (27%)"] },
-          { name: "Bundle price", values: ["$999 for all 3", "$999 for all 3", "$999 for all 3"] },
-          { name: "Bundle savings", values: ["$548 total", "$548 total", "$548 total"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+          { name: "Bundle price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+          { name: "Bundle savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
         ],
       },
     ],
@@ -449,6 +449,7 @@ export const COMPARISONS: ComparisonConfig[] = [
     productSlugs: ["spendshield-ai", "evidenceflow-ai"],
     oneLiner: "Control costs before you spend vs prove compliance after the fact — same bundle, different mandate.",
     seoDescription:
+// TODO: replace with dynamic pricing from products.ts
       "Compare SpendShield AI and EvidenceFlow AI: AI procurement intelligence for cost control vs AI compliance automation for audit readiness. Both in the Trust, Risk & Compliance bundle at the same $249 launch price — which fits your team?",
     decisionGuide: {
       titleA: "Choose SpendShield AI if you need to control procurement spending",
@@ -460,8 +461,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Primary mandate", values: ["Cost control & savings", "Audit readiness & evidence"] },
-      { name: "Regular price", values: ["$349", "$349"] },
-      { name: "Launch price", values: ["$249", "$249"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Timing", values: ["Before procurement decisions", "Before auditors arrive"] },
       { name: "Key strength", values: ["Supplier analysis & savings ID", "Evidence classification & control mapping"] },
     ],
@@ -492,7 +493,7 @@ export const COMPARISONS: ComparisonConfig[] = [
         features: [
           { name: "Primary user", values: ["Procurement manager / CFO", "Compliance officer / CISO"] },
           { name: "Reports to", values: ["CFO", "CFO / Board"] },
-          { name: "Launch savings", values: ["$100 (29%)", "$100 (29%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Complementary use case", values: ["Find savings, then prove controls around procurement process are compliant"] },
         ],
       },
@@ -505,6 +506,7 @@ export const COMPARISONS: ComparisonConfig[] = [
     productSlugs: ["digital-humans", "nexusos"],
     oneLiner: "Build AI employees that do the work, or an AI OS that connects departments — the C-suite's strategic choice.",
     seoDescription:
+// TODO: replace with dynamic pricing from products.ts
       "Compare Digital Humans and NexusOS: AI virtual workforce platform vs intelligent business operating system. Both are premium products at $379–$449 launch — which strategic investment fits your organisation?",
     decisionGuide: {
       titleA: "Choose Digital Humans if you need AI employees that execute",
@@ -516,8 +518,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Core concept", values: ["AI employees that do work", "AI system that coordinates work"] },
-      { name: "Regular price", values: ["$499", "$599"] },
-      { name: "Launch price", values: ["$379", "$449"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Strategic question", values: ["'Who does the work?'", "'How does work flow?'"] },
       { name: "Key strength", values: ["Execution capacity at scale", "Cross-department integration"] },
     ],
@@ -543,7 +545,7 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Strategic Value",
         features: [
-          { name: "Launch savings", values: ["$120 (24%)", "$150 (25%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Long-term impact", values: ["Permanent capacity expansion", "Permanent operational efficiency"] },
           { name: "C-suite champion", values: ["COO / CPO", "COO / CIO"] },
         ],
@@ -567,8 +569,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Platform type", values: ["Collaboration marketplace", "No-code app builder"] },
-      { name: "Regular price", values: ["$299", "$699"] },
-      { name: "Launch price", values: ["$219", "$499"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Your customers", values: ["AI businesses & service providers", "App creators & domain experts"] },
       { name: "Key strength", values: ["Network effects & community", "Tool creation & extensibility"] },
     ],
@@ -594,7 +596,7 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Founder Fit",
         features: [
-          { name: "Launch savings", values: ["$80 (27%)", "$200 (29%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Best for founders who", values: ["Understand community dynamics", "Have technical platform experience"] },
           { name: "Risk profile", values: ["Lower technical risk, higher adoption risk", "Higher technical risk, clearer monetisation path"] },
         ],
@@ -607,6 +609,7 @@ export const COMPARISONS: ComparisonConfig[] = [
     productSlugs: ["digital-humans", "empire-ai"],
     oneLiner: "AI agents that execute vs AI agents that observe — workforce deployment or executive oversight?",
     seoDescription:
+// TODO: replace with dynamic pricing from products.ts
       "Compare Digital Humans and Empire AI: AI virtual workforce for execution vs AI command platform for oversight. Similar launch pricing ($379–$399) — do you need AI that does the work or AI that helps you oversee it?",
     decisionGuide: {
       titleA: "Choose Digital Humans if you need AI that executes",
@@ -618,8 +621,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Agent role", values: ["Execute tasks & workflows", "Monitor, report & alert"] },
-      { name: "Regular price", values: ["$499", "$549"] },
-      { name: "Launch price", values: ["$379", "$399"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Metaphor", values: ["COO tool — gets things done", "CEO tool — sees everything"] },
       { name: "Key strength", values: ["Workforce deployment at scale", "Strategic visibility & decision support"] },
     ],
@@ -645,7 +648,7 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Strategic Fit",
         features: [
-          { name: "Launch savings", values: ["$120 (24%)", "$150 (27%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "C-suite champion", values: ["COO / VP Operations", "CEO / CFO"] },
           { name: "Complementary?", values: ["Digital Humans execute; Empire AI monitors the execution — they work best together"] },
         ],
@@ -669,8 +672,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "What you build", values: ["A platform for creating apps", "A platform for deploying AI workers"] },
-      { name: "Regular price", values: ["$699", "$499"] },
-      { name: "Launch price", values: ["$499", "$379"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Your customer does", values: ["Builds apps without code", "Deploys AI employees into roles"] },
       { name: "Key strength", values: ["App builder engine & templates", "Role-based AI workforce design"] },
     ],
@@ -696,7 +699,7 @@ export const COMPARISONS: ComparisonConfig[] = [
       {
         groupName: "Founder Considerations",
         features: [
-          { name: "Launch savings", values: ["$200 (29%)", "$120 (24%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Best for founders who", values: ["Love building tools for builders", "Love designing systems of work"] },
           { name: "Technical prerequisite", values: ["Platform engineering experience", "AI/ML + operations experience"] },
         ],
@@ -720,8 +723,8 @@ export const COMPARISONS: ComparisonConfig[] = [
     },
     quickComparison: [
       { name: "Platform model", values: ["AI workforce deployment", "Business collaboration marketplace"] },
-      { name: "Regular price", values: ["$499", "$299"] },
-      { name: "Launch price", values: ["$379", "$219"] },
+      { name: "Regular price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
+      { name: "Launch price", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
       { name: "Your customer does", values: ["Deploys AI employees into roles", "Finds partners & collaborates"] },
       { name: "Key strength", values: ["AI workforce at scale", "Network effects & community"] },
     ],
@@ -748,7 +751,7 @@ export const COMPARISONS: ComparisonConfig[] = [
         groupName: "Business Model",
         features: [
           { name: "Revenue model", values: ["Service revenue + enterprise", "Marketplace fees + subscriptions"] },
-          { name: "Launch savings", values: ["$120 (24%)", "$80 (27%)"] },
+          { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
           { name: "Est. time to MVP", values: ["14–18 weeks", "10–14 weeks"] },
           { name: "Risk profile", values: ["Higher technical risk — AI orchestration", "Lower technical risk — adoption risk"] },
         ],
@@ -764,6 +767,52 @@ export const COMPARISONS: ComparisonConfig[] = [
     ],
   },
 ];
+
+/* ─── Dynamic pricing derivation ─── */
+/*
+ * Prices, discounts, and bundle figures in comparison rows are derived from
+ * the product database (products.ts) rather than hardcoded, so the comparison
+ * pages stay in sync with the catalogue.
+ */
+function priceValues(slugs: string[], type: "regular" | "launch"): string[] {
+  return slugs.map((slug) => {
+    const p = PRODUCTS.find((x) => x.slug === slug);
+    return p ? `$${type === "regular" ? p.regularPrice : p.launchPrice}` : "—";
+  });
+}
+function savingsValues(slugs: string[]): string[] {
+  return slugs.map((slug) => {
+    const p = PRODUCTS.find((x) => x.slug === slug);
+    return p ? `$${p.regularPrice - p.launchPrice} (${p.discountPercent}%)` : "—";
+  });
+}
+function bundlePriceValues(slugs: string[], bundleSlug: string | undefined): string[] {
+  const b = bundleSlug ? BUNDLES.find((x) => x.slug === bundleSlug) : undefined;
+  const label = b ? `$${b.launchPrice} for all ${b.productSlugs.length}` : "—";
+  return slugs.map(() => label);
+}
+function bundleSavingsValues(slugs: string[], bundleSlug: string | undefined): string[] {
+  const b = bundleSlug ? BUNDLES.find((x) => x.slug === bundleSlug) : undefined;
+  const label = b ? `$${b.saving} total` : "—";
+  return slugs.map(() => label);
+}
+export const COMPARISONS: ComparisonConfig[] = RAW_COMPARISONS.map((c) => ({
+  ...c,
+  quickComparison: c.quickComparison.map((d) => {
+    if (d.name === "Regular price") return { ...d, values: priceValues(c.productSlugs, "regular") };
+    if (d.name === "Launch price") return { ...d, values: priceValues(c.productSlugs, "launch") };
+    return d;
+  }),
+  featureGroups: c.featureGroups.map((g) => ({
+    ...g,
+    features: g.features.map((f) => {
+      if (f.name === "Launch savings") return { ...f, values: savingsValues(c.productSlugs) };
+      if (f.name === "Bundle price") return { ...f, values: bundlePriceValues(c.productSlugs, c.bundleSlug) };
+      if (f.name === "Bundle savings") return { ...f, values: bundleSavingsValues(c.productSlugs, c.bundleSlug) };
+      return f;
+    }),
+  })),
+}));
 
 /* ─── Helpers ─── */
 

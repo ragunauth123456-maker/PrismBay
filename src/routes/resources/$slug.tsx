@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getArticleBySlug, isPublished, CATEGORIES } from "~/data/articles";
+import { BUNDLES } from "~/data/products";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import { articleScript, breadcrumbListScript, twitterMeta } from "~/utils/seo";
@@ -73,6 +74,12 @@ function ResourceArticlePage() {
   const article = Route.useLoaderData();
   const categoryName =
     CATEGORIES.find((c) => c.slug === article.category)?.name ?? article.category;
+  /* Bundle CTA pricing — derived from products.ts so it stays in sync with the catalogue. */
+  const bundleCtaData = article.bundleCta
+    ? BUNDLES.find((b) =>
+        b.slug === (article.bundleCta.type === "ai-business-operations" ? "ai-business-operations" : "trust-risk-compliance"),
+      )
+    : undefined;
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -140,9 +147,11 @@ function ResourceArticlePage() {
             <div className="rounded-2xl border border-brand-200 bg-white p-8 shadow-sm sm:p-10">
               <h2 className="text-2xl font-bold text-navy-900">Get the Complete System</h2>
               <p className="mt-3 text-neutral-600 leading-relaxed">
-                {article.bundleCta.type === 'ai-business-operations'
-                  ? 'NexusOS, Nexus One, and Empire AI are available together in the AI Business Operations Bundle at $999, saving $548.'
-                  : 'SpendShield AI, GuardianOS, and EvidenceFlow AI are available together in the Trust, Risk & Compliance Bundle at $749, saving $448.'}
+                {bundleCtaData
+                  ? `${bundleCtaData.productNames.slice(0, -1).join(", ")} and ${
+                      bundleCtaData.productNames[bundleCtaData.productNames.length - 1]
+                    } are available together in the ${bundleCtaData.name} at $${bundleCtaData.launchPrice}, saving $${bundleCtaData.saving}.`
+                  : ""}
               </p>
               <Link
                 to={article.bundleCta.type === 'ai-business-operations' ? '/bundles/ai-business-operations' : '/bundles/trust-risk-compliance'}

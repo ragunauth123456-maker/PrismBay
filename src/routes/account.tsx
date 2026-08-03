@@ -290,6 +290,9 @@ function AccountPage() {
         {/* Downloads Section */}
         <section className="mt-10">
           <h2 className="text-xl font-bold text-neutral-800">My Downloads</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            Purchased products remain available through your PrismBay account. Security-protected email download links expire, while account access continues under the applicable licence terms.
+          </p>
           {downloads.length === 0 ? (
             <div className="mt-4 rounded-lg border border-neutral-200 bg-white p-8 text-center">
               <p className="text-neutral-500">You haven't purchased any products yet.</p>

@@ -3,6 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRODUCTS, BUNDLES, CATEGORY_MAP } from "~/data/products";
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
+
+/* Max bundle saving (Complete Portfolio) — derived from products.ts so pricing stays dynamic. */
+const MAX_BUNDLE_SAVING = Math.max(...BUNDLES.map((b) => b.saving));
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 
@@ -64,8 +67,9 @@ function StarIcon({ filled }: { filled: boolean }) {
 }
 
 function StarRating({ rating, count }: { rating: number; count: number }) {
+  // No reviews yet — hide the rating UI entirely rather than showing "No reviews yet" or empty stars.
   if (rating === 0 || count === 0) {
-    return <span className="text-sm text-neutral-400 italic">No reviews yet</span>;
+    return null;
   }
   return (
     <div className="flex items-center gap-0.5">
@@ -458,7 +462,7 @@ function ProductsPage() {
               </h1>
               <p className="mt-1 text-neutral-600">
                 {showingBundles
-                  ? `${BUNDLES.length} bundles available — save up to $1,542`
+                  ? `${BUNDLES.length} bundles available — save up to $${MAX_BUNDLE_SAVING.toLocaleString()}`
                   : activeCategory !== "all"
                     ? `${filtered.length} products in this category · 9 products + 3 bundles available`
                     : `9 products + 3 bundles available`}
@@ -553,7 +557,7 @@ function ProductsPage() {
             <div>
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-neutral-800">Bundle & Save</h2>
-                <p className="mt-2 text-neutral-600">Get multiple AI business systems together and save up to $1,542 during our 30-day launch.</p>
+                <p className="mt-2 text-neutral-600">Get multiple AI business systems together and save up to ${MAX_BUNDLE_SAVING.toLocaleString()} during our 30-day launch.</p>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {BUNDLES.map((bundle) => (
