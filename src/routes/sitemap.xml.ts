@@ -35,7 +35,10 @@ export const Route = createFileRoute("/sitemap/xml")({
   server: {
     handlers: {
       GET: async () => {
-        const today = new Date().toISOString().split("T")[0];
+        // Fixed lastmod: content is not edited on a daily basis. Articles use
+        // their real published date when available; everything else shares the
+        // site launch date.
+        const FIXED_LASTMOD = "2026-08-01";
         const urls: SitemapEntry[] = [];
 
         // Static pages
@@ -57,7 +60,7 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const page of staticPages) {
           urls.push({
             loc: `${BASE_URL}${page.path}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: page.changefreq,
             priority: page.priority,
           });
@@ -74,7 +77,7 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const page of indexPages) {
           urls.push({
             loc: `${BASE_URL}${page.path}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: page.changefreq,
             priority: page.priority,
           });
@@ -84,7 +87,7 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const product of PRODUCTS) {
           urls.push({
             loc: `${BASE_URL}/products/${product.slug}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: "weekly",
             priority: "0.8",
           });
@@ -94,7 +97,7 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const bundle of BUNDLES) {
           urls.push({
             loc: `${BASE_URL}/bundles/${bundle.slug}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: "weekly",
             priority: "0.7",
           });
@@ -104,7 +107,7 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const comp of COMPARISONS) {
           urls.push({
             loc: `${BASE_URL}/compare/${comp.slug}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: "monthly",
             priority: "0.6",
           });
@@ -114,28 +117,22 @@ export const Route = createFileRoute("/sitemap/xml")({
         for (const product of PRODUCTS) {
           urls.push({
             loc: `${BASE_URL}/demo/${product.slug}`,
-            lastmod: today,
+            lastmod: FIXED_LASTMOD,
             changefreq: "monthly",
             priority: "0.6",
           });
         }
 
-        // Preview pages
-        for (const product of PRODUCTS) {
-          urls.push({
-            loc: `${BASE_URL}/preview/${product.slug}`,
-            lastmod: today,
-            changefreq: "monthly",
-            priority: "0.6",
-          });
-        }
-
-        // Resource articles
+        // Resource articles — use the article's real published date when set,
+        // otherwise fall back to the fixed site date. Published dates are
+        // stored as ISO 8601; the sitemap requires YYYY-MM-DD.
         const publishedArticles = ARTICLES.filter(isPublished);
         for (const article of publishedArticles) {
           urls.push({
             loc: `${BASE_URL}/resources/${article.slug}`,
-            lastmod: today,
+            lastmod: article.published
+              ? article.published.slice(0, 10)
+              : FIXED_LASTMOD,
             changefreq: "monthly",
             priority: "0.6",
           });

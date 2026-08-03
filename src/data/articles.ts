@@ -122,6 +122,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Practical guide to AI automation for small businesses. Learn which workflows deliver the highest time savings when automated with AI business systems.",
     bodyHtmlFile: "how-ai-business-systems-save-smbs-time",
+    published: "2026-07-30",
   },
 
   // ── PUBLISHED: Article 2 ──
@@ -137,6 +138,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Procurement intelligence uses AI to analyse spend, compare suppliers, and find savings. Learn how modern platforms give CFOs visibility into every pound spent.",
     bodyHtmlFile: "procurement-intelligence-cfo-guide",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -155,6 +157,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "AI decision support gives executives real-time visibility into operations. Learn how AI platforms monitor performance, flag exceptions, and prepare reports.",
     bodyHtmlFile: "ai-powered-decision-support-executive-guide",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -173,6 +176,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "AI payment verification prevents fraud by checking supplier details, confirming identities, and detecting anomalies before funds are released.",
     bodyHtmlFile: "ai-payment-verification-systems-explained",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -191,6 +195,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "AI compliance automation collects, classifies, and maps evidence to controls continuously. Learn how teams go from months of manual prep to audit-ready.",
     bodyHtmlFile: "compliance-automation-audit-ready",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -209,6 +214,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Compare Nexus One and NexusOS: two AI business operating systems for different company sizes. Find out which fits your team, budget, and complexity.",
     bodyHtmlFile: "nexus-one-vs-nexusos",
+    published: "2026-07-30",
   },
 
   // ── PUBLISHED: Article 7 ──
@@ -224,6 +230,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Not sure if your small business is ready for an AI business system? Here are five practical signs it's time — and how to choose the right platform for your size and budget.",
     bodyHtmlFile: "5-signs-smb-ready-ai-business-os",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -242,6 +249,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "AI executive dashboards give CEOs real-time visibility across every department with AI-powered insights. Learn what to look for and how to evaluate these systems.",
     bodyHtmlFile: "ai-executive-dashboards-ceo-guide",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -268,6 +276,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Traditional SaaS gives you a tool you rent; an AI business system gives you a blueprint for an entire operating model. Compare cost, customization, time-to-value, and scalability to find the right fit.",
     bodyHtmlFile: "ai-business-systems-vs-saas",
+    published: "2026-07-30",
   },
 
   // ── PUBLISHED: Pillar — What Is an AI Business Operating System? ──
@@ -290,6 +299,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn what an AI business operating system is, how it differs from traditional ERP, what AI-native means, and how to evaluate these platforms for your organisation.",
     bodyHtmlFile: "what-is-an-ai-business-operating-system",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -315,6 +325,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn how to evaluate AI business system blueprints with a practical framework covering scope fit, integration architecture, agent transparency, implementation guidance, governance, and pricing.",
     bodyHtmlFile: "how-to-evaluate-ai-business-blueprints",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -339,6 +350,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn how AI business operating systems automate workflows across sales, finance, HR, and operations — replacing manual handoffs with agent-driven coordination.",
     bodyHtmlFile: "department-automation-workflows",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -363,6 +375,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn the architectural patterns behind multi-agent AI coordination — from event-driven triggers to human-in-the-loop escalation — and how they enable cross-department business automation.",
     bodyHtmlFile: "multi-agent-coordination-patterns",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -390,6 +403,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "From the EU AI Act to Colorado's new AI law, here's what every business adopting AI systems needs to know about the 2026 regulatory landscape — and how to build compliance into your operations.",
     bodyHtmlFile: "regulatory-landscape-ai-business-2026",
+    published: "2026-07-30",
   },
   {
     slug: "building-trust-through-compliance",
@@ -413,6 +427,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Compliance isn't just about avoiding fines — it's a competitive advantage. Learn how transparent compliance practices can become your strongest marketing asset.",
     bodyHtmlFile: "building-trust-through-compliance",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -437,6 +452,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn how AI procurement intelligence systems uncover hidden savings through continuous spend analysis, supplier comparison, contract monitoring, and duplicate detection.",
     bodyHtmlFile: "procurement-savings-ai-driven",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -460,6 +476,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Instead of annual supplier reviews, AI enables real-time monitoring of financial health, compliance status, and operational performance across your entire supply chain.",
     bodyHtmlFile: "supplier-health-monitoring",
+    published: "2026-07-30",
     bundleCta: {
       type: 'trust-risk-compliance',
     },
@@ -484,6 +501,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Learn what virtual employee platforms are, how AI digital workers differ from chatbots and RPA, and which business functions benefit most from AI workforce systems.",
     bodyHtmlFile: "virtual-employee-platforms-explained",
+    published: "2026-07-30",
   },
   {
     slug: "managing-human-ai-teams",
@@ -644,6 +662,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "SpendShield AI controls procurement costs; GuardianOS prevents payment fraud. Compare features, pricing, and find which protects your business — or use both.",
     bodyHtmlFile: "spendshield-vs-guardianos",
+    published: "2026-07-30",
   },
   // ── PUBLISHED: AI Business Systems ROI ──
   {
@@ -655,6 +674,7 @@ export const ARTICLES: Article[] = [
     readTime: 14,
     linkedProducts: ["NexusOS", "Empire AI"],
     bodyHtmlFile: "ai-business-systems-roi-business-case",
+    published: "2026-07-30",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -669,6 +689,7 @@ export const ARTICLES: Article[] = [
     readTime: 13,
     linkedProducts: ["Genesis Platform"],
     bodyHtmlFile: "no-code-ai-app-builders-guide",
+    published: "2026-07-30",
   },
   // ── PUBLISHED: AI Business Collaboration Marketplaces ──
   {
@@ -680,6 +701,7 @@ export const ARTICLES: Article[] = [
     readTime: 12,
     linkedProducts: ["Nexus Network"],
     bodyHtmlFile: "ai-business-collaboration-marketplaces",
+    published: "2026-07-30",
   },
   // ── PUBLISHED: How to Implement an AI Business System ──
   {
@@ -691,6 +713,7 @@ export const ARTICLES: Article[] = [
     readTime: 15,
     linkedProducts: ["NexusOS", "Nexus One", "Empire AI", "Genesis Platform", "Nexus Network"],
     bodyHtmlFile: "how-to-implement-ai-business-system",
+    published: "2026-07-30",
   },
   // ── PUBLISHED: AI for Small Business ──
   {
@@ -702,6 +725,7 @@ export const ARTICLES: Article[] = [
     readTime: 13,
     linkedProducts: ["Nexus One"],
     bodyHtmlFile: "ai-for-small-business-getting-started",
+    published: "2026-07-30",
   },
   // ── PUBLISHED: AI Business Platform Buyer's Guide ──
   {
@@ -723,6 +747,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Navigate the AI business system landscape with confidence. Understand the six categories of AI business platforms, match the right type to your organisation, and evaluate products against criteria that matter.",
     bodyHtmlFile: "ai-business-platform-buyers-guide",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -747,6 +772,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "A clear, honest breakdown of AI business system pricing in 2026 — from one-time blueprint purchases to SaaS subscriptions and custom builds. Learn what you get at each price tier and how to calculate TCO.",
     bodyHtmlFile: "ai-business-system-pricing-guide",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -772,6 +798,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Use this practical 10-point checklist to assess whether your business has the processes, data, people, and alignment to successfully adopt an AI business system — and what to do if you're not ready yet.",
     bodyHtmlFile: "ai-readiness-checklist-10-point",
+    published: "2026-07-31",
   },
 
   // ── PUBLISHED: Build vs Buy vs Blueprint ──
@@ -794,6 +821,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Compare the three paths to AI business automation — custom development, SaaS platforms, and blueprint purchases — across cost, timeline, control, and technical requirements to find the right fit for your organisation.",
     bodyHtmlFile: "build-vs-buy-vs-blueprint-ai-business-automation",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -819,6 +847,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "A practical guide to AI-powered customer service — from the three levels of automation and the build-vs-buy decision to key design choices that determine whether your system helps customers or frustrates them.",
     bodyHtmlFile: "ai-customer-service-automation-intelligent-support-system",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -844,6 +873,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Discover the ten business processes that deliver the highest impact when automated with AI — from weekly reporting and expense approval to multi-department workflow coordination.",
     bodyHtmlFile: "business-processes-automate-with-ai-first",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -869,6 +899,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "A comprehensive guide to integrating AI business systems with your current tool stack — covering CRM, accounting, project management, and communication platforms with three integration patterns and a phased implementation sequence.",
     bodyHtmlFile: "ai-integration-guide-connecting-existing-tools",
+    published: "2026-07-31",
     bundleCta: {
       type: 'ai-business-operations',
     },
@@ -894,6 +925,7 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Explore the four AI platform business models that are working in 2026 — marketplace, app builder, workforce, and operating system — with guidance on monetisation, cost structures, and how to choose the right model.",
     bodyHtmlFile: "ai-business-models-build-monetize-ai-platform",
+    published: "2026-07-31",
   },
 ];
 

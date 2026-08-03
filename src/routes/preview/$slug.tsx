@@ -30,7 +30,7 @@ export const Route = createFileRoute("/preview/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: desc },
-        { name: "robots", content: "index, follow" },
+        { name: "robots", content: "noindex, follow" },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
       scripts: [
