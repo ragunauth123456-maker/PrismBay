@@ -487,6 +487,50 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* Who It's For */}
+      {(product.bestFor ||
+        product.technicalRequirements ||
+        (product.limitations && product.limitations.length > 0)) && (
+        <section className="bg-white">
+          <div className="mx-auto max-w-3xl px-6 py-14">
+            <h2 className="text-2xl font-bold text-neutral-800 text-center">Who It's For</h2>
+            <p className="mt-2 text-neutral-500 text-center">
+              Who this blueprint is built for, what you'll need to use it, and what it doesn't include.
+            </p>
+            <div className="mt-8 rounded-xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8 space-y-8">
+              {product.bestFor && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">Best for</h3>
+                  <p className="mt-2 text-neutral-600 leading-relaxed">{product.bestFor}</p>
+                </div>
+              )}
+              {product.technicalRequirements && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">What you'll need</h3>
+                  <p className="mt-2 text-neutral-600 leading-relaxed">{product.technicalRequirements}</p>
+                </div>
+              )}
+              {product.limitations && product.limitations.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">What's not included</h3>
+                  <ul className="mt-3 space-y-2">
+                    {product.limitations.map((limitation, i) => (
+                      <li key={i} className="flex items-start gap-2 text-neutral-600 leading-relaxed">
+                        <span
+                          className="mt-2.5 h-1 w-1 flex-shrink-0 rounded-full bg-neutral-400"
+                          aria-hidden="true"
+                        />
+                        {limitation}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* FAQs */}
       <section className="bg-white">
         <div className="mx-auto max-w-3xl px-6 py-14">

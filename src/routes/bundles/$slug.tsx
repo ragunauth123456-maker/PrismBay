@@ -332,6 +332,49 @@ function BundleDetailPage() {
           </div>
         </div>
       </section>
+      {/* Who It's For */}
+      {(bundle.bestFor ||
+        bundle.technicalRequirements ||
+        (bundle.limitations && bundle.limitations.length > 0)) && (
+        <section className="bg-white">
+          <div className="mx-auto max-w-3xl px-6 py-14">
+            <h2 className="text-2xl font-bold text-neutral-800 text-center">Who It's For</h2>
+            <p className="mt-2 text-neutral-500 text-center">
+              Who this bundle is built for and what it doesn't include.
+            </p>
+            <div className="mt-8 rounded-xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8 space-y-8">
+              {bundle.bestFor && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">Best for</h3>
+                  <p className="mt-2 text-neutral-600 leading-relaxed">{bundle.bestFor}</p>
+                </div>
+              )}
+              {bundle.technicalRequirements && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">What you'll need</h3>
+                  <p className="mt-2 text-neutral-600 leading-relaxed">{bundle.technicalRequirements}</p>
+                </div>
+              )}
+              {bundle.limitations && bundle.limitations.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">What's not included</h3>
+                  <ul className="mt-3 space-y-2">
+                    {bundle.limitations.map((limitation, i) => (
+                      <li key={i} className="flex items-start gap-2 text-neutral-600 leading-relaxed">
+                        <span
+                          className="mt-2.5 h-1 w-1 flex-shrink-0 rounded-full bg-neutral-400"
+                          aria-hidden="true"
+                        />
+                        {limitation}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
       {/* Per-Product Savings Breakdown */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-14">
