@@ -17,6 +17,9 @@ export interface Product {
   valueStatement: string;
   ctaText: string;
   included: string[];
+  bestFor: string;
+  technicalRequirements: string;
+  limitations: string[];
   faqs: FAQ[];
   reviews: Review[];
   demoVideoUrl: string;
@@ -36,6 +39,9 @@ export interface Bundle {
   regularCombined: number;
   launchPrice: number;
   saving: number;
+  bestFor: string;
+  technicalRequirements?: string;
+  limitations: string[];
 }
 
 export interface FAQ {
@@ -73,6 +79,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Connect every department — finance, HR, sales, marketing, procurement, operations, compliance — into one intelligent business operating system with AI agents that coordinate workflows and present decision-ready information.",
     ctaText: "Get NexusOS for $449",
+    bestFor:
+      "Established organizations with 250+ employees — typically executive teams, CTOs, and COOs — that want to connect finance, HR, sales, marketing, procurement, operations, compliance, customer service, and project management into one AI-coordinated operating system with governance, analytics, and executive oversight.",
+    technicalRequirements:
+      "A CTO or technical lead with system-design and cloud-infrastructure familiarity to implement the technical architecture sections; access to the department data sources and systems the operating system will connect. The executive summary and business sections are usable without coding knowledge.",
+    limitations: [
+      "Not working software — no hosted operating system, executable codebase, or installable product is delivered; the blueprint describes what to build.",
+      "No custom build work — the buyer's team (or a vendor they commission) builds the system from the blueprint; PrismBay does not build it for you.",
+      "No underlying AI models or proprietary data — you arrange model access (e.g., LLM APIs) and supply your own business data; no models, model weights, or training data are included.",
+      "Single-business perpetual licence — usable to build one commercial product; agency or multi-client use requires a separate enterprise licence.",
+    ],
     included: [
       "Executive command centre",
       "Department operating modules",
@@ -138,6 +154,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Give your SMB a practical AI operating system that brings customers, sales, tasks, projects, expenses, and team activity into one connected workspace.",
     ctaText: "Get Nexus One for $299",
+    bestFor:
+      "Small and medium-sized businesses with 10–250 employees — typically owners or operations leads — that want a practical AI operating system for customers, sales, tasks, projects, expenses, team activity, and reporting, without enterprise complexity.",
+    technicalRequirements:
+      "Implementation is designed for a technically-minded operations lead or CTO; the plan includes build-vs-buy recommendations and vendor-selection criteria, so a large IT team is not required.",
+    limitations: [
+      "Not pre-built software — no working SMB operating system, apps, or dashboards are delivered; the package is a blueprint your team builds from.",
+      "No custom build work — your team (or a vendor you hire) builds and operates the system.",
+      "No underlying AI models or proprietary data — model access and your business data are yours to supply.",
+      "Single-business perpetual licence — one commercial product per licence; agency and multi-client use require a separate licence.",
+    ],
     included: [
       "Small-business AI operating system",
       "Daily workflow automation",
@@ -208,6 +234,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Monitor your entire company from one AI command platform — financial results, operations, workforce, projects, risks, forecasts, and strategic priorities.",
     ctaText: "Get Empire AI for $399",
+    bestFor:
+      "Executives and business owners who want a single command view of company performance — financial results, operations, workforce, projects, risks, forecasts, and strategic priorities — with AI-prepared reports and decision support.",
+    technicalRequirements:
+      "Engineering capability for data-pipeline design, real-time monitoring infrastructure, and AI model integration; the architecture is stack-agnostic with AWS and GCP reference implementations. Requires access to the financial, operational, workforce, risk, and strategic data sources being monitored.",
+    limitations: [
+      "Not a dashboard product — no pre-built executive dashboard, reporting pipeline, alerting infrastructure, or decision-support tool is delivered; it is the architectural plan for one.",
+      "No custom build work — the buyer's team builds the command platform from the blueprint.",
+      "No underlying AI models or proprietary data — model access and the data the system monitors are yours to supply.",
+      "Output quality depends on your data — the system reports on the data sources you connect and keep current; it does not include or supply your company's data.",
+    ],
     included: [
       "Executive command dashboard",
       "Financial performance monitoring",
@@ -273,6 +309,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Launch your own AI-powered business collaboration marketplace that connects businesses, professionals, and service providers through intelligent matching and structured workflows.",
     ctaText: "Get Nexus Network for $219",
+    bestFor:
+      "Founders and venture teams building a B2B business-collaboration marketplace that connects businesses, professionals, service providers, project owners, and AI teams through intelligent matching and structured workflows.",
+    technicalRequirements:
+      "An engineering team to implement the technical architecture — the launch roadmap estimates 12–16 weeks to MVP for a team of 2–3 engineers plus a business lead. The strategy, workflow, and growth sections are accessible to business leaders without coding skills.",
+    limitations: [
+      "Not marketplace software — no working platform, matching engine, messaging system, or payment rails are delivered.",
+      "No custom build work — the buyer's team builds the marketplace from the blueprint.",
+      "No marketplace participants included — the blueprint does not supply the businesses, professionals, or providers needed to operate a two-sided marketplace; recruiting them is part of the launch work the buyer executes.",
+      "No underlying AI models or proprietary data — the recommendation and matching logic is specified in the blueprint; model access and platform data are yours to arrange.",
+    ],
     included: [
       "AI business-matching team",
       "Buyer and provider workflows",
@@ -342,6 +388,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Build a virtual AI employee platform — deploy digital workers across departments with defined responsibilities, approval controls, and performance monitoring.",
     ctaText: "Get Digital Humans for $379",
+    bestFor:
+      "Organizations planning a structured AI workforce — typically operations leads and CTOs — that want to deploy virtual AI employees across customer support, sales, marketing, finance, administration, research, operations, and project management, with defined responsibilities and human approval controls.",
+    technicalRequirements:
+      "An AI-literate technical lead familiar with AI/LLM integration patterns to implement the platform; the workforce-design and governance sections can be handled by a business lead without AI expertise. Access to the workflows and domain data the virtual employees will handle.",
+    limitations: [
+      "No virtual employees included — no working AI workers, agent code, or deployed platform is delivered; the blueprint defines the workforce platform to build.",
+      "No custom build work — the buyer's team builds and operates the platform.",
+      "No underlying AI models or proprietary data — you supply the model access and the business data for each role.",
+      "Human oversight is the buyer's operating responsibility — the blueprint specifies approval controls and escalation rules, but running them is part of the system the buyer builds and manages.",
+    ],
     included: [
       "Virtual employee platform model",
       "Digital employee profiles",
@@ -411,6 +467,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Build an AI-powered app builder — users describe the application they need and publish a working business app with no-code tools, automation, templates, and subscription billing.",
     ctaText: "Get Genesis Platform for $499",
+    bestFor:
+      "Technical founders and product teams who want to build an AI-powered, no-code business application builder — a platform their own customers will use to describe, configure, and publish business applications.",
+    technicalRequirements:
+      "The most technically advanced product in the collection: an engineering team is required — the development roadmap estimates 16–20 weeks to MVP for a team of 3–5 engineers — covering the no-code builder engine, AI agent orchestration, template rendering, and multi-tenant SaaS infrastructure.",
+    limitations: [
+      "No app-builder software — no no-code builder engine, template marketplace, workflow automation, or publishing infrastructure is delivered.",
+      "No custom build work — the buyer's team builds the platform from the blueprint.",
+      "No underlying AI models or proprietary data — the prompt-to-application and agent capabilities require model access you arrange; no model weights or proprietary data are included.",
+      "The SaaS build and operations are on the buyer — the blueprint specifies the architecture, billing framework, and licensing strategy, but standing up and running the platform (authentication, payments, subscriptions, hosting) is the buyer's build.",
+    ],
     included: [
       "AI application builder",
       "Prompt-to-application workflow",
@@ -480,6 +546,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Protect your business from payment fraud with an AI verification platform that reviews requests, checks identities, verifies suppliers, and blocks high-risk transactions.",
     ctaText: "Get GuardianOS for $369",
+    bestFor:
+      "Finance teams, procurement departments, business owners, and institutions that process high-value payments (six- and seven-figure transactions) and want AI-assisted verification of payment requests, supplier details, identities, and approval authority before funds move.",
+    technicalRequirements:
+      "A security-conscious engineering team to implement the platform; the blueprint includes the security architecture and pre-mapped compliance references (SOC 2, ISO 27001, PCI DSS). Requires access to payment-request flows, supplier records, and identity data.",
+    limitations: [
+      "No working verification platform — no fraud-detection engine, payment integration, or deployed system is delivered; the blueprint is the plan for building one.",
+      "No custom build work — the buyer's team builds and operates the system.",
+      "No underlying AI models or proprietary data — model access and your transaction, supplier, and identity data are yours to supply.",
+      "Compliance is not certified — the blueprint maps to SOC 2, ISO 27001, and PCI DSS, but achieving certification remains the buyer's implementation and audit work.",
+    ],
     included: [
       "Payment-verification AI team",
       "Supplier bank-detail verification",
@@ -545,6 +621,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Give your procurement team AI-powered intelligence for cost control — spending reviews, supplier comparisons, contract analysis, and savings identification.",
     ctaText: "Get SpendShield AI for $249",
+    bestFor:
+      "Procurement teams at organizations with $10M+ annual procurement spend that want AI-assisted cost control — spend reviews, supplier comparison, contract analysis, price-variance detection, and savings-opportunity identification — before supplier selection, contract renewal, negotiation, and purchasing decisions.",
+    technicalRequirements:
+      "A data-literate engineering team to implement the AI/ML components as specified in the architecture; requires access to spend, supplier, contract, and vendor-performance data.",
+    limitations: [
+      "No working procurement platform — no spend-analysis engine, contract-review tool, or vendor-risk scoring software is delivered.",
+      "No custom build work — the buyer's team builds the platform from the blueprint.",
+      "No underlying AI models or proprietary data — model access and your procurement data are yours to supply.",
+      "Savings outcomes are not guaranteed — the blueprint identifies where savings opportunities can be found; actual results depend on the buyer's procurement operation, data quality, and negotiation execution.",
+    ],
     included: [
       "Procurement AI team",
       "Spend classification",
@@ -610,6 +696,16 @@ export const PRODUCTS: Product[] = [
     valueStatement:
       "Automate compliance evidence collection and audit preparation — AI agents classify documents, map controls, identify gaps, and organize audit-ready files.",
     ctaText: "Get EvidenceFlow AI for $249",
+    bestFor:
+      "Compliance teams, auditors, quality managers, and risk teams working with formal standards (e.g., SOC 2, ISO 27001, PCI DSS, HIPAA, GDPR) who want to automate evidence collection, control mapping, gap identification, and audit preparation.",
+    technicalRequirements:
+      "In-house compliance knowledge — a compliance officer or CISO can run with the blueprint immediately — plus an engineering team to build the evidence-collection, classification, and control-mapping system. Requires access to the documents, policies, certificates, emails, reports, screenshots, and system records used as evidence.",
+    limitations: [
+      "No working GRC tool — no evidence-collection agents, document-classification engine, control-mapping system, or audit-file tooling is delivered.",
+      "No custom build work — the buyer's team builds the platform from the blueprint.",
+      "No underlying AI models or proprietary data — model access and your evidence and document data are yours to supply.",
+      "Reference control mappings are a starting point — the blueprint includes mappings for common frameworks, but configuring controls to your specific standards and completing audits is the buyer's implementation work.",
+    ],
     included: [
       "Compliance evidence AI team",
       "Automated evidence collection",
@@ -672,6 +768,12 @@ export const BUNDLES: Bundle[] = [
     regularCombined: 1547,
     launchPrice: 999,
     saving: 548,
+    bestFor:
+      "Businesses from SMBs (10–250 employees) through organizations of 250+ that want one connected set of blueprints covering daily operations, department management, executive reporting, and strategic oversight.",
+    limitations: [
+      "A bundle of three blueprints, not software — it contains no hosted systems, working code, or custom build work; each system is built by the buyer.",
+      "The individual blueprint exclusions apply to each product — no AI models or proprietary data are included, and each blueprint's single-business perpetual licence governs use (agency or multi-client use requires enterprise licensing).",
+    ],
   },
   {
     slug: "trust-risk-compliance",
@@ -683,6 +785,12 @@ export const BUNDLES: Bundle[] = [
     regularCombined: 1197,
     launchPrice: 749,
     saving: 448,
+    bestFor:
+      "Finance, procurement, and compliance leaders — including organizations with $10M+ annual procurement spend and high-value payment flows — who want AI-assisted protection across payments, suppliers, spend, and audit evidence.",
+    limitations: [
+      "A bundle of three blueprints, not software — no hosted verification, procurement, or compliance platform is included; each system is built by the buyer.",
+      "The individual blueprint exclusions apply to each product — no AI models or proprietary data, no custom build work, and compliance/security certifications remain the buyer's implementation and audit responsibility.",
+    ],
   },
   {
     slug: "complete-portfolio",
@@ -714,6 +822,12 @@ export const BUNDLES: Bundle[] = [
     regularCombined: 4241,
     launchPrice: 2699,
     saving: 1542,
+    bestFor:
+      "Technical founders, product teams, and established businesses that want the full collection of blueprints — app development, business operations, executive management, procurement, compliance, financial security, virtual workforces, and collaboration — to build multiple systems.",
+    limitations: [
+      "A bundle of nine blueprints, not software — no hosted systems or working products are included; every system in the portfolio must be built by the buyer or their team.",
+      "Individual licences still apply — the portfolio does not grant an agency licence; each included blueprint carries its single-business perpetual licence, and multi-client use of any blueprint requires a separate enterprise licence.",
+    ],
   },
 ];
 
