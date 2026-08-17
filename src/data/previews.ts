@@ -38,7 +38,7 @@ const PREVIEWS: Record<string, PreviewContent> = {
         "Department workflow maps (PDF + editable Figma)",
         "AI agent coordination specification",
         "SaaS revenue model spreadsheet",
-        "90-day implementation roadmap",
+        "Implementation roadmap",
         "Executive summary presentation deck",
       ],
     },
@@ -89,7 +89,7 @@ const PREVIEWS: Record<string, PreviewContent> = {
       {
         part: "Part V — Implementation & Launch",
         chapters: [
-          "90-Day Implementation Roadmap",
+          "Implementation Roadmap",
           "Team Structure & Skills Required",
           "Vendor Selection Criteria",
           "Migration Strategy for Legacy Systems",
@@ -190,7 +190,7 @@ Layer 3: Execution. Tasks include inline action capabilities — approve/reject 
 
 Layer 4: Reflection. Completed tasks feed into the analytics engine, building a picture of team velocity, bottleneck patterns, and workload distribution. The weekly team briefing includes a task-completion summary, overdue-task analysis, and recommendations for workload rebalancing.
 
-The module includes five task-specific agents: Inbox Organizer, Deadline Monitor, Dependency Tracker, Workload Balancer, and Follow-Up Agent. Together they reduce the administrative overhead of task management by an estimated 40-60% compared to manual systems — based on pilot deployments with SMB teams of 15-80 people.`,
+The module includes five task-specific agents: Inbox Organizer, Deadline Monitor, Dependency Tracker, Workload Balancer, and Follow-Up Agent. Together they reduce the administrative overhead of task management by an estimated 40-60% compared to manual systems — built for SMB teams.`,
   },
 
   /* ────── 3. Empire AI ────── */
@@ -254,7 +254,7 @@ The module includes five task-specific agents: Inbox Organizer, Deadline Monitor
       {
         part: "Part V — Implementation & Commercial Model",
         chapters: [
-          "Implementation Roadmap (12-16 Weeks)",
+          "Implementation Roadmap",
           "Team & Skills Required",
           "Commercial Model & Pricing Strategy",
           "Enterprise Sales Playbook",
@@ -407,7 +407,7 @@ The blueprint includes the full matching algorithm specification, training data 
           "Ethics & Compliance Considerations",
           "Department Allocation & Capacity Planning",
           "Subscription Pricing & Commercial Model",
-          "Implementation Roadmap (14-18 Weeks)",
+          "Implementation Roadmap",
         ],
       },
     ],
@@ -582,7 +582,7 @@ Layer 3: Anomaly Detection. Even authenticated, dual-channel-verified requests a
 
 Layer 4: Cooling-Off Period. The highest-risk transactions — six-figure payments, new international beneficiaries, requests received outside business hours — enter a mandatory cooling-off period. The payment is queued but not executed for a configurable window (typically 2-4 hours). During this window, the requesting executive receives a summary of the payment and can cancel it. The cooling-off period defeats urgency-based social engineering, where attackers pressure finance teams to act before anyone questions the request.
 
-The blueprint includes detailed specifications for each layer, integration guides for common ERP and banking systems, and configuration templates calibrated for organizations processing $10M-$500M in annual payments.`,
+The blueprint includes detailed specifications for each layer and integration guides for common ERP and banking systems.`,
   },
 
   /* ────── 8. SpendShield AI ────── */
@@ -637,7 +637,7 @@ The blueprint includes detailed specifications for each layer, integration guide
           "Negotiation Preparation & Playbooks",
           "Procurement Reporting & Dashboards",
           "Technical Architecture & Integration",
-          "Implementation Roadmap (10-14 Weeks)",
+          "Implementation Roadmap",
         ],
       },
     ],
@@ -656,7 +656,7 @@ Pipeline 4: Demand Management. Some of the largest savings come not from paying 
 
 Pipeline 5: Maverick Spend Detection. Maverick spend — purchases made outside approved procurement channels — typically represents 15-30% of total organizational spend and carries a 10-20% price premium. The engine identifies maverick-spend patterns by comparing purchase data against approved supplier lists and contract pricing, then quantifies the savings potential from bringing that spend into managed channels.
 
-Each recommendation includes: estimated annual savings (with confidence interval), implementation effort (low/medium/high), stakeholder impact, and a pre-written business case for internal approval. The blueprint includes the full algorithm specifications, data requirements, and calibration guidelines. Organizations typically identify savings opportunities of 8-15% of addressable spend within the first full quarter of operation.`,
+Each recommendation includes: estimated annual savings (with confidence interval), implementation effort (low/medium/high), stakeholder impact, and a pre-written business case for internal approval. The blueprint includes the full algorithm specifications, data requirements, and calibration guidelines. Organizations typically identify savings opportunities of 5–15% of addressable spend within the first full quarter of operation.`,
   },
 
   /* ────── 9. EvidenceFlow AI ────── */
@@ -712,7 +712,7 @@ Each recommendation includes: estimated annual savings (with confidence interval
           "Technical Architecture",
           "Integration Patterns (Cloud Services, HR, Security Tools)",
           "Security & Encryption Design",
-          "Implementation Roadmap (8-12 Weeks)",
+          "Implementation Roadmap",
         ],
       },
     ],

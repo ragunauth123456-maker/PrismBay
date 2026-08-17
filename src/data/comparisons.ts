@@ -280,7 +280,6 @@ const RAW_COMPARISONS: ComparisonConfig[] = [
         features: [
           { name: "Revenue model", values: ["Subscription billing + enterprise", "SaaS revenue"] },
           { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
-          { name: "Est. time to MVP", values: ["16–20 weeks", "12–16 weeks"] },
         ],
       },
     ],
@@ -595,7 +594,7 @@ const RAW_COMPARISONS: ComparisonConfig[] = [
           { name: "No-code builder", values: ["—", "✓"] },
           { name: "Template marketplace", values: ["Service listings", "App templates"] },
           { name: "Multi-tenant SaaS", values: ["Vendor storefronts", "End-user app hosting"] },
-          { name: "Est. time to MVP", values: ["10–14 weeks", "16–20 weeks"] },
+          { name: "Est. time to MVP", values: ["12–16 weeks", "16–20 weeks"] },
         ],
       },
       {
@@ -698,7 +697,6 @@ const RAW_COMPARISONS: ComparisonConfig[] = [
           { name: "Revenue model", values: ["Subscription billing + enterprise", "Service revenue + enterprise pricing"] },
           { name: "Target customer", values: ["Domain experts & citizen developers", "Operations leaders & department heads"] },
           { name: "Go-to-market", values: ["Platform adoption playbook", "Workforce transformation playbook"] },
-          { name: "Est. time to MVP", values: ["16–20 weeks", "14–18 weeks"] },
         ],
       },
       {
@@ -757,7 +755,6 @@ const RAW_COMPARISONS: ComparisonConfig[] = [
         features: [
           { name: "Revenue model", values: ["Service revenue + enterprise", "Marketplace fees + subscriptions"] },
           { name: "Launch savings", values: [ /* derived from products.ts — see COMPARISONS derivation below */ ] },
-          { name: "Est. time to MVP", values: ["14–18 weeks", "10–14 weeks"] },
           { name: "Risk profile", values: ["Higher technical risk — AI orchestration", "Lower technical risk — adoption risk"] },
         ],
       },

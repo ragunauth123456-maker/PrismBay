@@ -201,7 +201,7 @@ const nexusosSteps: DemoStep[] = [
   {
     title: "Security, Governance & Compliance",
     narration:
-      "Role-based access controls, audit logging, approval hierarchies, and compliance mappings to SOC 2, ISO 27001, and GDPR. For any company that takes compliance seriously, this is essential reading.",
+      "Role-based access controls, audit logging, approval hierarchies, and structured governance. For any company that takes compliance seriously, this is essential reading.",
     visualLabel: "Security, Governance, and Approval Controls",
     icon: "feature",
   },
@@ -222,7 +222,7 @@ const nexusosSteps: DemoStep[] = [
   {
     title: "Get NexusOS",
     narration:
-      "Four forty-nine during our thirty-day launch, five ninety-nine after. NexusOS is for companies with fifty-plus employees who've outgrown their tool stack and need a unified system.",
+      "Four forty-nine during our thirty-day launch, five ninety-nine after. NexusOS is for companies with 250+ employees who've outgrown their tool stack and need a unified system.",
     visualLabel: "Pricing and CTA",
     icon: "close",
   },

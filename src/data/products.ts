@@ -69,7 +69,7 @@ export const PRODUCTS: Product[] = [
     description:
       "NexusOS provides a complete plan for building an intelligent operating system for an entire business — connecting finance, HR, sales, marketing, procurement, operations, compliance, customer service, and project management.",
     longDescription:
-      "NexusOS provides a complete plan for building an intelligent operating system for an entire business. The platform connects finance, human resources, sales, marketing, procurement, operations, compliance, customer service, and project management. AI agents coordinate workflows, prepare reports, identify risks, track performance, and present decision-ready information to management. NexusOS targets established businesses requiring deeper departmental integration, governance, analytics, and executive oversight.",
+      "NexusOS provides a complete plan for building an intelligent operating system for an entire business. The platform connects finance, human resources, sales, marketing, procurement, operations, compliance, customer service, and project management. AI agents coordinate workflows, prepare reports, identify risks, track performance, and present decision-ready information to management. NexusOS targets established businesses requiring deeper departmental integration, governance, analytics, and executive oversight. Designed for organizations with 250+ employees.",
     valueStatement:
       "Connect every department — finance, HR, sales, marketing, procurement, operations, compliance — into one intelligent business operating system with AI agents that coordinate workflows and present decision-ready information.",
     ctaText: "Get NexusOS for $449",

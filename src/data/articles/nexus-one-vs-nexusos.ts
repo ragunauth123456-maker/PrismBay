@@ -40,7 +40,7 @@ export const bodyHtml = `<p>Choosing between Nexus One and NexusOS comes down to
     <tr><th></th><th><strong>Nexus One</strong></th><th><strong>NexusOS</strong></th></tr>
   </thead>
   <tbody>
-    <tr><td><strong>Best for</strong></td><td>SMBs with 2–25 employees</td><td>Organisations with 25–500+ employees</td></tr>
+    <tr><td><strong>Best for</strong></td><td>SMBs with 10–250 employees</td><td>Organisations with 250+ employees</td></tr>
     <tr><td><strong>Operating model</strong></td><td>Single-operator workspace</td><td>Multi-department coordination</td></tr>
     <tr><td><strong>Departments covered</strong></td><td>Sales, projects, expenses, team activity</td><td>Finance, HR, sales, marketing, procurement, operations, compliance, project management, customer service</td></tr>
     <tr><td><strong>AI agents</strong></td><td>Daily work management, reporting, deadline tracking, customer activity</td><td>Cross-department orchestration, risk identification, exception monitoring, executive reporting</td></tr>
