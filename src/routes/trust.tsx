@@ -159,7 +159,7 @@ const TRUST_SECTIONS = [
   {
     icon: MessageIcon,
     title: "Customer Support",
-    body: "We respond to every support inquiry within 24 hours — typically much faster. You can reach us directly by email at admin@prismbay.com, and every message goes to a real human on our team. Whether you have a pre-sale question, a technical issue, or just want to understand which product fits your needs, we're here to help. No chatbots, no ticket systems that go into a void — just direct, helpful responses from people who know the products.",
+    body: "We respond to every support inquiry within 24 hours — typically much faster. You can reach us directly by email at support@prismbayai.com, and every message goes to a real human on our team. Whether you have a pre-sale question, a technical issue, or just want to understand which product fits your needs, we're here to help. No chatbots, no ticket systems that go into a void — just direct, helpful responses from people who know the products.",
     takeaway: "Real human support, within 24 hours — direct email, no runaround.",
   },
   {

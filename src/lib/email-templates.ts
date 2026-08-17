@@ -104,7 +104,7 @@ What happens next:
    each time you request it. You can re-download at any time.
 
 3. Every PrismBay purchase includes 30 days of priority support. Reply
-   to this email or write to admin@prismbay.com — a real person will
+   to this email or write to support@prismbayai.com — a real person will
    get back to you, typically within a few hours.
 
 4. If the product isn't what you expected, you're covered by our 14-day
@@ -119,7 +119,7 @@ A few things to know:
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -149,7 +149,7 @@ Need to download again later? Visit your account:
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -186,7 +186,7 @@ email — we're happy to help.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -224,7 +224,7 @@ available at its regular price after the launch period ends.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -259,7 +259,7 @@ going smoothly, that's great to hear too.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -393,7 +393,7 @@ there's a real person on the other end.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -434,7 +434,7 @@ me what's blocking you. Happy to help.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -472,7 +472,7 @@ out of what you bought.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -505,7 +505,7 @@ feel good about your decision. Reply anytime.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -543,7 +543,7 @@ Browse the full marketplace: ${p.marketplaceUrl}
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -588,7 +588,7 @@ Resources and guides: ${p.resourcesUrl}
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -634,7 +634,7 @@ Implementation articles: ${p.resourcesUrl}
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -677,7 +677,7 @@ Full refund policy: ${p.refundPolicyUrl}
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -729,7 +729,7 @@ Unsubscribe: ${p.unsubscribeUrl}
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -769,7 +769,7 @@ receiving these, just click it — one and done.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }
 
@@ -809,6 +809,6 @@ one click and you're off the list.
 
 —
 The PrismBay Team
-admin@prismbay.com`,
+support@prismbayai.com`,
   };
 }

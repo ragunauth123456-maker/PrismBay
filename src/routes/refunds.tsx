@@ -39,7 +39,7 @@ function RefundsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">How to Request a Refund</h2>
-            <p>Email us at <a href="mailto:admin@prismbay.com" className="text-brand-600 hover:text-brand-700">admin@prismbay.com</a> with your order number and the reason for your refund request. We process refunds within 5 business days.</p>
+            <p>Email us at <a href="mailto:support@prismbayai.com" className="text-brand-600 hover:text-brand-700">support@prismbayai.com</a> with your order number and the reason for your refund request. We process refunds within 5 business days.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">After Refund</h2>

@@ -56,7 +56,7 @@ export const Route = createFileRoute("/api/contact")({
 
           // Send email notification to admin
           await sendEmailQuietly({
-            to: "admin@prismbay.com",
+            to: "support@prismbayai.com",
             subject: `PrismBay Contact: ${subject || "New message"} from ${name}`,
             body: [
               `New contact form submission from PrismBay.`,

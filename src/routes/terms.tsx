@@ -32,10 +32,8 @@ function TermsPage() {
         <div className="mx-auto max-w-3xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Legal</p>
           <h1 className="text-3xl font-bold text-neutral-800">Terms &amp; Conditions</h1>
-          <p className="mt-2 text-sm text-neutral-500">Effective: July 28, 2026</p>
-          <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            <strong>⚠️ Draft — Pending Legal Review.</strong> These terms have not been reviewed by a qualified lawyer and should not be considered final. Placeholders and advisory notes are marked throughout.
-          </div>
+          <p className="mt-2 text-sm text-neutral-500">Effective: August 3, 2026</p>
+          <p className="mt-3 text-sm text-neutral-500">These terms are provided as general information and do not constitute legal advice.</p>
         </div>
       </div>
       <div className="mx-auto max-w-3xl px-6 py-12">
@@ -46,8 +44,9 @@ function TermsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">2. Products and Digital Delivery</h2>
-            <p>All products sold on PrismBay are digital business system blueprints — comprehensive documentation packages delivered as downloadable files. No physical products are shipped. Upon successful payment, you receive immediate access to download your purchase.</p>
-            <p>Each product includes a single-business perpetual licence. You may use the blueprint to build one commercial product. Agency, multi-client, and enterprise licences are available separately — contact us for details.</p>
+            <p>All products sold on PrismBay are digital business system blueprints — comprehensive documentation packages (agent configurations, workflows, technical architecture, revenue models, implementation guides, and supporting templates) delivered as downloadable files. No physical products are shipped, and no software subscription or hosted service is included. Upon successful payment, your purchase is delivered instantly to your PrismBay account, where you can download it at any time.</p>
+            <p>Each product includes a commercial-use licence for a single business, subject to the licence terms included with the product. You may use the blueprint to build one commercial product. Agency, multi-client, and enterprise licences are available separately — contact us for details.</p>
+            <p>Every purchase is covered by our 14-day money-back guarantee. If you are not satisfied, email <a href="mailto:support@prismbayai.com" className="text-brand-600 hover:text-brand-700">support@prismbayai.com</a> within 14 days of purchase with your order number and we will refund your payment in accordance with our <Link to="/refunds" className="text-brand-600 hover:text-brand-700">Refund Policy</Link>.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">3. Pricing and Payment</h2>
@@ -56,7 +55,7 @@ function TermsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">4. Intellectual Property</h2>
-            <p>All product content, including architecture diagrams, workflow designs, documentation, and implementation guides, is protected by copyright and other intellectual property laws. Your purchase grants you a licence to use the content — it does not transfer ownership.</p>
+            <p>All product content, including architecture diagrams, workflow designs, documentation, and implementation guides, is protected by copyright and other intellectual property laws. Your purchase grants you a licence to use the content for the purposes set out in the licence terms — it does not transfer ownership.</p>
             <p>You may not redistribute, resell, or sublicense the product materials beyond the scope of your licence.</p>
           </section>
           <section>
@@ -77,7 +76,7 @@ function TermsPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">9. Contact</h2>
-            <p>For questions about these terms, contact us at <a href="mailto:legal@www.prismbayai.com" className="text-brand-600 hover:text-brand-700">legal@www.prismbayai.com</a> or through our <Link to="/contact" className="text-brand-600 hover:text-brand-700">contact page</Link>.</p>
+            <p>For questions about these terms, contact us at <a href="mailto:legal@prismbayai.com" className="text-brand-600 hover:text-brand-700">legal@prismbayai.com</a> or through our <Link to="/contact" className="text-brand-600 hover:text-brand-700">contact page</Link>.</p>
           </section>
         </div>
       </div>

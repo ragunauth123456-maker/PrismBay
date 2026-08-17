@@ -24,10 +24,8 @@ function CookiesPage() {
         <div className="mx-auto max-w-3xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-2">Legal</p>
           <h1 className="text-3xl font-bold text-neutral-800">Cookie Policy</h1>
-          <p className="mt-2 text-sm text-neutral-500">Effective: July 28, 2026</p>
-          <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            <strong>⚠️ Draft — Pending Legal Review.</strong> This policy has not been reviewed by a qualified lawyer.
-          </div>
+          <p className="mt-2 text-sm text-neutral-500">Effective: August 3, 2026</p>
+          <p className="mt-3 text-sm text-neutral-500">This policy is provided as general information and does not constitute legal advice.</p>
         </div>
       </div>
       <div className="mx-auto max-w-3xl px-6 py-12">
@@ -45,7 +43,7 @@ function CookiesPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-neutral-800">Analytics Cookies</h3>
-                <p>Help us understand how visitors use the site — which pages are popular, how people find us, and where we can improve. We use privacy-respecting analytics that do not track you across other sites.</p>
+                <p>Help us understand how visitors use the site — which pages are popular, how people find us, and where we can improve.</p>
               </div>
               <div>
                 <h3 className="font-semibold text-neutral-800">Functional Cookies</h3>
@@ -59,7 +57,7 @@ function CookiesPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">Third-Party Cookies</h2>
-            <p>Our payment processor (Stripe) and any embedded content (such as YouTube demo videos) may set their own cookies. These are governed by their respective privacy policies.</p>
+            <p>Our payment processor, Stripe, may set cookies when you complete a purchase. Any other third-party content we embed on the site may also set cookies. These cookies are governed by the respective providers' privacy policies.</p>
           </section>
         </div>
       </div>

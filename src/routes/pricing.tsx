@@ -420,7 +420,7 @@ function PricingPage() {
               <p className="mt-1 text-xs text-neutral-500">
                 14-day refund policy on all products. Questions?{" "}
                 <a
-                  href="mailto:support@prismbay.com"
+                  href="mailto:support@prismbayai.com"
                   className="text-brand-600 hover:text-brand-700 underline"
                 >
                   Contact support

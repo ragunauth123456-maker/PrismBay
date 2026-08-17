@@ -152,7 +152,7 @@ function ContactPage() {
                 {sending ? "Sending..." : "Send Message"}
               </button>
               <p className="text-xs text-center text-neutral-400">
-                Or email us directly at <a href="mailto:admin@prismbay.com" className="text-brand-600 hover:text-brand-700">admin@prismbay.com</a>
+                Or email us directly at <a href="mailto:support@prismbayai.com" className="text-brand-600 hover:text-brand-700">support@prismbayai.com</a>
               </p>
             </form>
           )}

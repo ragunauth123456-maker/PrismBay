@@ -101,7 +101,7 @@ export const Route = createFileRoute("/bundles/$slug")({
                 name: "What is your refund policy?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "We offer a 14-day money-back guarantee. If you are not satisfied with your purchase, contact us at admin@prismbay.com within 14 days for a full refund. We encourage you to review the product details and demo walkthroughs before purchasing.",
+                  text: "We offer a 14-day money-back guarantee. If you are not satisfied with your purchase, contact us at support@prismbayai.com within 14 days for a full refund. We encourage you to review the product details and demo walkthroughs before purchasing.",
                 },
               },
             ],
@@ -233,7 +233,7 @@ function BundleDetailPage() {
     },
     {
       question: "What is your refund policy?",
-      answer: "We offer a 14-day money-back guarantee. If you are not satisfied with your purchase, contact us at admin@prismbay.com within 14 days for a full refund. We encourage you to review the product details and demo walkthroughs before purchasing.",
+      answer: "We offer a 14-day money-back guarantee. If you are not satisfied with your purchase, contact us at support@prismbayai.com within 14 days for a full refund. We encourage you to review the product details and demo walkthroughs before purchasing.",
     },
     {
       question: "Are these actual working software products?",

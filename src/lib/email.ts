@@ -6,7 +6,7 @@
  *
  * Required env vars:
  *   RESEND_API_KEY  — Resend API key for sending
- *   EMAIL_FROM      — "From" address (defaults to "PrismBay <admin@prismbay.com>")
+ *   EMAIL_FROM      — "From" address (defaults to "PrismBay <support@prismbayai.com>")
  */
 
 import { Resend } from "resend";
@@ -38,7 +38,7 @@ export interface SendEmailParams {
  * and the function returns successfully (graceful degradation for dev).
  */
 export async function sendEmail(params: SendEmailParams): Promise<{ success: boolean; error?: string }> {
-  const from = process.env.EMAIL_FROM || "PrismBay <admin@prismbay.com>";
+  const from = process.env.EMAIL_FROM || "PrismBay <support@prismbayai.com>";
 
   // Log the email regardless
   console.log(`[EMAIL] To: ${params.to} | Subject: ${params.subject}`);
