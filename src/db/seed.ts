@@ -7,7 +7,7 @@ import { neon } from "@neondatabase/serverless";
 import { hash } from "@node-rs/bcrypt";
 import { PRODUCTS, BUNDLES, CATEGORY_MAP } from "../data/products";
 
-const ADMIN_EMAIL = "admin@www.prismbayai.com";
+const ADMIN_EMAIL = "admin@prismbayai.com";
 const ADMIN_PASSWORD = "admin123"; // TEMPORARY — change immediately
 
 async function main() {
