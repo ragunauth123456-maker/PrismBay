@@ -17,6 +17,24 @@ import { getComparisonsForProduct } from "~/data/comparisons";
 import { twitterMeta } from "~/utils/seo";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
+import { DEEP_DIVES } from "~/data/deep-dives";
+
+function DeepDiveText({ text }: { text: string }) {
+  // Render verbatim deep-dive prose, converting markdown **bold** emphasis
+  // into <strong> (the source uses paired **...** markers).
+  const parts = text.split("**");
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <strong key={i} className="font-semibold text-neutral-800">{part}</strong>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/products/$slug")({
@@ -296,6 +314,7 @@ function ProductPage() {
   if (!product) throw notFound();
 
   const relatedProducts = related;
+  const deepDive = product ? DEEP_DIVES[product.slug] : undefined;
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -531,6 +550,48 @@ function ProductPage() {
         </section>
       )}
 
+      {/* Deep Dive */}
+      {deepDive && (
+        <section className="bg-neutral-50">
+          <div className="mx-auto max-w-3xl px-6 py-14">
+            <h2 className="text-2xl font-bold text-neutral-800 text-center">Deep Dive</h2>
+            <p className="mt-2 text-neutral-500 text-center">
+              A closer look at how {product.name} works in practice, how it is implemented, and its architecture.
+            </p>
+            <div className="mt-8 space-y-4">
+              {[
+                { id: "workflow", label: "Workflow overview", body: deepDive.workflow },
+                { id: "implementation", label: "Implementation stages", body: deepDive.implementation },
+                { id: "architecture", label: "Architecture overview", body: deepDive.architecture },
+              ].map((section) => (
+                <details
+                  key={section.id}
+                  className="group rounded-xl border border-neutral-200 bg-white p-6 sm:p-8 open:shadow-sm"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-brand-600">
+                      {section.label}
+                    </h3>
+                    <span
+                      aria-hidden="true"
+                      className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-neutral-300 text-neutral-500 transition-transform duration-200 group-open:rotate-45"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <div className="mt-4">
+                    <p className="text-neutral-600 leading-relaxed">
+                      <DeepDiveText text={section.body} />
+                    </p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       {/* FAQs */}
       <section className="bg-white">
         <div className="mx-auto max-w-3xl px-6 py-14">
