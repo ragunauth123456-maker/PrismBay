@@ -12,6 +12,7 @@ import CookieConsent from "~/components/CookieConsent";
 import PageViewTracker from "~/components/PageViewTracker";
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
+import AdviserLauncher from "~/components/ai-widget/AdviserLauncher";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -99,6 +100,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         </main>
         <PageViewTracker />
         <CookieConsent />
+        <AdviserLauncher />
         <Scripts />
       </body>
     </html>
