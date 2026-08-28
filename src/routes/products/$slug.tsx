@@ -18,6 +18,7 @@ import { twitterMeta } from "~/utils/seo";
 import Navbar from '~/components/Navbar';
 import Footer from '~/components/Footer';
 import { DEEP_DIVES } from "~/data/deep-dives";
+import { getPaymentLink } from "~/data/payment-links";
 
 function DeepDiveText({ text }: { text: string }) {
   // Render verbatim deep-dive prose, converting markdown **bold** emphasis
@@ -283,28 +284,6 @@ function FAQItem({ faq, defaultOpen }: { faq: FAQ; defaultOpen: boolean }) {
 /* ─── Product Page ─── */
 function ProductPage() {
   const { product, related, bundle } = Route.useLoaderData();
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-
-  async function handlePurchase(productSlug: string) {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productSlug }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Checkout failed. Please try again.");
-        setCheckoutLoading(false);
-      }
-    } catch (err) {
-      alert("Checkout failed. Please try again.");
-      setCheckoutLoading(false);
-    }
-  }
 
   // Handle bundle page
   if (!product && bundle) {
@@ -370,13 +349,14 @@ function ProductPage() {
               </div>
               {/* CTA */}
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => handlePurchase(product.slug)}
-                  disabled={checkoutLoading}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+                <a
+                  href={getPaymentLink(product.slug) ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
                 >
-                  {checkoutLoading ? "Redirecting to Stripe..." : `Purchase Now — $${product.launchPrice}`}
-                </button>
+                  Purchase Now — $${product.launchPrice}
+                </a>
                 {product.demoVideoUrl ? (
                   <Link
                     to={product.demoVideoUrl}
@@ -667,28 +647,6 @@ function ProductPage() {
 
 /* ─── Bundle Page ─── */
 function BundlePage({ bundle }: { bundle: Bundle }) {
-  const [bundleCheckoutLoading, setBundleCheckoutLoading] = useState(false);
-
-  async function handleBundlePurchase(bundleSlug: string) {
-    setBundleCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productSlug: bundleSlug }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Checkout failed. Please try again.");
-      }
-    } catch (err) {
-      alert("Checkout failed. Please try again.");
-    } finally {
-      setBundleCheckoutLoading(false);
-    }
-  }
 
   const bundleProducts = bundle.productSlugs
     .map((slug) => getProductBySlug(slug))
@@ -739,13 +697,14 @@ function BundlePage({ bundle }: { bundle: Bundle }) {
               <p className="mt-1 text-xs text-neutral-400">
                 Introductory pricing — 30 days only.
               </p>
-              <button
-                onClick={() => handleBundlePurchase(bundle.slug)}
-                disabled={bundleCheckoutLoading}
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+              <a
+                href={getPaymentLink(bundle.slug) ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
               >
-                {bundleCheckoutLoading ? "Redirecting to Stripe..." : `Get All ${bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer`}
-              </button>
+                Get All {bundle.productSlugs.length} Products for ${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer
+              </a>
               <p className="mt-3 text-xs text-neutral-400">Secure payment via Stripe. Instant delivery. Single-business licence.</p>
               <TrustBadges className="mt-4" />
             </div>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRODUCTS, BUNDLES, CATEGORY_MAP } from "~/data/products";
+import { getPaymentLink } from "~/data/payment-links";
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
 
@@ -216,28 +217,6 @@ const marketableProducts: ProductCardItem[] = PRODUCTS.map((p) => ({
 
 /* ─── Product Card ─── */
 function ProductCard({ product }: { product: ProductCardItem }) {
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-
-  async function handlePurchase(productSlug: string) {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productSlug }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Checkout failed. Please try again.");
-        setCheckoutLoading(false);
-      }
-    } catch (err) {
-      alert("Checkout failed. Please try again.");
-      setCheckoutLoading(false);
-    }
-  }
 
   return (
     <div className="group cursor-pointer rounded-xl border border-neutral-200 bg-white p-0 transition-all duration-200 hover:border-brand-200 hover:shadow-md hover:-translate-y-0.5">
@@ -300,13 +279,14 @@ function ProductCard({ product }: { product: ProductCardItem }) {
         )}
       </div>
       <div className="px-5 pb-5 pt-0">
-        <button
-          onClick={(e) => { e.preventDefault(); handlePurchase(product.slug); }}
-          disabled={checkoutLoading}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        <a
+          href={getPaymentLink(product.slug) ?? "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
         >
-          {checkoutLoading ? "Redirecting..." : `Buy Now — ${product.launchPrice}`}
-        </button>
+          Buy Now — ${product.launchPrice}
+        </a>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import {
 import CountdownTimer from "~/components/CountdownTimer";
 import TrustBadges from "~/components/TrustBadges";
 import { twitterMeta } from "~/utils/seo";
+import { getPaymentLink } from "~/data/payment-links";
 
 /* ─── Route ─── */
 export const Route = createFileRoute("/bundles/$slug")({
@@ -195,28 +196,6 @@ function FAQRow({ faq, defaultOpen }: { faq: FAQItem; defaultOpen: boolean }) {
 /* ─── Bundle Detail Page ─── */
 function BundleDetailPage() {
   const { bundle, bundleProducts, otherBundles } = Route.useLoaderData();
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-
-  async function handleBundlePurchase(bundleSlug: string) {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productSlug: bundleSlug }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Checkout failed. Please try again.");
-      }
-    } catch (err) {
-      alert("Checkout failed. Please try again.");
-    } finally {
-      setCheckoutLoading(false);
-    }
-  }
 
   const bundleFAQs: FAQItem[] = [
     {
@@ -282,13 +261,14 @@ function BundleDetailPage() {
               <p className="mt-1 text-xs text-neutral-400">
                 Introductory pricing — 30 days only.
               </p>
-              <button
-                onClick={() => handleBundlePurchase(bundle.slug)}
-                disabled={checkoutLoading}
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
+              <a
+                href={getPaymentLink(bundle.slug) ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
               >
-                {checkoutLoading ? "Redirecting to Stripe..." : `Get All ${bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer`}
-              </button>
+                Get All {bundle.productSlugs.length} Products for $${bundle.launchPrice.toLocaleString()} — 30-Day Launch Offer
+              </a>
               <p className="mt-3 text-xs text-neutral-400">Secure payment via Stripe. Instant delivery. Single-business licence.</p>
               <TrustBadges className="mt-4" />
             </div>
@@ -476,13 +456,14 @@ function BundleDetailPage() {
         <div className="mx-auto max-w-3xl px-6 py-14 text-center">
           <h2 className="text-2xl font-bold text-white">Ready to save ${bundle.saving.toLocaleString()}?</h2>
           <p className="mt-2 text-neutral-300">Get all {bundle.productSlugs.length} AI business systems at the launch price. Instant access after purchase.</p>
-          <button
-            onClick={() => handleBundlePurchase(bundle.slug)}
-            disabled={checkoutLoading}
-            className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
+          <a
+            href={getPaymentLink(bundle.slug) ?? "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-600 hover:shadow-md hover:-translate-y-px active:bg-brand-700 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"
           >
-            {checkoutLoading ? "Redirecting to Stripe..." : `Get the ${bundle.name} — $${bundle.launchPrice.toLocaleString()}`}
-          </button>
+            Get the {bundle.name} — $${bundle.launchPrice.toLocaleString()}
+          </a>
           <p className="mt-3 text-xs text-neutral-500">30-day launch pricing. Secure payment via Stripe.</p>
         </div>
       </section>
