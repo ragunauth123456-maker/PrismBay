@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-09-21",
+  "legal_operator": "STUDYSMARTZ LLC",
+  "brand": "PrismBay Clean",
+  "marketplace": "eBay US",
+  "publish_rule": "Do not publish until exact SKU/variant, landed US cost, stock, tracking, return route and neutral fulfillment are verified.",
+  "supplier": "EPROLO",
+  "supplier_connection": "EPROLO Connect New Store -> eBay -> authorize in eBay -> push/sync products.",
+  "products": [
+    {"prismbay":"5-in-1 Electric Spin Scrubber","candidate":"New Electric Spin Scrubber with 5 Replaceable Brush Heads","url":"https://eprolo.com/app/product/new-electric-spin-scrubber%2Cbathroom-cleaning-brush-power-scrubber-with-5-replaceable-brush-heads%2C-5-in-1-electric-cleaning-brush","status":"strong candidate; exact variant/landed cost pending"},
+    {"prismbay":"Cordless Handheld Vacuum","candidate":"Car Mounted Wireless Vacuum Cleaner Dry/Wet 9000Pa","url":"https://eprolo.com/app/product/car-mounted-wireless-vacuum-cleaner-for-both-dry-and-wet-use%2C-high-power-portable-high-suction-mini-handheld-vacuum-cleaner","status":"candidate; visual/SKU and landed cost pending"},
+    {"prismbay":"Cordless Pressure Washer","candidate":"Wireless Car Washer High-Pressure Rechargeable Water Gun","url":"https://eprolo.com/app/product/wireless-car-washer-home-use-high-pressure-water-gun-cleaning-tool-rechargeable-high-power-lithium-battery-strong-boost","status":"candidate; exact battery/variant and landed cost pending"},
+    {"prismbay":"Reusable Pet Hair Remover","candidate":"2-way self-cleaning Pet Hair Remover Roller","url":"https://eprolo.com/app/product/2-way-pet-hair-remover-roller-removing-dog-cat-hair-from-furniture-self-cleaning-lint-pet-hair-remover-one-hand-operate-zh1","status":"candidate; visual/SKU and landed cost pending"},
+    {"prismbay":"Portable Garment Steamer","candidate":"Portable Handheld Garment & Fabric Steamer 1200W","url":"https://eprolo.com/app/product/new-design-portable-handheld-garment-and-fabric-steamer-1200w-quick-heat-mini-travel-steam-iron-for-clothes","status":"strong candidate with US 110V option; landed cost pending"}
+  ],
+  "next_actions": ["complete eBay business account credential/security steps","connect eBay store to EPROLO","verify exact supplier variants and landed US economics","create eBay shipping/payment/return policies","push first 3-5 products as drafts","review and publish only profitable compliant listings"]
+}
