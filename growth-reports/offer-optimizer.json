@@ -1,0 +1,12 @@
+{
+  "role": "Offer Optimizer",
+  "startedAt": "2026-09-21T02:24:16.551Z",
+  "finishedAt": "2026-09-21T02:24:16.853Z",
+  "result": {
+    "shopStatus": 200,
+    "countdownText": null,
+    "saleEndText": null,
+    "staleAugustCopy": false,
+    "recommendation": "Keep price/value claims tied to live checkout values; remove expired urgency immediately."
+  }
+}

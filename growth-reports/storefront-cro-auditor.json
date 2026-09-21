@@ -1,0 +1,31 @@
+{
+  "role": "Storefront CRO Auditor",
+  "startedAt": "2026-09-21T02:24:10.425Z",
+  "finishedAt": "2026-09-21T02:24:16.508Z",
+  "result": {
+    "activeStorefront": {
+      "target": "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/",
+      "status": 200,
+      "finalUrl": "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/",
+      "title": "PrismBay Clean TikTok Shop | Cleaning &amp; Home Products",
+      "description": "Shop PrismBay Clean products featured on TikTok, including spin scrubbers, pressure washers, garment steamers, pet hair removers, mattress vacuums and practical home tools.",
+      "canonical": "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/",
+      "h1": "Cleaning and home products featured by PrismBay Clean",
+      "ctaCount": 18,
+      "hasProductSchema": false,
+      "hasExpiredAugustCopy": false
+    },
+    "customDomain": {
+      "target": "https://shop.prismbayai.com/tiktok",
+      "status": 404,
+      "finalUrl": "https://shop.prismbayai.com/tiktok",
+      "title": "AI Business System Blueprints | PrismBay",
+      "description": "Complete AI business systems with workflows, architecture diagrams, revenue models &amp; implementation plans. Browse, evaluate, and download instantly.",
+      "canonical": "",
+      "h1": "Page not found",
+      "ctaCount": 6,
+      "hasProductSchema": false,
+      "hasExpiredAugustCopy": false
+    }
+  }
+}
