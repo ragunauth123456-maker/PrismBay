@@ -1,16 +1,17 @@
 {
   "role": "Analytics Reviewer",
-  "startedAt": "2026-09-21T20:37:06.271Z",
-  "finishedAt": "2026-09-21T20:37:06.648Z",
+  "startedAt": "2026-09-21T21:37:11.561Z",
+  "finishedAt": "2026-09-21T21:37:11.926Z",
   "result": {
     "statusEndpoint": "https://prismbay-sales-control-plane-production.up.railway.app/status",
     "httpStatus": 200,
     "live": true,
     "reported": {
-      "region": "iad",
-      "service_purpose": "PrismBay TikTok Sales Control Plane",
-      "mode": "PrismBay TikTok sales control plane",
-      "timestamp": "2026-09-20T18:12:50.400Z"
+      "service": "PrismBay Clean Store v2",
+      "status": "live",
+      "operator": "STUDYSMARTZ LLC",
+      "brand": "PrismBay Clean",
+      "products": 10
     },
     "rule": "Internal/test traffic is not counted as demand or revenue."
   }
