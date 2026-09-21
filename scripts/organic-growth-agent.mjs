@@ -4,7 +4,7 @@ const role = process.argv[2] || 'Storefront CRO Auditor';
 const SHOP = process.env.PRISMBAY_SHOP_URL || 'https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/';
 const SHOP_CUSTOM = process.env.PRISMBAY_SHOP_CUSTOM_URL || 'https://shop.prismbayai.com/tiktok';
 const SITE = process.env.PRISMBAY_SITE_URL || 'https://www.prismbayai.com';
-const VERIFY = process.env.TIKTOK_VERIFY_URL || SITE + '/tiktokioWxniaZWfubplFsqe1pzgPGhS04LORJ.txt';
+const VERIFY = process.env.TIKTOK_VERIFY_URL || SITE + '/tiktokioWxniaZWfubplFsge1pzgPGhS04LORJ.txt';
 const products = [
   'Cordless Pressure Washer','Cordless Handheld Vacuum','5-in-1 Electric Spin Scrubber',
   'Mattress Vacuum','Portable Garment Steamer','Portable Home Caddy',

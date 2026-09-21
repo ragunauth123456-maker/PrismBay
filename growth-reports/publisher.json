@@ -1,7 +1,7 @@
 {
   "role": "Publisher",
-  "startedAt": "2026-09-21T02:37:17.919Z",
-  "finishedAt": "2026-09-21T02:37:19.176Z",
+  "startedAt": "2026-09-21T02:39:02.092Z",
+  "finishedAt": "2026-09-21T02:39:04.277Z",
   "result": {
     "checks": [
       {
@@ -19,10 +19,10 @@
         "bodyPreview": "Privacy Policy — PrismBay {\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"ht"
       },
       {
-        "url": "https://www.prismbayai.com/tiktokioWxniaZWfubplFsqe1pzgPGhS04LORJ.txt",
+        "url": "https://www.prismbayai.com/tiktokioWxniaZWfubplFsge1pzgPGhS04LORJ.txt",
         "status": 404,
         "ok": false,
-        "finalUrl": "https://www.prismbayai.com/tiktokioWxniaZWfubplFsqe1pzgPGhS04LORJ.txt",
+        "finalUrl": "https://www.prismbayai.com/tiktokioWxniaZWfubplFsge1pzgPGhS04LORJ.txt",
         "bodyPreview": "AI Business System Blueprints | PrismBay Skip to content Prism Bay Products Bundles Compare Demos Resources Partners Sign In 404 Page not found The page you&#x2"
       }
     ],
