@@ -1,0 +1,17 @@
+{
+  "role": "Analytics Reviewer",
+  "startedAt": "2026-09-21T02:37:19.248Z",
+  "finishedAt": "2026-09-21T02:37:19.701Z",
+  "result": {
+    "statusEndpoint": "https://prismbay-sales-control-plane-production.up.railway.app/status",
+    "httpStatus": 200,
+    "live": true,
+    "reported": {
+      "region": "iad",
+      "service_purpose": "PrismBay TikTok Sales Control Plane",
+      "mode": "PrismBay TikTok sales control plane",
+      "timestamp": "2026-09-20T18:12:50.400Z"
+    },
+    "rule": "Internal/test traffic is not counted as demand or revenue."
+  }
+}

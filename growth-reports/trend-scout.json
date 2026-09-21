@@ -1,0 +1,21 @@
+{
+  "role": "Trend Scout",
+  "startedAt": "2026-09-21T02:37:16.297Z",
+  "finishedAt": "2026-09-21T02:37:16.298Z",
+  "result": {
+    "priorityProducts": [
+      "Cordless Pressure Washer",
+      "Cordless Handheld Vacuum",
+      "5-in-1 Electric Spin Scrubber",
+      "Mattress Vacuum",
+      "Portable Garment Steamer"
+    ],
+    "liveResearchQueries": [
+      "TikTok Shop US cleaning tools current demand",
+      "TikTok Shop cordless pressure washer current demand",
+      "TikTok Shop electric spin scrubber current demand",
+      "TikTok Shop garment steamer current demand"
+    ],
+    "instruction": "Use connected live-web research to validate demand before changing product priority."
+  }
+}
