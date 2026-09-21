@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Continue'
 $repo = 'C:\Users\Fano Faizul\PrismBayGithub'
-$log = Join-Path $repo 'growth-reports\runner.log'
+$log = 'C:\PrismBayGrowth.log'
 Set-Location $repo
 
 function Log([string]$m) {
