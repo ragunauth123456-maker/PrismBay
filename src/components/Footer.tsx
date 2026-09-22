@@ -156,8 +156,18 @@ export default function Footer() {
                   to="/jvzoo/resources"
                   className="text-sm text-neutral-300 transition-colors hover:text-white"
                 >
-                  Affiliate Program
+                  Affiliate Resources
                 </Link>
+              </li>
+              <li>
+                <a
+                  href="https://ppkqmsgfhp.goaffpro.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-neutral-300 transition-colors hover:text-white"
+                >
+                  Join Affiliate Program
+                </a>
               </li>
             </ul>
           </nav>
