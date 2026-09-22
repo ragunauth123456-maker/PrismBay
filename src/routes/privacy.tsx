@@ -53,7 +53,7 @@ function PrivacyPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">4. Cookies and Tracking</h2>
-            <p>We use essential cookies for site functionality (authentication, shopping cart) and analytics cookies to understand site usage. See our <Link to="/cookies" className="text-brand-600 hover:text-brand-700">Cookie Policy</Link> for details.</p>
+            <p>We use essential cookies for site functionality (authentication, shopping cart) and, with your permission, analytics and functional cookies to understand site usage and attribute eligible affiliate referrals through GoAffPro. See our <Link to="/cookies" className="text-brand-600 hover:text-brand-700">Cookie Policy</Link> for details.</p>
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">5. Data Sharing</h2>

@@ -25,6 +25,7 @@ export default function CookieConsent() {
 
   function handleChoice(value: "accepted" | "declined") {
     localStorage.setItem(STORAGE_KEY, value);
+    window.dispatchEvent(new CustomEvent("prismbay:cookie-consent", { detail: value }));
     setAnimate(false);
     setExiting(true);
     setTimeout(() => setShow(false), 400);

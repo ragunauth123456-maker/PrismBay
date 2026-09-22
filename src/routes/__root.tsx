@@ -10,6 +10,7 @@ import type { ReactNode } from "react";
 import appCss from "~/styles/app.css?url";
 import CookieConsent from "~/components/CookieConsent";
 import PageViewTracker from "~/components/PageViewTracker";
+import GoAffProTracker from "~/components/GoAffProTracker";
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
 import AdviserLauncher from "~/components/ai-widget/AdviserLauncher";
@@ -99,6 +100,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           {children}
         </main>
         <PageViewTracker />
+        <GoAffProTracker />
         <CookieConsent />
         <AdviserLauncher />
         <Scripts />

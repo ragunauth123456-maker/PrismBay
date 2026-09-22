@@ -213,13 +213,46 @@ function AccountPage() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    // Check for checkout success param
     const params = new URLSearchParams(window.location.search);
-    if (params.get("checkout") === "success") {
-      setShowSuccess(true);
-      // Clean URL
-      window.history.replaceState({}, "", "/account");
+    if (params.get("checkout") !== "success") return;
+
+    setShowSuccess(true);
+    const sessionId = params.get("session_id");
+
+    if (sessionId) {
+      const storageKey = `goaffpro:tracked:${sessionId}`;
+      if (!sessionStorage.getItem(storageKey)) {
+        fetch(`/api/affiliate/conversion?session_id=${encodeURIComponent(sessionId)}`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((order) => {
+            if (!order) return;
+
+            const tryTrack = (attempt = 0) => {
+              const goaffpro = (window as any).goaffproTrackConversion;
+              if (typeof goaffpro === "function") {
+                const conversion = {
+                  number: order.number,
+                  total: order.total,
+                };
+                (window as any).goaffpro_order = conversion;
+                goaffpro(conversion);
+                sessionStorage.setItem(storageKey, "1");
+                return;
+              }
+              if (attempt < 20) {
+                window.setTimeout(() => tryTrack(attempt + 1), 250);
+              }
+            };
+
+            tryTrack();
+          })
+          .catch(() => {
+            // Affiliate tracking is non-blocking and must never interrupt account access.
+          });
+      }
     }
+
+    window.history.replaceState({}, "", "/account");
   }, []);
 
   useEffect(() => {

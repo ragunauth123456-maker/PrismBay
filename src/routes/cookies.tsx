@@ -57,7 +57,7 @@ function CookiesPage() {
           </section>
           <section>
             <h2 className="text-xl font-bold text-neutral-800">Third-Party Cookies</h2>
-            <p>Our payment processor, Stripe, may set cookies when you complete a purchase. Any other third-party content we embed on the site may also set cookies. These cookies are governed by the respective providers' privacy policies.</p>
+            <p>Our payment processor, Stripe, may set cookies when you complete a purchase. If you accept non-essential cookies, GoAffPro may set affiliate-attribution cookies so PrismBay can credit eligible referral sales and administer affiliate commissions. Any other third-party content we embed on the site may also set cookies. These cookies are governed by the respective providers&apos; privacy policies.</p>
           </section>
         </div>
       </div>

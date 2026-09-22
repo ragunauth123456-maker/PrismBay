@@ -67,7 +67,7 @@ export async function createProductCheckoutSession(params: {
     metadata: {
       product_slug: params.productSlug,
     },
-    success_url: `${params.origin}/account?checkout=success`,
+    success_url: `${params.origin}/account?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${params.origin}/products/${params.productSlug}`,
   });
 
