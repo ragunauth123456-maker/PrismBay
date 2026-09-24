@@ -1,4 +1,6 @@
 import fs from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
+import { discoverySources, expandSeeds, readDiscoveryState, writeDiscoveryState, unverifiedGates } from './candidate-discovery.mjs';
 
 const seeds = [
   { slug: 'cordless-handheld-vacuum', name: 'Cordless Handheld Vacuum', query: 'cordless handheld vacuum', videoFit: 0.98 },
@@ -64,10 +66,10 @@ function uniqueItems(feeds) {
   }
   return out;
 }
-function attentionMetrics(items, videoFit) {
+function attentionMetrics(items, videoFit, referenceTime = now) {
   const dated = items.filter(item => item.publishedAt instanceof Date && !Number.isNaN(item.publishedAt.getTime()));
-  const last7 = dated.filter(item => now - item.publishedAt <= 7 * DAY).length;
-  const last30 = dated.filter(item => now - item.publishedAt <= 30 * DAY).length;
+  const last7 = dated.filter(item => referenceTime - item.publishedAt <= 7 * DAY).length;
+  const last30 = dated.filter(item => referenceTime - item.publishedAt <= 30 * DAY).length;
   const volume = Math.min(1, items.length / 25);
   const recency = Math.min(1, (last7 * 2 + last30) / 16);
   const score = Math.round((volume * 45 + recency * 30 + videoFit * 25) * 10) / 10;
@@ -160,7 +162,7 @@ async function supplierMatch(seed) {
     saleStatus: String(item.saleStatus),
   };
 }
-async function scoreSeed(seed) {
+export async function scoreSeed(seed, referenceTime = now) {
   const phrase = encodeURIComponent('"' + seed.query + '"');
   const socialPhrase = encodeURIComponent('"' + seed.query + '" TikTok OR Amazon');
   const feeds = await Promise.all([
@@ -168,7 +170,7 @@ async function scoreSeed(seed) {
     fetchFeed(`https://www.bing.com/news/search?q=${phrase}&format=rss`, 'Bing News'),
   ]);
   const items = uniqueItems(feeds);
-  const metrics = attentionMetrics(items, seed.videoFit);
+  const metrics = attentionMetrics(items, seed.videoFit, referenceTime);
   const supplier = await supplierMatch(seed);
   const deliveryDays = supplier ? Number.parseInt(String(supplier.deliveryCycleDays || ''), 10) : NaN;
   const supplierReady = Boolean(
@@ -208,11 +210,20 @@ async function scoreSeed(seed) {
     supplierReady,
     freightReady,
     promotionReady,
+    ...unverifiedGates(),
+    discoveryEvidence: seed.discoveryEvidence || [],
     nextAction: !cjToken ? 'connect-cj' : !supplierReady ? 'continue-supplier-search' : !freightReady ? 'calculate-freight' : 'create-offer',
   };
 }
+export async function main() {
+await fs.mkdir('growth-reports', { recursive: true });
+const statePath = 'growth-reports/viral-seed-pool.json';
+const previous = await readDiscoveryState(statePath);
+const discoveryFeeds = await Promise.all(discoverySources.map(source => fetchFeed(source.url, source.source)));
+const expanded = expandSeeds(seeds, discoveryFeeds, previous, now);
+await writeDiscoveryState(statePath, expanded.state);
 const scored = [];
-for (const seed of seeds) scored.push(await scoreSeed(seed));
+for (const seed of expanded.seeds) scored.push(await scoreSeed(seed));
 scored.sort((a, b) => b.attentionScore - a.attentionScore || a.name.localeCompare(b.name));
 const ranked = scored.map((item, index) => ({ ...item, rank: index + 1 }));
 
@@ -260,3 +271,6 @@ console.log(JSON.stringify({
     nextAction: item.nextAction,
   })),
 }, null, 2));
+
+}
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();
