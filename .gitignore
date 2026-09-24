@@ -25,3 +25,4 @@ data/products/*
 
 # Local video renders, staged fonts/photos, manifests and ffprobe reports.
 /growth-reports/videos/
+/growth-reports/viral-seed-pool.json
