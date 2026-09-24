@@ -39,9 +39,9 @@ No Stripe API key is required. No outbound Stripe event, catalog, or customer ca
 
 GET `/health` returns process liveness only, not disk readiness. Terminate TLS at the platform proxy. Requests are limited to 1 MiB with timeouts. Return 200 only after durable commit; write failures return 500 so Stripe retries. Signature verification uses untouched bytes and the SDK's 300-second tolerance. See [Stripe webhook documentation](https://docs.stripe.com/webhooks).
 
-## Import the physical catalog before production
+## Verified PrismBay Clean LIVE catalog
 
-The physical app was not available from this environment, and this worktree contains no authoritative physical Stripe ID export. **No live mapping has been fabricated or imported. Production startup rejects the empty example.** Copy `catalog.example.json` to an operator-controlled path, then populate it from the physical app's server-side Stripe configuration, confirming the LIVE account ID and every mapping in that account. Do not commit exports containing secrets or customer data.
+`catalog.prismbay-live.json` contains the 9 active physical product link IDs plus their Stripe price and product IDs, and the active bundle link/price/product ID. They were reconciled with authenticated Stripe live account `acct_1UHjcPKDLFBMHojQ` on 24 September 2026 and cross-checked against the live AppDeploy physical storefront and bundle composition. The fixed bundle maps to one scrubber, one crevice brush and one pet-hair remover. All observed links were active and restricted to US shipping; link-line adjustable quantity was null for the inspected original product. This file contains public/non-secret payment-object IDs, never account keys, signing secrets, or customer data. Set `PHYSICAL_CATALOG_PATH` to this file's absolute path at deployment, or a private reviewed copy. Re-verify links and any optional items or adjustable quantities before using a link-level mapping if checkout settings change; unknown baskets remain `needs_review`. This catalog does not prove supplier stock, customer shipping address or dispatch readiness.
 
 Schema example (synthetic ID, not a working payment link):
 
