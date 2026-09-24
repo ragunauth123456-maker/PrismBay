@@ -1,0 +1,301 @@
+{
+  "store": "PrismBay Clean",
+  "accountId": "acct_1UHjcPKDLFBMHojQ",
+  "source": "Authenticated Stripe PrismBay Clean live account PaymentLinks and payment-link line_items 2026-09-24, crosschecked with AppDeploy physical storefront and bundle page; does not establish stock or shipping readiness.",
+  "mappings": [
+    {
+      "stripeId": "plink_1UHk3VKDLFBMHojQiqrPvlda",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk1UKDLFBMHojQDfkRmmt3",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKg9CYWmtZwlA",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk3hKDLFBMHojQdsdP95vn",
+      "items": [
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk1yKDLFBMHojQOnPpM53C",
+      "items": [
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKhqZUVOLVJ1p",
+      "items": [
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk3oKDLFBMHojQEAnzuocV",
+      "items": [
+        {
+          "sku": "crevice",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk2FKDLFBMHojQFIuweqrA",
+      "items": [
+        {
+          "sku": "crevice",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKhZVzexKEiy4",
+      "items": [
+        {
+          "sku": "crevice",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk3vKDLFBMHojQLQjWdML5",
+      "items": [
+        {
+          "sku": "pressure-washer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk2QKDLFBMHojQuVm7qrjB",
+      "items": [
+        {
+          "sku": "pressure-washer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKhaiCNVnj1fZ",
+      "items": [
+        {
+          "sku": "pressure-washer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk49KDLFBMHojQVKLayIMS",
+      "items": [
+        {
+          "sku": "mattress-vacuum",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk2aKDLFBMHojQARrUGgrD",
+      "items": [
+        {
+          "sku": "mattress-vacuum",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKi1YwcnGFpEm",
+      "items": [
+        {
+          "sku": "mattress-vacuum",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk4GKDLFBMHojQ71RMLPTa",
+      "items": [
+        {
+          "sku": "garment-steamer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk2iKDLFBMHojQws9eXthB",
+      "items": [
+        {
+          "sku": "garment-steamer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKilhfyZniXZy",
+      "items": [
+        {
+          "sku": "garment-steamer",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk4NKDLFBMHojQ5ncqgUul",
+      "items": [
+        {
+          "sku": "mini-mop",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk2uKDLFBMHojQZvMOIBVX",
+      "items": [
+        {
+          "sku": "mini-mop",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKimp72kwfEpK",
+      "items": [
+        {
+          "sku": "mini-mop",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk4XKDLFBMHojQDFTRHrbf",
+      "items": [
+        {
+          "sku": "drain-catcher",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk36KDLFBMHojQpdYTEus3",
+      "items": [
+        {
+          "sku": "drain-catcher",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKige6Kx3d7E2",
+      "items": [
+        {
+          "sku": "drain-catcher",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UHk4gKDLFBMHojQxRQ72nWn",
+      "items": [
+        {
+          "sku": "home-caddy",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UHk3FKDLFBMHojQBdokqUy3",
+      "items": [
+        {
+          "sku": "home-caddy",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VIKiG2bfIc8YNj",
+      "items": [
+        {
+          "sku": "home-caddy",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "plink_1UIpiaKDLFBMHojQdm6Mchul",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        },
+        {
+          "sku": "crevice",
+          "quantity": 1
+        },
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "price_1UIpiRKDLFBMHojQTOlFnjZk",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        },
+        {
+          "sku": "crevice",
+          "quantity": 1
+        },
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "stripeId": "prod_VJSddvmTKpMf8m",
+      "items": [
+        {
+          "sku": "scrubber",
+          "quantity": 1
+        },
+        {
+          "sku": "crevice",
+          "quantity": 1
+        },
+        {
+          "sku": "pethair",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}
