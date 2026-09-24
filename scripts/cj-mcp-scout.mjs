@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export const LOGIN = 'In Codex/VSCode enable the official CJMCP server, invoke show_login_form with {}, and complete the owner login in its official form (including any verification). Never paste credentials into chat. Keep the existing TOKEN_ENCRYPT_KEY; run the scout under the same OS user with that key supplied securely in its environment. See scripts/cj-mcp-scout.md.';
+export const LOGIN = 'In VS Code Copilot with MCP Apps enabled, invoke official CJMCP wait_for_login with {timeout:30} and complete owner login in its official UI. show_login_form returns guidance only; Codex CLI has no MCP Apps popup. Never paste credentials into chat. Keep the existing TOKEN_ENCRYPT_KEY and run under the same OS user. See scripts/cj-mcp-scout.md.';
 export const allowed = ['search_products', 'get_product_detail', 'get_product_variants', 'query_cj_inventory', 'calculate_freight', 'get_logistics_timeliness'];
 const numeric = v => (typeof v === 'number' || (typeof v === 'string' && v.trim())) && Number.isFinite(Number(v)) ? Number(v) : null;
 const positive = v => numeric(v) !== null && numeric(v) > 0;

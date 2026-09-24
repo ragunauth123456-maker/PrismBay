@@ -10,11 +10,7 @@ No account login or supplier purchase is performed by this script.
 1. In Codex/VSCode, enable the existing **CJMCP** stdio configuration pointing to
    `C:\Users\Fano Faizul\CJ-MCP\dist\mcp-server\index.cjs`. Preserve its existing
    custom `TOKEN_ENCRYPT_KEY`. Do not print it or put it in this repository.
-2. Ask the connected assistant: **Use CJMCP's show_login_form with {}**.
-   Enter CJ credentials and complete any verification only in the official form.
-   If the Codex client cannot display MCP Apps, use the official CJ server in
-   VSCode's MCP Apps capable Copilot interface and invoke the same tool there.
-   Do not paste credentials into chat or bypass the official login flow.
+2. In VS Code Copilot with MCP Apps enabled, ask the connected assistant to use **CJMCP's `wait_for_login` tool with `{"timeout":30}`**. Enter credentials and complete any verification only in the official popup. `show_login_form` displays text guidance, not a popup; Codex CLI cannot display the MCP Apps login UI. Use the VS Code popup for the owner login, or follow CJ's official secure API-token setup. Do not paste passwords into ChatGPT, GitHub or repository files.
 3. The official server persists `.cj-mcp-token` in `HOME`, falling back to
    `USERPROFILE`. Use the same OS account and home for the runner. The scout
    only stats this path; it never opens, decrypts, or exports the session.
