@@ -39,3 +39,15 @@ Run the full local/K1 swarm with:
 `powershell -ExecutionPolicy Bypass -File scripts/run-growth-swarm.ps1`
 
 Treat live publication, creator replies, checkout activity, verified Stripe sales, and native TikTok Shop progress as measurable outcomes. Do not infer outcomes from generated artifacts alone.
+
+## Viral candidate pipeline
+- Run `node scripts/viral-product-engine.mjs` to re-rank live approved products.
+- Run `node scripts/viral-candidate-engine.mjs` to refresh new product candidates.
+- `public/viral-candidates.json` is the auditable discovery feed. `growth-reports/viral-promotion-queue.json` is the commercial staging queue.
+- Prefer practical home, cleaning and organization products with clear short-video demonstrations.
+- A candidate must not become a live offer from attention data alone.
+- Supplier promotion requires an authenticated CJ route, on-sale status, verified US inventory, and product checks.
+- Freight validation must occur before a new checkout price is treated as ready.
+- Use the official CJMCP integration when available for supplier search, SKU details, freight, logistics timing and order creation.
+- Never publish supplier media unless its usage is authorized for the selling account.
+- Keep weak or unverified candidates in research status and never present them as products already sold by PrismBay.
