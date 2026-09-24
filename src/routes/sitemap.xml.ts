@@ -72,12 +72,13 @@ export const Route = createFileRoute("/sitemap/xml")({
           { path: "/compare", priority: "0.7", changefreq: "weekly" },
           { path: "/demo", priority: "0.7", changefreq: "weekly" },
           { path: "/resources", priority: "0.8", changefreq: "daily" },
+          { path: "/watch", priority: "0.8", changefreq: "weekly" },
         ];
 
         for (const page of indexPages) {
           urls.push({
             loc: `${BASE_URL}${page.path}`,
-            lastmod: FIXED_LASTMOD,
+            lastmod: page.path === "/watch" ? "2026-09-24" : FIXED_LASTMOD,
             changefreq: page.changefreq,
             priority: page.priority,
           });
