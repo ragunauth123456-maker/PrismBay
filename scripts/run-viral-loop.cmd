@@ -4,6 +4,8 @@ set REPO=C:\Users\Fano Faizul\PrismBayGithub
 set LOG=C:\PrismBayViral.log
 cd /d "%REPO%" || exit /b 1
 echo [%date% %time%] viral refresh starting>>"%LOG%"
+rem Generated feeds are disposable. Clear partial-run changes without touching unrelated work.
+git restore --worktree -- public\viral-catalog.json public\viral-candidates.json growth-reports\viral-content-queue.json growth-reports\viral-promotion-queue.json >>"%LOG%" 2>&1
 git pull --rebase origin main >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
 node scripts\viral-product-engine.mjs >>"%LOG%" 2>&1
