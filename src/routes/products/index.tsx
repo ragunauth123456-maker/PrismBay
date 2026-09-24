@@ -583,7 +583,7 @@ function ProductsPage() {
               <div className="mt-16 border-t border-neutral-200 pt-12">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-neutral-800">Save more with bundles</h2>
-                  <p className="mt-2 text-neutral-600">Get multiple AI business systems together and save during our 30-day launch.</p>
+                  <p className="mt-2 text-neutral-600">Get multiple AI business systems together. Review current bundle prices and included resources before checkout.</p>
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {BUNDLES.map((bundle) => (
