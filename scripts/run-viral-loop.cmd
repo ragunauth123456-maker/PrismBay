@@ -8,7 +8,9 @@ git pull --rebase origin main >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
 node scripts\viral-product-engine.mjs >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
-git add public\viral-catalog.json growth-reports\viral-content-queue.json
+node scripts\viral-candidate-engine.mjs >>"%LOG%" 2>&1
+if errorlevel 1 goto :fail
+git add public\viral-catalog.json public\viral-candidates.json growth-reports\viral-content-queue.json growth-reports\viral-promotion-queue.json
 git diff --cached --quiet
 if not errorlevel 1 goto :done
 git commit -m "Refresh viral product signals" >>"%LOG%" 2>&1
