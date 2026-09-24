@@ -178,9 +178,11 @@ async function scoreSeed(seed) {
     supplier.productCostUsd > 0 &&
     supplier.suggestedRetailUsd >= supplier.productCostUsd * 2
   );
+  const freightReady = false;
   const promotionReady = Boolean(
     metrics.score >= 55 &&
     supplierReady &&
+    freightReady &&
     (!Number.isFinite(deliveryDays) || deliveryDays <= 7)
   );
 
@@ -204,8 +206,9 @@ async function scoreSeed(seed) {
     },
     supplier,
     supplierReady,
+    freightReady,
     promotionReady,
-    nextAction: !cjToken ? 'connect-cj' : !supplierReady ? 'continue-supplier-search' : 'calculate-freight-and-create-offer',
+    nextAction: !cjToken ? 'connect-cj' : !supplierReady ? 'continue-supplier-search' : !freightReady ? 'calculate-freight' : 'create-offer',
   };
 }
 const scored = [];
@@ -234,6 +237,7 @@ const promotionQueue = {
       product: item.name,
       attentionScore: item.attentionScore,
       supplierReady: item.supplierReady,
+      freightReady: item.freightReady,
       promotionReady: item.promotionReady,
       nextAction: item.nextAction,
       supplier: item.supplier,

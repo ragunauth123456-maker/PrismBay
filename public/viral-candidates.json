@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-24T21:47:21.484Z",
+  "updatedAt": "2026-09-24T21:51:11.744Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -48,6 +48,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 1
@@ -95,6 +96,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 2
@@ -142,6 +144,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 3
@@ -189,6 +192,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 4
@@ -236,6 +240,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 5
@@ -277,6 +282,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 6
@@ -306,6 +312,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 7
@@ -353,6 +360,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 8
@@ -388,6 +396,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 9
@@ -410,6 +419,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 10
@@ -432,6 +442,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 11
@@ -461,6 +472,7 @@
       },
       "supplier": null,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "rank": 12

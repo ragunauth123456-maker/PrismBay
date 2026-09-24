@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24T21:47:21.484Z",
+  "updatedAt": "2026-09-24T21:51:11.744Z",
   "supplierIntegration": "awaiting-cj-auth",
   "items": [
     {
@@ -8,6 +8,7 @@
       "product": "Cordless Handheld Vacuum",
       "attentionScore": 99.5,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "supplier": null
@@ -18,6 +19,7 @@
       "product": "Roll-Up Dish Drying Rack",
       "attentionScore": 76.8,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "supplier": null
@@ -28,6 +30,7 @@
       "product": "Hanging Closet Organizer",
       "attentionScore": 73.1,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "supplier": null
@@ -38,6 +41,7 @@
       "product": "Dryer Vent Cleaner Kit",
       "attentionScore": 68.5,
       "supplierReady": false,
+      "freightReady": false,
       "promotionReady": false,
       "nextAction": "connect-cj",
       "supplier": null
