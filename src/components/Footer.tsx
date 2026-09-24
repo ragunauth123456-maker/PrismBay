@@ -82,6 +82,7 @@ export default function Footer() {
           <nav aria-label="Learn navigation">
             <h4 className="mb-4 text-sm font-semibold text-neutral-100">Learn</h4>
             <ul className="space-y-2">
+              <li><Link to="/watch" className="text-sm text-neutral-300 transition-colors hover:text-white">Watch & Learn</Link></li>
               <li>
                 <Link
                   to="/resources"
