@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ragunauth123456-maker.github.io/PrismBay/sitemap.xml
