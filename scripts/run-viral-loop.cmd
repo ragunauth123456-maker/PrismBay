@@ -12,6 +12,13 @@ node scripts\viral-product-engine.mjs >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
 node scripts\viral-candidate-engine.mjs >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
+if "%CJ_MCP_ENABLE%"=="1" (
+  node scripts\cj-mcp-scout.mjs --check-session >nul 2>&1
+  if not errorlevel 1 (
+    node scripts\cj-mcp-scout.mjs >>"%LOG%" 2>&1
+    if errorlevel 1 echo WARNING: CJ scout failed; continuing product refresh>>"%LOG%"
+  )
+)
 node scripts\render-viral-queue.mjs >>"%LOG%" 2>&1
 if errorlevel 1 echo WARNING: video renderer failed; continuing product refresh>>"%LOG%"
 git add public\viral-catalog.json public\viral-candidates.json growth-reports\viral-content-queue.json growth-reports\viral-promotion-queue.json
