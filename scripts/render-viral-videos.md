@@ -1,5 +1,11 @@
 # Local Short Video Publisher
 
+The existing Windows loop runs `node scripts/render-viral-queue.mjs` after both product engines. The wrapper hashes the ordered top three approved slug/product pairs with SHA256; timestamps, brief text and lower-ranked products do not invalidate the cache. It skips only when the fingerprint matches and all three nonempty local MP4 drafts exist. A first run, changed top three, invalid cache or missing output triggers the exported Node `render()` directly using a local snapshot of the ranked queue. No shell command is constructed.
+
+Successful fingerprint and complete draft manifest are atomically saved in ignored `growth-reports/videos/queue-state.json`. Failed rendering (including missing ffmpeg/ffprobe) logs a warning, preserves the last successful state and retries next run without failing product refresh. Publication stays disabled and media/font rights review stays pending. Local seed evidence at `growth-reports/viral-seed-pool.json` is also ignored and is not cleared by the runner. No schedule is installed by this integration.
+
+Run all Node tests with `node --test`; queue tests use deterministic renderer fixtures without ffmpeg or network access.
+
 Run from this worktree on K1 (Node 20+ and existing ffmpeg/ffprobe on PATH):
 
 ```powershell

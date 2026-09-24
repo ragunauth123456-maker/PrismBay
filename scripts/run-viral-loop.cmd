@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set REPO=C:\Users\Fano Faizul\PrismBayGithub
+set "REPO=%~dp0.."
 set LOG=C:\PrismBayViral.log
 cd /d "%REPO%" || exit /b 1
 echo [%date% %time%] viral refresh starting>>"%LOG%"
@@ -12,6 +12,8 @@ node scripts\viral-product-engine.mjs >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
 node scripts\viral-candidate-engine.mjs >>"%LOG%" 2>&1
 if errorlevel 1 goto :fail
+node scripts\render-viral-queue.mjs >>"%LOG%" 2>&1
+if errorlevel 1 echo WARNING: video renderer failed; continuing product refresh>>"%LOG%"
 git add public\viral-catalog.json public\viral-candidates.json growth-reports\viral-content-queue.json growth-reports\viral-promotion-queue.json
 git diff --cached --quiet
 if not errorlevel 1 goto :done
