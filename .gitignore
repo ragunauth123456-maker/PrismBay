@@ -22,3 +22,6 @@ src/routeTree.gen.ts
 
 # Product files (git-ignored, stored in data/products/)
 data/products/*
+
+# Local video renders, staged fonts/photos, manifests and ffprobe reports.
+/growth-reports/videos/
