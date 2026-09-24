@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "brand": "PrismBay Clean",
+  "campaign": "First verified external US sale",
+  "channel": "TikTok @prismbayclean",
+  "product": "Reusable Pet Hair Remover",
+  "verifiedAt": "2026-09-24",
+  "priceUsd": 13.45,
+  "referencePriceUsd": 14.95,
+  "stripePaymentLinkId": "plink_1UHkwPKDLFBMHojQeLqi3f7w",
+  "checkoutUrl": "https://buy.stripe.com/7sYdRa5Lo39F8lY3GognK0f",
+  "allowedCheckoutCountry": "US",
+  "clip": "K1 local revenue-workers/campaigns/trending-deals/pet-deal.mp4",
+  "clipSeconds": 10,
+  "caption": "Ad | Pet hair on the sofa? Reusable Pet Hair Remover, $13.45 (regular $14.95). Product details and US checkout: https://buy.stripe.com/7sYdRa5Lo39F8lY3GognK0f #PetHair #PrismBayClean",
+  "promotionLabel": "Your brand",
+  "status": "TikTok draft, not confirmed live",
+  "pending": [
+    "Confirm source image and audio rights for commercial use",
+    "Verify fulfillment costs, stock and delivery terms",
+    "Confirm the on-platform Your brand disclosure is active"
+  ],
+  "metrics": ["external video URL", "non-test checkout", "paid order", "refund", "verified shipment", "net margin"],
+  "youtube": "Keep AI business-systems content on @PrismBayAI. Do not cross-post unrelated physical-product adverts.",
+  "note": "Platform ad revenue unavailable from Guyana under the currently published program eligibility lists. The initial goal is direct sales, not an unverified creator payout."
+}
