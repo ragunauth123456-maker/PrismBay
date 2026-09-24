@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {audit,classify,CHANNEL} from './youtube-publishing-guard.mjs';
+const make=(title,date,extra={})=>({id:title,providers:[{network:'youtube'}],youtubeData:{title,tags:['PrismBay AI']},publicationDate:{dateTime:date,timezone:'America/Guyana'},media:[title+'.mp4'],text:title,autoPublish:true,draft:false,...extra});
+test('rejects retail video on AI channel',()=>assert.equal(classify(make('PrismBay Clean spin scrubber','2026-09-25T08:00:00')).ok,false));
+test('blocks queue entries less than four hours apart',()=>assert.ok(audit([make('AI ROI Test','2026-09-25T08:00:00'),make('AI vendor risk','2026-09-25T08:50:00')]).issues.some(x=>x.reason==='spacing-under-four-hours')));
+test('passes four-hour and fifteen-minute spacing',()=>assert.equal(audit([make('AI ROI Test','2026-09-25T08:00:00'),make('AI vendor risk','2026-09-25T12:15:00')]).issues.length,0));
+test('drafts are excluded from live queue',()=>assert.equal(audit([make('PrismBay Clean scrubber','2026-09-25T08:00:00',{draft:true,autoPublish:false})]).issues.length,0));
+test('wrong channel is rejected',()=>assert.ok(audit([], 'different-channel').issues.some(x=>x.reason==='wrong-channel')));
+test('duplicate content is rejected',()=>assert.ok(audit([make('AI ROI Test','2026-09-25T08:00:00'),make('AI ROI Test','2026-09-25T13:00:00')]).issues.some(x=>x.reason==='duplicate-creative')));
