@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-24T21:53:38.622Z",
+  "updatedAt": "2026-09-24T22:32:51.748Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -50,6 +50,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 1
     },
@@ -98,6 +102,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 2
     },
@@ -146,6 +154,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 3
     },
@@ -194,6 +206,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 4
     },
@@ -219,13 +235,13 @@
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XNnJBdTh6VUQxUTZOdlQxQ1RNNEp5ZUxwTThBSEQxLTRJSHZPSFRxUUNCZFduYlBTa1hHYjg5MU9IUXJidkJjM0Njb0ZCQnZMM3pzYmVjRDQ4ZnlPV1hqanNscWJpT3pLMkQ2OWFvSHBHMldzUzFBd2dtSzFfNkk?oc=5"
           },
           {
-            "title": "8 KitchenAid Mixer Attachments & Accessories Worth Buying—And 4 That Aren’t - PureWow",
+            "title": "8 KitchenAid Mixer Attachments & Accessories Worth Buying—And 4 That Aren’t - purewow.com",
             "source": "Google News",
             "publishedAt": "2025-02-28T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9na0hpX3ZWQzRoUmlTaFNSRF9WUlI1X1A2X21vZlRzdXJRRTVnTksyb21PWlFma2N6WE80cG03OVVQZjFkNjQweEJsb3p6VjBzUTF1VlhwaDgzYlY5TktDTw?oc=5"
           },
           {
-            "title": "30 Most Useful Amazon Products Under $30 - tasteofhome.com",
+            "title": "30 Most Useful Amazon Products Under $30 - Taste of Home",
             "source": "Google News",
             "publishedAt": "2024-12-19T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFA2VHZmbDExRHlEdnRBa2RmWUI3REc1RUkyX05RWlB1QWlQVWVVVjZIbzlRMXY5Qm9UaDlOZDlHNF8tcXIzNzlWMFFxN0dDeXAyMGYwNmNVVnB5UWh0WnBEN2MxR1RWc2hnZTdpc1l5cw?oc=5"
@@ -242,6 +258,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 5
     },
@@ -284,6 +304,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 6
     },
@@ -314,6 +338,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 7
     },
@@ -362,6 +390,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 8
     },
@@ -381,7 +413,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "This window cleaning set is our top pick – and it's on sale - Real Homes",
+            "title": "This window cleaning set is our top pick – and it's on sale - realhomes.com",
             "source": "Google News",
             "publishedAt": "2020-05-02T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQVE1RZEw3ZXFWNHlYcmQ3bHNKU214UVBSZU9WTVlxUVk0TjNCUkNaYWNzRHpWS0lrZVNBTUcwYVpiU3lmeWdGNDlQSGloV21senpDMW9NUnlkdFdwTFdKVmZYUE1xVC1qY0REQkZKVGQxUVpXQTBFUThicXNVN1FQTTlXVjBaT04tREdiR0ZHSWw?oc=5"
@@ -398,6 +430,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 9
     },
@@ -421,6 +457,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 10
     },
@@ -444,6 +484,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 11
     },
@@ -474,6 +518,10 @@
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
       "nextAction": "connect-cj",
       "rank": 12
     }
