@@ -1,0 +1,6 @@
+{
+  "store": "PrismBay Clean",
+  "accountId": "acct_REPLACEFROMPHYSICALAPP",
+  "source": "Export from the physical app's server-side Stripe catalog; never from the AI storefront",
+  "mappings": []
+}
