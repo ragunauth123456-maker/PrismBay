@@ -8,7 +8,9 @@ Practical, evidence-based AI operations education and implementation planning.
 
 Compare AI suppliers by documented data-retention, model-training, export, security, human-approval and contract-exit terms rather than marketing claims. Includes a fictional worked example and a suggested 30-day decision plan.
 
-[Read the complete worksheet](https://ragunauth123456-maker.github.io/PrismBay/guide.html) · [Download editable Markdown](https://ragunauth123456-maker.github.io/PrismBay/risk-matrix.md) · [Watch the original 30-second video](https://ragunauth123456-maker.github.io/PrismBay/vendor-risk.mp4)
+[Try the private interactive assessment](https://ragunauth123456-maker.github.io/PrismBay/scorecard.html) · [Read the complete worksheet](https://ragunauth123456-maker.github.io/PrismBay/guide.html) · [Download editable Markdown](https://ragunauth123456-maker.github.io/PrismBay/risk-matrix.md) · [Watch the original 30-second video](https://ragunauth123456-maker.github.io/PrismBay/vendor-risk.mp4)
+
+The new interactive worksheet generates a downloadable, self-reported evidence review without accounts, browser storage, tracking or payment. Its ten questions and report logic passed 10 offline tests on K1. It is a planning tool, not a vendor rating or automated approval.
 
 **Always free:** no account, email address, payment or credit card required.
 
