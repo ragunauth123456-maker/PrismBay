@@ -1,0 +1,168 @@
+{
+  "id": "prismbayRevenueWatch20260925",
+  "name": "PrismBay | Paid Store and Viral Catalog Revenue Watch",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  },
+  "nodes": [
+    {
+      "id": "manual",
+      "name": "Manual test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        160,
+        170
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "schedule",
+      "name": "Every six hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        360
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "store",
+      "name": "Fetch paid storefront",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        390,
+        260
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://ragunauth123456-maker.github.io/PrismBay/toolkits.html",
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "html"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "validate",
+      "name": "Verify four live checkout links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        630,
+        260
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const data=$input.first().json; const html=String(data.html??data.data??data.body??''); const links=['4gM8wQ1v8dOj45Ib8QgnK0q','4gMeVe8XA5hNfOq2CkgnK0r','bJe7sMgq25hNcCe6SAgnK0s','eVqfZi5Lo7pV31Ea4MgnK0t'];const missing=links.filter(x=>!html.includes(x));const legal=['www.prismbayai.com/refunds','www.prismbayai.com/contact'];const noLegal=legal.filter(x=>!html.includes(x));if(missing.length||noLegal.length||html.length<6000)throw new Error('Storefront FAIL missing payment links='+missing+' support='+noLegal+' htmlBytes='+html.length);return [{json:{status:'PASS',paidStore:'OK',links:4,checkedAt:new Date().toISOString()}}];"
+      }
+    },
+    {
+      "id": "catalog",
+      "name": "Fetch public viral catalog",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        860,
+        260
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://raw.githubusercontent.com/ragunauth123456-maker/PrismBay/main/public/viral-catalog.json",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "audit",
+      "name": "Check catalog age and report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1090,
+        260
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const raw=$input.first().json;const c=typeof raw.data==='string'?JSON.parse(raw.data):typeof raw.body==='string'?JSON.parse(raw.body):raw;const p=Array.isArray(c.products)?c.products:[];const hours=(Date.now()-new Date(c.updatedAt).getTime())/3600000;const s=$('Verify four live checkout links').first().json;if(!Number.isFinite(hours)||hours>24||hours< -1||p.length<9)throw new Error('Catalog FAIL: ageHours='+hours+' products='+p.length);return [{json:{status:'PASS',checkedAt:new Date().toISOString(),paidStore:s.paidStore,activeConfiguredStripeLinks:s.links,trackedProducts:p.length,catalogAgeHours:+hours.toFixed(1),topAttention:p.slice(0,3).map(x=>({name:x.name,signalScore:x.signalScore})),important:'These are public-news attention scores, not sales or TikTok rankings. Stripe payment data not accessible to this workflow.'}}];"
+      }
+    }
+  ],
+  "connections": {
+    "Manual test": {
+      "main": [
+        [
+          {
+            "node": "Fetch paid storefront",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every six hours": {
+      "main": [
+        [
+          {
+            "node": "Fetch paid storefront",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch paid storefront": {
+      "main": [
+        [
+          {
+            "node": "Verify four live checkout links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify four live checkout links": {
+      "main": [
+        [
+          {
+            "node": "Fetch public viral catalog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch public viral catalog": {
+      "main": [
+        [
+          {
+            "node": "Check catalog age and report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
