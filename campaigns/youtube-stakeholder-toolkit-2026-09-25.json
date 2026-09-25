@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-09-24",
+  "objective": "First confirmed, non-test toolkit payment via existing verified Stripe checkout; no ad-revenue claims",
+  "channel": "PrismBay AI YouTube",
+  "youtubeProfilePrimaryLink": "https://ragunauth123456-maker.github.io/PrismBay/toolkits.html?utm_source=youtube&utm_medium=profile&utm_campaign=executive_toolkits_sep26",
+  "profileStatus": "Published and button disabled after saving on 2026-09-24",
+  "existingPublishedShort": "https://www.youtube.com/shorts/kQtXtfCxnE8",
+  "existingShortDescription": "Updated, saved, then reloaded and verified actual toolkit landing link",
+  "newOriginalShort": {
+    "asset": "public/videos/prismbay-stakeholder-evidence-toolkit-20260924.mp4",
+    "renderer": "scripts/render-stakeholder-toolkit-short.py",
+    "durationSeconds": 36,
+    "dimensions": "720x1280",
+    "codec": "H264",
+    "mediaType": "original captions-first educational text and graphics",
+    "audio": "none",
+    "scheduledAt": "2026-09-25T15:00:00-04:00",
+    "metricoolPostId": "381706500",
+    "status": "scheduled and copied into Metricool, public posting not yet confirmed"
+  },
+  "paidLanding": {
+    "url": "https://ragunauth123456-maker.github.io/PrismBay/toolkits.html",
+    "status": 200,
+    "localPreviewUrl": "https://ragunauth123456-maker.github.io/PrismBay/stakeholder-video.mp4",
+    "previewStatus": 200,
+    "previewCommit": "a333c9a",
+    "qa": "15 tests passed"
+  },
+  "primaryOffer": {
+    "name": "Executive Stakeholder Mapping Toolkit",
+    "priceUsd": 49,
+    "hostedCheckout": "https://buy.stripe.com/4gM8wQ1v8dOj45Ib8QgnK0q",
+    "stripeAccount": "PrismBay Clean",
+    "contents": [
+      "PDF guide",
+      "XLSX editable stakeholder and commitment tracker",
+      "DOCX executive briefing template"
+    ],
+    "delivery": "Existing live Stripe checkout redirects after payment to Floot static opaque link; true order-bound entitlements pending"
+  },
+  "measurement": {
+    "livePrismBayCleanPaidSessionsAsLastChecked": 0,
+    "notes": "Do not count preview views, test cards, pending drafts, unpaid sessions or scheduled posts as revenue"
+  },
+  "releaseGates": [
+    "One-off YouTube account verification needed for clickable description links per Studio message",
+    "Static reusable product-download links require order-bound entitlement hardening before scale",
+    "TikTok Clean saved product draft remains unpublished until supplier stock, freight and commercial rights review",
+    "Do not misrepresent free educational worksheet as paid product or charity donation"
+  ]
+}
