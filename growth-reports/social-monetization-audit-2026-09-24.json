@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-09-24",
+  "publication": {
+    "youtubeChannel": "https://www.youtube.com/@PrismBayAI",
+    "video": "https://www.youtube.com/shorts/kQtXtfCxnE8",
+    "publicHttpStatus": 200,
+    "state": "published_verified_metricool_and_public_url",
+    "plannedSecondShort": "FREE AI Vendor Risk Matrix; confirm current schedule in Metricool",
+    "secondShortState": "scheduled_not_confirmed_live"
+  },
+  "conversion": {
+    "digitalProducts": "https://www.prismbayai.com/products",
+    "freeLeadMagnet": "https://ragunauth123456-maker.github.io/PrismBay/",
+    "optionalSupportCheckout": "https://buy.stripe.com/aFa3cw0jweEMfCn2xs2400H",
+    "publicEndpointsHttpStatus": 200,
+    "optionalSupportIsDonation": false,
+    "optionalSupportIsRequiredForFreeResource": false
+  },
+  "tiktok": {
+    "account": "PrismBay Clean",
+    "draftState": "saved_at_20_02_Guyana",
+    "draftMedia": "original_silent_15_second_typography",
+    "mediaRights": "Original graphics and silent video; rendered-font licensing review still outstanding",
+    "promotionSwitch": true,
+    "ownBrandSelected": true,
+    "copyrightCheck": "no_issues_found",
+    "contentCheck": "no_issues_found",
+    "publicPostVerified": false
+  },
+  "stripePhysical": {
+    "account": "PrismBay Clean",
+    "activeUsPhysicalLinks": 27,
+    "stockRefundDisclosureShownBeforePayment": 26,
+    "missingDisclosurePaymentLink": "plink_1UHkwuKDLFBMHojQW3G63FgD",
+    "missingDisclosureProduct": "Portable Garment Steamer",
+    "fulfilledOrdersVerified": null,
+    "paymentSessionsLastAudit": {
+      "total": 5,
+      "paid": 0
+    }
+  },
+  "qa": {
+    "nodeTestsPassed": 85,
+    "nodeTestsFailed": 0,
+    "productionBuild": "passed"
+  },
+  "releaseGates": [
+    "Official CJ supplier session not yet authorized; validate stock, cost and US freight before claiming confirmed availability.",
+    "Dedicated physical-orders webhook service not deployed; monitor any sale manually in the Stripe Dashboard.",
+    "TikTok draft saved; public posting not verified.",
+    "One older promotional Stripe link lacks a prepayment supplier notice because its update was blocked."
+  ]
+}
