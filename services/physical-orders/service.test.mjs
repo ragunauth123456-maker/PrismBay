@@ -63,6 +63,17 @@ for (const [name, patch, reason] of [
   assert.equal(Object.values(ledger.snapshot().orders)[0].reason, reason);
 });
 
+
+
+test('realistic live Checkout session IDs with internal underscores are accepted and malformed IDs fail closed', async t => {
+  const { ledger } = await fixture(t);
+  const realistic = checkout('evt_livecheckout', { id: 'cs_live_synthetic123', payment_intent: 'pi_liveSynthetic123' });
+  await ingest(realistic, ledger, catalog, false);
+  assert.equal(ledger.snapshot().orders.pi_liveSynthetic123.sessionId, 'cs_live_synthetic123');
+  const malformed = checkout('evt_badcheckout', { id: 'cs_live_bad-dash', payment_intent: 'pi_otherSynthetic123' });
+  await assert.rejects(ingest(malformed, ledger, catalog, false), /Invalid checkout/);
+});
+
 test('unpaid and zero amount do not queue; async success upgrades', async t => {
   const { ledger } = await fixture(t);
   await ingest(checkout('evt_unpaid', { payment_status: 'unpaid' }), ledger, catalog, false);

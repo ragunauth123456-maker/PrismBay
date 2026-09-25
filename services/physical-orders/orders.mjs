@@ -2,7 +2,7 @@ import { mapItems } from './catalog.mjs';
 
 const identifier = (value, prefix) => {
   const id = typeof value === 'string' ? value : value?.id;
-  return typeof id === 'string' && new RegExp(`^${prefix}_[a-zA-Z0-9]+$`).test(id) ? id : null;
+  return typeof id === 'string' && new RegExp(`^${prefix}_[a-zA-Z0-9_]+$`).test(id) ? id : null;
 };
 const states = new Set('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY DC'.split(' '));
 export function validUSShipping(shipping) {
