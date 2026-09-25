@@ -11,7 +11,10 @@
     "go-live": "bash ./go-live.sh",
     "format": "prettier --write .",
     "migrate": "bun run scripts/migrate.ts",
-    "seed-admin": "bun run scripts/seed-admin.ts"
+    "seed-admin": "bun run scripts/seed-admin.ts",
+    "test:youtube-gate": "node --test scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs",
+    "youtube:preflight": "node scripts/youtube-publishing-preflight.mjs",
+    "youtube:studio-check": "node scripts/install-youtube-studio-gate.mjs --check"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

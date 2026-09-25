@@ -1,5 +1,13 @@
 # PrismBay GitHub Agent Instructions
 
+## Mandatory YouTube channel boundary
+
+PrismBay AI YouTube channel `UCw2hs85TzIpdKwJtG-BSxzQ` is **educational AI-business content only**. PrismBay Clean commerce and TikTok workers are separate and may never send retail-product promotions to this YouTube channel. The commerce-first priority below applies **only to the retail workstream**, not to this YouTube channel.
+
+YouTube publishers must use `scripts/youtube-publishing-guard.mjs` through the authenticated `scripts/youtube-publishing-gateway.mjs` adapter, or an approved K1 Studio preflight receipt issued by `scripts/youtube-publishing-preflight.mjs`. Validate exact Metricool brand `6945443` and connected channel, original media/checksum, editorial fit, minimum four-hour spacing, and similarity against published and pending content using a fresh (<2 minute) queue snapshot. Never treat a Metricool UUID as the creative identity: a previously edited post reused a UUID for different footage. Reserve publishing attempts durably and never automatically retry an uncertain publication. A disconnected adapter, missing receipt, outdated queue, or failed check **blocks YouTube publication**, not research, video production or separate commerce activity. No worker may directly call Metricool/YouTube/Studio to bypass these controls.
+
+The K1 Studio gate installer is `node scripts/install-youtube-studio-gate.mjs`. Run `node scripts/install-youtube-studio-gate.mjs --check` to detect tampering/drift. A controller cannot intercept other accounts or independent third-party publishers; restrict their authorization to achieve platform-wide enforcement. Never put OAuth credentials, browser cookies, video files or private preflight snapshots in the public repository.
+
 PrismBay Clean / TikTok commerce is the first growth priority until native TikTok Shop is active and verified external revenue exists.
 
 ## Operating rules
