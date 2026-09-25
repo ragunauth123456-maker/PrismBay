@@ -1,7 +1,7 @@
 {
   "role": "Storefront CRO Auditor",
-  "startedAt": "2026-09-25T22:37:03.540Z",
-  "finishedAt": "2026-09-25T22:37:05.190Z",
+  "startedAt": "2026-09-25T22:59:01.993Z",
+  "finishedAt": "2026-09-25T22:59:02.942Z",
   "result": {
     "activeStorefront": {
       "target": "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/",
@@ -16,16 +16,10 @@
       "hasExpiredAugustCopy": false
     },
     "customDomain": {
-      "target": "https://shop.prismbayai.com/tiktok",
-      "status": 404,
-      "finalUrl": "https://shop.prismbayai.com/tiktok",
-      "title": "AI Business System Blueprints | PrismBay",
-      "description": "Complete AI business systems with workflows, architecture diagrams, revenue models &amp; implementation plans. Browse, evaluate, and download instantly.",
-      "canonical": "",
-      "h1": "Page not found",
-      "ctaCount": 6,
-      "hasProductSchema": false,
-      "hasExpiredAugustCopy": false
+      "target": null,
+      "status": "not_configured",
+      "publicPromotion": false,
+      "note": "No custom PrismBay Clean storefront hostname is configured; use the verified AppDeploy storefront URL."
     }
   }
 }
