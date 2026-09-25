@@ -34,19 +34,16 @@ export interface SendEmailParams {
 
 /**
  * Send a transactional email.
- * If RESEND_API_KEY is not configured, the email contents are logged to console
- * and the function returns successfully (graceful degradation for dev).
+ * When the delivery provider is unconfigured, return a failure. Recipient
+ * addresses and message bodies must never appear in application logs.
  */
 export async function sendEmail(params: SendEmailParams): Promise<{ success: boolean; error?: string }> {
   const from = process.env.EMAIL_FROM || "PrismBay <support@prismbayai.com>";
 
-  // Log the email regardless
-  console.log(`[EMAIL] To: ${params.to} | Subject: ${params.subject}`);
-
+  // Transactional messages may contain private access links. Never log recipients or bodies.
   if (!process.env.RESEND_API_KEY) {
-    console.log(`[EMAIL] (no RESEND_API_KEY — email logged but not sent)`);
-    console.log(`[EMAIL] Body preview: ${params.body.slice(0, 200)}...`);
-    return { success: true };
+    console.error("[EMAIL] Transactional email provider not configured.");
+    return { success: false, error: "Transactional email provider not configured." };
   }
 
   try {
@@ -59,7 +56,7 @@ export async function sendEmail(params: SendEmailParams): Promise<{ success: boo
     });
 
     if (error) {
-      console.error(`[EMAIL] Resend error: ${error.message}`);
+      console.error("[EMAIL] Provider rejected delivery. Check provider dashboard.");
       return { success: false, error: error.message };
     }
 
@@ -67,7 +64,7 @@ export async function sendEmail(params: SendEmailParams): Promise<{ success: boo
     return { success: true };
   } catch (err) {
     const message = (err as Error).message;
-    console.error(`[EMAIL] Failed to send: ${message}`);
+    console.error("[EMAIL] Transactional delivery failed. Check provider logs.");
     return { success: false, error: message };
   }
 }
@@ -78,9 +75,10 @@ export async function sendEmail(params: SendEmailParams): Promise<{ success: boo
  */
 export async function sendEmailQuietly(params: SendEmailParams): Promise<void> {
   try {
-    await sendEmail(params);
+    const outcome = await sendEmail(params);
+    if (!outcome.success) console.error("[EMAIL] Quiet send failed. Review provider configuration.");
   } catch {
-    // Silently ignore — email is non-critical
+    console.error("[EMAIL] Quiet send raised an error. Review delivery logs.");
   }
 }
 

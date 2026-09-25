@@ -6,6 +6,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyStripeWebhook, getStripe } from "~/lib/stripe";
 import { sql } from "~/db";
+import { isPaidDigitalCheckout } from "~/lib/checkout-payment-guard";
 import { sendEmailQuietly } from "~/lib/email";
 import { BUNDLES } from "~/data/products";
 import { isBundle, getBundleProductSlugs } from "~/lib/storage";
@@ -42,7 +43,8 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 
         try {
           switch (event.type) {
-            case "checkout.session.completed": {
+            case "checkout.session.completed":
+            case "checkout.session.async_payment_succeeded": {
               await handleCheckoutCompleted(event);
               break;
             }
@@ -73,15 +75,22 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 
 async function handleCheckoutCompleted(event: any) {
   const session = event.data.object;
+  if (!isPaidDigitalCheckout(session)) {
+    console.log("Checkout event deferred: payment not confirmed for digital delivery.");
+    return;
+  }
   const sessionId = session.id;
   const customerEmail = session.customer_details?.email || session.customer_email || "";
+  if (!process.env.RESEND_API_KEY || !customerEmail) {
+    throw new Error("Paid digital checkout cannot be delivered: transactional email unavailable.");
+  }
   const customerId = session.customer; // Stripe customer ID
   const metadata = session.metadata || {};
   const productSlug = metadata.product_slug || "";
   const amountTotal = session.amount_total || 0;
   const paymentIntentId = session.payment_intent || null;
 
-  console.log(`Checkout completed: ${sessionId} — ${customerEmail} — ${productSlug}`);
+  console.log("Verified paid digital checkout received.");
 
   // Find the order by stripe_session_id
   const orderRows = await sql()`
@@ -89,8 +98,7 @@ async function handleCheckoutCompleted(event: any) {
   `;
 
   if (orderRows.length === 0) {
-    console.error(`Order not found for session: ${sessionId}`);
-    return;
+    throw new Error("Paid digital checkout has no matching order. Retry event after order creation.");
   }
 
   const orderId = (orderRows[0] as any).id;
@@ -154,7 +162,7 @@ async function handleCheckoutCompleted(event: any) {
 
     createdTokens.push({ token, productTitle, productSlug: slug });
 
-    console.log(`  ✓ Order item created for "${productTitle}" (${slug}). Download token: ${token}`);
+    console.log("Digital order item and access token created.");
   }
 
   // If the user is logged in, update their Stripe customer ID
@@ -269,14 +277,14 @@ async function handleCheckoutCompleted(event: any) {
     });
   }
 
-  console.log(`  ✓ Emails sent to ${customerEmail}`);
+  console.log("Digital checkout notification processing completed.");
 }
 
 async function handleCheckoutExpired(event: any) {
   const session = event.data.object;
   const sessionId = session.id;
 
-  console.log(`Checkout expired: ${sessionId}`);
+  console.log("An unpaid checkout session expired.");
 
   // Mark order as expired
   await sql()`
