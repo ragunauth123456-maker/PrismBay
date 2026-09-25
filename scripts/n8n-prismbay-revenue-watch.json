@@ -88,7 +88,7 @@
       ],
       "parameters": {
         "method": "GET",
-        "url": "https://raw.githubusercontent.com/ragunauth123456-maker/PrismBay/main/public/viral-catalog.json",
+        "url": "={{ 'https://api.github.com/repos/ragunauth123456-maker/PrismBay/contents/public/viral-catalog.json?ref=main&t=' + $now.toMillis() }}",
         "options": {
           "timeout": 15000
         }
@@ -105,7 +105,7 @@
       ],
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "const raw=$input.first().json;const c=typeof raw.data==='string'?JSON.parse(raw.data):typeof raw.body==='string'?JSON.parse(raw.body):raw;const p=Array.isArray(c.products)?c.products:[];const hours=(Date.now()-new Date(c.updatedAt).getTime())/3600000;const s=$('Verify four live checkout links').first().json;if(!Number.isFinite(hours)||hours>24||hours< -1||p.length<9)throw new Error('Catalog FAIL: ageHours='+hours+' products='+p.length);return [{json:{status:'PASS',checkedAt:new Date().toISOString(),paidStore:s.paidStore,activeConfiguredStripeLinks:s.links,trackedProducts:p.length,catalogAgeHours:+hours.toFixed(1),topAttention:p.slice(0,3).map(x=>({name:x.name,signalScore:x.signalScore})),important:'These are public-news attention scores, not sales or TikTok rankings. Stripe payment data not accessible to this workflow.'}}];"
+        "jsCode": "const payload=$input.first().json;const raw=(payload?.encoding==='base64'&&typeof payload.content==='string')?JSON.parse(Buffer.from(payload.content.replace(/\\s/g,''),'base64').toString('utf8')):payload;const c=typeof raw.data==='string'?JSON.parse(raw.data):typeof raw.body==='string'?JSON.parse(raw.body):raw;const p=Array.isArray(c.products)?c.products:[];const hours=(Date.now()-new Date(c.updatedAt).getTime())/3600000;const s=$('Verify four live checkout links').first().json;if(!Number.isFinite(hours)||hours>24||hours< -1||p.length<9)throw new Error('Catalog FAIL: ageHours='+hours+' products='+p.length);return [{json:{status:'PASS',checkedAt:new Date().toISOString(),paidStore:s.paidStore,activeConfiguredStripeLinks:s.links,trackedProducts:p.length,catalogAgeHours:+hours.toFixed(1),topAttention:p.slice(0,3).map(x=>({name:x.name,signalScore:x.signalScore})),important:'These are public-news attention scores, not sales or TikTok rankings. Stripe payment data not accessible to this workflow.'}}];"
       }
     }
   ],
