@@ -1,7 +1,10 @@
 @echo off
 setlocal
 set "REPO=%~dp0.."
-set LOG=C:\PrismBayViral.log
+if not defined LOCALAPPDATA set "LOCALAPPDATA=%TEMP%"
+set "LOGDIR=%LOCALAPPDATA%\PrismBay"
+if not exist "%LOGDIR%" mkdir "%LOGDIR%" >nul 2>&1
+set "LOG=%LOGDIR%\viral-refresh.log"
 cd /d "%REPO%" || exit /b 1
 echo [%date% %time%] viral refresh starting>>"%LOG%"
 rem Generated feeds are disposable. Clear partial-run changes without touching unrelated work.
