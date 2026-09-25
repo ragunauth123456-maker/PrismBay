@@ -7,6 +7,7 @@ const channel = "https://www.youtube.com/@PrismBayAI/videos";
 const shop = "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/?utm_source=prismbayai&utm_medium=creator_hub&utm_campaign=watch";
 const freeVendorGuide = "https://ragunauth123456-maker.github.io/PrismBay/?utm_source=prismbayai&utm_medium=learning_studio&utm_campaign=vendor_risk";
 const researchSupport = "https://buy.stripe.com/aFa3cw0jweEMfCn2xs2400H";
+const interactiveScorecard = "https://ragunauth123456-maker.github.io/PrismBay/scorecard.html?utm_source=prismbayai&utm_medium=learning_studio&utm_campaign=vendor_risk";
 const lessons = [
   {
     number: "01", title: "Evaluate AI return on investment",
@@ -101,7 +102,8 @@ function WatchPage() {
           <h2 id="free-vendor-heading" className="mt-3 text-3xl font-bold text-neutral-900">Compare AI vendors by evidence, not price alone.</h2>
           <p className="mt-4 max-w-3xl leading-8 text-neutral-700">Use our independently published 10-question AI Vendor Risk Matrix to compare retention, data export, privacy controls, human approval and exit rights. Includes a fictional example and a practical review plan. No email, account or payment is required.</p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={freeVendorGuide} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-teal-800 px-5 py-3 font-semibold text-white hover:bg-teal-900">Get the free worksheet</a>
+            <a href={interactiveScorecard} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-teal-800 px-5 py-3 font-semibold text-white hover:bg-teal-900">Try the interactive evidence review</a>
+            <a href={freeVendorGuide} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-teal-700 px-5 py-3 font-semibold text-teal-900 hover:bg-teal-100">Read the free worksheet</a>
             <a href={researchSupport} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-teal-700 px-5 py-3 font-semibold text-teal-900 hover:bg-teal-100">Support free research (optional)</a>
           </div>
           <p className="mt-5 text-sm leading-6 text-neutral-600">Optional one-time $3–$100 USD commercial support is processed by Studysmartz LLC. It is not a charitable donation or a paid content purchase; the complete worksheet remains free for everyone.</p>
