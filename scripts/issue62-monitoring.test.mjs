@@ -13,6 +13,11 @@ test('revenue health workflow routes production errors to the existing n8n error
   assert.equal(workflow.settings.errorWorkflow, 'jarvis05db28a6f9fa04');
   assert.equal(workflow.settings.saveDataErrorExecution, 'all');
   assert.ok(workflow.nodes.some(n => n.type === 'n8n-nodes-base.scheduleTrigger'));
+  const catalogNode = workflow.nodes.find(n => n.id === 'catalog');
+  assert.match(catalogNode.parameters.url, /api[.]github[.]com\/repos\/ragunauth123456-maker\/PrismBay\/contents\/public\/viral-catalog[.]json/);
+  assert.match(catalogNode.parameters.url, /[?]ref=main[&]t=/);
+  assert.match(catalogNode.parameters.url, /[$]now[.]toMillis[(][)]/);
+  assert.match(workflow.nodes.find(n => n.id === 'audit').parameters.jsCode, /encoding==='base64'/);
 });
 
 test('broken Railway custom store route is not a default public target', () => {
