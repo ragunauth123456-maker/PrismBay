@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "checkedAt": "2026-09-25T23:35:36.948Z",
+  "paidStore": {
+    "bytes": 21281,
+    "checkoutLinks": 4,
+    "policies": 2
+  },
+  "freeScorecard": {
+    "bytes": 12567
+  },
+  "physicalStore": {
+    "productsVisible": 9,
+    "bytes": 16754
+  },
+  "catalog": {
+    "products": 9,
+    "ageHours": 0.1
+  },
+  "boundaries": {
+    "revenueVerified": false,
+    "supplierStockVerified": false,
+    "message": "Health checks prove public-path availability only. They do not prove payment, supplier inventory, TikTok ranking, dispatch, delivery, or profit."
+  }
+}
