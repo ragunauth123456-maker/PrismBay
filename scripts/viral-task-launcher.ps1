@@ -42,8 +42,9 @@ try {
   $runner = Join-Path $PSScriptRoot 'run-viral-loop.cmd'
   if (-not (Test-Path -LiteralPath $cmd -PathType Leaf)) { Record 'missing_cmd'; exit 10 }
   if (-not (Test-Path -LiteralPath $runner -PathType Leaf)) { Record 'missing_runner'; exit 11 }
+  $env:PRISMBAY_LOG_DIR = $logDir
   Record 'runner_start'
-  & $cmd '/d' '/s' '/c' ('"' + $runner + '"')
+  & $cmd '/d' '/c' ('call "' + $runner + '"')
   $result = $LASTEXITCODE
   if ($null -eq $result) { $result = 1 }
   Record ('runner_exit_' + $result)
@@ -52,5 +53,6 @@ try {
   $result = 1
 } finally {
   Remove-Item Env:TOKEN_ENCRYPT_KEY -ErrorAction SilentlyContinue
+  Remove-Item Env:PRISMBAY_LOG_DIR -ErrorAction SilentlyContinue
 }
 exit $result
