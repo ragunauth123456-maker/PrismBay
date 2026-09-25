@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 const html=fs.readFileSync(new URL('./toolkits.html',import.meta.url),'utf8');
 const index=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
 const guide=fs.readFileSync(new URL('./guide.html',import.meta.url),'utf8');
@@ -40,4 +42,14 @@ test('free resources remain free, while all educational navigation points to sep
   for(const p of [index,guide,scorecard]) assert.ok(p.includes('./toolkits.html'));
   assert.match(index,/No email address, credit card/);
   assert.match(scorecard,/No login or paywall/);
+});
+
+test('original 36-second stakeholder video is embedded and cross-links its verified $49 toolkit',()=>{
+  assert.match(html, /src="\.\/stakeholder-video\.mp4"/);
+  assert.match(html, /href="#stakeholder">See the \$49 editable toolkit/);
+  const media=new URL('./stakeholder-video.mp4',import.meta.url);
+  assert.ok(fs.existsSync(media),'local preview missing');
+  const probe=JSON.parse(execFileSync('ffprobe',['-v','error','-show_entries','format=duration:stream=codec_name,width,height','-of','json',fileURLToPath(media)],{encoding:'utf8'}));
+  assert.ok(Number(probe.format.duration)>=35&&Number(probe.format.duration)<=37);
+  assert.ok(probe.streams.some(x=>x.codec_name==='h264'&&x.width===720&&x.height===1280));
 });
