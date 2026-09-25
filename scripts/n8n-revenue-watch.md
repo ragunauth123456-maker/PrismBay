@@ -6,7 +6,7 @@
 
 Every six hours, the Schedule Trigger fetches the public [professional toolkits storefront](https://ragunauth123456-maker.github.io/PrismBay/toolkits.html), validates four exact existing Stripe-hosted checkout links and the published support/refund routes, then reads the GitHub-hosted `public/viral-catalog.json`. The Code node checks that at least nine approved physical products are present and that the catalog is less than 24 hours old. A missing checkout link, stale data, broken site, or failed HTTP request marks the n8n execution failed; successful executions show a timestamped status and top three public-news attention products. Attention signals do not equal sales or TikTok rankings.
 
-The workflow has no Stripe secret, does not read financial transactions, does not create purchases, does not fulfill orders, and does not publish social posts. There are no automated external failure notifications yet; use n8n execution history to investigate a failure.
+The workflow has no Stripe secret, does not read financial transactions, does not create purchases, does not fulfill orders, and does not publish social posts. Its n8n `errorWorkflow` is wired to the existing active JARVIS error handler (`jarvis05db28a6f9fa04`), which records failed production executions into the local JARVIS event bridge. n8n execution history remains the source of detailed failure evidence. This is a local failure-event route, not proof of external email/SMS delivery.
 
 ## K1 availability and commands
 

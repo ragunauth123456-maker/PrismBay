@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 
 const role = process.argv[2] || 'Storefront CRO Auditor';
 const SHOP = process.env.PRISMBAY_SHOP_URL || 'https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/';
-const SHOP_CUSTOM = process.env.PRISMBAY_SHOP_CUSTOM_URL || 'https://shop.prismbayai.com/tiktok';
+const SHOP_CUSTOM = process.env.PRISMBAY_SHOP_CUSTOM_URL?.trim() || '';
 const SITE = process.env.PRISMBAY_SITE_URL || 'https://www.prismbayai.com';
 const VERIFY = process.env.TIKTOK_VERIFY_URL || SITE + '/tiktokioWxniaZWfubplFsge1pzgPGhS04LORJ.txt';
 const products = [
@@ -36,7 +36,11 @@ async function croAudit() {
       hasExpiredAugustCopy: /August\s+27|Aug\.?\s*27/i.test(html)
     };
   }
-  return { activeStorefront: await inspect(SHOP), customDomain: await inspect(SHOP_CUSTOM) };
+  const activeStorefront = await inspect(SHOP);
+  const customDomain = SHOP_CUSTOM
+    ? await inspect(SHOP_CUSTOM)
+    : { target: null, status: 'not_configured', publicPromotion: false, note: 'No custom PrismBay Clean storefront hostname is configured; use the verified AppDeploy storefront URL.' };
+  return { activeStorefront, customDomain };
 }
 
 async function publisherReadiness() {

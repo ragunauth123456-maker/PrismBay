@@ -5,7 +5,8 @@
   "settings": {
     "executionOrder": "v1",
     "saveDataSuccessExecution": "all",
-    "saveDataErrorExecution": "all"
+    "saveDataErrorExecution": "all",
+    "errorWorkflow": "jarvis05db28a6f9fa04"
   },
   "nodes": [
     {
