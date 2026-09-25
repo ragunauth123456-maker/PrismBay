@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-25T23:29:34.942Z",
+  "updatedAt": "2026-09-25T23:52:49.903Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -168,7 +168,7 @@
       "attentionScore": 68.5,
       "attentionLabel": "promotion-watch",
       "evidence": {
-        "publicMentions": 28,
+        "publicMentions": 27,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
@@ -489,24 +489,17 @@
       "slug": "rug-grippers",
       "name": "Reusable Rug Grippers",
       "query": "rug grippers reusable",
-      "attentionScore": 21.3,
+      "attentionScore": 19.5,
       "attentionLabel": "low-signal",
       "evidence": {
-        "publicMentions": 1,
+        "publicMentions": 0,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
         ],
-        "sampleSignals": [
-          {
-            "title": "Met Gala 2025's 'fabulous' blue carpet was made by this Kerala brand from Alleppey: 'Incredibly proud' | Fashion Trends - Hindustan Times",
-            "source": "Google News",
-            "publishedAt": "2025-05-06T07:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQZHhfWl84emR2bHk3dlJFbW9aMGswWnJfbTJCejU4LUw4ZEVPYldrd09WNVQ4ZkhwYkkxWTJ4UWx5QkdydEhOR3JXdkowREhqaHlNTm5oclVBUnRNNFIzUGxnNVBpblI1U2hsTjNFR0hLamxETnNZMlpvNWdHMFhXNnlEMUVTMlVMUTV6bmZ0dmtXdDI1SHlnb0dyUzczZllqUFdwbnBQSURMQVBHNnhjeXZtaGRHWmUtaTZTNlVWcXU4YVRpSndZanpHcDJzZ2s4bHBhX3hJVzRRMk5IZUpKQUhzUG01cDJYTW1KTEFtVFNOT2xVOXpQYtIB_gFBVV95cUxOcnBVVjlNZC1ZYU1xc0FtczV6ZU42T3NkQlBydnVCYTRlUGZBSzg4ZUtVU3pockpDck5Hc3B2SjZWMTBwMHB0ZWJoRC1LY3FNTm0tLTdiTHJTZkZQWUJTcXc1eHhtdlJhbGtJMmlvcHo3bDFlZEI5WnVqTmdEN181MEoxWThjcTJiS2NPYTFRemw0NTZtVmItM2JBUE1RcE1jazF5M2JhazI4R1RPZmhndFo0QVJzOFNxb3hCS1hsUHgzUi1UdUdRU05iaV92YzU1YnNtdXY4SlZaRFJGRXF6RkZ2ak1QWmVWRFhiV29vaFZUbE1HOTBkbVkzWVM5QQ?oc=5"
-          }
-        ]
+        "sampleSignals": []
       },
       "supplier": null,
       "supplierReady": false,
