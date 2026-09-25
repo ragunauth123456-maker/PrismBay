@@ -50,8 +50,13 @@ try {
   $env:N8N_PORT = '5678'
   $env:N8N_RUNNERS_BROKER_PORT = '5679'
   $env:N8N_RUNNERS_TASK_TIMEOUT = '300'
+  $comspec = $env:COMSPEC
+  if ([string]::IsNullOrWhiteSpace($comspec)) {
+    $comspec = Join-Path $env:SystemRoot 'System32\cmd.exe'
+  }
+  if (-not (Test-Path $comspec)) { Record 'missing_comspec' $comspec; exit 8 }
   $args = '/d /s /c ""' + $n8n + '" start >> "' + $serviceLog + '" 2>&1"'
-  Start-Process -FilePath $env:COMSPEC -ArgumentList $args -WindowStyle Hidden | Out-Null
+  Start-Process -FilePath $comspec -ArgumentList $args -WindowStyle Hidden | Out-Null
   Record 'start_requested' 'detached n8n process launched'
 
   $deadline = (Get-Date).AddSeconds([Math]::Max(10, $StartupTimeoutSeconds))
