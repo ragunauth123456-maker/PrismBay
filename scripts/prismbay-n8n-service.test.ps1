@@ -11,7 +11,10 @@ foreach($needle in @(
   'Start-Process',
   'N8N_RUNNERS_BROKER_PORT',
   'start_failed',
-  'StartupTimeoutSeconds'
+  'StartupTimeoutSeconds',
+  '[string]::IsNullOrWhiteSpace($comspec)',
+  'System32\cmd.exe',
+  'missing_comspec'
 )){
   if(-not $content.Contains($needle)){throw ('Missing supervisor safeguard: '+$needle)}
 }
