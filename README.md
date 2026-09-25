@@ -18,6 +18,12 @@ The new interactive worksheet generates a downloadable, self-reported evidence r
 
 If the resource is useful, you can [support more original free AI education through our Stripe checkout](https://buy.stripe.com/aFa3cw0jweEMfCn2xs2400H). This is a voluntary **one-time $3–$100 USD** commercial contribution, processed by **Studysmartz LLC**. It is not a tax-deductible charitable donation and includes no premium report, software or consulting. The worksheet remains free regardless of payment.
 
+## Live professional digital products
+
+[Browse four verified PrismBay executive toolkits](https://ragunauth123456-maker.github.io/PrismBay/toolkits.html): stakeholder mapping ($49), ESG and social performance ($99), executive white papers and board briefings ($79), or the complete three-system bundle ($179, saving $48 versus individual purchases). All offers use existing active Stripe payment links for the current PrismBay account. The available PDF guides, editable Excel workbooks, Word templates and license files were audited in the real ZIP archives; all four existing digital delivery endpoints returned valid ZIP packages. The checkout links are configured to redirect buyers to the corresponding package after payment.
+
+These are paid **professional document systems**, not live AI applications or bespoke consulting. The original free worksheet and assessment remain free. The current digital fulfillment uses opaque, reusable access links, so order-bound delivery hardening and an actual paid end-to-end transaction test remain future safeguards. Follow the [published refund policy](https://www.prismbayai.com/refunds) and [contact support](https://www.prismbayai.com/contact) if a purchase cannot be downloaded.
+
 ## Projects and channels
 
 - [PrismBay AI](https://www.prismbayai.com/) provides business-system blueprint information. Blueprints are documentation, not working software.

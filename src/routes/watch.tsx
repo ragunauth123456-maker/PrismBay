@@ -7,6 +7,7 @@ const channel = "https://www.youtube.com/@PrismBayAI/videos";
 const shop = "https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/?utm_source=prismbayai&utm_medium=creator_hub&utm_campaign=watch";
 const freeVendorGuide = "https://ragunauth123456-maker.github.io/PrismBay/?utm_source=prismbayai&utm_medium=learning_studio&utm_campaign=vendor_risk";
 const researchSupport = "https://buy.stripe.com/aFa3cw0jweEMfCn2xs2400H";
+const verifiedToolkits = "https://ragunauth123456-maker.github.io/PrismBay/toolkits.html?utm_source=prismbayai&utm_medium=learning_studio&utm_campaign=verified_professional_toolkits";
 const interactiveScorecard = "https://ragunauth123456-maker.github.io/PrismBay/scorecard.html?utm_source=prismbayai&utm_medium=learning_studio&utm_campaign=vendor_risk";
 const lessons = [
   {
@@ -114,6 +115,12 @@ function WatchPage() {
           <p className="mt-4 max-w-3xl leading-7 text-neutral-600">
             PrismBay sells documentation packages, not working hosted software. Each blueprint describes workflows, architecture, operating controls and implementation considerations. Review product limitations before purchasing.
           </p>
+          <div className="mt-7 rounded-xl border border-emerald-200 bg-emerald-50 p-6">
+            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-800">Ready-to-download professional systems</p>
+            <h3 className="mt-2 text-xl font-bold">Verified stakeholder, ESG and board-reporting toolkits</h3>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-neutral-700">Separate from our AI software blueprints, these existing document products include real PDF guides, editable Excel workbooks and Word templates. Their live Stripe prices, ZIP contents and download endpoints have been checked. Individual purchases start at $49 USD; the complete three-system bundle costs $179.</p>
+            <a href={verifiedToolkits} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex rounded-lg bg-emerald-800 px-5 py-3 font-semibold text-white hover:bg-emerald-900">Browse verified professional toolkits →</a>
+          </div>
           <div className="mt-9 grid gap-6 md:grid-cols-3">
             {recommended.map(product => (
               <article key={product.slug} className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-6">
