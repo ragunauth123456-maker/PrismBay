@@ -1,0 +1,68 @@
+{
+  "verifiedAt": "2026-09-24",
+  "checks": "Matched live Stripe payment links and prices; downloaded each publicly configured Floot digital-delivery endpoint; inspected ZIP central directories and readable START_HERE/LICENSE files. No live customer purchase or refund was performed.",
+  "limitations": "Delivery currently uses static opaque links that can be redistributed, not per-order entitlements. Harden before scale; do not expose access keys in public code.",
+  "storeUrl": "https://prismbay-clean-global.floot.app/digital",
+  "offers": [
+    {
+      "id": "stakeholder",
+      "name": "Executive Stakeholder Mapping Toolkit",
+      "priceUsd": 49,
+      "checkoutUrl": "https://buy.stripe.com/4gM8wQ1v8dOj45Ib8QgnK0q",
+      "zipFiles": 5,
+      "zipBytes": 94184,
+      "formats": [
+        "PDF",
+        "XLSX",
+        "DOCX"
+      ],
+      "active": true,
+      "deliveryGetVerified": true
+    },
+    {
+      "id": "esg",
+      "name": "ESG & Social Performance Operating Pack",
+      "priceUsd": 99,
+      "checkoutUrl": "https://buy.stripe.com/4gMeVe8XA5hNfOq2CkgnK0r",
+      "zipFiles": 5,
+      "zipBytes": 98489,
+      "formats": [
+        "PDF",
+        "XLSX",
+        "DOCX"
+      ],
+      "active": true,
+      "deliveryGetVerified": true
+    },
+    {
+      "id": "whitepaper",
+      "name": "Executive White Paper & Board Briefing System",
+      "priceUsd": 79,
+      "checkoutUrl": "https://buy.stripe.com/bJe7sMgq25hNcCe6SAgnK0s",
+      "zipFiles": 6,
+      "zipBytes": 125317,
+      "formats": [
+        "PDF",
+        "XLSX",
+        "DOCX"
+      ],
+      "active": true,
+      "deliveryGetVerified": true
+    },
+    {
+      "id": "bundle",
+      "name": "PrismBay Executive Intelligence Bundle",
+      "priceUsd": 179,
+      "checkoutUrl": "https://buy.stripe.com/eVqfZi5Lo7pV31Ea4MgnK0t",
+      "zipFiles": 15,
+      "zipBytes": 317995,
+      "formats": [
+        "PDF",
+        "XLSX",
+        "DOCX"
+      ],
+      "active": true,
+      "deliveryGetVerified": true
+    }
+  ]
+}
