@@ -1,8 +1,12 @@
 @echo off
 setlocal
 set "REPO=%~dp0.."
-if not defined LOCALAPPDATA set "LOCALAPPDATA=%TEMP%"
-set "LOGDIR=%LOCALAPPDATA%\PrismBay"
+if defined PRISMBAY_LOG_DIR (
+  set "LOGDIR=%PRISMBAY_LOG_DIR%"
+) else (
+  if not defined LOCALAPPDATA set "LOCALAPPDATA=%TEMP%"
+  set "LOGDIR=%LOCALAPPDATA%\PrismBay"
+)
 if not exist "%LOGDIR%" mkdir "%LOGDIR%" >nul 2>&1
 set "LOG=%LOGDIR%\viral-refresh.log"
 cd /d "%REPO%" || exit /b 1
