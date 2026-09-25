@@ -25,6 +25,8 @@ for (let i=0;i<lines.length;i++){
 const page=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Free AI Vendor Risk Matrix Worksheet | PrismBay AI</title>
 <meta name="description" content="An original, free 10-question AI vendor evidence checklist with a fictional worked example, score interpretation and 30-day decision plan.">
+<meta property="og:type" content="article"><meta property="og:title" content="Free AI Vendor Risk Matrix | PrismBay AI"><meta property="og:image" content="https://ragunauth123456-maker.github.io/PrismBay/og-card.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://ragunauth123456-maker.github.io/PrismBay/og-card.png">
 <link rel="canonical" href="https://ragunauth123456-maker.github.io/PrismBay/guide.html">
 <style>
 :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172b42;background:#eef4f9}*{box-sizing:border-box}body{margin:0}a{color:#046c62}a:focus-visible{outline:3px solid #087d70;outline-offset:3px}
@@ -35,7 +37,7 @@ header{background:#0b1325;color:#eaf4fa;padding:20px 24px}header nav{max-width:1
 <main><p style="text-transform:uppercase;color:#067969;letter-spacing:.15em;font-size:12px;font-weight:850">Original free learning resource · No sign-in or payment</p>
 ${out.join('\n')}
 <div class="band"><strong>Keep the worksheet free.</strong><p>Anyone can copy, print or share this original educational resource. No account or credit card is required.</p>
-<div class="actions"><a class="button" href="./risk-matrix.md" download>Download editable version</a><a class="button secondary" href="./">Watch the short explainer</a></div></div>
+<div class="actions"><a class="button" href="./scorecard.html">Try the interactive evidence review</a><a class="button secondary" href="./risk-matrix.md" download>Download editable version</a><a class="button secondary" href="./">Watch the short explainer</a></div></div>
 <div class="support"><h2 style="margin:12px 0">Support more free research, optionally</h2><p>If the guide was useful, you can choose a one-time amount from $3 to $100 USD via Stripe. There is no extra content behind payment and no subscription. This is voluntary commercial support through Studysmartz LLC, not a charitable donation.</p><a class="btn" href="https://buy.stripe.com/aFa3cw0jweEMfCn2xs2400H" target="_blank" rel="noopener noreferrer">Optional one-time support ↗</a></div>
 </main></body></html>`;
 fs.writeFileSync(new URL('./guide.html',import.meta.url),page);console.log('Generated guide.html, '+page.length+' bytes, '+out.length+' content sections');

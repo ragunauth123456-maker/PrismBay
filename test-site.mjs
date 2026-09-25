@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 const read = file => fs.readFileSync(new URL(file,import.meta.url),'utf8');
 test('free resource includes all ten questions with no paywall',()=>{
  const home=read('./index.html'), guide=read('./guide.html'), md=read('./risk-matrix.md');
- assert.match(home,/Get the free worksheet/);assert.match(home,/No email address, credit card/);
+ assert.match(home,/Try the free interactive review/);assert.match(home,/No email address, credit card/);
  assert.match(home,/voluntary commercial support/i);assert.match(home,/not a charitable donation/i);
  assert.match(guide,/Keep the worksheet free/);assert.match(md,/fictional worked example/i);
  assert.equal(Array.from({length:10},(_,i)=>'| '+(i+1)+' |').filter(q=>md.includes(q)).length,10);
@@ -18,6 +18,9 @@ test('local media and verified live Stripe support link are wired',()=>{
  assert.ok(home.includes(link)&&guide.includes(link));assert.ok(home.includes('Studysmartz LLC'));
  assert.ok(home.includes('<source src="./vendor-risk.mp4"'));assert.ok(fs.statSync(new URL('./vendor-risk.mp4',import.meta.url)).size>250000);
  assert.ok(fs.statSync(new URL('./cover.jpg',import.meta.url)).size>30000);
+ assert.ok(fs.statSync(new URL('./og-card.png',import.meta.url)).size>100000);
+ assert.ok(home.includes('og-card.png') && guide.includes('og-card.png'));
+ assert.ok(home.includes('./scorecard.html') && guide.includes('./scorecard.html'));
  assert.ok(!/fake testimonials|guaranteed earnings/i.test(home));
 });
 test('video is silent mobile portrait H264 with 30-second duration',()=>{
