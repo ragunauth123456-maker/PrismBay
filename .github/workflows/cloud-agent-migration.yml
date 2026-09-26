@@ -1,0 +1,139 @@
+name: PrismBay Cloud-Only Agent Migration
+
+# Complements the live six-hour free-cloud-ops.yml. Runs only on GitHub-hosted
+# Ubuntu computers. No user PCs, self-hosted runners, secrets, paid services,
+# supplier orders, payment actions, email sends, or automatic publishing.
+on:
+  schedule:
+    - cron: '47 3 * * *'   # Daily candidate research, 23:47 Guyana time
+    - cron: '17 6 * * 0' # Weekly video drafts, Sunday 02:17 Guyana time
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prismbay-cloud-only-agent-migration
+  cancel-in-progress: false
+
+jobs:
+  candidate-research:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '47 3 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test discovery safeguards
+        run: node --test scripts/candidate-discovery.test.mjs
+      - name: Run former Windows candidate research from GitHub cloud
+        # No CJ_ACCESS_TOKEN is supplied. Stock, freight and promotion remain gated.
+        run: node scripts/viral-candidate-engine.mjs
+      - name: Reject missing or prematurely approved candidates
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const data = JSON.parse(fs.readFileSync('public/viral-candidates.json', 'utf8'));
+          const queue = JSON.parse(fs.readFileSync('growth-reports/viral-promotion-queue.json', 'utf8'));
+          if (data.supplierIntegration !== 'awaiting-cj-auth' || data.candidates?.length < 12 ||
+              data.candidates.some(x => x.supplierReady || x.freightReady || x.promotionReady || x.listed) ||
+              queue.items?.some(x => x.promotionReady || x.supplierReady || x.freightReady)) {
+            throw new Error('Candidate research failed safety or completeness checks');
+          }
+          console.log('Cloud candidate audit PASS: ' + data.candidates.length + ' research candidates; supplier and promotion gates closed');
+          JS
+      - name: Publish public-only candidate catalog to main
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/viral-candidates.json growth-reports/viral-promotion-queue.json growth-reports/viral-seed-pool.json
+          if git diff --cached --quiet; then echo 'Candidate catalog unchanged'; exit 0; fi
+          git commit -m 'chore: cloud refresh of unverified PrismBay product candidates'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo 'Concurrent change needs review; no force push'
+              exit 1
+            fi
+            git push origin HEAD:main && exit 0
+            sleep "$((attempt * 2))"
+          done
+          exit 1
+      - name: Retain candidate audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-candidate-research-${{ github.run_id }}
+          path: |
+            public/viral-candidates.json
+            growth-reports/viral-promotion-queue.json
+            growth-reports/viral-seed-pool.json
+          if-no-files-found: warn
+          retention-days: 3
+
+  video-drafts:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 6 * * 0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - name: Check out approved published content queue
+        uses: actions/checkout@v4
+      - name: Install Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install or verify FFmpeg and font
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null || ! test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          fi
+      - name: Test video queue authorization gates
+        run: node --test scripts/render-viral-queue.test.mjs
+      - name: Render three original cloud-hosted video drafts
+        run: node scripts/render-viral-queue.mjs
+      - name: Verify video outputs remain unpublished drafts
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root = process.cwd();
+          const state = JSON.parse(fs.readFileSync('growth-reports/videos/queue-state.json', 'utf8'));
+          const m = state.manifest;
+          if (m?.localOnly !== true || m.publicationEnabled !== false || m.posts?.length !== 3) {
+            throw new Error('Missing or unexpectedly publishable video queue');
+          }
+          for (const p of m.posts) {
+            const file = path.resolve(root, p.mediaPath);
+            if (!file.startsWith(path.join(root, 'growth-reports', 'videos') + path.sep) ||
+                p.status !== 'awaiting_tiktok_authorization' || p.publishable !== false ||
+                p.mediaRightsCheck?.status !== 'pending' || fs.statSync(file).size < 1000) {
+              throw new Error('Draft video verification failed');
+            }
+          }
+          console.log('Three non-publishable cloud video drafts verified');
+          JS
+      - name: Retain owner-reviewable video drafts
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-private-video-drafts-${{ github.run_id }}
+          path: |
+            growth-reports/videos/queue-state.json
+            growth-reports/videos/render-*/*.mp4
+            growth-reports/videos/render-*/post-queue.json
+          if-no-files-found: error
+          retention-days: 3
