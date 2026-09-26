@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b1325">
+<title>PrismBay Cloud Operations | Read-only Status</title>
+<meta name="description" content="Read-only public status for PrismBay scheduled cloud workers and the public news-attention catalog.">
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#eaf1ff;background:#0b1325;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;line-height:1.5}a{color:#9af0db}a:focus-visible{outline:3px solid #67e8ce;outline-offset:4px}
+header{border-bottom:1px solid #24364e;background:#101d30}
+.wrap{max-width:1060px;margin:auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 0}
+.brand{font-weight:850;font-size:22px;letter-spacing:-.035em;text-decoration:none;color:#fff}.brand span{color:#67e8ce}
+.nav-links{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+.hero{padding:66px 0 35px;background:radial-gradient(ellipse at 80% 10%,#153b4d,transparent 44%)}
+.kicker{color:#67e8ce;letter-spacing:.15em;text-transform:uppercase;font-size:12px;font-weight:800}
+h1{font-size:clamp(34px,5vw,56px);line-height:1.1;letter-spacing:-.04em;margin:12px 0 16px}
+.lead{color:#bdcbe0;font-size:17px;max-width:730px;line-height:1.75;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:30px 0}
+.card{border:1px solid #33465e;background:#14243a;border-radius:16px;padding:25px;min-height:210px}
+.card h2{font-size:18px;margin:0 0 12px}
+.state{font-size:22px;font-weight:800;margin:10px 0;overflow-wrap:anywhere}
+.detail{color:#bfcee0;font-size:14px;overflow-wrap:anywhere}
+.tag{display:inline-block;border:1px solid #63758b;color:#dce8f4;border-radius:100px;font-size:12px;padding:5px 10px}
+.ok{color:#67e8ce}.warn{color:#ffe7a1}.fail{color:#ffb3b6}
+.links{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 50px}
+.btn{padding:12px 16px;border-radius:9px;text-decoration:none;font-weight:750;font-size:14px;background:#67e8ce;color:#10242c}
+.btn.secondary{color:#eaf1ff;background:#223852;border:1px solid #53758f}
+.note{font-size:13px;color:#aec0d4;border-top:1px solid #33465e;padding:24px 0 36px;line-height:1.7}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.hero{padding-top:43px}.card{min-height:155px}}
+</style>
+</head>
+<body>
+<header><nav class="wrap"><a class="brand" href="./">PrismBay <span>AI</span></a><div class="nav-links"><a href="toolkits.html">Toolkits</a><a href="scorecard.html">Free assessment</a><a href="https://github.com/ragunauth123456-maker/PrismBay/actions">GitHub Actions</a></div></nav></header>
+<main>
+<section class="hero"><div class="wrap"><p class="kicker">Read-only public dashboard</p><h1>Cloud operations</h1><p class="lead">Public status of scheduled GitHub research workers and the existing PrismBay attention catalog. Local K1 access and private n8n workflows are intentionally excluded.</p></div></section>
+<section class="wrap" aria-label="Service status"><div class="grid">
+<article class="card"><span class="tag">GitHub hosted computers</span><h2>Six-hour cloud worker</h2><p id="runner-state" class="state" aria-live="polite">Checking workflow...</p><p id="runner-detail" class="detail">GitHub Action status is loading.</p></article>
+<article class="card"><span class="tag">Public research data</span><h2>Product attention catalog</h2><p id="catalog-state" class="state" aria-live="polite">Checking catalog...</p><p id="catalog-detail" class="detail">This is public news attention, not sales or product inventory.</p></article>
+<article class="card"><span class="tag">Protected local services</span><h2>K1 and n8n</h2><p class="state">Private access</p><p class="detail">Remote Desktop Commander and the existing K1 n8n remain on your Windows computer. Their status is not exposed by this public page.</p></article>
+</div>
+<p id="refreshed" class="detail" aria-live="polite">The page checks public sources on load and every five minutes.</p>
+<div class="links"><a class="btn" href="https://github.com/ragunauth123456-maker/PrismBay/actions/workflows/free-cloud-ops.yml">View cloud executions</a><a class="btn secondary" href="https://github.com/ragunauth123456-maker/PrismBay/pull/71">Deployment changes</a><a class="btn secondary" href="./toolkits.html">Public storefront</a></div>
+</section>
+</main>
+<footer class="wrap note">Public, read-only telemetry. This page contains no credentials, API keys, remote-control interfaces, customer information, revenue figures or internal K1 status. GitHub schedules are best-effort and do not provide uninterrupted computing.</footer>
+<script type="module">
+const root="https://api.github.com/repos/ragunauth123456-maker/PrismBay/";
+const state=(id,value,kind)=>{const el=document.getElementById(id);el.textContent=value;el.className="state "+(kind||"");};
+const detail=(id,value)=>{document.getElementById(id).textContent=value;};
+const date=iso=>new Intl.DateTimeFormat("en-US",{timeZone:"America/Guyana",dateStyle:"medium",timeStyle:"short"}).format(new Date(iso));
+async function refresh(){
+const results=await Promise.allSettled([
+fetch(root+"actions/workflows/free-cloud-ops.yml/runs?per_page=1",{headers:{Accept:"application/vnd.github+json"},cache:"no-store"}),
+fetch("https://raw.githubusercontent.com/ragunauth123456-maker/PrismBay/main/public/viral-catalog.json",{cache:"no-store"})
+]);
+try{
+if(results[0].status!=="fulfilled")throw Error("GitHub request unavailable");
+const response=results[0].value;
+if(response.status===404){state("runner-state","Awaiting activation","warn");detail("runner-detail","The scheduled workflow has not yet been published to GitHub main.");}
+else if(!response.ok)throw Error("GitHub status "+response.status);
+else{const body=await response.json();const run=body.workflow_runs?.[0];if(!run){state("runner-state","Configured","warn");detail("runner-detail","No cloud execution reported yet. Run the workflow manually on GitHub.");}
+else{const good=run.status==="completed"&&run.conclusion==="success";const bad=run.status==="completed"&&!good;state("runner-state",good?"Last run passed":bad?"Last run needs review":"Run "+run.status,good?"ok":bad?"fail":"warn");detail("runner-detail","Last started "+date(run.created_at)+". "+(run.conclusion||"In progress")+".");}}
+}catch(e){state("runner-state","Status unavailable","warn");detail("runner-detail","Open GitHub Actions for details. "+e.message);}
+try{
+if(results[1].status!=="fulfilled")throw Error("Catalog request unavailable");
+const response=results[1].value;if(!response.ok)throw Error("Catalog HTTP "+response.status);
+const body=await response.json();const age=(Date.now()-Date.parse(body.updatedAt))/3600000;
+if(!Array.isArray(body.products)||!Number.isFinite(age))throw Error("Missing product count or update time");
+const good=age>=-1&&age<=24&&body.products.length>=9;
+state("catalog-state",good?"Current public data":"Refresh required",good?"ok":"warn");
+detail("catalog-detail",body.products.length+" tracked products; last refreshed "+date(body.updatedAt)+". Data represents public news attention only.");
+}catch(e){state("catalog-state","Status unavailable","warn");detail("catalog-detail","The public catalog could not be verified. "+e.message);}
+detail("refreshed","Checked "+date(new Date().toISOString())+". This page refreshes public sources every five minutes.");
+}
+refresh();setInterval(refresh,300000);
+</script>
+</body>
+</html>
