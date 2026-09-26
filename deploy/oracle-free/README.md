@@ -4,7 +4,7 @@ GitHub Actions supplies free scheduled computers for the existing public-data Pr
 
 ## GitHub Actions, no VM required
 
-1. The validated workflow is preserved in `deploy/oracle-free/cloud-workers.yml.example` while GitHub's one-time `workflow` OAuth permission is pending. After approval, publish the identical file to `.github/workflows/free-cloud-ops.yml`, check the branch workflow run, and merge the pull request into `main`.
+1. The validated six-hour workflow is now active on `main` at `.github/workflows/free-cloud-ops.yml`. Its checked reference copy is `deploy/oracle-free/cloud-workers.yml.example`. Review future changes on a feature branch and verify hosted tests before merging.
 2. Open GitHub Actions > PrismBay Free Cloud Operations > Run workflow for a first manual execution on `main`.
 3. Check the summary and two-day execution artifact. A scheduled run then starts approximately every six hours; scheduled starts are best-effort.
 4. The workflow refreshes the nine-product public-news catalog with the existing PrismBay research script. Only successful scheduled or manual runs on `main` commit the refreshed catalog. A stale or incomplete catalog fails verification.
