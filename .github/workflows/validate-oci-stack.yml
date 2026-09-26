@@ -1,0 +1,42 @@
+name: Validate free Oracle deployment
+on:
+  pull_request:
+    paths:
+      - 'deploy/oracle-free/**'
+      - '.github/workflows/validate-oci-stack.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.10.5'
+      - name: Format check
+        run: terraform fmt -check -diff -recursive deploy/oracle-free/resource-manager
+      - name: Provider init (no state backend, no OCI credentials)
+        working-directory: deploy/oracle-free/resource-manager
+        run: terraform init -backend=false -input=false -no-color
+      - name: Terraform structure validation
+        working-directory: deploy/oracle-free/resource-manager
+        run: terraform validate -no-color
+      - name: Check startup script syntax and private network bind
+        shell: bash
+        run: |
+          bash -n deploy/oracle-free/activate.sh
+          grep -Fq '"127.0.0.1:5678:5678"' deploy/oracle-free/compose.yaml
+          grep -Fq 'source   = var.admin_ip_cidr' deploy/oracle-free/resource-manager/main.tf
+      - name: Validate n8n Docker Compose without deploying
+        shell: bash
+        run: |
+          docker compose -f deploy/oracle-free/compose.yaml --env-file deploy/oracle-free/.env.example config --quiet
+      - name: Check ZIP contains only deployment files, no secrets
+        shell: bash
+        run: |
+          unzip -Z1 deploy/oracle-free/resource-manager-stack.zip | sort | tee /tmp/ziplist
+          diff -u <(printf '%s\n' README.md cloud-init.yaml main.tf outputs.tf variables.tf | sort) /tmp/ziplist
+          if unzip -Z1 deploy/oracle-free/resource-manager-stack.zip | grep -Ei '(private|secret|\.env$|\.pem$)'; then exit 1; fi

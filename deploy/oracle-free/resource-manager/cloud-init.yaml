@@ -1,0 +1,14 @@
+#cloud-config
+package_update: true
+packages:
+  - ca-certificates
+  - curl
+  - git
+  - docker.io
+  - docker-compose-v2
+runcmd:
+  - [bash, -lc, "systemctl enable --now docker"]
+  - [bash, -lc, "mkdir -p /opt/prismbay"]
+  - [bash, -lc, "git clone --depth 1 --branch main https://github.com/ragunauth123456-maker/PrismBay.git /opt/prismbay/source"]
+  - [bash, -lc, "chmod 750 /opt/prismbay"]
+final_message: "PrismBay VM ready for owner-authorized Tailscale enrollment; workflows are not activated."
