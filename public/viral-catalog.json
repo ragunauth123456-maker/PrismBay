@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-26T04:35:03.411Z",
+  "updatedAt": "2026-09-26T10:35:03.538Z",
   "market": "US",
   "methodology": "Public-news attention, freshness, and short-form demonstration fit. This is not PrismBay sales data and is not a TikTok, Amazon, Google, or Bing product ranking.",
   "refreshTargetHours": 6,
@@ -39,7 +39,7 @@
           "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9HWkFheEdZLU5KN28wQmVlLVZWVFJZSUZpcFlSTmJLSFJJc3lacVNuUTNycF9SN0tnRmM4QnZ1SXNwcDFid3kya1RUU2J0cjEyQUxOY1N6YXI0UHI3?oc=5"
         },
         {
-          "title": "The best clothes steamers for removing creases, killing bacteria, and freshening up garments - The Telegraph",
+          "title": "The best clothes steamers for removing creases, killing bacteria, and freshening up garments - telegraph.co.uk",
           "source": "Google News",
           "publishedAt": "2026-03-18T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE53Y0l6RGxTd29FX2I5QThSem8xYVZkbmZoeFNEOTVRVVZqMWlxOEpGNFB6NnUydGlRc3NraGVUVGs3OFJJVnJ1SW9Lc2QwN0lBLW9NaF9BUFFuck9aUC1kblBjbG1KWVdFMUM3LWZlZ2pxMXcy?oc=5"
@@ -56,12 +56,12 @@
     {
       "slug": "scrubber",
       "name": "5-in-1 Electric Spin Scrubber",
-      "signalScore": 86.5,
+      "signalScore": 83.5,
       "signalLabel": "high-attention",
       "evidence": {
         "publicMentions": 91,
         "mentionsLast7Days": 2,
-        "mentionsLast30Days": 7,
+        "mentionsLast30Days": 5,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -69,16 +69,10 @@
       },
       "sampleSignals": [
         {
-          "title": "Back or joint pain? This electric scrubber means no kneeling down to clean — it's usually $150, but it's on sale for $45 ahead of October Prime Day - Yahoo Lifestyle Canada",
+          "title": "Back or joint pain? This electric scrubber means no kneeling down to clean — it's usually $150, but it's on sale for $45 ahead of October Prime Day - ca.style.yahoo.com",
           "source": "Google News",
           "publishedAt": "2026-09-22T16:25:20.000Z",
           "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxNcDFRcm1TT183LWtEanVuS2hYRWhqUkhsdlEyeHRZS0hsOUVBRXNKWkc1dE1oakk5TUlkcE1vRFlrWkVFVE5YWFZOcjg5MVp1SkgyZnpqY1NFc1Z5dHBkZ1UtV2ppdmRRTFFEOGx1TUNYYmlfc1d6aFk5ZUhOLTJoZ1R6MldTOUFDUnV5bWo0SWFma0xGMWUwM0F5S0VhbXQ4V3FuLTBySGwxMU9iZzN6OVZGVVUyNnBZUXhYRHJyYUZHMWJZWkg5U0R4RFkydEhDNjJ4M3NBVjlNSzFUWVFBNU5mRFU1RmNCckRMOGM5aE1Sdlo2QjNrRVRRd0NJa2Rra3R1S3dvSFk1T0N2Qmcw?oc=5"
-        },
-        {
-          "title": "I Have a Leg Injury, and This Extendable Spin Scrubber Has Been a Lifesaver in Keeping My Bathroom Spotless - Apartment Therapy",
-          "source": "Google News",
-          "publishedAt": "2026-09-11T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPOF92S3dDMlBWc1ptWEpxX0pxNWd5emtEbHdyMXg4NkxhUWxweGVsR1pGMXotcElFNGQtWldFRkNtUzdRWGE5aFdFNFl3NW5NYVdlbzhJVk9YMUpsLUF0Mkp4MGFfVlVXVll1Qmo5Yl9sRnhrdkJwMVpxRjlNc2NFc0E5NmhQZw?oc=5"
         },
         {
           "title": "Finally! 'A Scrubber That Is Not An Arm Workout' — And It's $19 Right Now - HuffPost",
@@ -97,6 +91,12 @@
           "source": "Google News",
           "publishedAt": "2026-06-25T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPeHdhUGRKUmlMQy1qT2hYWXZISTJDcExWc1hFVkoxQXQ0cldiWUVGTFlnOWNNVDQxS0kwRjg0MTFZaUp3X3M4WDhFUjNJLVRYT201NjNKZlkxWmNIYVd3T1JfSGs3dDFTMXQyUGNEcmVFdUtmSHJwUTduM015VGNYNHl4MFd4TDlRSnJBbw?oc=5"
+        },
+        {
+          "title": "These electric spin scrubbers clean grout, tubs, and floors with ease - Business Insider",
+          "source": "Google News",
+          "publishedAt": "2026-04-22T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE40c3JDUmdvYnFzQW4wNUE0VUdoWVMzUk1MT1VGOTBMbDdIT0tBcU1IbzMwWmNwME5za1ozalNqUWdkVDNMV1d0WUx5YUpOSU9TRGhWR1VVTzktT3VBOXR0d0pQM0hpQVZpU2hRdFN4M3dXRlpiejRwSUlDMA?oc=5"
         }
       ],
       "rank": 2
@@ -104,12 +104,12 @@
     {
       "slug": "mattress-vacuum",
       "name": "Mattress Vacuum",
-      "signalScore": 82,
+      "signalScore": 83.5,
       "signalLabel": "high-attention",
       "evidence": {
         "publicMentions": 105,
         "mentionsLast7Days": 2,
-        "mentionsLast30Days": 5,
+        "mentionsLast30Days": 6,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -123,7 +123,7 @@
           "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOeVRLODl6aXZwcHU1M2VNUEx0NW1wbnJFTWFia09PX0tjM3BsN0d5eVRmdW5wR0pPTEUxVnJjNlpvTDBIQnNUN1FzTlpZRUlRYnFWRENNUURaMlFxb253TjMwOGNjdkNyMUs5VVluNEtiVENhOEV6SEhxd0VlVTZhOXpKZzgtNXRGOEHSAY8BQVVfeXFMTi0yUkdFNTlaYXNZLXhnNWY2Z0gwbXhEb0R3dVpYMW1zN0R1Q09pVnQ1SXlXZjZRRWx4NW5qM0NHYzdyWUd0eUNZcWhOMlJ3a1VyNzFva0hBNGpabzYzdm5zdkNsVEZoZFZ2TnhKaXhlc010cDJ0azAwcUR6NGFvd3NNOEJQa3NhV1p3bFIzUGM?oc=5"
         },
         {
-          "title": "I Finally Got a Bed Vacuum, and Now I’m Never Going to Be Without One Again - Apartment Therapy",
+          "title": "I Finally Got a Bed Vacuum, and Now I’m Never Going to Be Without One Again - apartmenttherapy.com",
           "source": "Google News",
           "publishedAt": "2026-05-19T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNbkpkQUFEYVRYc3gzc0Q0MUdkdE1pb2VORTFxbi1XbXk5OXBDYWg0Rmk3R01ZSUt6ZzNlRzRRWGR2RzRGQ09FQVNJNlZOMHk2eU9zZ0p1c1Q1dHpLbXZLZ29RcDQyX1JDZWpPME1pSlRyOG1XUTV2TlRYcDhLUWpXbFFJQkFvS09tb2YyQi1HYnE?oc=5"
@@ -141,7 +141,7 @@
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxORUVHTHVGWkZtVUhlMG1CSUpQUjRzM0dwTWhNem9pM3ppNkRiZjFxZzRCNkVIc0dhd3RUVU4zTU91am9UQVVYcFZsU2k5a1d1WVFFWHBFTHBpUWJaQzc5bEpxR1hUb1AyZW4wVTRRaE94OW1BYU90cUNWZkcwVzlSWW96VzdzYkZuajBkN2JqSjJzNjBkeEtjTUx6QWtmemRvRUhVT21OWmplTkhh0gHAAUFVX3lxTE95S1VXaDg0OFdlMm85aXdBSjN0aHJUTElRWEhEdlhpaWRCMDlnXzVia2p5NFpJZTEwcUZvVGhnNGJzMDR4N0NWamlXS28yMzRiME15aHdsV3RYMWZucGpRTkFVUEZYakZLeEJJR2w4b0Y1NlNOU1ZURVVsTDRyOVN1SHZyRk5COUJNbnFLbExVMEhrNkszREZJcnp3dnVDck5oZXZYMllyRlN5S3NwMmFNU0FkZ0s1YkJ2TE1EZFpYSw?oc=5"
         },
         {
-          "title": "As a sinusitis sufferer, I implore you to consider Aldi's £19 UV mattress vacuum — it's not about bed bugs, it's about dust - techradar.com",
+          "title": "As a sinusitis sufferer, I implore you to consider Aldi's £19 UV mattress vacuum — it's not about bed bugs, it's about dust - TechRadar",
           "source": "Google News",
           "publishedAt": "2026-06-12T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxOOTZqRGZuMWZJTVh2VUhXOHgzMUdhVUhjYTdxeXl6QWVqbkxCb2R2bU45Wl9ERHVFaklYajJWa0JSd2RtdDNpdksyR1IwVV9QeUUyTmcySXJvcnltUDcxazNHaF85ZzZTYnYwNy1yZ1ZjNlhIWGVBRzc2aUtKNDhBbk85UHFueGtRY2JVaXpTMzNxX3dOUl9OazRUVloyVkRscXhwQ2kxSmg4T01BVUZERGlLR3I0b0NhOFJYdVdMTE0xdVY1cjdWYi11MndYbFZZYUpPLVl0LTh2NlhDV3g4aWRYcDZydWtORU01eS1RVWhEZjNQU2c?oc=5"
@@ -183,13 +183,13 @@
           "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOX2xfRzZIY0x2R1ZlUE9NVm1XVVZ3THhxZFFwOEJqZHJ1MDBYenNDVGJEUzhISFMxbldXM2lLaDhURWV2a0VmdHYwdHFBX3JyUi1mMlZJcEZQc3VQSkxoaWo4ZUpPZWJxV19ySHFPYnRqV1VFTExyNE1TUmttV2Y1VHBybjh5dlZaRXZ4ckg2MnUzRG9pNUZ1RjlzYWR5NTRvRDBZQnRESkVsQXZsa19RUA?oc=5"
         },
         {
-          "title": "In a Decade of Testing Pressure Washers, These Are the Smallest, Most Powerful Models Yet - The New York Times",
+          "title": "In a Decade of Testing Pressure Washers, These Are the Smallest, Most Powerful Models Yet - nytimes.com",
           "source": "Google News",
           "publishedAt": "2026-06-05T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE12V2hOQ2d1Z0xiSU0ySWNYbmpaS0ZaOC1oc3QzazB3WU5oRHcxV1B1RjNhdHFmckxHc0pEdlRFUGQtN2dkUWtoTHZiQWVWSi02ZV9xTElkQ0xTNWw1MjFnakpCT0pkUTliaWh1aGVWN0RUdw?oc=5"
         },
         {
-          "title": "Does it work? Hydro X5 cordless pressure washer - KWCH",
+          "title": "Does it work? Hydro X5 cordless pressure washer - kwch.com",
           "source": "Google News",
           "publishedAt": "2026-08-12T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNTWJJdnI5YnFKNlFnNUNhY09iVVFJZ1ZvMHJmQ2FYcEQtbU0xYmRBNzQ5Y3NrRXJ6NS04Sl9uSXBSUDJoSEh2QXVBM3VlQzQtbHdIVWl5S2dDNGxQNzYxdDFuQnQtWEFmdUpLSEU3STlaSkhLSFF3d1JxMVFxZEtZXzYzbTQ1UdIBmgFBVV95cUxPZERNWEJkcWM1a0pySUFEZC12OXE2Q1F1Q3hjSEk1Ql9SUktmSjczWG13Y0doWHV0ZkpGSm9LUnA4eEIwWFg3ZU95TVlZTDQ0WkFtSUhDWDRIY29ITmlJTUljZ3lvNHdYWXNFQ2hGQVo1djZzWkZudTZPdEJtOHJGRDV0Q2pUQkE4OG00WFh6R3ZjQ1Q2NEhldGV3?oc=5"
@@ -200,10 +200,10 @@
     {
       "slug": "pethair",
       "name": "Reusable Pet Hair Remover",
-      "signalScore": 60.5,
+      "signalScore": 59,
       "signalLabel": "active",
       "evidence": {
-        "publicMentions": 24,
+        "publicMentions": 23,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
@@ -285,7 +285,7 @@
           "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQMllzbFMyWUc4SVdwd1E1QmJFbXpmc1VnYjFzZnh4SkhxbDVhRldvYjAzZDJKVUZLYVBwSEFOeEMxcl92cGMwMENVRkVKTU9Xbnp5YmkyUk1UTnNETGVNeXo2RWRJZ2ViUnZ3WjRadUtaeUN5SXFlY3I5aHJfYm1qazFKQWQ4Q1FTVUQteHgxX3FNNUJrT2FSc0J6SnFkOHdGeHJVQm5RWWg5dm83OXh0QWFRSlJVdjRPeF9NcEpaMU5CRGhtdGxyY0ZyeDRDVmdBX21xQmtQb0xqTzJXLVdTNlpJQzFsNGtTOGpQdDdfOA?oc=5"
         },
         {
-          "title": "Amazon Shoppers Bought This $10 Cleaning Tool More Than 2,000 Times Last Month (You'll Use It in Every Room!) - Apartment Therapy",
+          "title": "Amazon Shoppers Bought This $10 Cleaning Tool More Than 2,000 Times Last Month (You'll Use It in Every Room!) - apartmenttherapy.com",
           "source": "Google News",
           "publishedAt": "2024-06-04T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNaEppZ1kxQmNqdm1LbTVfVTdmMmlkTU0zekl1c1BSdVBmSTZUMi1YUTdfRWlxUlR6ZGlRZEZ1Sk9Uc0JvLTJyUDRHc1hNRnNmRllKTjRvbmxyNlUzcmx4SzlzOWdVRXBQbWxyZ25VX2VlbDJrdmMxU3Z0b0hyXzN5SVpXOA?oc=5"
@@ -315,16 +315,16 @@
           "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE12eWlYN0NrZFZnUHZ6T0JWN3JsZFhmS2IwR0dsNFhnQWM3WHEtN3FjN0hQODRpa3dfUThCRTBVc0RtRU9YcFpoeXZ5ZnA3dkJFMHZYd3kxLWxQcGFCZU94UjNUQl9ZakNJaHJV?oc=5"
         },
         {
-          "title": "Babs Costello shares spring cleaning tips from new book 'Homemaking with Babs' - goodmorningamerica.com",
+          "title": "Babs Costello shares spring cleaning tips from new book 'Homemaking with Babs' - Good Morning America",
           "source": "Google News",
           "publishedAt": "2026-04-30T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQOXNiQWdmazZNR0M4ZTdUMzNJaHhZN2NSMmZHa0tWTmNnYzE3MGltaUcyNjlrMEdfMnlSbk9RY29ycm4tdmd5Y0wtNk9IMktyTzhmN0ZKTzBLTkloRHhvNlgtM0pIcFE4N2NCSUU2WXE0d0NOUy1WS00zWDdzczlBeFk4b3lvQVhCVXNudU5mbG5nNVlNSVJ2MGctMmhPMFNWMFRDUklIZG9tVFZubTVhX3lZeDhXVjBUSTFmMXFtNNIBxAFBVV95cUxPSGJnSkU3ZHNOYURTUThBaXFWbXREOXJlaXR1NVBUMU1vSDBsZlBGRHBPc2xuU3pURkZ5ekhFcy1VaWN0NUhmdU1OdGZsdy1LZTh4X243Vm9SMERCLUJZeUU2LTlKUF81RFY1Q0wxRm03N1EtYndHZmZrczc1am9xTWttWHk5U1diWGhWd3k3VlRfV0ZHRXNHNHB3bkY5MEg5c1U2aDRmN3R3MHZHSUZNYWpLWDNqTzRqZF9qQTlpazlSRWNz?oc=5"
         },
         {
-          "title": "Aldi's New Shower Caddy Looks Just Like a Pricier Pottery Barn One - parade.com",
+          "title": "Target’s Sleek New $10 Organizer Is a Dorm Room Must-Have - parade.com",
           "source": "Google News",
-          "publishedAt": "2025-07-28T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBwbVJSY2JRTDU3VUpjRDFwRUpWY0pIRlZydjk4RmZxSDNFVUllaV95bnQwcVFmLWxDSjBrRnJVZ2lhdXh3R2VYNnJsaVRwbzVBYy05Q2xzcURneXVfWk1qOG53?oc=5"
+          "publishedAt": "2026-07-29T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBaTUdJcXZxNVJhZUl4ZXJSa25PdV9Mb3NnMGc3SWFWU3B6ejY4UUJQZFBZM3N0Uk91ZVpjUUZzMzJ2cnRiWUNHNlJRTmlmbGRmeEVEMkZyN0lpc05MbUo4V1hsV0IzdnNBWEdMb0NoNE9OeTlJRTl4aVBOZ3k5ODA?oc=5"
         }
       ],
       "rank": 7
