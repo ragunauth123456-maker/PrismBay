@@ -1,0 +1,38 @@
+name: Validate free Cloudflare control plane
+on:
+  pull_request:
+    paths:
+      - 'deploy/cloudflare-free/**'
+      - 'scripts/free-cloud-sync*'
+      - '.github/workflows/free-cloud-ops.yml'
+      - '.github/workflows/validate-cloudflare-free.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing and Cloudflare integration tests
+        run: node --test deploy/cloudflare-free/test/worker.test.mjs scripts/free-cloud-sync.test.mjs scripts/revenue-health-check.test.mjs
+      - name: Validate Cloudflare Worker without deploying or authenticating
+        run: npx --yes wrangler@4 deploy --dry-run --config deploy/cloudflare-free/wrangler.jsonc
+      - name: Verify database migration and integrity constraints
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import sqlite3
+          from pathlib import Path
+          db=sqlite3.connect(':memory:')
+          db.executescript(Path('deploy/cloudflare-free/migrations/0001_init.sql').read_text())
+          db.execute("INSERT INTO run_events(run_id,status,finished_at,products) VALUES (?,?,?,?)",('123','success','2026-09-26T01:00:00Z',9))
+          db.execute("INSERT INTO task_requests(task_id,kind,status,created_at) VALUES (?,?,?,?)",('test-task','health_check','pending','2026-09-26T01:00:00Z'))
+          assert db.execute('SELECT COUNT(*) FROM run_events').fetchone()[0] == 1
+          assert db.execute('SELECT COUNT(*) FROM task_requests').fetchone()[0] == 1
+          print('Cloudflare D1 migration passes SQLite acceptance checks')
+          PY
