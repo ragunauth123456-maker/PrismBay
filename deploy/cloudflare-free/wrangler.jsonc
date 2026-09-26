@@ -8,7 +8,7 @@
     {
       "binding": "DB",
       "database_name": "prismbay-free-control",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "c3d56c94-0cd1-4a28-94a4-222430f67193",
       "migrations_dir": "migrations"
     }
   ]
