@@ -1,0 +1,263 @@
+name: PrismBay CJ Supplier Verification
+
+# Uses the repository secret CJ_API_KEY only inside GitHub-hosted runners.
+# Fails closed on product name, variant inventory, price and freight estimates.
+# Read-only: no orders, payments, listing, email or publishing.
+on:
+  schedule:
+    - cron: '17 4 * * *' # 00:17 Guyana, 30 min after daily candidate research
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-cj-supplier-verification
+  cancel-in-progress: false
+
+jobs:
+  verify-cj:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+
+      - name: Install Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Authenticate and verify CJ supplier data
+        env:
+          CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs/promises';
+          import assert from 'node:assert/strict';
+          
+          // Explicit product-class requirements prevent CJ's fuzzy search from selecting
+          // unrelated merchandise. New categories remain unverified until reviewed.
+          const productClasses = Object.freeze({
+            'cordless-handheld-vacuum': [/\bvacuum\b/i, /(handheld|hand-held|cordless|portable)/i],
+            'extendable-high-zone-duster': [/\bduster\b/i, /(extend|high|telescop)/i],
+            'dryer-vent-cleaner-kit': [/(dryer|lint)/i, /(vent|cleaner|brush)/i],
+            'self-standing-floor-mop': [/\bmop\b/i, /(stand|floor|flat|spin)/i],
+            'window-washer-squeegee': [/(squeegee|window washer)/i, /(window|glass)/i],
+            'roll-up-dish-rack': [/\brack\b/i, /(dish|drying|sink|roll[- ]?up)/i],
+            'appliance-cord-organizer': [/(cord|cable)/i, /(organizer|holder|clip)/i],
+            'rug-grippers': [/(rug|carpet)/i, /(grip|non.?slip|adhesive)/i],
+            'bottle-brush-set': [/\bbottle\b/i, /\bbrush\b/i],
+            'sheet-laundry-detangler': [/(sheet|laundry)/i, /(detangl|tangle|twist|ball)/i],
+            'hanging-closet-organizer': [/(closet|wardrobe)/i, /(hanging|hang|organizer)/i],
+            'pan-scraper': [/(scraper|scrubber)/i, /(pan|pot|cookware|dish)/i],
+          });
+          
+          function matchesIntendedProduct(candidate, name) {
+            const rules = productClasses[String(candidate.slug || '')];
+            return Boolean(rules && typeof name === 'string' && rules.every(rule => rule.test(name)));
+          }
+          
+          function positiveNumber(value) {
+            if (value === null || value === undefined || typeof value === 'boolean' || String(value).trim() === '') return null;
+            const parsed = Number(value);
+            return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+          }
+          
+          function count(value) {
+            const n = positiveNumber(value);
+            return n !== null && Number.isInteger(n) ? n : 0;
+          }
+          
+          function price(item, variant = null) {
+            return positiveNumber(variant?.variantSellPrice) ??
+              positiveNumber(item?.nowPrice) ??
+              positiveNumber(item?.discountPrice) ??
+              positiveNumber(item?.sellPrice);
+          }
+          
+          function eligibleProducts(products, candidate) {
+            return products.filter(item =>
+              String(item?.saleStatus) === '3' &&
+              Number(item?.verifiedWarehouse) === 1 &&
+              count(item?.totalVerifiedInventory) >= 10 &&
+              price(item) !== null &&
+              matchesIntendedProduct(candidate, item?.nameEn)
+            ).sort((a, b) => count(b.totalVerifiedInventory) - count(a.totalVerifiedInventory));
+          }
+          
+          // Reproduce the false positives from the first live run and fail before
+          // connecting to CJ if a later edit removes these safeguards.
+          assert.equal(matchesIntendedProduct({slug:'cordless-handheld-vacuum'}, 'VEVOR Stand Airless Paint Sprayer'), false);
+          assert.equal(matchesIntendedProduct({slug:'hanging-closet-organizer'}, 'Shoe Cabinet With 2 Flip Drawers'), false);
+          assert.equal(matchesIntendedProduct({slug:'roll-up-dish-rack'}, 'Flower Print Lace-up Sneakers'), false);
+          assert.equal(matchesIntendedProduct({slug:'cordless-handheld-vacuum'}, 'Cordless Portable Handheld Vacuum Cleaner'), true);
+          assert.equal(positiveNumber(null), null);
+          assert.equal(positiveNumber(0), null);
+          assert.equal(positiveNumber('0'), null);
+          assert.equal(positiveNumber('9.64'), 9.64);
+          assert.equal(price({nowPrice:0, discountPrice:null, sellPrice:'23.50'}), 23.5);
+          assert.equal(eligibleProducts([{nameEn:'VEVOR Stand Airless Paint Sprayer', saleStatus:'3', verifiedWarehouse:1, totalVerifiedInventory:3835, sellPrice:55}], {slug:'cordless-handheld-vacuum'}).length, 0);
+          console.log('Product-matching, price and prior false-positive safeguards PASS');
+          if (process.env.CJ_AUDIT_SELF_TEST_ONLY === '1') process.exit(0);
+          
+          const apiKey = String(process.env.CJ_API_KEY || '').trim();
+          if (!apiKey) throw new Error('CJ_API_KEY repository secret is missing.');
+          const BASE = 'https://developers.cjdropshipping.com/api2.0/v1';
+          const headers = token => ({
+            'CJ-Access-Token': token,
+            'Content-Type': 'application/json',
+            'User-Agent': 'PrismBay-CJ-Verification/2.0',
+          });
+          async function jsonFetch(url, options = {}) {
+            const response = await fetch(url, { ...options, signal: AbortSignal.timeout(20000) });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok || payload?.result === false) {
+              const code = String(payload?.code ?? response.status).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 15);
+              throw new Error('CJ request failed (HTTP ' + response.status + ', code ' + code + ').');
+            }
+            return payload;
+          }
+          
+          const auth = await jsonFetch(BASE + '/authentication/getAccessToken', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json','User-Agent':'PrismBay-CJ-Verification/2.0'},
+            body: JSON.stringify({apiKey}),
+          });
+          const token = String(auth?.data?.accessToken || '');
+          if (!token) throw new Error('CJ authentication succeeded without an access token.');
+          console.log('::add-mask::' + token);
+          console.log('CJ authentication PASS');
+          
+          const catalog = JSON.parse(await fs.readFile('public/viral-candidates.json', 'utf8'));
+          const candidates = Array.isArray(catalog?.candidates) ? catalog.candidates.slice(0, 3) : [];
+          if (candidates.length === 0) throw new Error('No research candidates available for supplier verification.');
+          function flatten(payload) {
+            const groups = payload?.data?.content;
+            return Array.isArray(groups) ? groups.flatMap(group => Array.isArray(group?.productList) ? group.productList : []) : [];
+          }
+          
+          const results = [];
+          for (const candidate of candidates) {
+            const base = {
+              candidate: String(candidate?.name || ''), query: String(candidate?.query || ''),
+              supplierVerified: false, variantInventoryVerified: false,
+              freightVerified: false, fulfillmentReady: false,
+            };
+            if (!productClasses[candidate?.slug]) {
+              results.push({...base, status:'manual_category_review', reason:'Candidate has no approved product-class validation rule.'});
+              continue;
+            }
+            const url = new URL(BASE + '/product/listV2');
+            url.searchParams.set('page', '1');
+            url.searchParams.set('size', '20');
+            url.searchParams.set('keyWord', base.query);
+            url.searchParams.set('countryCode', 'US');
+            url.searchParams.set('startWarehouseInventory', '10');
+            url.searchParams.set('verifiedWarehouse', '1');
+            url.searchParams.set('sort', 'desc');
+            url.searchParams.set('orderBy', '1');
+            url.searchParams.append('features', 'enable_category');
+          
+            let search;
+            try {
+              search = await jsonFetch(url, { headers: headers(token) });
+            } catch (error) {
+              results.push({...base, status:'search_error', reason: error instanceof Error ? error.message : 'CJ search failed.'});
+              continue;
+            }
+            const products = flatten(search);
+            const eligible = eligibleProducts(products, candidate);
+            if (!eligible.length) {
+              results.push({...base, status:'manual_supplier_match_required',
+                candidatesReturned:products.length,
+                reason:'CJ search returned no correctly matched product with positive price and verified US inventory. Unrelated products and zero-cost records are excluded.'});
+              continue;
+            }
+          
+            const item = eligible[0];
+            const detailUrl = new URL(BASE + '/product/query');
+            detailUrl.searchParams.set('pid', String(item.id));
+            detailUrl.searchParams.set('countryCode', 'US');
+            let variant = null;
+            let variantInventoryVerified = false;
+            let variantCheck = 'unavailable';
+            try {
+              const details = await jsonFetch(detailUrl, { headers: headers(token) });
+              const variants = Array.isArray(details?.data?.variants) ? details.data.variants : [];
+              // A product-level US warehouse flag is not enough to confirm the specific SKU.
+              variant = variants.find(v => Array.isArray(v?.inventories) && v.inventories.some(inv =>
+                String(inv?.countryCode || '').toUpperCase() === 'US' &&
+                count(inv?.totalInventory ?? inv?.inventory ?? inv?.stock) >= 1
+              )) || null;
+              variantInventoryVerified = Boolean(variant?.vid);
+              variantCheck = variantInventoryVerified ? 'verified' : 'manual_variant_inventory_check_required';
+            } catch {
+              variantCheck = 'variant_details_unavailable';
+            }
+          
+            const freightOptions = [];
+            let zeroPriceQuoteCount = 0;
+            if (variantInventoryVerified && variant?.vid) {
+              try {
+                const freight = await jsonFetch(BASE + '/logistic/freightCalculate', {
+                  method:'POST', headers:headers(token),
+                  body:JSON.stringify({startCountryCode:'US',endCountryCode:'US',products:[{quantity:1,vid:variant.vid}]}),
+                });
+                const services = Array.isArray(freight?.data) ? freight.data : [];
+                for (const service of services) {
+                  const amount = positiveNumber(service?.logisticPrice);
+                  if (amount === null) { zeroPriceQuoteCount += 1; continue; }
+                  freightOptions.push({name:service?.logisticName || null,usd:amount,aging:service?.logisticAging || null});
+                }
+                freightOptions.sort((a,b) => a.usd - b.usd);
+                freightOptions.length = Math.min(freightOptions.length, 5);
+              } catch {
+                // Freight is never marked verified when CJ's quote call fails.
+              }
+            }
+          
+            results.push({...base,
+              supplierVerified:true,
+              variantInventoryVerified,
+              freightVerified:variantInventoryVerified && freightOptions.length > 0,
+              status: !variantInventoryVerified ? 'supplier_product_matched_variant_pending' :
+                !freightOptions.length ? 'supplier_matched_freight_pending' : 'supplier_matched_us_freight_estimate',
+              product:{
+                id:String(item.id), sku:item.sku || item.spu || null,
+                name:item.nameEn, productCostUsd:price(item,variant),
+                verifiedProductInventory:count(item.totalVerifiedInventory),
+                warehouse:'US', variantId:variant?.vid || null, variantSku:variant?.variantSku || null,
+              }, variantCheck, zeroPriceQuoteCount, freightOptions,
+              shippingDisclaimer:'US-to-US country-level estimate only. Confirm destination ZIP, variant, final total landed cost and supplier order acceptance before sale.',
+              fulfillmentNote:'No ordering, payment, listing or automatic publishing is enabled.',
+            });
+          }
+          
+          const report = {
+            schemaVersion:2, checkedAt:new Date().toISOString(), market:'US',
+            authentication:'verified', apiKeyExposed:false, accessTokenExposed:false,
+            ordersEnabled:false, paymentsEnabled:false, automaticListingEnabled:false, automaticPublishingEnabled:false,
+            candidateCount:results.length,
+            supplierVerifiedCount:results.filter(x=>x.supplierVerified).length,
+            variantInventoryVerifiedCount:results.filter(x=>x.variantInventoryVerified).length,
+            freightEstimateCount:results.filter(x=>x.freightVerified).length,
+            allRequireManualCommercialApproval:true,
+            results,
+          };
+          await fs.mkdir('growth-reports',{recursive:true});
+          await fs.writeFile('growth-reports/cj-supplier-verification.json',JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify({authentication:report.authentication,candidates:report.candidateCount,
+            matchedSupplierProducts:report.supplierVerifiedCount,verifiedVariants:report.variantInventoryVerifiedCount,
+            estimatedFreight:report.freightEstimateCount,ordersEnabled:false}));
+          JS
+
+      - name: Retain CJ verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-cj-supplier-verification-${{ github.run_id }}
+          path: growth-reports/cj-supplier-verification.json
+          if-no-files-found: error
+          retention-days: 3
