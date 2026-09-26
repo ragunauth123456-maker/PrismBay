@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T23:52:49.903Z",
+  "updatedAt": "2026-09-26T04:35:07.117Z",
   "supplierIntegration": "awaiting-cj-auth",
   "items": [
     {
@@ -15,9 +15,9 @@
     },
     {
       "rank": 2,
-      "slug": "hanging-closet-organizer",
-      "product": "Hanging Closet Organizer",
-      "attentionScore": 76.9,
+      "slug": "roll-up-dish-rack",
+      "product": "Roll-Up Dish Drying Rack",
+      "attentionScore": 76.8,
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
@@ -26,9 +26,9 @@
     },
     {
       "rank": 3,
-      "slug": "roll-up-dish-rack",
-      "product": "Roll-Up Dish Drying Rack",
-      "attentionScore": 76.8,
+      "slug": "hanging-closet-organizer",
+      "product": "Hanging Closet Organizer",
+      "attentionScore": 73.1,
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
