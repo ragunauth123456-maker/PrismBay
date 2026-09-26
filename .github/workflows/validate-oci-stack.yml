@@ -38,5 +38,5 @@ jobs:
         shell: bash
         run: |
           unzip -Z1 deploy/oracle-free/resource-manager-stack.zip | sort | tee /tmp/ziplist
-          diff -u <(printf '%s\n' README.md cloud-init.yaml main.tf outputs.tf variables.tf | sort) /tmp/ziplist
+          diff -u <(printf '%s\n' README.md cloud-init.yaml main.tf outputs.tf variables.tf versions.tf | sort) /tmp/ziplist
           if unzip -Z1 deploy/oracle-free/resource-manager-stack.zip | grep -Ei '(private|secret|\.env$|\.pem$)'; then exit 1; fi
