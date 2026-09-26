@@ -1,0 +1,83 @@
+name: PrismBay Free Cloud Operations
+
+on:
+  schedule:
+    - cron: '19 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [free-cloud-ops-20260925]
+    paths:
+      - '.github/workflows/free-cloud-ops.yml'
+      - 'scripts/revenue-health-check*'
+      - 'scripts/viral-product-engine.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prismbay-free-cloud-ops
+  cancel-in-progress: false
+
+jobs:
+  cloud-operations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out existing PrismBay code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run existing offline regression tests
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs
+      - name: Research and refresh the existing public attention catalog
+        run: |
+          node scripts/viral-product-engine.mjs
+          node --input-type=module -e "import fs from 'node:fs'; const c=JSON.parse(fs.readFileSync('public/viral-catalog.json')); if(c.products.length<9 || !c.products.some(p=>p.evidence.sourcesAvailable.length)) { console.error('No verified public feed or catalog incomplete'); process.exit(1); }"
+      - name: Publish public catalog from the cloud
+        if: github.ref == 'refs/heads/main' && github.event_name != 'push'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/viral-catalog.json growth-reports/viral-content-queue.json
+          if git diff --cached --quiet; then echo 'Public catalog unchanged'; exit 0; fi
+          git commit -m 'chore: refresh PrismBay public catalog from free cloud'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo 'Concurrent edit requires review. No force push.'
+              exit 1
+            fi
+            git push origin HEAD:main && exit 0
+            sleep $((attempt * 2))
+          done
+          exit 1
+      - name: Run existing public-data AI growth workers
+        shell: bash
+        run: |
+          roles=('Trend Scout' 'Hook/Creative Writer' 'Storefront CRO Auditor' 'Creator/Partner Scout' 'Publisher' 'Analytics Reviewer' 'Offer Optimizer' 'GitHub Support Scout')
+          for role in "${roles[@]}"; do
+            echo "Running $role"
+            node scripts/organic-growth-agent.mjs "$role"
+          done
+      - name: Verify published public routes and catalog freshness
+        run: node scripts/revenue-health-check.mjs
+      - name: Retain short-lived cloud execution reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-cloud-ops-${{ github.run_id }}
+          path: |
+            growth-reports/*.json
+            public/viral-catalog.json
+          if-no-files-found: warn
+          retention-days: 2
+      - name: Write clear execution summary
+        if: always()
+        shell: bash
+        run: echo 'Cloud execution completed. Review prior step outcomes and the short-lived reports artifact. No Stripe charges, CJ orders, or social posts are initiated by this workflow.' >> "$GITHUB_STEP_SUMMARY"
