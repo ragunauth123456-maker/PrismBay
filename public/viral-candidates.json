@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-26T16:35:09.067Z",
+  "updatedAt": "2026-09-26T22:35:13.052Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -33,16 +33,16 @@
             "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNbXdYRW9tSWo4UWowdXBVTzFSYm8xdmZLdTlSVURKclRRRDNoXzhzWXRXbnlWR2Q4cjF6RWdTLUYxX3FDUElMZHZ6emRmczZqY2hEUndfdDQ5LXM4dEtiNE5FbjRKbi1KWjRid0dIZXRBTTM1a09YU0dlLTEwZVQ1WUstU3BwSVFybHNlTW9HYmJQVDlhTFBPVzhR?oc=5"
           },
           {
-            "title": "This Cordless Vacuum That Doubles as a Mop Made Shoppers Say ‘Bye-Bye Shark’ — and It’s on Sale at Amazon - People.com",
-            "source": "Google News",
-            "publishedAt": "2026-09-24T11:30:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMkNDa2NwU3lld2hfNWEtMFY4dGh6Z2VOZTNjRGt4RzZ0dXZQVVAxc09QWGM4bnM1aUJobmxKV1hsRDBQWlFnTjRIakRmVU5aenFETXJNU2lObGU4V1hTYXdxZ3phcEllcTE4djNmVlNXQjQxWFlrUHFJdVVLZmhPVlBFNkxmcm44NDBtWkZsODAtdw?oc=5"
-          },
-          {
             "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-07-20T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQd0diVGlZVTdZMm9BN1JwaUtxR1NuNTV0UDhyei1uSE5qdndvNmR3WS1IZnBfVk9QRHZwYW1mUnl2RHVSRThTSUV6NC1KZHZ3aGZSZ2wtV2hnbDBzbGpnQkJBZmxDQWpfUm1td1ViOFhMSmxiUkswOW5Eb0lQbXVkQndOWVpncjRDOG5JQ3UxRTZIdkNJYkF0cWFjYzd2dkhSZVJhUmxZZ0xMS1hWS2t6TDFicHV3OUtlTm9JSENsNkE0TklsZGtHeWRCbWkyREdoeXA5V1FPbUs1ODZCYUctVjhRTjYyMVl2LU5R?oc=5"
+          },
+          {
+            "title": "This Cordless Vacuum That Doubles as a Mop Made Shoppers Say ‘Bye-Bye Shark’ — and It’s on Sale at Amazon - People.com",
+            "source": "Google News",
+            "publishedAt": "2026-09-24T11:30:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMkNDa2NwU3lld2hfNWEtMFY4dGh6Z2VOZTNjRGt4RzZ0dXZQVVAxc09QWGM4bnM1aUJobmxKV1hsRDBQWlFnTjRIakRmVU5aenFETXJNU2lObGU4V1hTYXdxZ3phcEllcTE4djNmVlNXQjQxWFlrUHFJdVVLZmhPVlBFNkxmcm44NDBtWkZsODAtdw?oc=5"
           }
         ]
       },
@@ -61,11 +61,11 @@
       "slug": "hanging-closet-organizer",
       "name": "Hanging Closet Organizer",
       "query": "hanging closet organizer",
-      "attentionScore": 76.9,
+      "attentionScore": 73.1,
       "attentionLabel": "high-attention",
       "evidence": {
         "publicMentions": 44,
-        "mentionsLast7Days": 1,
+        "mentionsLast7Days": 0,
         "mentionsLast30Days": 5,
         "sourcesAvailable": [
           "Google News",
@@ -85,16 +85,16 @@
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPWFp5N1QwRWRBSlduLVVKYUtGSWFaLXZWWnB3RGVZQ1VFVGotVkdhMWhKMTBxQ3JnVHpJVGJJd0FmYW5NcWgxdlhmM0MtMDNSZkVNa1BMZVdGTjlQSW5ET1paa2p6cFRtWVFMWHpna1ZjdlIzVzI0VnJfdHhJckhvY2RzaFpvZVFSQUE?oc=5"
           },
           {
+            "title": "Stocked Up a Little Too Well for Sweater Weather? These Stacking Storage Bins Keep Your Collection Organized - People.com",
+            "source": "Google News",
+            "publishedAt": "2026-09-16T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNdUt2cm1naldDczF5TFc0bExVNFFsTlBOTFdrOWh6NHpHSl9FckJJc0NoaTFWWmZST2hZWWJQU0Q5TWxzZVlxTjNGZ0pzOXQ5SDlOTFF4QkR2dkVMXzhrelhZcjUxT0d3WkJmRVdaQjRYQjF0d2lDWWUwZmJQNUs2ZA?oc=5"
+          },
+          {
             "title": "Amazon has a stackable 5-piece storage organizer for only $36 - thestreet.com",
             "source": "Google News",
             "publishedAt": "2026-07-24T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPdTNFMTk1Rk1GcmtlN0pZb0Z3WU1ZQlJwMGUtamNJeVpFQkQ2VzZxbVp6M2RELTZaZXhDcjdSZzRaTVp5OV9oZEhJUUlWTzdKNDA0bmlOMnM3LV8xXzVqOU1SN1pfdWdkd1JCLW5yWnJvMzVZSklsOWFVMW5ENzJiaWgtR2w?oc=5"
-          },
-          {
-            "title": "Amazon's portable wardrobe has 3 baskets, 3 shelves, and 3 hanging areas for only $26 - AOL.com",
-            "source": "Google News",
-            "publishedAt": "2026-09-08T07:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNX3hBSTA3a1B2WElQUUpQQkZOQ3dBd0pGeHRQVWhpdzhndFM3VUlTUmlUeEtBcHlpR0dRNmJQUFlmbGZYQTNwRjN1Z01KX01kbDJjSExWX2Z2OXVQRFRvckw2UDRQM1VteVBRV09WTVh3N2l2MzVHakQwOUc4UzRZdVl3bC1ZQQ?oc=5"
           }
         ]
       },
@@ -113,11 +113,11 @@
       "slug": "roll-up-dish-rack",
       "name": "Roll-Up Dish Drying Rack",
       "query": "roll up dish drying rack",
-      "attentionScore": 76.8,
+      "attentionScore": 73,
       "attentionLabel": "high-attention",
       "evidence": {
         "publicMentions": 33,
-        "mentionsLast7Days": 1,
+        "mentionsLast7Days": 0,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
           "Google News",
@@ -125,7 +125,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "The 11 Very Best Dish Racks - nymag.com",
+            "title": "The 11 Very Best Dish Racks - New York Magazine",
             "source": "Google News",
             "publishedAt": "2026-09-17T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8xNGhfekNqcklvNmFnN1NuTWVuWFJwLW5TWkxqakRXZVQxNk8yTlhWaGtubTRIT094Y09uNS16TFJoeGFJZ0VPYkVMNnpuRElpXzRjNVRQVG5JQWkzT0hBMnhfcm9FaF9M?oc=5"
@@ -327,10 +327,10 @@
         ],
         "sampleSignals": [
           {
-            "title": "Amazon has 20% off these space-saving cleaning tools for minimalists - Detroit Free Press",
+            "title": "Amazon has 20% off these space-saving cleaning tools for minimalists - USA Today",
             "source": "Google News",
-            "publishedAt": "2026-09-24T17:54:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNQVhseTNGQkU0bURrRThWbERJdHFxZ01kRkFSUmR0ek5DZUtabzZCdm9UblI0TE9NZ29DaG9PV2I4MV9aNVFuZ3lGaVdIektFeE5nczlTSVNaN3k5eW1QOGR1NnRKcTZUbWdXcHF3a1dqRW9LRTVzRmRtQ2JCVkdLaWxfTXJiOUYyWGN1UllRNjFOQ3NyOE03OTVmU0Q3bGFYWmN2VHBCRFF2d2lEb004VGlQd2lTVnluVWJ4Ug?oc=5"
+            "publishedAt": "2026-09-25T17:26:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxONFZyZk9VbDdXWGYyWXIzRUFLZDdwNk9JWnh0V2dXXzR6MzNVdnRweHlNWUtIWlU2TkJtaFpfVWZWLUxNSUlkZkRLQ0pYa3MzNzFyenlSYURzRlNsNkxxS0RTVGNkN05zcUxUTDVyS0ViaVdUa2oyMEpXUVBPQXJrV2tEZHJRbndyQzd2VnZyc3RPa3JtVVdzdmZ1RjB3SG9tenBpTER2UlNJSnFyZDREYjJyc24zNEUwbGd0d2gzc3Y?oc=5"
           }
         ]
       },
