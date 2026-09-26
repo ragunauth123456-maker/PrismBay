@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-26T15:55:13.964Z",
+  "updatedAt": "2026-09-26T16:35:09.067Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -12,7 +12,7 @@
       "attentionScore": 99.5,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 101,
+        "publicMentions": 100,
         "mentionsLast7Days": 3,
         "mentionsLast30Days": 11,
         "sourcesAvailable": [
@@ -131,7 +131,7 @@
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8xNGhfekNqcklvNmFnN1NuTWVuWFJwLW5TWkxqakRXZVQxNk8yTlhWaGtubTRIT094Y09uNS16TFJoeGFJZ0VPYkVMNnpuRElpXzRjNVRQVG5JQWkzT0hBMnhfcm9FaF9M?oc=5"
           },
           {
-            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - foodandwine.com",
+            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - Food & Wine",
             "source": "Google News",
             "publishedAt": "2026-06-05T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNME5UMWtzQUpSOHA2RWtIc1hxZEEwUUlnMGJ5cVRNN1VkZ1B4dWEtSE5JeHN1aVRSY0o0U2paMFlMSjl1NWxaaVFDZjVsWFBTOXYxcGtUb2ZsRlptQkhSNjRPWHdTVmJFdVZZT01uaG53RFcxUnJ3aVhIbkZyRmxQSw?oc=5"
@@ -229,7 +229,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - foodandwine.com",
+            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - Food & Wine",
             "source": "Google News",
             "publishedAt": "2026-07-26T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XNnJBdTh6VUQxUTZOdlQxQ1RNNEp5ZUxwTThBSEQxLTRJSHZPSFRxUUNCZFduYlBTa1hHYjg5MU9IUXJidkJjM0Njb0ZCQnZMM3pzYmVjRDQ4ZnlPV1hqanNscWJpT3pLMkQ2OWFvSHBHMldzUzFBd2dtSzFfNkk?oc=5"
@@ -281,7 +281,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "These Clever Amazon Products Fix Annoying Home Problems In Minutes—Shop Our Favorite Finds From $9 - southernliving.com",
+            "title": "These Clever Amazon Products Fix Annoying Home Problems In Minutes—Shop Our Favorite Finds From $9 - Southern Living",
             "source": "Google News",
             "publishedAt": "2026-09-21T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNanRCX21aVXIteW9BSUJ3UFIwNHdVV0VSQWxES1pZUllEMF9tTHhUcDZYcWwwLUZtQ2tTU1o2QU5Ia0cyODBTc1lQWHQzQUdFMkhwbUNyQXZwQnJ3MGZfZ0Q2XzlSUTR1dXQzNmU4WS1TSUtuMWE1T3d5c042VksybVcwUjdPb2t6d1E?oc=5"
@@ -367,7 +367,7 @@
             "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQVE1RZEw3ZXFWNHlYcmQ3bHNKU214UVBSZU9WTVlxUVk0TjNCUkNaYWNzRHpWS0lrZVNBTUcwYVpiU3lmeWdGNDlQSGloV21senpDMW9NUnlkdFdwTFdKVmZYUE1xVC1qY0REQkZKVGQxUVpXQTBFUThicXNVN1FQTTlXVjBaT04tREdiR0ZHSWw?oc=5"
           },
           {
-            "title": "Top 5 Best Commercial Window Cleaning 2026 - pixelfy.me",
+            "title": "Top 5 Best Commercial Window Cleaning 2026 - Pixelfy.me",
             "source": "Google News",
             "publishedAt": "2026-08-14T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5VVW5NRWgxR2dpcFNXM0MxRE1vVVN3ZE9hTUJQcXJEb3ZkNEd1bExPcnVQT1FDVHpPQ21PUExrS2RES0FIbmtPd2NET2FMaV9mcG9WcUNYOU1FRXdTWlVUUzg1UmlGYlhJVWN3WUpYNVkyUm8?oc=5"

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-26T16:23:50.542Z",
+  "updatedAt": "2026-09-26T16:35:04.478Z",
   "policy": "Content briefs are generated only for already-approved PrismBay Clean products. Publication remains subject to platform authorization and media rights.",
   "items": [
     {
@@ -14,22 +14,22 @@
     },
     {
       "rank": 2,
-      "slug": "scrubber",
-      "product": "5-in-1 Electric Spin Scrubber",
-      "channel": "tiktok",
-      "format": "short-video",
-      "hook": "A fast before-and-after idea for the 5-in-1 Electric Spin Scrubber.",
-      "cta": "See the 5-in-1 Electric Spin Scrubber details at PrismBay Clean.",
-      "guardrail": "Use original or supplier-authorized media. Do not state sales, rankings, delivery guarantees, or performance claims without evidence."
-    },
-    {
-      "rank": 3,
       "slug": "mattress-vacuum",
       "product": "Mattress Vacuum",
       "channel": "tiktok",
       "format": "short-video",
-      "hook": "Three places the Mattress Vacuum fits into a practical home reset.",
+      "hook": "A fast before-and-after idea for the Mattress Vacuum.",
       "cta": "See the Mattress Vacuum details at PrismBay Clean.",
+      "guardrail": "Use original or supplier-authorized media. Do not state sales, rankings, delivery guarantees, or performance claims without evidence."
+    },
+    {
+      "rank": 3,
+      "slug": "scrubber",
+      "product": "5-in-1 Electric Spin Scrubber",
+      "channel": "tiktok",
+      "format": "short-video",
+      "hook": "Three places the 5-in-1 Electric Spin Scrubber fits into a practical home reset.",
+      "cta": "See the 5-in-1 Electric Spin Scrubber details at PrismBay Clean.",
       "guardrail": "Use original or supplier-authorized media. Do not state sales, rankings, delivery guarantees, or performance claims without evidence."
     },
     {
