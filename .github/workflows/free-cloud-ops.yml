@@ -33,6 +33,11 @@ jobs:
           node-version: '22'
       - name: Run existing offline regression tests
         run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs
+      - name: Poll approved Cloudflare task requests (optional)
+        env:
+          PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
+          PRISMBAY_CF_REPORT_TOKEN: ${{ secrets.PRISMBAY_CF_REPORT_TOKEN }}
+        run: node scripts/free-cloud-sync.mjs poll
       - name: Research and refresh the existing public attention catalog
         run: |
           node scripts/viral-product-engine.mjs
@@ -67,6 +72,19 @@ jobs:
           done
       - name: Verify published public routes and catalog freshness
         run: node scripts/revenue-health-check.mjs
+      - name: Complete only tasks captured before successful scheduled work
+        if: success()
+        env:
+          PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
+          PRISMBAY_CF_REPORT_TOKEN: ${{ secrets.PRISMBAY_CF_REPORT_TOKEN }}
+        run: node scripts/free-cloud-sync.mjs complete
+      - name: Report execution to free Cloudflare control plane (optional)
+        if: always()
+        env:
+          PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
+          PRISMBAY_CF_REPORT_TOKEN: ${{ secrets.PRISMBAY_CF_REPORT_TOKEN }}
+          PRISMBAY_RUN_STATUS: ${{ job.status }}
+        run: node scripts/free-cloud-sync.mjs report
       - name: Retain short-lived cloud execution reports
         if: always()
         uses: actions/upload-artifact@v4
