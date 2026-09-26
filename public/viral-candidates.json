@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-26T10:35:07.303Z",
+  "updatedAt": "2026-09-26T15:55:13.964Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -12,7 +12,7 @@
       "attentionScore": 99.5,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 100,
+        "publicMentions": 101,
         "mentionsLast7Days": 3,
         "mentionsLast30Days": 11,
         "sourcesAvailable": [
@@ -39,7 +39,7 @@
             "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMkNDa2NwU3lld2hfNWEtMFY4dGh6Z2VOZTNjRGt4RzZ0dXZQVVAxc09QWGM4bnM1aUJobmxKV1hsRDBQWlFnTjRIakRmVU5aenFETXJNU2lObGU4V1hTYXdxZ3phcEllcTE4djNmVlNXQjQxWFlrUHFJdVVLZmhPVlBFNkxmcm44NDBtWkZsODAtdw?oc=5"
           },
           {
-            "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - ca.style.yahoo.com",
+            "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-07-20T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQd0diVGlZVTdZMm9BN1JwaUtxR1NuNTV0UDhyei1uSE5qdndvNmR3WS1IZnBfVk9QRHZwYW1mUnl2RHVSRThTSUV6NC1KZHZ3aGZSZ2wtV2hnbDBzbGpnQkJBZmxDQWpfUm1td1ViOFhMSmxiUkswOW5Eb0lQbXVkQndOWVpncjRDOG5JQ3UxRTZIdkNJYkF0cWFjYzd2dkhSZVJhUmxZZ0xMS1hWS2t6TDFicHV3OUtlTm9JSENsNkE0TklsZGtHeWRCbWkyREdoeXA5V1FPbUs1ODZCYUctVjhRTjYyMVl2LU5R?oc=5"
@@ -79,7 +79,7 @@
             "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNTEktQnJlSWx1UGpURHMxc3VaaVRIaklobEQxSGYtejQ3NW96Qk1Ed25rTlFwRUxfNUx3Y2VsYTduLVg2aURmMDhjYklwS2l2MnhVT2NocnpUZmhmaTlwVmZoSFVYRHBxZGpDMGJOckVNckZMbERudFFRem9uVWl2bkVSUQ?oc=5"
           },
           {
-            "title": "I Doubled My Closet Storage with This $25 Hanging Organizer - apartmenttherapy.com",
+            "title": "I Doubled My Closet Storage with This $25 Hanging Organizer - Apartment Therapy",
             "source": "Google News",
             "publishedAt": "2026-07-12T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPWFp5N1QwRWRBSlduLVVKYUtGSWFaLXZWWnB3RGVZQ1VFVGotVkdhMWhKMTBxQ3JnVHpJVGJJd0FmYW5NcWgxdlhmM0MtMDNSZkVNa1BMZVdGTjlQSW5ET1paa2p6cFRtWVFMWHpna1ZjdlIzVzI0VnJfdHhJckhvY2RzaFpvZVFSQUE?oc=5"
@@ -125,28 +125,28 @@
         ],
         "sampleSignals": [
           {
-            "title": "The 11 Very Best Dish Racks - New York Magazine",
+            "title": "The 11 Very Best Dish Racks - nymag.com",
             "source": "Google News",
             "publishedAt": "2026-09-17T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8xNGhfekNqcklvNmFnN1NuTWVuWFJwLW5TWkxqakRXZVQxNk8yTlhWaGtubTRIT094Y09uNS16TFJoeGFJZ0VPYkVMNnpuRElpXzRjNVRQVG5JQWkzT0hBMnhfcm9FaF9M?oc=5"
           },
           {
-            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - Food & Wine",
+            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - foodandwine.com",
             "source": "Google News",
             "publishedAt": "2026-06-05T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNME5UMWtzQUpSOHA2RWtIc1hxZEEwUUlnMGJ5cVRNN1VkZ1B4dWEtSE5JeHN1aVRSY0o0U2paMFlMSjl1NWxaaVFDZjVsWFBTOXYxcGtUb2ZsRlptQkhSNjRPWHdTVmJFdVZZT01uaG53RFcxUnJ3aVhIbkZyRmxQSw?oc=5"
-          },
-          {
-            "title": "10 Clever Amazon Home and Kitchen Gadgets That Pull a Lot More Weight Than Their Under-$10 Price Tag Suggests - Real Simple",
-            "source": "Google News",
-            "publishedAt": "2026-09-19T19:30:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUHVIbW03WHp0bXI4ZXNXNGpFT2ZtSXhKaUNhd04tdXVRbmM5RWoxS1pQcF9JSjRFN3VNUTJIby13bExHaHdvWDRaZWlqX29pcENKRVB5bDVRNnlERGJieWJPSGhUNnlyeUhhN0RfMFlNanR0UEVrMjg2N1NCa1gxQVlKc1QtLVdZenRKRg?oc=5"
           },
           {
             "title": "The Dish Racks We Use (and Love) for Dry Dishes and Clutter-Free Counters - The Spruce",
             "source": "Google News",
             "publishedAt": "2026-07-30T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1oQlI0bHl0dHVWR3phNW5Vd0t2RW96T2xGYjBVZnpURk54eXN6VnladzZMdnhjWFN1Ymt0ZUIxWndGenVIZXFvajV5anBOTTBSX29mcDdheFJDRE54alE?oc=5"
+          },
+          {
+            "title": "10 Clever Amazon Home and Kitchen Gadgets That Pull a Lot More Weight Than Their Under-$10 Price Tag Suggests - Real Simple",
+            "source": "Google News",
+            "publishedAt": "2026-09-19T19:30:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUHVIbW03WHp0bXI4ZXNXNGpFT2ZtSXhKaUNhd04tdXVRbmM5RWoxS1pQcF9JSjRFN3VNUTJIby13bExHaHdvWDRaZWlqX29pcENKRVB5bDVRNnlERGJieWJPSGhUNnlyeUhhN0RfMFlNanR0UEVrMjg2N1NCa1gxQVlKc1QtLVdZenRKRg?oc=5"
           }
         ]
       },
@@ -177,7 +177,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - ca.style.yahoo.com",
+            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-08-11T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPNHlsSk1uanVvSjRscmNoSkxIZVVMZjlsMmFDaXc3VEpUUzBjd1d2UGlwRnRuSE9XNXhvVXhQUW9tOXdEU1BjUFFFU0Jrc19mTFZzbTcxLTV5bzFIaUx5RU1YMGZEZFVQTUlyUWR4U1NWVWZsNUZQbk9UWjhMaktnb19LNFJ5bVcyMWM2b3F5S3FnLWROQ1IwTzhHZUgydUhwb2hPRlpFQUo5ZjFTMVVLTzFsYmluWGNvNkZRSHB1bThZX0NzX0JVMnNfNWJRVUY5Y2ZCLUV0bGJqTW8?oc=5"
@@ -229,7 +229,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - Food & Wine",
+            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - foodandwine.com",
             "source": "Google News",
             "publishedAt": "2026-07-26T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XNnJBdTh6VUQxUTZOdlQxQ1RNNEp5ZUxwTThBSEQxLTRJSHZPSFRxUUNCZFduYlBTa1hHYjg5MU9IUXJidkJjM0Njb0ZCQnZMM3pzYmVjRDQ4ZnlPV1hqanNscWJpT3pLMkQ2OWFvSHBHMldzUzFBd2dtSzFfNkk?oc=5"
@@ -281,13 +281,13 @@
         ],
         "sampleSignals": [
           {
-            "title": "These Clever Amazon Products Fix Annoying Home Problems In Minutes—Shop Our Favorite Finds From $9 - Southern Living",
+            "title": "These Clever Amazon Products Fix Annoying Home Problems In Minutes—Shop Our Favorite Finds From $9 - southernliving.com",
             "source": "Google News",
             "publishedAt": "2026-09-21T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNanRCX21aVXIteW9BSUJ3UFIwNHdVV0VSQWxES1pZUllEMF9tTHhUcDZYcWwwLUZtQ2tTU1o2QU5Ia0cyODBTc1lQWHQzQUdFMkhwbUNyQXZwQnJ3MGZfZ0Q2XzlSUTR1dXQzNmU4WS1TSUtuMWE1T3d5c042VksybVcwUjdPb2t6d1E?oc=5"
           },
           {
-            "title": "The 49 Coolest Things on Amazon Under $25 - hgtv.com",
+            "title": "The 49 Coolest Things on Amazon Under $25 - HGTV",
             "source": "Google News",
             "publishedAt": "2026-06-16T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9XSTFKR0lJRW5HVWdxdy1WVjdEZ1pCcENEcFI2WmNSM0Q4c0R0OUsteTd4bzM0LVg4cGd3c2tvcVVnZHpLbmVCZUNiQkpESEc2aDZHUk9hTGhvd0Z5dVFKcVdzWnZiZk5aLXFlbDI2V18tWHpMSndac29R?oc=5"
