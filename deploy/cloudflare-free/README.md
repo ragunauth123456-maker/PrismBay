@@ -1,12 +1,23 @@
 # PrismBay: GitHub + Cloudflare free control plane
 
+## Verified live deployment — 26 September 2026 (UTC)
+
+- Cloudflare Worker: https://prismbay-free-control.prismbay-ragunauth.workers.dev/
+- Free-sized D1 database: `prismbay-free-control`, deployed and migrated successfully in Cloudflare ENAM.
+- `/healthz` and `/v1/status`: verified HTTP 200 with healthy D1.
+- Existing GitHub six-hour cloud run: https://github.com/ragunauth123456-maker/PrismBay/actions/runs/36210960044 (successful; Cloudflare report received in D1).
+- Reporter token is stored in Cloudflare Workers Secrets and the repository's encrypted GitHub Actions secrets. A separate administrator token is stored in Cloudflare, with a Windows DPAPI-encrypted local recovery copy on K1 under `%APPDATA%\\PrismBay\\cloudflare-admin.dpapi`. Do not commit it, export it into logs, or send it in chat.
+- Cloudflare is request-driven and **not** a continuous replacement for the K1 n8n process. No paid Workers feature, VM, or upgrade was requested by this deployment. Verify your Cloudflare account remains on the Workers Free plan.
+
+The steps below document recreating the deployment if necessary. Do not create a duplicate database or overwrite the working deployment.
+
 This complements, rather than replaces, the **existing successful six-hour GitHub Actions workflow** and K1's local n8n. Cloudflare Workers serves a public read-only dashboard and authenticated status API. Cloudflare D1 stores a small run history and an allowlisted task queue. Only the two existing task types can be acknowledged by the next successful GitHub execution.
 
 **Free-plan boundary:** Workers Free has a daily request and CPU budget; D1 Free has database, daily row-read and write limits. Exceeding free limits should result in throttling/errors, not an instruction to upgrade or incur a charge. Do not activate paid Cloudflare features. Cloudflare is request-driven: it cannot host the continuously running n8n process.
 
 ## Current status and account ownership
 
-The source, migrations, security tests, six-hour workflow integration and offline Wrangler bundle are in this GitHub branch. Production activation requires your own Cloudflare account authorization. Do not infer that a Worker or D1 database exists from a merged GitHub PR or successful local tests. Do not send any secrets, passwords, account tokens or MFA codes through GitHub or chat.
+Cloudflare OAuth has been authorized on K1, and the Worker, D1 migration and GitHub reporter integration have been verified live. Future deployments from a different machine require that owner's own Cloudflare authorization. Do not send passwords, account tokens, administrator secrets or MFA codes through GitHub or chat.
 
 ## Activate on your authorized K1 Windows machine
 
