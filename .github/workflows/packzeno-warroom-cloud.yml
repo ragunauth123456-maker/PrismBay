@@ -1,9 +1,13 @@
 name: PackZeno Cloud War Room Candidate
 
 # This is an auditable public-data candidate, not the migrated AGM local task.
-# The exact Windows task action, source code, dependencies and cadence remain
-# unverified. Do not schedule or disable the AGM task until parity is proven.
+# AGM task launches a local CMD runner at approximately :30 every hour.
+# Its script content and side effects remain unverified. This *read-only*
+# candidate cron will not run until this draft branch is merged into main.
+# Do not disable the AGM task until exact parity is independently verified.
 on:
+  schedule:
+    - cron: '30 * * * *' # Provisional hourly public-data snapshot. Only live on default branch.
   push:
     branches: [migration/packzeno-warroom-cloud-20260927]
     paths:
