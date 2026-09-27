@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DIGITAL_CHECKOUT_TOKENS, PHYSICAL_PRODUCTS, validatePaidStore, validateScorecard, validatePhysicalStore, validateCatalog } from './revenue-health-check.mjs';
+import { DIGITAL_CHECKOUT_TOKENS, PHYSICAL_PRODUCTS, validatePaidStore, validateBuyerGuide, validateScorecard, validatePhysicalStore, validateCatalog } from './revenue-health-check.mjs';
+import { ACTIVE_DIGITAL_OFFERS } from './digital-conversion-campaign.mjs';
 
 test('paid store requires every configured digital checkout token and customer policy routes', () => {
   const html = 'x'.repeat(6100) + DIGITAL_CHECKOUT_TOKENS.join(' ') + ' www.prismbayai.com/refunds www.prismbayai.com/contact';
@@ -32,4 +33,18 @@ test('catalog rejects stale, incomplete and duplicate public attention data', ()
   assert.throws(() => validateCatalog({...base, updatedAt:'2026-09-23T00:00:00Z'}, now), /catalog_stale/);
   assert.throws(() => validateCatalog({...base, products:base.products.slice(0,8)}, now), /catalog_incomplete/);
   assert.throws(() => validateCatalog({...base, products:[...base.products.slice(0,8), base.products[0]]}, now), /duplicate_slugs/);
+});
+
+test('live paid-product acquisition guides enforce exact canonical, checkout, price and refund policy', () => {
+  assert.equal(ACTIVE_DIGITAL_OFFERS.length,3);
+  for(const offer of ACTIVE_DIGITAL_OFFERS) {
+    const html='x'.repeat(7200)+'<link rel="canonical" href="'+offer.guide+'">'+
+      '<link rel="stylesheet" href="./buyer-guides.css"><h1>Free original guide</h1>'+
+      '<a href="'+offer.checkout+'">Buy for $'+offer.priceUsd+'</a>'+
+      '<a href="https://www.prismbayai.com/refunds">Refund policy</a>';
+    assert.equal(validateBuyerGuide(html,offer).priceUsd,offer.priceUsd);
+    assert.throws(()=>validateBuyerGuide(html.replace(offer.checkout,'https://invalid.example/buy'),offer),/buyer_guide_invalid/);
+    assert.throws(()=>validateBuyerGuide(html.replace('$'+offer.priceUsd,'$999'),offer),/buyer_guide_invalid/);
+    assert.throws(()=>validateBuyerGuide(html.replace(offer.guide,'https://incorrect.example/'),offer),/buyer_guide_invalid/);
+  }
 });
