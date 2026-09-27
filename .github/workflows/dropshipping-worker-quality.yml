@@ -10,6 +10,7 @@ on:
       - '.github/workflows/cj-supplier-verification.yml'
       - '.github/workflows/free-cloud-ops.yml'
       - '.github/workflows/dropshipping-worker-quality.yml'
+      - 'docs/DROPSHIPPING_WORKERS.md'
   pull_request:
     paths:
       - 'scripts/cj-*.mjs'
@@ -17,6 +18,7 @@ on:
       - '.github/workflows/cj-supplier-verification.yml'
       - '.github/workflows/free-cloud-ops.yml'
       - '.github/workflows/dropshipping-worker-quality.yml'
+      - 'docs/DROPSHIPPING_WORKERS.md'
   workflow_dispatch:
 
 permissions:
