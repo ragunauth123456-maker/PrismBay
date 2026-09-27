@@ -22,6 +22,20 @@ test('correctly matched and fully quoted product still requires manual commercia
  assert.equal(b.candidates[0].checkoutAllowed,false);
  assert.equal(b.candidates[0].mediaRightsVerified,false);
 });
+test('zero-price freight methods and SKU remain blocked in sanitized review',()=>{
+ const b=buildCJReview({...base,results:[{
+  slug:'hanging-closet-organizer',candidate:'Hanging Closet Organizer',
+  supplierVerified:true,variantInventoryVerified:true,freightVerified:false,
+  product:{name:'Hanging Closet Shelf Storage Organizer',sku:'CJ-P1',variantSku:'CJ-V1'},
+  freightDiagnostic:'zero_priced_methods_require_supplier_confirmation',
+  zeroPriceQuoteCount:11,freightQuoteScope:null,
+ }]});
+ assert.equal(b.candidates[0].status,'destination_freight_required');
+ assert.equal(b.zeroPricedCandidateCount,1);
+ assert.equal(b.candidates[0].observedVariantSku,'CJ-V1');
+ assert.equal(b.candidates[0].zeroPricedMethodCount,11);
+ assert.equal(b.candidates[0].checkoutAllowed,false);
+});
 test('unknown identity and missing reports fail closed',()=>{
  const b=buildCJReview({...base,results:[{candidate:'new item',supplierVerified:true,product:{name:'Mystery item'}}]});
  assert.equal(b.candidates[0].status,'manual_identity_check_required');
