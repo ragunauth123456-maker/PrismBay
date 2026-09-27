@@ -7,6 +7,12 @@ on:
   schedule:
     - cron: '17 0,6,12,18 * * *' # Four 3-product batches/day, bounded CJ API checks
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cj-supplier-verification.yml'
+      - 'scripts/cj-match-policy.mjs'
+      - 'scripts/cj-review-board.mjs'
 
 permissions:
   contents: write
