@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T17:18:52.765Z",
+  "generatedAt": "2026-09-27T21:21:11.821Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-27T16:58:12.333Z",
-    "validSupplierMatches": 1,
-    "variantStock": 1,
+    "checkedAt": "2026-09-27T21:21:11.541Z",
+    "validSupplierMatches": 2,
+    "variantStock": 2,
     "countryFreightEstimates": 0,
     "falseMatches": 0
   },
@@ -23,8 +23,29 @@
       "action": "Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.",
       "state": "review_required",
       "executionMode": "scheduled_cj_and_manual_review",
-      "candidateCount": 6,
+      "candidateCount": 9,
       "blockers": [
+        {
+          "slug": "extendable-high-zone-duster",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "pan-scraper",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "rug-grippers",
+          "status": "destination_freight_required",
+          "sku": "CJLY27903090001",
+          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
+          "zeroPricedMethods": 30
+        },
         {
           "slug": "self-standing-floor-mop",
           "status": "supplier_search_needed",
@@ -76,6 +97,12 @@
       "action": "Check SKU-specific origin and destination ZIP quotes. Zero-dollar CJ methods require written supplier confirmation before treating shipping as free.",
       "state": "supplier_quote_needed",
       "products": [
+        {
+          "slug": "rug-grippers",
+          "variantSku": "CJLY27903090001",
+          "zeroPricedMethods": 30,
+          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
+        },
         {
           "slug": "hanging-closet-organizer",
           "variantSku": "CJJT254150701AZ",
