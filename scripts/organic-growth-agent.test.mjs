@@ -1,4 +1,6 @@
 import test from 'node:test';
+// Existing CI already runs this file; include deterministic paid-document campaign tests.
+import './digital-conversion-campaign.test.mjs';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
