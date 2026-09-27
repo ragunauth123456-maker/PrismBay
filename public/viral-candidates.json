@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-27T09:32:49.304Z",
+  "updatedAt": "2026-09-27T16:35:06.825Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -12,7 +12,7 @@
       "attentionScore": 99.5,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 101,
+        "publicMentions": 100,
         "mentionsLast7Days": 3,
         "mentionsLast30Days": 11,
         "sourcesAvailable": [
@@ -21,13 +21,13 @@
         ],
         "sampleSignals": [
           {
-            "title": "This Handheld Vacuum Is 80% Off at Amazon - people.com",
+            "title": "This Handheld Vacuum Is 80% Off at Amazon - People.com",
             "source": "Google News",
             "publishedAt": "2026-09-11T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQVHBkYUZUN2xpVXhDbXZabUxyeFFUanRVVzZBRWp4VU13djZzT3pJdDJfLWlxWVc0WnQzbTZ5WEdVbkxSQnRwNzVRME5hX0l4LWZsX0R3MGdCenN1M0p4RC1SZGRxTVlMeXRXamJweVNYU1htNzNYak9aaFRwcjdwUUZzWVI1Tk9CclFLd2FIWQ?oc=5"
           },
           {
-            "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - ca.style.yahoo.com",
+            "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-07-20T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQd0diVGlZVTdZMm9BN1JwaUtxR1NuNTV0UDhyei1uSE5qdndvNmR3WS1IZnBfVk9QRHZwYW1mUnl2RHVSRThTSUV6NC1KZHZ3aGZSZ2wtV2hnbDBzbGpnQkJBZmxDQWpfUm1td1ViOFhMSmxiUkswOW5Eb0lQbXVkQndOWVpncjRDOG5JQ3UxRTZIdkNJYkF0cWFjYzd2dkhSZVJhUmxZZ0xMS1hWS2t6TDFicHV3OUtlTm9JSENsNkE0TklsZGtHeWRCbWkyREdoeXA5V1FPbUs1ODZCYUctVjhRTjYyMVl2LU5R?oc=5"
@@ -39,7 +39,7 @@
             "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNbXdYRW9tSWo4UWowdXBVTzFSYm8xdmZLdTlSVURKclRRRDNoXzhzWXRXbnlWR2Q4cjF6RWdTLUYxX3FDUElMZHZ6emRmczZqY2hEUndfdDQ5LXM4dEtiNE5FbjRKbi1KWjRid0dIZXRBTTM1a09YU0dlLTEwZVQ1WUstU3BwSVFybHNlTW9HYmJQVDlhTFBPVzhR?oc=5"
           },
           {
-            "title": "This Cordless Vacuum That Doubles as a Mop Made Shoppers Say ‘Bye-Bye Shark’ — and It’s on Sale at Amazon - people.com",
+            "title": "This Cordless Vacuum That Doubles as a Mop Made Shoppers Say ‘Bye-Bye Shark’ — and It’s on Sale at Amazon - People.com",
             "source": "Google News",
             "publishedAt": "2026-09-24T11:30:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMkNDa2NwU3lld2hfNWEtMFY4dGh6Z2VOZTNjRGt4RzZ0dXZQVVAxc09QWGM4bnM1aUJobmxKV1hsRDBQWlFnTjRIakRmVU5aenFETXJNU2lObGU4V1hTYXdxZ3phcEllcTE4djNmVlNXQjQxWFlrUHFJdVVLZmhPVlBFNkxmcm44NDBtWkZsODAtdw?oc=5"
@@ -64,7 +64,7 @@
       "attentionScore": 78.8,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 46,
+        "publicMentions": 47,
         "mentionsLast7Days": 1,
         "mentionsLast30Days": 6,
         "sourcesAvailable": [
@@ -85,7 +85,7 @@
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPWFp5N1QwRWRBSlduLVVKYUtGSWFaLXZWWnB3RGVZQ1VFVGotVkdhMWhKMTBxQ3JnVHpJVGJJd0FmYW5NcWgxdlhmM0MtMDNSZkVNa1BMZVdGTjlQSW5ET1paa2p6cFRtWVFMWHpna1ZjdlIzVzI0VnJfdHhJckhvY2RzaFpvZVFSQUE?oc=5"
           },
           {
-            "title": "Stocked Up a Little Too Well for Sweater Weather? These Stacking Storage Bins Keep Your Collection Organized - people.com",
+            "title": "Stocked Up a Little Too Well for Sweater Weather? These Stacking Storage Bins Keep Your Collection Organized - People.com",
             "source": "Google News",
             "publishedAt": "2026-09-16T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNdUt2cm1naldDczF5TFc0bExVNFFsTlBOTFdrOWh6NHpHSl9FckJJc0NoaTFWWmZST2hZWWJQU0Q5TWxzZVlxTjNGZ0pzOXQ5SDlOTFF4QkR2dkVMXzhrelhZcjUxT0d3WkJmRVdaQjRYQjF0d2lDWWUwZmJQNUs2ZA?oc=5"
@@ -177,7 +177,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - ca.style.yahoo.com",
+            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-08-11T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPNHlsSk1uanVvSjRscmNoSkxIZVVMZjlsMmFDaXc3VEpUUzBjd1d2UGlwRnRuSE9XNXhvVXhQUW9tOXdEU1BjUFFFU0Jrc19mTFZzbTcxLTV5bzFIaUx5RU1YMGZEZFVQTUlyUWR4U1NWVWZsNUZQbk9UWjhMaktnb19LNFJ5bVcyMWM2b3F5S3FnLWROQ1IwTzhHZUgydUhwb2hPRlpFQUo5ZjFTMVVLTzFsYmluWGNvNkZRSHB1bThZX0NzX0JVMnNfNWJRVUY5Y2ZCLUV0bGJqTW8?oc=5"
@@ -217,12 +217,12 @@
       "slug": "appliance-cord-organizer",
       "name": "Appliance Cord Organizer",
       "query": "appliance cord organizer",
-      "attentionScore": 38.1,
+      "attentionScore": 45.5,
       "attentionLabel": "research",
       "evidence": {
-        "publicMentions": 9,
-        "mentionsLast7Days": 0,
-        "mentionsLast30Days": 1,
+        "publicMentions": 10,
+        "mentionsLast7Days": 1,
+        "mentionsLast30Days": 2,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -287,7 +287,7 @@
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNanRCX21aVXIteW9BSUJ3UFIwNHdVV0VSQWxES1pZUllEMF9tTHhUcDZYcWwwLUZtQ2tTU1o2QU5Ia0cyODBTc1lQWHQzQUdFMkhwbUNyQXZwQnJ3MGZfZ0Q2XzlSUTR1dXQzNmU4WS1TSUtuMWE1T3d5c042VksybVcwUjdPb2t6d1E?oc=5"
           },
           {
-            "title": "The 49 Coolest Things on Amazon Under $25 - hgtv.com",
+            "title": "The 49 Coolest Things on Amazon Under $25 - HGTV",
             "source": "Google News",
             "publishedAt": "2026-06-16T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9XSTFKR0lJRW5HVWdxdy1WVjdEZ1pCcENEcFI2WmNSM0Q4c0R0OUsteTd4bzM0LVg4cGd3c2tvcVVnZHpLbmVCZUNiQkpESEc2aDZHUk9hTGhvd0Z5dVFKcVdzWnZiZk5aLXFlbDI2V18tWHpMSndac29R?oc=5"
@@ -361,13 +361,13 @@
         ],
         "sampleSignals": [
           {
-            "title": "This window cleaning set is our top pick – and it's on sale - realhomes.com",
+            "title": "This window cleaning set is our top pick – and it's on sale - Real Homes",
             "source": "Google News",
             "publishedAt": "2020-05-02T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQVE1RZEw3ZXFWNHlYcmQ3bHNKU214UVBSZU9WTVlxUVk0TjNCUkNaYWNzRHpWS0lrZVNBTUcwYVpiU3lmeWdGNDlQSGloV21senpDMW9NUnlkdFdwTFdKVmZYUE1xVC1qY0REQkZKVGQxUVpXQTBFUThicXNVN1FQTTlXVjBaT04tREdiR0ZHSWw?oc=5"
           },
           {
-            "title": "Top 5 Best Commercial Window Cleaning 2026 - pixelfy.me",
+            "title": "Top 5 Best Commercial Window Cleaning 2026 - Pixelfy.me",
             "source": "Google News",
             "publishedAt": "2026-08-14T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5VVW5NRWgxR2dpcFNXM0MxRE1vVVN3ZE9hTUJQcXJEb3ZkNEd1bExPcnVQT1FDVHpPQ21PUExrS2RES0FIbmtPd2NET2FMaV9mcG9WcUNYOU1FRXdTWlVUUzg1UmlGYlhJVWN3WUpYNVkyUm8?oc=5"
@@ -413,7 +413,7 @@
             "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNYjdvWlg4Y0JBWG10b0F6VVcwTU1MMnAxTFRvQzEyeW5lYThwT3JnLTdyQjlmaEFzVjBKMzBmWml5dVotSVJLUmY5Rkd2UF9CY2tPNUF6SU54X1M1S0c0dUdqQlVnTUw0U0FEdjFYOE1POU1zQTE1cl9KVlF4R1MwOG9kR1F3WjZOLXYxbkFxSlFQODlIY3g1bWNWVmVqcmhVbk1pc2lQVGpudk1hTnJSNExyeTktdUJoa2JQM05uakN1aWZ1aHJPbmVmY0VxaVRFRldkNXktZ9IB3AFBVV95cUxNR3p5OHB6OG9YOTZGTEVDWmVFck96SjF0RndINDlwVmcyVUFBVGgzODBXcEhMWWtzM3ZFRmo3N2hWS01JdlJUVnhLSzYyaVQzV2FIeHBYbkllVTZnRWlwSW55OGlDN0ZOa2lLUENJN3VQdElod1NYYlVXeGVWT2xlLUFiX2NmUUx5TEtpd29WZnFkMzhyYnhuWUFWVTJEM3Y4NllfYnlaY0dFZ056Z3dwdFVOUC05SkkzeFdaVVhSLWVfRVMtUDBJSUhQcWxtenpfU0k1a2tYZTNHbndv?oc=5"
           },
           {
-            "title": "11 Best Baby Bottle Brushes To Remove Bacteria And Germs In 2026 - MomJunction",
+            "title": "11 Best Baby Bottle Brushes To Remove Bacteria And Germs In 2026 - momjunction.com",
             "source": "Google News",
             "publishedAt": "2026-02-09T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBSSnZJWk02YnZ0a196a2FxNGRxV29yeFJscE4tOUxEb1czcXdQREwta0NRNy1kSmNFVklxd2VENmRRSjkzdnQzX1Bob2dScW1pLXF5YzBGSDBDYnJwalZ0bERjOWdyZEZvcmlwN0ZOYjFhRl9UQmxyQklsMA?oc=5"
@@ -501,7 +501,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Met Gala 2025's 'fabulous' blue carpet was made by this Kerala brand from Alleppey: 'Incredibly proud' | Fashion Trends - Hindustan Times",
+            "title": "Met Gala 2025's 'fabulous' blue carpet was made by this Kerala brand from Alleppey: 'Incredibly proud' | Fashion Trends - hindustantimes.com",
             "source": "Google News",
             "publishedAt": "2025-05-06T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQZHhfWl84emR2bHk3dlJFbW9aMGswWnJfbTJCejU4LUw4ZEVPYldrd09WNVQ4ZkhwYkkxWTJ4UWx5QkdydEhOR3JXdkowREhqaHlNTm5oclVBUnRNNFIzUGxnNVBpblI1U2hsTjNFR0hLamxETnNZMlpvNWdHMFhXNnlEMUVTMlVMUTV6bmZ0dmtXdDI1SHlnb0dyUzczZllqUFdwbnBQSURMQVBHNnhjeXZtaGRHWmUtaTZTNlVWcXU4YVRpSndZanpHcDJzZ2s4bHBhX3hJVzRRMk5IZUpKQUhzUG01cDJYTW1KTEFtVFNOT2xVOXpQYtIB_gFBVV95cUxOcnBVVjlNZC1ZYU1xc0FtczV6ZU42T3NkQlBydnVCYTRlUGZBSzg4ZUtVU3pockpDck5Hc3B2SjZWMTBwMHB0ZWJoRC1LY3FNTm0tLTdiTHJTZkZQWUJTcXc1eHhtdlJhbGtJMmlvcHo3bDFlZEI5WnVqTmdEN181MEoxWThjcTJiS2NPYTFRemw0NTZtVmItM2JBUE1RcE1jazF5M2JhazI4R1RPZmhndFo0QVJzOFNxb3hCS1hsUHgzUi1UdUdRU05iaV92YzU1YnNtdXY4SlZaRFJGRXF6RkZ2ak1QWmVWRFhiV29vaFZUbE1HOTBkbVkzWVM5QQ?oc=5"
