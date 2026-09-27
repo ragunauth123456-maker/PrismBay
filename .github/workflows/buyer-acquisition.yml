@@ -9,6 +9,8 @@ on:
       - 'scripts/digital-conversion-campaign.mjs'
       - 'scripts/buyer-acquisition-worker.mjs'
       - 'scripts/buyer-acquisition-worker.test.mjs'
+      - 'scripts/indexnow-submit.mjs'
+      - 'scripts/indexnow-submit.test.mjs'
       - '.github/workflows/buyer-acquisition.yml'
   push:
     branches: [main]
@@ -16,6 +18,8 @@ on:
       - 'scripts/digital-conversion-campaign.mjs'
       - 'scripts/buyer-acquisition-worker.mjs'
       - 'scripts/buyer-acquisition-worker.test.mjs'
+      - 'scripts/indexnow-submit.mjs'
+      - 'scripts/indexnow-submit.test.mjs'
       - '.github/workflows/buyer-acquisition.yml'
 
 permissions:
@@ -35,9 +39,12 @@ jobs:
         with:
           node-version: '22'
       - name: Verify conversion worker safeguards
-        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs
+        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs scripts/indexnow-submit.test.mjs
       - name: Build current buyer-to-checkout campaign from live offer
         run: node scripts/buyer-acquisition-worker.mjs
+      - name: Notify participating search engines about live buyer guides
+        if: github.event_name != 'pull_request'
+        run: node scripts/indexnow-submit.mjs
       - name: Retain buyer acquisition assets
         uses: actions/upload-artifact@v4
         with:
