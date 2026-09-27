@@ -31,7 +31,7 @@ export function freightRequest(vid, zip = null) {
   if (typeof vid !== 'string' || !vid.trim() || vid.length > 200) {
     throw new Error('A validated variant ID is required');
   }
-  if (zip !== null && !/^\\d{5}$/.test(zip)) {
+  if (zip !== null && !/^\d{5}$/.test(zip)) {
     throw new Error('Illustrative US ZIP must be five digits');
   }
   return {
