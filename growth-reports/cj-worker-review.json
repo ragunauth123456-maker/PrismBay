@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-09-27T12:02:32.179Z",
+  "checkedAt": "2026-09-27T16:58:12.333Z",
   "market": "US",
   "authenticationVerified": true,
   "sourceCandidateCount": 6,
@@ -31,7 +31,7 @@
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T12:02:32.179Z"
+      "observedAt": "2026-09-27T16:58:12.333Z"
     },
     {
       "slug": "window-washer-squeegee",
@@ -51,7 +51,7 @@
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T12:02:32.179Z"
+      "observedAt": "2026-09-27T16:58:12.333Z"
     },
     {
       "slug": "bottle-brush-set",
@@ -71,7 +71,7 @@
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T12:02:32.179Z"
+      "observedAt": "2026-09-27T16:58:12.333Z"
     },
     {
       "slug": "cordless-handheld-vacuum",
