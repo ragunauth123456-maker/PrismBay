@@ -31,6 +31,9 @@ export function createCJReadOnlyClient({
       const payload = await response.json().catch(() => ({}));
       const code = String(payload?.code ?? response.status)
         .replace(/[^0-9a-zA-Z_-]/g, '').slice(0, 15);
+      if (code === '1600201') {
+        throw new Error('CJ API points quota exhausted (code 1600201)');
+      }
       if (response.status === 429 || code === '1600200') {
         if (attempt < retryDelaysMs.length) {
           await pause(Math.max(minGapMs, retryDelaysMs[attempt]));
