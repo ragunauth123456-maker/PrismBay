@@ -42,11 +42,12 @@ export function validateBuyerGuide(html, offer) {
     '<link rel="canonical" href="' + offer.guide + '"',
     'buyer-guides.css',
     offer.checkout.split('/').at(-1),
-    '$' + offer.priceUsd,
     'www.prismbayai.com/refunds',
     '<h1>'
   ];
   const missing = expected.filter(part => !html.includes(part));
+  const displayedPrices = [...html.matchAll(/\$\s*([0-9]+)(?:\.([0-9]{2}))?(?![0-9.])/g)].map(match => Number(match[1]) + Number(match[2] ?? 0) / 100);
+  if (!displayedPrices.includes(offer.priceUsd)) missing.push('exact_price_usd_' + offer.priceUsd);
   if (html.length < 7000 || missing.length) {
     throw new Error('buyer_guide_invalid:' + JSON.stringify({slug:offer.slug,missing,bytes:html.length}));
   }
