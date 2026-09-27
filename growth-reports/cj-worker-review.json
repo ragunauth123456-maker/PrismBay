@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-09-27T01:21:14.415Z",
+  "checkedAt": "2026-09-27T01:25:22.001Z",
   "market": "US",
   "authenticationVerified": true,
   "sourceCandidateCount": 3,
-  "independentProductMatches": 0,
+  "independentProductMatches": 1,
   "rejectedFalseMatches": 0,
-  "verifiedVariantCount": 0,
+  "verifiedVariantCount": 1,
   "countryFreightEstimateCount": 0,
   "saleReadyCount": 0,
-  "zeroPricedCandidateCount": 0,
+  "zeroPricedCandidateCount": 1,
   "allRequireManualCommercialApproval": true,
   "note": "Country-level freight is not a destination ZIP quote. Product media and checkout require separate authorization.",
   "candidates": [
@@ -31,27 +31,27 @@
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T01:21:14.415Z"
+      "observedAt": "2026-09-27T01:25:22.001Z"
     },
     {
       "slug": "hanging-closet-organizer",
       "candidate": "Hanging Closet Organizer",
-      "observedProduct": null,
-      "observedSupplierSku": null,
-      "observedVariantSku": null,
-      "freightDiagnostic": null,
+      "observedProduct": "Wall Mounted Storage Bag Door Closet Hanging Storage Bag Organizer Waterproof 3 Pockets Pouch",
+      "observedSupplierSku": "CJJT2541507",
+      "observedVariantSku": "CJJT254150701AZ",
+      "freightDiagnostic": "zero_priced_methods_require_supplier_confirmation",
       "freightQuoteScope": null,
-      "zeroPricedMethodCount": 0,
-      "supplierClaimedMatch": false,
-      "independentIdentityMatch": false,
-      "status": "supplier_api_retry_required",
-      "variantStockVerified": false,
+      "zeroPricedMethodCount": 22,
+      "supplierClaimedMatch": true,
+      "independentIdentityMatch": true,
+      "status": "destination_freight_required",
+      "variantStockVerified": true,
       "countryFreightEstimated": false,
       "mediaRightsVerified": false,
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T01:21:14.415Z"
+      "observedAt": "2026-09-27T01:25:22.001Z"
     },
     {
       "slug": "roll-up-dish-rack",
@@ -64,14 +64,14 @@
       "zeroPricedMethodCount": 0,
       "supplierClaimedMatch": false,
       "independentIdentityMatch": false,
-      "status": "supplier_api_retry_required",
+      "status": "supplier_search_needed",
       "variantStockVerified": false,
       "countryFreightEstimated": false,
       "mediaRightsVerified": false,
       "finalZipFreightVerified": false,
       "checkoutAllowed": false,
       "automaticPromotionAllowed": false,
-      "observedAt": "2026-09-27T01:21:14.415Z"
+      "observedAt": "2026-09-27T01:25:22.001Z"
     }
   ],
   "latestBatchCandidateCount": 3
