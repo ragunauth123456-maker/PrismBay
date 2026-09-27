@@ -44,6 +44,7 @@ jobs:
           import assert from 'node:assert/strict';
           import {hasApprovedProductClass, matchesIntendedProduct} from './scripts/cj-match-policy.mjs';
           import { parseCJFreight, freightRequest, chooseQuote } from './scripts/cj-freight-policy.mjs';
+          import { createCJReadOnlyClient } from './scripts/cj-api-limiter.mjs';
           
           // Explicit product-class requirements prevent CJ's fuzzy search from selecting
           // unrelated merchandise. New categories remain unverified until reviewed.
@@ -100,16 +101,10 @@ jobs:
             'Content-Type': 'application/json',
             'User-Agent': 'PrismBay-CJ-Verification/2.0',
           });
-          async function jsonFetch(url, options = {}) {
-            const response = await fetch(url, { ...options, signal: AbortSignal.timeout(20000) });
-            const payload = await response.json().catch(() => ({}));
-            if (!response.ok || payload?.result === false) {
-              const code = String(payload?.code ?? response.status).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 15);
-              throw new Error('CJ request failed (HTTP ' + response.status + ', code ' + code + ').');
-            }
-            return payload;
-          }
-          
+          // Enforce free-tier request pacing and bounded 429 retry across authentication,
+          // product search, variant stock and the two shipping-quote attempts.
+          const jsonFetch = createCJReadOnlyClient();
+
           const auth = await jsonFetch(BASE + '/authentication/getAccessToken', {
             method: 'POST',
             headers: {'Content-Type':'application/json','User-Agent':'PrismBay-CJ-Verification/2.0'},
@@ -287,7 +282,7 @@ jobs:
 
       - name: Independently audit product identity and prepare worker assignments
         run: |
-          node --test scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs
+          node --test scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs
           node scripts/cj-review-board.mjs
 
       - name: Update sanitized public worker review, not the raw supplier report
