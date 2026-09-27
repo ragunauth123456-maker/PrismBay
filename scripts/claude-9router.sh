@@ -38,7 +38,7 @@ if (!ids.length) { console.error("No models available. Connect an approved free 
 if (process.argv[1]==="--models") console.log(ids.join("\n"));
 const selected=process.env.ROUTER_MODEL;
 if (selected && !ids.includes(selected)) { console.error("Selected model is not advertised by this gateway."); process.exit(1); }
-' "$mode"
+' -- "$mode"
 
 if [[ "$mode" == "--check" || "$mode" == "--models" ]]; then
   [[ "$mode" == "--check" ]] && echo "Router reachable and model catalog available; no model request sent."
