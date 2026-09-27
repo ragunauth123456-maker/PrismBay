@@ -55,14 +55,21 @@ async function publisherReadiness() {
 }
 
 function hookWriter() {
+  // All newly researched physical products are unverified until supplier, US
+  // variant, destination freight, product media and merchant approval pass.
+  // Create useful educational drafts without purchase or availability claims.
   const hour = new Date().getUTCHours();
   const p = products[hour % products.length];
   const hooks = [
-    `Still doing this by hand? Meet the ${p}.`,
-    `One practical tool for the mess you keep putting off: ${p}.`,
-    `Quick reset idea: use the ${p} where it actually saves effort.`
+    `What to check before choosing a ${p} for your home.`,
+    `Compare key specifications and safety information for ${p} models.`,
+    `Three questions to ask a supplier before ordering a ${p}.`,
   ];
-  return { product: p, hooks, cta: 'See the product details at PrismBay Clean.', note: 'No unverified performance claims are added.' };
+  return {
+    product: p, hooks, cta: null, draftOnly: true,
+    physicalProductAvailabilityClaim: false, publicationAuthorized: false,
+    note: 'Editorial research only. Validate SKU, current inventory, final US ZIP freight, product media rights and merchant approval before a promotional CTA.',
+  };
 }
 
 function trendScout() {
