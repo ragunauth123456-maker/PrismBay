@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {buildCJReview} from './cj-review-board.mjs';
+import {buildCJReview, mergeCJReview} from './cj-review-board.mjs';
 const base={checkedAt:'2026-09-26T16:52:56.364Z',market:'US',authentication:'verified'};
 test('rejects the two unrelated products claimed as CJ supplier matches',()=>{
  const b=buildCJReview({...base,results:[
@@ -26,4 +26,20 @@ test('unknown identity and missing reports fail closed',()=>{
  const b=buildCJReview({...base,results:[{candidate:'new item',supplierVerified:true,product:{name:'Mystery item'}}]});
  assert.equal(b.candidates[0].status,'manual_identity_check_required');
  assert.throws(()=>buildCJReview({results:[]}),/invalid/);
+});
+
+test('four scheduled batches accumulate without reviving stale evidence',()=>{
+ const previous=buildCJReview({checkedAt:'2026-09-26T12:00:00Z',authentication:'verified',results:[
+  {slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',supplierVerified:true,product:{name:'Cordless Handheld Vacuum Cleaner'},variantInventoryVerified:false,freightVerified:false}
+ ]});
+ const current=buildCJReview({checkedAt:'2026-09-26T18:00:00Z',authentication:'verified',results:[
+  {slug:'roll-up-dish-rack',candidate:'Roll-Up Dish Drying Rack',supplierVerified:false}
+ ]});
+ const merged=mergeCJReview(previous,current);
+ assert.equal(merged.latestBatchCandidateCount,1);
+ assert.equal(merged.sourceCandidateCount,2);
+ assert.equal(merged.independentProductMatches,1);
+ const expired=mergeCJReview(previous,{...current,checkedAt:'2026-09-28T10:00:00Z'});
+ assert.equal(expired.sourceCandidateCount,1);
+ assert.equal(expired.saleReadyCount,0);
 });
