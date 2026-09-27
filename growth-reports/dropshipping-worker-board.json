@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-27T01:25:16.651Z",
+  "researchCandidates": 12,
+  "publishedResearchSignals": 12,
+  "verifiedCJStatus": {
+    "checkedAt": "2026-09-27T01:21:14.415Z",
+    "validSupplierMatches": 0,
+    "variantStock": 0,
+    "countryFreightEstimates": 0,
+    "falseMatches": 0
+  },
+  "constraints": {
+    "supplierApprovalsRequired": true,
+    "customerOrdersEnabled": false,
+    "autoPublishingEnabled": false,
+    "livePaymentsAuthorized": false
+  },
+  "tasks": [
+    {
+      "worker": "Supplier Auditor",
+      "priority": "high",
+      "action": "Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.",
+      "state": "review_required",
+      "executionMode": "scheduled_cj_and_manual_review",
+      "candidateCount": 3,
+      "blockers": [
+        {
+          "slug": "cordless-handheld-vacuum",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "hanging-closet-organizer",
+          "status": "supplier_api_retry_required",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "roll-up-dish-rack",
+          "status": "supplier_api_retry_required",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        }
+      ]
+    },
+    {
+      "worker": "Trend Scout",
+      "priority": "normal",
+      "action": "Refresh current public-news research; do not represent attention scores as verified orders.",
+      "state": "scheduled",
+      "executionMode": "existing_cloud_script",
+      "candidateCount": 12
+    },
+    {
+      "worker": "Storefront CRO Auditor",
+      "priority": "normal",
+      "action": "Inspect existing storefront, shipping disclosures, policies, live offer identity and mobile experience. Propose a Product schema only for independently verified live listings.",
+      "state": "scheduled",
+      "executionMode": "existing_cloud_script",
+      "reportAvailable": true,
+      "storefrontStatus": 200,
+      "missingProductSchema": true
+    },
+    {
+      "worker": "Hook/Creative Writer",
+      "priority": "normal",
+      "action": "Prepare original informational product-comparison drafts. Do not add a purchase CTA until SKU, inventory, freight, creative rights and approval are independently verified.",
+      "state": "drafts_only",
+      "executionMode": "existing_cloud_script"
+    },
+    {
+      "worker": "Creator/Partner Scout",
+      "priority": "normal",
+      "action": "Research relevant cleaning creators and prepare a qualified shortlist; do not send unsolicited messages or imply an active creator relationship.",
+      "state": "research_only",
+      "executionMode": "existing_cloud_script"
+    },
+    {
+      "worker": "Publisher Readiness",
+      "priority": "normal",
+      "action": "Check channel verification and policy pages; all new product posts remain draft-only pending merchant and media-rights authorization.",
+      "state": "readiness_check_only",
+      "executionMode": "existing_cloud_script"
+    },
+    {
+      "worker": "Analytics Reviewer",
+      "priority": "normal",
+      "action": "Compare live storefront health with verified, non-test payment evidence. No inferred revenue.",
+      "state": "scheduled",
+      "executionMode": "existing_cloud_script",
+      "reportAvailable": true
+    },
+    {
+      "worker": "Offer Optimizer",
+      "priority": "normal",
+      "action": "Inspect existing product-page prices and outdated urgency. Do not modify live prices without verified supplier landed cost and owner approval.",
+      "state": "scheduled",
+      "executionMode": "existing_cloud_script"
+    }
+  ],
+  "note": "Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed."
+}
