@@ -1,15 +1,18 @@
 {
   "role": "Hook/Creative Writer",
-  "startedAt": "2026-09-27T00:37:03.706Z",
-  "finishedAt": "2026-09-27T00:37:03.707Z",
+  "startedAt": "2026-09-27T01:37:05.629Z",
+  "finishedAt": "2026-09-27T01:37:05.629Z",
   "result": {
-    "product": "Cordless Pressure Washer",
+    "product": "Cordless Handheld Vacuum",
     "hooks": [
-      "Still doing this by hand? Meet the Cordless Pressure Washer.",
-      "One practical tool for the mess you keep putting off: Cordless Pressure Washer.",
-      "Quick reset idea: use the Cordless Pressure Washer where it actually saves effort."
+      "What to check before choosing a Cordless Handheld Vacuum for your home.",
+      "Compare key specifications and safety information for Cordless Handheld Vacuum models.",
+      "Three questions to ask a supplier before ordering a Cordless Handheld Vacuum."
     ],
-    "cta": "See the product details at PrismBay Clean.",
-    "note": "No unverified performance claims are added."
+    "cta": null,
+    "draftOnly": true,
+    "physicalProductAvailabilityClaim": false,
+    "publicationAuthorized": false,
+    "note": "Editorial research only. Validate SKU, current inventory, final US ZIP freight, product media rights and merchant approval before a promotional CTA."
   }
 }
