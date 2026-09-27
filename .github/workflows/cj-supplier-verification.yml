@@ -45,6 +45,7 @@ jobs:
           import {hasApprovedProductClass, matchesIntendedProduct} from './scripts/cj-match-policy.mjs';
           import { parseCJFreight, freightRequest, chooseQuote } from './scripts/cj-freight-policy.mjs';
           import { createCJReadOnlyClient } from './scripts/cj-api-limiter.mjs';
+          import { candidateSearches, uniqueEligibleProducts, selectBestInspection } from './scripts/cj-search-strategy.mjs';
           
           // Explicit product-class requirements prevent CJ's fuzzy search from selecting
           // unrelated merchandise. New categories remain unverified until reviewed.
@@ -137,34 +138,53 @@ jobs:
               results.push({...base, status:'manual_category_review', reason:'Candidate has no approved product-class validation rule.'});
               continue;
             }
-            const url = new URL(BASE + '/product/listV2');
-            url.searchParams.set('page', '1');
-            url.searchParams.set('size', '20');
-            url.searchParams.set('keyWord', base.query);
-            url.searchParams.set('countryCode', 'US');
-            url.searchParams.set('startWarehouseInventory', '10');
-            url.searchParams.set('verifiedWarehouse', '1');
-            url.searchParams.set('sort', 'desc');
-            url.searchParams.set('orderBy', '1');
-            url.searchParams.append('features', 'enable_category');
-          
-            let search;
-            try {
-              search = await jsonFetch(url, { headers: headers(token) });
-            } catch (error) {
-              results.push({...base, status:'search_error', reason: error instanceof Error ? error.message : 'CJ search failed.'});
-              continue;
+            const eligibleGroups = [];
+            let candidatesReturned = 0;
+            let searchesAttempted = 0;
+            let searchErrors = 0;
+            // One primary query plus one category-specific alternate at most.
+            // Every result still passes the strict identity and warehouse filters.
+            for (const query of candidateSearches(candidate)) {
+              searchesAttempted += 1;
+              const url = new URL(BASE + '/product/listV2');
+              url.searchParams.set('page', '1');
+              url.searchParams.set('size', '20');
+              url.searchParams.set('keyWord', query);
+              url.searchParams.set('countryCode', 'US');
+              url.searchParams.set('startWarehouseInventory', '10');
+              url.searchParams.set('verifiedWarehouse', '1');
+              url.searchParams.set('sort', 'desc');
+              url.searchParams.set('orderBy', '1');
+              url.searchParams.append('features', 'enable_category');
+              let search;
+              try {
+                search = await jsonFetch(url, { headers: headers(token) });
+              } catch (error) {
+                searchErrors += 1;
+                // Never hammer CJ's exhausted daily quota.
+                if (String(error?.message || '').includes('1600201')) break;
+                continue;
+              }
+              const products = flatten(search);
+              candidatesReturned += products.length;
+              eligibleGroups.push(eligibleProducts(products, candidate));
+              if (uniqueEligibleProducts(eligibleGroups, 2).length >= 2) break;
             }
-            const products = flatten(search);
-            const eligible = eligibleProducts(products, candidate);
+            const eligible = uniqueEligibleProducts(eligibleGroups, 2);
             if (!eligible.length) {
-              results.push({...base, status:'manual_supplier_match_required',
-                candidatesReturned:products.length,
-                reason:'CJ search returned no correctly matched product with positive price and verified US inventory. Unrelated products and zero-cost records are excluded.'});
+              results.push({...base,
+                status: searchErrors === searchesAttempted ? 'search_error' : 'manual_supplier_match_required',
+                candidatesReturned, searchesAttempted, searchErrors,
+                reason: searchErrors === searchesAttempted ?
+                  'Both limited CJ supplier searches failed; await a fresh read-only run.' :
+                  'Neither approved query returned a matching on-sale product with a positive price and verified US product inventory.',
+              });
               continue;
             }
-          
-            const item = eligible[0];
+
+            const inspected = [];
+            for (const item of eligible) {
+
             // CJ's product/query endpoint is a summary. Variant identities and
             // physical US stock come from the separate documented endpoints.
             const variantsUrl = new URL(BASE + '/product/variant/query');
@@ -244,7 +264,7 @@ jobs:
               else if (freightDiagnostic === 'not_quoted') freightDiagnostic = evaluated.diagnostic;
             }
 
-            results.push({...base,
+            inspected.push({...base,
               supplierVerified:true,
               variantInventoryVerified,
               freightVerified:variantInventoryVerified && freightOptions.length > 0,
@@ -259,8 +279,13 @@ jobs:
               shippingDisclaimer:'US-to-US country or illustrative ZIP estimate only. Confirm the actual buyer ZIP, carrier, variant, total landed cost and supplier acceptance before any sale.',
               fulfillmentNote:'No ordering, payment, listing or automatic publishing is enabled.',
             });
+              if (freightOptions.length) break;
+            }
+            const best = selectBestInspection(inspected);
+            results.push({...best, alternativesInspected:inspected.length, searchesAttempted,searchErrors,candidatesReturned,
+              alternativeNote:'A supplier match never authorizes a listing. Both alternatives require independent variant and freight checks.'});
           }
-          
+
           const report = {
             schemaVersion:3, checkedAt:new Date().toISOString(), market:'US',
             batchSlot:slot, catalogCandidateCount:allCandidates.length,
@@ -282,7 +307,7 @@ jobs:
 
       - name: Independently audit product identity and prepare worker assignments
         run: |
-          node --test scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs
+          node --test scripts/cj-search-strategy.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs
           node scripts/cj-review-board.mjs
           node scripts/dropshipping-dispatch.mjs
 
