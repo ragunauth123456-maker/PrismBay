@@ -5,11 +5,17 @@ name: PrismBay CJ Supplier Verification
 # Read-only: no orders, payments, listing, email or publishing.
 on:
   schedule:
-    - cron: '17 4 * * *' # 00:17 Guyana, 30 min after daily candidate research
+    - cron: '17 0,6,12,18 * * *' # Four 3-product batches/day, bounded CJ API checks
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cj-supplier-verification.yml'
+      - 'scripts/cj-match-policy.mjs'
+      - 'scripts/cj-review-board.mjs'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: prismbay-cj-supplier-verification
@@ -36,29 +42,10 @@ jobs:
           node --input-type=module <<'JS'
           import fs from 'node:fs/promises';
           import assert from 'node:assert/strict';
+          import {hasApprovedProductClass, matchesIntendedProduct} from './scripts/cj-match-policy.mjs';
           
           // Explicit product-class requirements prevent CJ's fuzzy search from selecting
           // unrelated merchandise. New categories remain unverified until reviewed.
-          const productClasses = Object.freeze({
-            'cordless-handheld-vacuum': [/\bvacuum\b/i, /(handheld|hand-held|cordless|portable)/i],
-            'extendable-high-zone-duster': [/\bduster\b/i, /(extend|high|telescop)/i],
-            'dryer-vent-cleaner-kit': [/(dryer|lint)/i, /(vent|cleaner|brush)/i],
-            'self-standing-floor-mop': [/\bmop\b/i, /(stand|floor|flat|spin)/i],
-            'window-washer-squeegee': [/(squeegee|window washer)/i, /(window|glass)/i],
-            'roll-up-dish-rack': [/\brack\b/i, /(dish|drying|sink|roll[- ]?up)/i],
-            'appliance-cord-organizer': [/(cord|cable)/i, /(organizer|holder|clip)/i],
-            'rug-grippers': [/(rug|carpet)/i, /(grip|non.?slip|adhesive)/i],
-            'bottle-brush-set': [/\bbottle\b/i, /\bbrush\b/i],
-            'sheet-laundry-detangler': [/(sheet|laundry)/i, /(detangl|tangle|twist|ball)/i],
-            'hanging-closet-organizer': [/(closet|wardrobe)/i, /(hanging|hang|organizer)/i],
-            'pan-scraper': [/(scraper|scrubber)/i, /(pan|pot|cookware|dish)/i],
-          });
-          
-          function matchesIntendedProduct(candidate, name) {
-            const rules = productClasses[String(candidate.slug || '')];
-            return Boolean(rules && typeof name === 'string' && rules.every(rule => rule.test(name)));
-          }
-          
           function positiveNumber(value) {
             if (value === null || value === undefined || typeof value === 'boolean' || String(value).trim() === '') return null;
             const parsed = Number(value);
@@ -100,6 +87,8 @@ jobs:
           assert.equal(price({nowPrice:0, discountPrice:null, sellPrice:'23.50'}), 23.5);
           assert.equal(eligibleProducts([{nameEn:'VEVOR Stand Airless Paint Sprayer', saleStatus:'3', verifiedWarehouse:1, totalVerifiedInventory:3835, sellPrice:55}], {slug:'cordless-handheld-vacuum'}).length, 0);
           console.log('Product-matching, price and prior false-positive safeguards PASS');
+          assert.equal(matchesIntendedProduct({slug:'cordless-handheld-vacuum'}, 'VEVOR Wet Dry Vac, 2.6 Gallon, Portable Shop Vacuum'), false);
+          assert.equal(matchesIntendedProduct({slug:'hanging-closet-organizer'}, 'Wall-door Mounted Jewelry Wardrobe Large Capacity Mirror And LED Light Lockable Organizer'), false);
           if (process.env.CJ_AUDIT_SELF_TEST_ONLY === '1') process.exit(0);
           
           const apiKey = String(process.env.CJ_API_KEY || '').trim();
@@ -131,7 +120,10 @@ jobs:
           console.log('CJ authentication PASS');
           
           const catalog = JSON.parse(await fs.readFile('public/viral-candidates.json', 'utf8'));
-          const candidates = Array.isArray(catalog?.candidates) ? catalog.candidates.slice(0, 3) : [];
+          const allCandidates = Array.isArray(catalog?.candidates) ? catalog.candidates.slice(0, 12) : [];
+          // Four 3-product batches per day cover twelve research candidates with bounded API use.
+          const slot = process.env.GITHUB_EVENT_NAME === 'schedule' ? Math.floor(new Date().getUTCHours() / 6) : 0;
+          const candidates = allCandidates.slice(slot * 3, slot * 3 + 3);
           if (candidates.length === 0) throw new Error('No research candidates available for supplier verification.');
           function flatten(payload) {
             const groups = payload?.data?.content;
@@ -141,11 +133,11 @@ jobs:
           const results = [];
           for (const candidate of candidates) {
             const base = {
-              candidate: String(candidate?.name || ''), query: String(candidate?.query || ''),
+              slug:String(candidate?.slug || ''), candidate: String(candidate?.name || ''), query: String(candidate?.query || ''),
               supplierVerified: false, variantInventoryVerified: false,
               freightVerified: false, fulfillmentReady: false,
             };
-            if (!productClasses[candidate?.slug]) {
+            if (!hasApprovedProductClass(candidate?.slug)) {
               results.push({...base, status:'manual_category_review', reason:'Candidate has no approved product-class validation rule.'});
               continue;
             }
@@ -177,26 +169,44 @@ jobs:
             }
           
             const item = eligible[0];
-            const detailUrl = new URL(BASE + '/product/query');
-            detailUrl.searchParams.set('pid', String(item.id));
-            detailUrl.searchParams.set('countryCode', 'US');
+            // CJ's product/query endpoint is a summary. Variant identities and
+            // physical US stock come from the separate documented endpoints.
+            const variantsUrl = new URL(BASE + '/product/variant/query');
+            variantsUrl.searchParams.set('pid', String(item.id));
+            variantsUrl.searchParams.set('countryCode', 'US');
             let variant = null;
             let variantInventoryVerified = false;
-            let variantCheck = 'unavailable';
+            let variantCheck = 'variant_details_unavailable';
             try {
-              const details = await jsonFetch(detailUrl, { headers: headers(token) });
-              const variants = Array.isArray(details?.data?.variants) ? details.data.variants : [];
-              // A product-level US warehouse flag is not enough to confirm the specific SKU.
-              variant = variants.find(v => Array.isArray(v?.inventories) && v.inventories.some(inv =>
-                String(inv?.countryCode || '').toUpperCase() === 'US' &&
-                count(inv?.totalInventory ?? inv?.inventory ?? inv?.stock) >= 1
-              )) || null;
-              variantInventoryVerified = Boolean(variant?.vid);
-              variantCheck = variantInventoryVerified ? 'verified' : 'manual_variant_inventory_check_required';
+              const variantsResponse = await jsonFetch(variantsUrl, { headers: headers(token) });
+              const variants = Array.isArray(variantsResponse?.data) ? variantsResponse.data : [];
+              variantCheck = 'manual_variant_inventory_check_required';
+              // Bound API traffic and require same PID, VID, positive unit price and CJ-held US stock.
+              for (const choice of variants.slice(0, 5)) {
+                if (String(choice?.pid || '') !== String(item.id) || !choice?.vid ||
+                    positiveNumber(choice?.variantSellPrice) === null) continue;
+                const stockUrl = new URL(BASE + '/product/stock/queryByVid');
+                stockUrl.searchParams.set('vid', String(choice.vid));
+                let stockResponse;
+                try { stockResponse = await jsonFetch(stockUrl, { headers: headers(token) }); }
+                catch { continue; }
+                const stockRows = Array.isArray(stockResponse?.data) ? stockResponse.data : [];
+                const hasPhysicalUsInventory = stockRows.some(row =>
+                  String(row?.vid || '') === String(choice.vid) &&
+                  String(row?.countryCode || '').toUpperCase() === 'US' &&
+                  count(row?.totalInventoryNum) >= 10 &&
+                  count(row?.cjInventoryNum) >= 1
+                );
+                if (!hasPhysicalUsInventory) continue;
+                variant = choice;
+                variantInventoryVerified = true;
+                variantCheck = 'verified_us_cj_stock';
+                break;
+              }
             } catch {
               variantCheck = 'variant_details_unavailable';
             }
-          
+
             const freightOptions = [];
             let zeroPriceQuoteCount = 0;
             if (variantInventoryVerified && variant?.vid) {
@@ -236,7 +246,8 @@ jobs:
           }
           
           const report = {
-            schemaVersion:2, checkedAt:new Date().toISOString(), market:'US',
+            schemaVersion:3, checkedAt:new Date().toISOString(), market:'US',
+            batchSlot:slot, catalogCandidateCount:allCandidates.length,
             authentication:'verified', apiKeyExposed:false, accessTokenExposed:false,
             ordersEnabled:false, paymentsEnabled:false, automaticListingEnabled:false, automaticPublishingEnabled:false,
             candidateCount:results.length,
@@ -253,11 +264,39 @@ jobs:
             estimatedFreight:report.freightEstimateCount,ordersEnabled:false}));
           JS
 
+      - name: Independently audit product identity and prepare worker assignments
+        run: |
+          node --test scripts/cj-match-policy.test.mjs scripts/cj-review-board.test.mjs
+          node scripts/cj-review-board.mjs
+
+      - name: Update sanitized public worker review, not the raw supplier report
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f growth-reports/cj-worker-review.json
+          if git diff --cached --quiet; then echo 'CJ review unchanged'; exit 0; fi
+          git commit -m 'chore: update safe read-only CJ worker review'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo 'Concurrent change requires owner review; never force push'
+              exit 1
+            fi
+            git push origin HEAD:main && exit 0
+            sleep "$((attempt * 2))"
+          done
+          exit 1
+
       - name: Retain CJ verification report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: prismbay-cj-supplier-verification-${{ github.run_id }}
-          path: growth-reports/cj-supplier-verification.json
+          path: |
+            growth-reports/cj-supplier-verification.json
+            growth-reports/cj-worker-review.json
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 7

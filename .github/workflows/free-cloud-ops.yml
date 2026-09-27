@@ -5,11 +5,12 @@ on:
     - cron: '19 */6 * * *'
   workflow_dispatch:
   push:
-    branches: [free-cloud-ops-20260925]
+    branches: [free-cloud-ops-20260925, main]
     paths:
       - '.github/workflows/free-cloud-ops.yml'
       - 'scripts/revenue-health-check*'
       - 'scripts/viral-product-engine.mjs'
+      - 'scripts/dropshipping-dispatch.mjs'
 
 permissions:
   contents: write
@@ -32,7 +33,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -70,6 +71,8 @@ jobs:
             echo "Running $role"
             node scripts/organic-growth-agent.mjs "$role"
           done
+      - name: Coordinate dropshipping worker assignments and supplier blockers
+        run: node scripts/dropshipping-dispatch.mjs
       - name: Verify published public routes and catalog freshness
         run: node scripts/revenue-health-check.mjs
       - name: Complete only tasks captured before successful scheduled work

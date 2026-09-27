@@ -1,0 +1,69 @@
+name: Dropshipping Worker Quality
+
+on:
+  push:
+    branches:
+      - 'dropshipping-workers-*'
+    paths:
+      - 'scripts/cj-*.mjs'
+      - 'scripts/dropshipping-*.mjs'
+      - '.github/workflows/cj-supplier-verification.yml'
+      - '.github/workflows/free-cloud-ops.yml'
+      - '.github/workflows/dropshipping-worker-quality.yml'
+      - 'docs/DROPSHIPPING_WORKERS.md'
+  pull_request:
+    paths:
+      - 'scripts/cj-*.mjs'
+      - 'scripts/dropshipping-*.mjs'
+      - '.github/workflows/cj-supplier-verification.yml'
+      - '.github/workflows/free-cloud-ops.yml'
+      - '.github/workflows/dropshipping-worker-quality.yml'
+      - 'docs/DROPSHIPPING_WORKERS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out candidate fixes
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify identity policy, review board and dispatch rules
+        run: |
+          node --test scripts/cj-match-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs
+      - name: Check previously approved catalog discovery and CJ MCP regression
+        run: |
+          node --test scripts/candidate-discovery.test.mjs scripts/cj-mcp-scout.test.mjs
+      - name: Run embedded CJ pipeline safeguards without credentials or API requests
+        env:
+          CJ_AUDIT_SELF_TEST_ONLY: '1'
+        run: |
+          python3 - <<'PY'
+          import pathlib, subprocess, sys, os
+          workflow = pathlib.Path('.github/workflows/cj-supplier-verification.yml').read_text()
+          marker = "          node --input-type=module <<'JS'\n"
+          start = workflow.index(marker) + len(marker)
+          end = workflow.index("\n          JS", start)
+          program = "\n".join(line[10:] if line.startswith("          ") else line for line in workflow[start:end].splitlines()) + "\n"
+          result = subprocess.run(['node', '--input-type=module'], input=program, text=True, env=os.environ)
+          sys.exit(result.returncode)
+          PY
+      - name: Confirm no commercial automation is activated
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const cj=fs.readFileSync('.github/workflows/cj-supplier-verification.yml','utf8');
+          const ops=fs.readFileSync('.github/workflows/free-cloud-ops.yml','utf8');
+          for(const line of ['ordersEnabled:false','paymentsEnabled:false','automaticListingEnabled:false','automaticPublishingEnabled:false']) {
+            if(!cj.includes(line)) throw new Error('Missing fail-closed setting '+line);
+          }
+          if(!ops.includes('node scripts/dropshipping-dispatch.mjs')) throw new Error('Existing cloud worker was not connected');
+          console.log('Read-only growth and supplier verification boundaries PASS');
+          JS
