@@ -47,7 +47,7 @@ const policy = Object.freeze({
     excluded: [/\b(jewelry|mirror|cabinet|lockable|wall[\s-]*door)\b/i],
   },
   'pan-scraper': {
-    required: [/\b(pan|pot|cookware|dish)\b/i, /\b(scrap|scrub)\b/i],
+    required: [/\b(pan|pot|cookware|dish)\b/i, /\b(scrap\w*|scrub\w*)\b/i],
     excluded: [/\b(paint|wallpaper|industrial)\b/i],
   },
 });
