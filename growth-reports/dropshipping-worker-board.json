@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T02:11:56.655Z",
+  "generatedAt": "2026-09-27T12:02:32.448Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-27T02:11:56.387Z",
+    "checkedAt": "2026-09-27T12:02:32.179Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
     "countryFreightEstimates": 0,
@@ -23,8 +23,29 @@
       "action": "Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.",
       "state": "review_required",
       "executionMode": "scheduled_cj_and_manual_review",
-      "candidateCount": 3,
+      "candidateCount": 6,
       "blockers": [
+        {
+          "slug": "self-standing-floor-mop",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "window-washer-squeegee",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "bottle-brush-set",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "cordless-handheld-vacuum",
           "status": "supplier_search_needed",
