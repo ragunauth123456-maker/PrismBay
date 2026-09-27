@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: prismbay-free-cloud-ops
+  group: prismbay-commerce-board-writers
   cancel-in-progress: false
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs scripts/board-freshness.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -90,6 +90,14 @@ jobs:
           for attempt in 1 2 3; do
             git fetch origin main
             git -C "$syncdir" reset --hard origin/main
+            # The CJ job can commit a newer review while a growth run executes.
+            # Skip stale snapshots instead of rolling supplier evidence backwards.
+            if ! node scripts/board-freshness.mjs "$snapshot" \
+              "$syncdir/growth-reports/cj-worker-review.json" \
+              "$syncdir/growth-reports/dropshipping-worker-board.json"; then
+              echo 'Newer supplier evidence or worker board exists; retain artifact and skip stale publish'
+              exit 0
+            fi
             mkdir -p "$syncdir/growth-reports"
             cp "$snapshot" "$syncdir/growth-reports/dropshipping-worker-board.json"
             git -C "$syncdir" add -f growth-reports/dropshipping-worker-board.json
