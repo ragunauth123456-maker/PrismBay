@@ -35,3 +35,11 @@ The existing manually selectable Copilot profiles in `.github/agents/` supply en
 CJ API reference: https://developers.cjdropshipping.com/en/api/api2/api/product.html
 
 CJ freight calculation documentation: https://developers.cjdropshipping.com/en/api/api2/api/logistic.html
+
+## Existing-cloud paid-document conversion worker (27 September 2026)
+
+The six-hour `Hook/Creative Writer` task now also runs `scripts/digital-conversion-campaign.mjs` without adding a server, runner, workflow or model subscription. It rotates three **existing** paid document packages across successive six-hour runs: stakeholder mapping ($49), ESG operating pack ($99), and white paper/board briefing ($79). Its source-of-truth URLs are the live, original free buyer guides under GitHub Pages, with a matching existing Stripe Payment Link and a bounded `client_reference_id` for eventual paid-session attribution.
+
+The output in `growth-reports/hook-creative-writer.json` contains an educational post draft, an original-graphics-only 30-second video script, honest document-package disclosures and a campaign-specific free-guide URL. The pre-existing cloud workflow includes the output in its time-limited run artifact. It is *not* an auto-posting or cold-email bot; it has no access to a subscribed mailing list and must never claim transactions, working AI software, or unverified physical inventory. Publishing remains subject to genuine channel authorization and media review. For actual revenue, reconcile live Stripe `payment_status=paid` transactions separately.
+
+Offline checks: `node --test scripts/digital-conversion-campaign.test.mjs scripts/organic-growth-agent.test.mjs`. Existing physical supplier and TikTok approval safeguards remain unchanged.
