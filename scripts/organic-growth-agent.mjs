@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { campaignForSlot, currentSixHourSlot } from './digital-conversion-campaign.mjs';
 
 const role = process.argv[2] || 'Storefront CRO Auditor';
 const SHOP = process.env.PRISMBAY_SHOP_URL || 'https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/';
@@ -69,6 +70,9 @@ function hookWriter() {
     product: p, hooks, cta: null, draftOnly: true,
     physicalProductAvailabilityClaim: false, publicationAuthorized: false,
     note: 'Editorial research only. Validate SKU, current inventory, final US ZIP freight, product media rights and merchant approval before a promotional CTA.',
+    // Independent revenue channel: only the already-built, downloadable document products.
+    // Physical merchandise stays draft-only; neither channel publishes or sends on its own.
+    digitalCampaign: campaignForSlot(currentSixHourSlot()),
   };
 }
 
