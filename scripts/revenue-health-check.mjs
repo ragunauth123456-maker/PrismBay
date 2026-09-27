@@ -48,7 +48,8 @@ export function validateBuyerGuide(html, offer) {
   const missing = expected.filter(part => !html.includes(part));
   // A $99 listing must not pass on $999, $99.99, or a price hidden in metadata.
   // Check a complete USD amount, allowing a .00 suffix only.
-  const pricePattern = new RegExp('\\\\
+  const displayedPrices = [...html.matchAll(/\$\s*([0-9]+)(?:\.([0-9]{2}))?(?![0-9.])/g)].map(match => Number(match[1]) + Number(match[2] ?? 0) / 100);
+  if (!displayedPrices.includes(offer.priceUsd)) missing.push('exact_price_usd_' + offer.priceUsd);
   if (html.length < 7000 || missing.length) {
     throw new Error('buyer_guide_invalid:' + JSON.stringify({slug:offer.slug,missing,bytes:html.length}));
   }
