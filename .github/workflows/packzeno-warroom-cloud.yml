@@ -1,0 +1,40 @@
+name: PackZeno Cloud War Room Candidate
+
+# This is an auditable public-data candidate, not the migrated AGM local task.
+# The exact Windows task action, source code, dependencies and cadence remain
+# unverified. Do not schedule or disable the AGM task until parity is proven.
+on:
+  push:
+    branches: [migration/packzeno-warroom-cloud-20260927]
+    paths:
+      - '.github/workflows/packzeno-warroom-cloud.yml'
+      - 'scripts/packzeno-warroom-cloud.mjs'
+      - 'scripts/packzeno-warroom-cloud.test.mjs'
+      - 'docs/PACKZENO_CLOUD_MIGRATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-revenue-war-room:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out existing PrismBay reports and cloud worker code
+        uses: actions/checkout@v4
+      - name: Install Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test read-only, freshness and revenue-evidence protections
+        run: node --test scripts/packzeno-warroom-cloud.test.mjs
+      - name: Compile safe public operations snapshot
+        run: node scripts/packzeno-warroom-cloud.mjs
+      - name: Retain short-lived review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: packzeno-cloud-candidate
+          path: growth-reports/packzeno-revenue-warroom-cloud.json
+          if-no-files-found: error
+          retention-days: 3
