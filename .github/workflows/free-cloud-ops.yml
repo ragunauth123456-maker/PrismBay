@@ -2,7 +2,7 @@ name: PrismBay Free Cloud Operations
 
 on:
   schedule:
-    - cron: '19 */6 * * *'
+    - cron: '47 */6 * * *' # Read the CJ review after its :17 supplier batch finishes
   workflow_dispatch:
   push:
     branches: [free-cloud-ops-20260925, main]
