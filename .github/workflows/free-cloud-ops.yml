@@ -5,11 +5,12 @@ on:
     - cron: '19 */6 * * *'
   workflow_dispatch:
   push:
-    branches: [free-cloud-ops-20260925]
+    branches: [free-cloud-ops-20260925, main]
     paths:
       - '.github/workflows/free-cloud-ops.yml'
       - 'scripts/revenue-health-check*'
       - 'scripts/viral-product-engine.mjs'
+      - 'scripts/dropshipping-dispatch.mjs'
 
 permissions:
   contents: write
