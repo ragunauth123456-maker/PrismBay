@@ -1,0 +1,40 @@
+const KEY='927a4d6b8c21e5f73a90bc14d2ef6a31';
+const HOST='ragunauth123456-maker.github.io';
+const ROOT='https://'+HOST+'/PrismBay/';
+const URLS=[
+  ROOT,
+  ROOT+'toolkits.html',
+  ROOT+'stakeholder-engagement-plan-template.html',
+  ROOT+'esg-monthly-reporting-template.html',
+  ROOT+'board-briefing-white-paper-template.html'
+];
+const event=process.env.GITHUB_EVENT_NAME||'manual';
+const hour=new Date().getUTCHours();
+if(event==='schedule' && ![0,12].includes(hour)){
+  console.log(JSON.stringify({status:'SKIP',reason:'scheduled_indexnow_twice_daily_only',hour,event}));
+  process.exit(0);
+}
+const keyLocation=ROOT+KEY+'.txt';
+const keyProof=await fetch(keyLocation,{redirect:'follow',signal:AbortSignal.timeout(10000)});
+const proofText=(await keyProof.text()).trim();
+if(!keyProof.ok || proofText!==KEY) throw new Error('indexnow_key_proof_failed_http_'+keyProof.status);
+for(const url of URLS){
+  const r=await fetch(url,{method:'HEAD',redirect:'follow',signal:AbortSignal.timeout(10000)});
+  if(!r.ok) throw new Error('public_url_not_live_'+r.status+'_'+url);
+}
+const payload={host:HOST,key:KEY,keyLocation,urlList:URLS};
+const r=await fetch('https://api.indexnow.org/indexnow',{
+  method:'POST',
+  headers:{'content-type':'application/json; charset=utf-8','user-agent':'PrismBay-IndexNow/1.0'},
+  body:JSON.stringify(payload),
+  signal:AbortSignal.timeout(15000)
+});
+const body=await r.text();
+if(![200,202].includes(r.status)){
+  if(r.status===429){
+    console.warn(JSON.stringify({status:'RATE_LIMITED',httpStatus:r.status,urlCount:URLS.length,body:body.slice(0,300)}));
+    process.exit(0);
+  }
+  throw new Error('indexnow_submit_failed_http_'+r.status+':'+body.slice(0,300));
+}
+console.log(JSON.stringify({status:'PASS',httpStatus:r.status,urlCount:URLS.length,keyLocation,submittedAt:new Date().toISOString()}));
