@@ -1,0 +1,4 @@
+Claim ID,Claim,Type,Source,Publication Date,Methodology,Reviewer,Confidence,Status
+C-01,Operating costs changed versus baseline,Calculation,Insert exact source,YYYY-MM-DD,Define identical boundary,Research Lead,Pending,Review
+C-02,Option A requires lower upfront capital,Estimate,Insert exact source,YYYY-MM-DD,Include financing assumptions,Finance Reviewer,Pending,Review
+C-03,Decision required by quarter end,Governance fact,Insert authority record,YYYY-MM-DD,Confirm decision owner,Executive Sponsor,Pending,Review

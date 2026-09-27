@@ -1,0 +1,4 @@
+KPI,Definition,Unit,Period,Data Owner,Evidence Location,Quality Flag,Status
+Purchased electricity,Grid electricity consumed,kWh,Monthly,Energy Coordinator,Billing record,Measured,Open
+Water withdrawal,Total water abstracted,m3,Monthly,Environment Lead,Meter log,Measured,Open
+Community grievances,New cases received,count,Monthly,Social Performance Lead,Case register,Verified,Open
