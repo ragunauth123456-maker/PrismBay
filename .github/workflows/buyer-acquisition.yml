@@ -1,0 +1,53 @@
+name: PrismBay Buyer Acquisition Priority
+
+on:
+  schedule:
+    - cron: '23 */2 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/digital-conversion-campaign.mjs'
+      - 'scripts/buyer-acquisition-worker.mjs'
+      - 'scripts/buyer-acquisition-worker.test.mjs'
+      - '.github/workflows/buyer-acquisition.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/digital-conversion-campaign.mjs'
+      - 'scripts/buyer-acquisition-worker.mjs'
+      - 'scripts/buyer-acquisition-worker.test.mjs'
+      - '.github/workflows/buyer-acquisition.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-buyer-acquisition
+  cancel-in-progress: true
+
+jobs:
+  acquire-buyers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify conversion worker safeguards
+        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs
+      - name: Build current buyer-to-checkout campaign from live offer
+        run: node scripts/buyer-acquisition-worker.mjs
+      - name: Retain buyer acquisition assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: buyer-acquisition-${{ github.run_id }}
+          path: |
+            growth-reports/buyer-acquisition-latest.json
+            growth-reports/buyer-acquisition-latest.md
+          retention-days: 7
+      - name: Summary
+        run: |
+          echo '## Buyer acquisition worker' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This worker validates a real existing guide -> Stripe checkout path and generates a channel-ready truthful conversion asset every two hours.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'It does not claim revenue without a paid Stripe transaction.' >> "$GITHUB_STEP_SUMMARY"
