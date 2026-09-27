@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T01:25:16.651Z",
+  "generatedAt": "2026-09-27T02:09:11.547Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-27T01:25:22.001Z",
+    "checkedAt": "2026-09-27T02:09:11.280Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
     "countryFreightEstimates": 0,
@@ -118,6 +118,5 @@
       "executionMode": "existing_cloud_script"
     }
   ],
-  "note": "Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed.",
-  "supplierEvidenceUpdatedAt": "2026-09-27T01:25:22.001Z"
+  "note": "Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed."
 }
