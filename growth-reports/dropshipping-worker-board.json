@@ -4,9 +4,9 @@
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-27T01:21:14.415Z",
-    "validSupplierMatches": 0,
-    "variantStock": 0,
+    "checkedAt": "2026-09-27T01:25:22.001Z",
+    "validSupplierMatches": 1,
+    "variantStock": 1,
     "countryFreightEstimates": 0,
     "falseMatches": 0
   },
@@ -34,17 +34,32 @@
         },
         {
           "slug": "hanging-closet-organizer",
-          "status": "supplier_api_retry_required",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
+          "status": "destination_freight_required",
+          "sku": "CJJT254150701AZ",
+          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
+          "zeroPricedMethods": 22
         },
         {
           "slug": "roll-up-dish-rack",
-          "status": "supplier_api_retry_required",
+          "status": "supplier_search_needed",
           "sku": null,
           "shippingDiagnostic": null,
           "zeroPricedMethods": 0
+        }
+      ]
+    },
+    {
+      "worker": "Freight Analyst",
+      "priority": "high",
+      "executionMode": "scheduled_cj_and_manual_review",
+      "action": "Check SKU-specific origin and destination ZIP quotes. Zero-dollar CJ methods require written supplier confirmation before treating shipping as free.",
+      "state": "supplier_quote_needed",
+      "products": [
+        {
+          "slug": "hanging-closet-organizer",
+          "variantSku": "CJJT254150701AZ",
+          "zeroPricedMethods": 22,
+          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
         }
       ]
     },
@@ -103,5 +118,6 @@
       "executionMode": "existing_cloud_script"
     }
   ],
-  "note": "Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed."
+  "note": "Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed.",
+  "supplierEvidenceUpdatedAt": "2026-09-27T01:25:22.001Z"
 }
