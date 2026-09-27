@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -73,6 +73,26 @@ jobs:
           done
       - name: Coordinate dropshipping worker assignments and supplier blockers
         run: node scripts/dropshipping-dispatch.mjs
+      - name: Publish sanitized dropshipping worker board for owner review
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f growth-reports/dropshipping-worker-board.json
+          if git diff --cached --quiet; then echo 'Worker board unchanged'; exit 0; fi
+          git commit -m 'chore: publish current dropshipping worker assignments'
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo 'Concurrent edit blocked board publication; artifact still available'
+              exit 1
+            fi
+            git push origin HEAD:main && exit 0
+            sleep "$((attempt * 2))"
+          done
+          exit 1
       - name: Verify published public routes and catalog freshness
         run: node scripts/revenue-health-check.mjs
       - name: Complete only tasks captured before successful scheduled work

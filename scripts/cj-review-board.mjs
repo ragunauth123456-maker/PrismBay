@@ -25,6 +25,13 @@ export function buildCJReview(report) {
     }
     return {
       slug, candidate: intended, observedProduct: productName || null,
+      // Public CJ catalog identifiers only, never credentials, account IDs or customer data.
+      observedSupplierSku: typeof row.product?.sku === 'string' ? row.product.sku : null,
+      observedVariantSku: typeof row.product?.variantSku === 'string' ? row.product.variantSku : null,
+      freightDiagnostic: typeof row.freightDiagnostic === 'string' ? row.freightDiagnostic :
+        (Number(row.zeroPriceQuoteCount) > 0 ? 'zero_priced_methods_require_supplier_confirmation' : null),
+      freightQuoteScope: row.freightQuoteScope || null,
+      zeroPricedMethodCount: Number.isInteger(row.zeroPriceQuoteCount) ? row.zeroPriceQuoteCount : 0,
       supplierClaimedMatch: Boolean(row.supplierVerified),
       independentIdentityMatch: identity, status,
       variantStockVerified: Boolean(identity === true && row.variantInventoryVerified),
@@ -40,7 +47,9 @@ export function buildCJReview(report) {
     rejectedFalseMatches: candidates.filter(c => c.status === 'identity_rejected').length,
     verifiedVariantCount: candidates.filter(c => c.variantStockVerified).length,
     countryFreightEstimateCount: candidates.filter(c => c.countryFreightEstimated).length,
-    saleReadyCount: 0, allRequireManualCommercialApproval: true,
+    saleReadyCount: 0,
+    zeroPricedCandidateCount: candidates.filter(c => c.zeroPricedMethodCount > 0).length,
+    allRequireManualCommercialApproval: true,
     note: 'Country-level freight is not a destination ZIP quote. Product media and checkout require separate authorization.',
     candidates,
   };
@@ -66,6 +75,7 @@ export function mergeCJReview(previous, fresh) {
     verifiedVariantCount: combined.filter(c => c.variantStockVerified).length,
     countryFreightEstimateCount: combined.filter(c => c.countryFreightEstimated).length,
     saleReadyCount: 0,
+    zeroPricedCandidateCount: combined.filter(c => c.zeroPricedMethodCount > 0).length,
   };
 }
 
@@ -90,6 +100,7 @@ export async function main(source = 'growth-reports/cj-supplier-verification.jso
     falseMatchesRejected: output.rejectedFalseMatches,
     variantsConfirmed: output.verifiedVariantCount,
     countryFreightEstimates: output.countryFreightEstimateCount,
+    zeroPricedCandidatesNeedingManualQuote: output.zeroPricedCandidateCount,
     saleReady: 0,
   };
   console.log(JSON.stringify(summary));

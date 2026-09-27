@@ -43,6 +43,7 @@ jobs:
           import fs from 'node:fs/promises';
           import assert from 'node:assert/strict';
           import {hasApprovedProductClass, matchesIntendedProduct} from './scripts/cj-match-policy.mjs';
+          import { parseCJFreight, freightRequest, chooseQuote } from './scripts/cj-freight-policy.mjs';
           
           // Explicit product-class requirements prevent CJ's fuzzy search from selecting
           // unrelated merchandise. New categories remain unverified until reviewed.
@@ -207,27 +208,47 @@ jobs:
               variantCheck = 'variant_details_unavailable';
             }
 
+            // Verify shipping independently of the supplier match. A zero-dollar
+            // result is ambiguous, NOT evidence of approved free shipping.
+            // If country-only quotes have no positive price, retry once using
+            // an illustrative US ZIP. A sample ZIP never validates a buyer's address.
             const freightOptions = [];
             let zeroPriceQuoteCount = 0;
+            let freightQuoteScope = null;
+            let freightDiagnostic = variantInventoryVerified ? 'not_quoted' : 'variant_stock_unverified';
             if (variantInventoryVerified && variant?.vid) {
+              let countryQuote = null;
+              let exampleQuote = null;
               try {
-                const freight = await jsonFetch(BASE + '/logistic/freightCalculate', {
+                const country = await jsonFetch(BASE + '/logistic/freightCalculate', {
                   method:'POST', headers:headers(token),
-                  body:JSON.stringify({startCountryCode:'US',endCountryCode:'US',products:[{quantity:1,vid:variant.vid}]}),
+                  body:JSON.stringify(freightRequest(String(variant.vid))),
                 });
-                const services = Array.isArray(freight?.data) ? freight.data : [];
-                for (const service of services) {
-                  const amount = positiveNumber(service?.logisticPrice);
-                  if (amount === null) { zeroPriceQuoteCount += 1; continue; }
-                  freightOptions.push({name:service?.logisticName || null,usd:amount,aging:service?.logisticAging || null});
-                }
-                freightOptions.sort((a,b) => a.usd - b.usd);
-                freightOptions.length = Math.min(freightOptions.length, 5);
+                countryQuote = parseCJFreight(country, 'country_estimate');
               } catch {
-                // Freight is never marked verified when CJ's quote call fails.
+                freightDiagnostic = 'country_quote_api_error';
               }
+              if (!countryQuote || countryQuote.offers.length === 0) {
+                try {
+                  const zip = '10001'; // Illustrative NYC ZIP only, never a customer delivery quote
+                  const sample = await jsonFetch(BASE + '/logistic/freightCalculate', {
+                    method:'POST', headers:headers(token),
+                    body:JSON.stringify(freightRequest(String(variant.vid), zip)),
+                  });
+                  exampleQuote = parseCJFreight(sample, 'example_zip_estimate', zip);
+                } catch {
+                  freightDiagnostic = 'illustrative_zip_quote_api_error';
+                }
+              }
+              const evaluated = chooseQuote(countryQuote || parseCJFreight({data:[]}), exampleQuote);
+              freightOptions.push(...evaluated.offers);
+              zeroPriceQuoteCount = evaluated.zeroPriced;
+              freightQuoteScope = evaluated.scope;
+              if (freightOptions.length) freightDiagnostic = evaluated.diagnostic;
+              else if (evaluated.zeroPriced) freightDiagnostic = 'zero_priced_methods_require_supplier_confirmation';
+              else if (freightDiagnostic === 'not_quoted') freightDiagnostic = evaluated.diagnostic;
             }
-          
+
             results.push({...base,
               supplierVerified:true,
               variantInventoryVerified,
@@ -239,8 +260,8 @@ jobs:
                 name:item.nameEn, productCostUsd:price(item,variant),
                 verifiedProductInventory:count(item.totalVerifiedInventory),
                 warehouse:'US', variantId:variant?.vid || null, variantSku:variant?.variantSku || null,
-              }, variantCheck, zeroPriceQuoteCount, freightOptions,
-              shippingDisclaimer:'US-to-US country-level estimate only. Confirm destination ZIP, variant, final total landed cost and supplier order acceptance before sale.',
+              }, variantCheck, zeroPriceQuoteCount, freightOptions, freightQuoteScope, freightDiagnostic,
+              shippingDisclaimer:'US-to-US country or illustrative ZIP estimate only. Confirm the actual buyer ZIP, carrier, variant, total landed cost and supplier acceptance before any sale.',
               fulfillmentNote:'No ordering, payment, listing or automatic publishing is enabled.',
             });
           }
@@ -266,7 +287,7 @@ jobs:
 
       - name: Independently audit product identity and prepare worker assignments
         run: |
-          node --test scripts/cj-match-policy.test.mjs scripts/cj-review-board.test.mjs
+          node --test scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs
           node scripts/cj-review-board.mjs
 
       - name: Update sanitized public worker review, not the raw supplier report

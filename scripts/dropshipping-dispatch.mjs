@@ -9,24 +9,59 @@ export function makeDispatch({catalog, queue, review, growthReports = {}, now = 
   const ageHours = review?.checkedAt ? (now - Date.parse(review.checkedAt)) / 36e5 : null;
   const reviewFresh = Number.isFinite(ageHours) && ageHours >= 0 && ageHours < 30;
   const tasks = [];
+  const candidates = reviewFresh && Array.isArray(review.candidates) ? review.candidates : [];
+  const blocked = candidates.filter(c => c.status !== 'commercial_review_required');
+  const freightBlocked = blocked.filter(c => c.variantStockVerified && !c.countryFreightEstimated);
+  const reviewTasks = blocked.map(c => ({
+    slug: c.slug, status: c.status,
+    sku: c.observedVariantSku || c.observedSupplierSku || null,
+    shippingDiagnostic: c.freightDiagnostic || null,
+    zeroPricedMethods: c.zeroPricedMethodCount || 0,
+  }));
   if (!reviewFresh) {
-    tasks.push({worker:'Supplier Auditor',priority:'high',action:'Read latest CJ verification artifact; refresh strict identity, variant inventory and US freight evidence.',state:'awaiting_new_evidence'});
+    tasks.push({worker:'Supplier Auditor',priority:'high',action:'Obtain a fresh CJ read-only verification run. Do not infer readiness from stale supplier data.',state:'awaiting_new_evidence',executionMode:'scheduled_cj_and_manual_review'});
   } else {
-    const blockers = (review.candidates || []).filter(c => c.status !== 'commercial_review_required');
-    tasks.push({worker:'Supplier Auditor',priority:'high',action:'Review CJ candidate blockers and investigate precise SKUs. Do not create a listing or order.',state:'active_read_only',candidateCount:blockers.length,blockers:blockers.map(c=>({slug:c.slug,status:c.status}))});
-    if (review.rejectedFalseMatches) tasks.push({worker:'Quality Reviewer',priority:'high',action:'Inspect and reject unrelated CJ keyword matches before any offer work.',state:'active_read_only',rejectedFalseMatches:review.rejectedFalseMatches});
+    tasks.push({worker:'Supplier Auditor',priority:'high',action:'Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.',state:'review_required',executionMode:'scheduled_cj_and_manual_review',candidateCount:blocked.length,blockers:reviewTasks});
+    if (review.rejectedFalseMatches) tasks.push({worker:'Quality Reviewer',priority:'high',action:'Reject CJ keyword false matches and update the explicit product-class regression tests.',state:'review_required',executionMode:'manual_copilot_review',rejectedFalseMatches:review.rejectedFalseMatches});
+    if (freightBlocked.length) tasks.push({
+      worker:'Freight Analyst',priority:'high',executionMode:'scheduled_cj_and_manual_review',
+      action:'Check SKU-specific origin and destination ZIP quotes. Zero-dollar CJ methods require written supplier confirmation before treating shipping as free.',
+      state:'supplier_quote_needed',
+      products:freightBlocked.map(c=>({slug:c.slug,variantSku:c.observedVariantSku || null,
+        zeroPricedMethods:c.zeroPricedMethodCount || 0,
+        diagnostic:c.freightDiagnostic || null})),
+    });
   }
-  tasks.push({worker:'Trend Scout',priority:'normal',action:'Refresh the existing public-news attention catalog; treat news mentions as research signals only.',state:'scheduled',candidateCount});
-  tasks.push({worker:'Storefront CRO Auditor',priority:'normal',action:'Check existing store route, price and shipping disclosures, links, policy pages and checkout visibility. Log findings.',state:'scheduled',reportAvailable:Boolean(growthReports['storefront-cro-auditor'])});
-  tasks.push({worker:'Hook/Creative Writer',priority:'normal',action:'Prepare original product demonstration scripts for approved inventory only. Hold all posts for rights and merchant review.',state:'drafts_only'});
-  tasks.push({worker:'Analytics Reviewer',priority:'normal',action:'Compare storefront availability and verified sales evidence. Never count test payments or impressions as sales.',state:'scheduled',reportAvailable:Boolean(growthReports['analytics-reviewer'])});
+  tasks.push({worker:'Trend Scout',priority:'normal',action:'Refresh current public-news research; do not represent attention scores as verified orders.',state:'scheduled',executionMode:'existing_cloud_script',candidateCount});
+  const cro = growthReports['storefront-cro-auditor']?.result?.activeStorefront;
+  tasks.push({worker:'Storefront CRO Auditor',priority:'normal',
+    action:'Inspect existing storefront, shipping disclosures, policies, live offer identity and mobile experience. Propose a Product schema only for independently verified live listings.',
+    state:'scheduled',executionMode:'existing_cloud_script',
+    reportAvailable:Boolean(cro),storefrontStatus:cro?.status ?? null,
+    missingProductSchema:cro?.hasProductSchema === false});
+  tasks.push({worker:'Hook/Creative Writer',priority:'normal',
+    action:'Prepare original informational product-comparison drafts. Do not add a purchase CTA until SKU, inventory, freight, creative rights and approval are independently verified.',
+    state:'drafts_only',executionMode:'existing_cloud_script'});
+  tasks.push({worker:'Creator/Partner Scout',priority:'normal',
+    action:'Research relevant cleaning creators and prepare a qualified shortlist; do not send unsolicited messages or imply an active creator relationship.',
+    state:'research_only',executionMode:'existing_cloud_script'});
+  tasks.push({worker:'Publisher Readiness',priority:'normal',
+    action:'Check channel verification and policy pages; all new product posts remain draft-only pending merchant and media-rights authorization.',
+    state:'readiness_check_only',executionMode:'existing_cloud_script'});
+  tasks.push({worker:'Analytics Reviewer',priority:'normal',
+    action:'Compare live storefront health with verified, non-test payment evidence. No inferred revenue.',
+    state:'scheduled',executionMode:'existing_cloud_script',
+    reportAvailable:Boolean(growthReports['analytics-reviewer'])});
+  tasks.push({worker:'Offer Optimizer',priority:'normal',
+    action:'Inspect existing product-page prices and outdated urgency. Do not modify live prices without verified supplier landed cost and owner approval.',
+    state:'scheduled',executionMode:'existing_cloud_script'});
   return {
-    schemaVersion: 1, generatedAt:new Date(now).toISOString(),
+    schemaVersion: 2, generatedAt:new Date(now).toISOString(),
     researchCandidates:candidateCount, publishedResearchSignals:Array.isArray(catalog?.candidates) ? catalog.candidates.length : 0,
     verifiedCJStatus:reviewFresh ? {checkedAt:review.checkedAt,validSupplierMatches:review.independentProductMatches,variantStock:review.verifiedVariantCount,countryFreightEstimates:review.countryFreightEstimateCount,falseMatches:review.rejectedFalseMatches} : null,
     constraints:{supplierApprovalsRequired:true,customerOrdersEnabled:false,autoPublishingEnabled:false,livePaymentsAuthorized:false},
     tasks,
-    note:'These are existing deterministic scheduled workers and next-task instructions. A model-enabled Copilot agent runs only when explicitly invoked through an available runtime.',
+    note:'Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed.',
   };
 }
 
