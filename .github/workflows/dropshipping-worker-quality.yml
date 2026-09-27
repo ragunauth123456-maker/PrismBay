@@ -37,7 +37,7 @@ jobs:
           node-version: '22'
       - name: Verify identity policy, review board and dispatch rules
         run: |
-          node --test scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
+          node --test scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
       - name: Check previously approved catalog discovery and CJ MCP regression
         run: |
           node --test scripts/candidate-discovery.test.mjs scripts/cj-mcp-scout.test.mjs

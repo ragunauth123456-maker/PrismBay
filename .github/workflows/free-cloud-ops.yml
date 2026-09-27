@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -77,21 +77,31 @@ jobs:
         if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f growth-reports/dropshipping-worker-board.json
-          if git diff --cached --quiet; then echo 'Worker board unchanged'; exit 0; fi
-          git commit -m 'chore: publish current dropshipping worker assignments'
+          # The research and growth workers leave tracked report changes in the
+          # original checkout. Use an isolated worktree so a rebase never fails
+          # with "You have unstaged changes" or discards useful run artifacts.
+          snapshot="$RUNNER_TEMP/prismbay-worker-board.json"
+          syncdir="$RUNNER_TEMP/prismbay-worker-board-publisher"
+          cp growth-reports/dropshipping-worker-board.json "$snapshot"
+          git fetch origin main
+          git worktree add --detach "$syncdir" origin/main
+          git -C "$syncdir" config user.name 'github-actions[bot]'
+          git -C "$syncdir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           for attempt in 1 2 3; do
             git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort
-              echo 'Concurrent edit blocked board publication; artifact still available'
-              exit 1
+            git -C "$syncdir" reset --hard origin/main
+            mkdir -p "$syncdir/growth-reports"
+            cp "$snapshot" "$syncdir/growth-reports/dropshipping-worker-board.json"
+            git -C "$syncdir" add -f growth-reports/dropshipping-worker-board.json
+            if git -C "$syncdir" diff --cached --quiet; then
+              echo 'Worker board unchanged'
+              exit 0
             fi
-            git push origin HEAD:main && exit 0
-            sleep "$((attempt * 2))"
+            git -C "$syncdir" commit -m 'chore: update safe dropshipping worker board'
+            if git -C "$syncdir" push origin HEAD:main; then exit 0; fi
+            sleep "$((attempt * 3))"
           done
+          echo 'Board commit failed; inspect retained run artifact'
           exit 1
       - name: Verify published public routes and catalog freshness
         run: node scripts/revenue-health-check.mjs
