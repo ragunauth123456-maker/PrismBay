@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-27T01:08:17.939Z",
+  "market": "US",
+  "authenticationVerified": true,
+  "sourceCandidateCount": 3,
+  "independentProductMatches": 1,
+  "rejectedFalseMatches": 0,
+  "verifiedVariantCount": 1,
+  "countryFreightEstimateCount": 0,
+  "saleReadyCount": 0,
+  "allRequireManualCommercialApproval": true,
+  "note": "Country-level freight is not a destination ZIP quote. Product media and checkout require separate authorization.",
+  "candidates": [
+    {
+      "slug": "cordless-handheld-vacuum",
+      "candidate": "Cordless Handheld Vacuum",
+      "observedProduct": null,
+      "supplierClaimedMatch": false,
+      "independentIdentityMatch": false,
+      "status": "supplier_search_needed",
+      "variantStockVerified": false,
+      "countryFreightEstimated": false,
+      "mediaRightsVerified": false,
+      "finalZipFreightVerified": false,
+      "checkoutAllowed": false,
+      "automaticPromotionAllowed": false,
+      "observedAt": "2026-09-27T01:08:17.939Z"
+    },
+    {
+      "slug": "hanging-closet-organizer",
+      "candidate": "Hanging Closet Organizer",
+      "observedProduct": "Wall Mounted Storage Bag Door Closet Hanging Storage Bag Organizer Waterproof 3 Pockets Pouch",
+      "supplierClaimedMatch": true,
+      "independentIdentityMatch": true,
+      "status": "destination_freight_required",
+      "variantStockVerified": true,
+      "countryFreightEstimated": false,
+      "mediaRightsVerified": false,
+      "finalZipFreightVerified": false,
+      "checkoutAllowed": false,
+      "automaticPromotionAllowed": false,
+      "observedAt": "2026-09-27T01:08:17.939Z"
+    },
+    {
+      "slug": "roll-up-dish-rack",
+      "candidate": "Roll-Up Dish Drying Rack",
+      "observedProduct": null,
+      "supplierClaimedMatch": false,
+      "independentIdentityMatch": false,
+      "status": "supplier_search_needed",
+      "variantStockVerified": false,
+      "countryFreightEstimated": false,
+      "mediaRightsVerified": false,
+      "finalZipFreightVerified": false,
+      "checkoutAllowed": false,
+      "automaticPromotionAllowed": false,
+      "observedAt": "2026-09-27T01:08:17.939Z"
+    }
+  ],
+  "latestBatchCandidateCount": 3
+}
