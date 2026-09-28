@@ -55,7 +55,7 @@ jobs:
             --available-tools='view,glob,grep' \
             --allow-tool='read' \
             --no-ask-user \
-            --max-ai-credits=1 \
+            --max-ai-credits=30 \
             > /tmp/claude-council-response.txt
           test -s /tmp/claude-council-response.txt
 
