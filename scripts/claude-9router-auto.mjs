@@ -263,10 +263,12 @@ async function selfTest() {
     const dataDir = path.join(root, ".9router");
     await fsp.mkdir(path.join(dataDir, "db"), { recursive: true });
     const db = new DatabaseSync(path.join(dataDir, "db", "data.sqlite"));
-    db.exec("CREATE TABLE apiKeys(id TEXT PRIMARY KEY, key TEXT, isActive INTEGER, createdAt TEXT)");
-    db.prepare("INSERT INTO apiKeys VALUES (?, ?, ?, ?)").run(
+    db.exec("CREATE TABLE apiKeys(id TEXT PRIMARY KEY, key TEXT, name TEXT, machineId TEXT, isActive INTEGER, createdAt TEXT)");
+    db.prepare("INSERT INTO apiKeys(id, key, name, machineId, isActive, createdAt) VALUES (?, ?, ?, ?, ?, ?)").run(
       "1",
       "sk-self-test",
+      "self-test",
+      "machine-self-test",
       1,
       "2026-09-28T00:00:00Z",
     );
