@@ -34,6 +34,14 @@ For genuine Claude, use the owner-only `[CLAUDE-GENUINE]` issue and include `@cl
 
 For the free fallback reviewer, use the existing `[AI-COUNCIL]` issue. That route remains useful for additional model diversity but must not be represented as genuine Claude.
 
+## Zero-secret Anthropic route through GitHub Copilot
+
+For this personally owned repository, GitHub Copilot CLI can authenticate inside GitHub Actions with the short-lived built-in `GITHUB_TOKEN`. The council workflow requests the `copilot-requests: write` permission, discovers the Claude models allowed by the repository owner's Copilot entitlement without invoking a model, and then runs an Anthropic Claude model through Copilot.
+
+The workflow prefers `claude-sonnet-5`, then `claude-opus-5`, `claude-haiku-4.5`, and finally another advertised Claude model. Each response is constrained with `--max-ai-credits=1`, uses only read-oriented repository tools, and posts the result back to the owner-only `[CLAUDE-COPILOT]` issue.
+
+This route does not require an Anthropic API key or OAuth token. It does require GitHub Copilot access and consumes GitHub AI Credits under the owner's existing Copilot entitlement. It does not enable or purchase additional credits.
+
 ## Safety and cost boundaries
 
 The council remains cloud-only. It must not connect K1, AGMADMINLPT18, another user computer, self-hosted runners, or remote desktop. It must not expose credentials, customer data, unpublished employer material, or private correspondence to unapproved services.
