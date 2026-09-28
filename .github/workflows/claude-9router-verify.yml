@@ -8,13 +8,16 @@ on:
       - '.vscode/tasks.json'
       - 'docs/CLAUDE_9ROUTER_CLOUD.md'
       - 'docs/AI_COUNCIL.md'
+      - 'docs/OPEN_MODEL_MESH.md'
       - 'scripts/claude-9router.sh'
       - 'scripts/claude-9router.test.sh'
       - 'scripts/claude-9router-auto.mjs'
+      - 'scripts/open-model-council.mjs'
       - '.github/workflows/claude-9router-verify.yml'
       - '.github/workflows/claude-free-issue-agent.yml'
       - '.github/workflows/genuine-claude-council.yml'
       - '.github/workflows/copilot-claude-council.yml'
+      - '.github/workflows/open-model-mesh.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,4 +37,5 @@ jobs:
       - name: Validate one-command automation
         run: |
           node --check scripts/claude-9router-auto.mjs
+          node --check scripts/open-model-council.mjs
           node scripts/claude-9router-auto.mjs --self-test
