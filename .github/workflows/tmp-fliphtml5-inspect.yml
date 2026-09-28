@@ -13,19 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Inspect loaded viewer network
         run: |
           set -euo pipefail
-          echo "Chrome:"
-          which google-chrome || which chromium || which chromium-browser || true
           npm install --no-save playwright-core
-          cat > /tmp/probe.mjs <<'NODE'
+          cat > probe.mjs <<'NODE'
           import { chromium } from 'playwright-core';
-          const exe = '/usr/bin/google-chrome';
-          const browser = await chromium.launch({headless:true, executablePath:exe, args:['--no-sandbox']});
+          const browser = await chromium.launch({headless:true, executablePath:'/usr/bin/google-chrome', args:['--no-sandbox']});
           const page = await browser.newPage({viewport:{width:1440,height:1100}});
           const urls = new Set();
           page.on('request', r => {
@@ -33,18 +31,18 @@ jobs:
             if (/fliphtml5|MI05|\/files\//i.test(u)) urls.add(u);
           });
           await page.goto('https://online.fliphtml5.com/jeign/MI05/#p=45',{waitUntil:'domcontentloaded',timeout:60000});
-          await page.waitForTimeout(12000);
+          await page.waitForTimeout(15000);
           console.log('TITLE', await page.title());
           console.log('URL', page.url());
           console.log('---- network urls ----');
           for (const u of [...urls].sort()) console.log(u);
           console.log('---- body text excerpt ----');
           console.log((await page.locator('body').innerText()).slice(0,12000));
-          await page.screenshot({path:'/tmp/page45.png',fullPage:true});
+          await page.screenshot({path:'page45.png',fullPage:true});
           await browser.close();
           NODE
-          node /tmp/probe.mjs
+          node probe.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: mi05-page45-probe
-          path: /tmp/page45.png
+          path: page45.png
