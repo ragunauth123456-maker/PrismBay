@@ -11,23 +11,40 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Fetch config and test assets
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect loaded viewer network
         run: |
           set -euo pipefail
-          base='https://online.fliphtml5.com/jeign/MI05'
-          curl -L --compressed -A 'Mozilla/5.0' "$base/javascript/config.js" -o /tmp/config.js
-          echo "CONFIG_SIZE=$(wc -c </tmp/config.js)"
-          echo "---- config head ----"
-          head -c 12000 /tmp/config.js
-          echo
-          echo "---- relevant config tokens ----"
-          grep -Eoi '.{0,150}(download|pdf|source|file|page|large|thumb|text|bookConfig|pages).{0,300}' /tmp/config.js | head -n 300 || true
-          echo "---- candidate URLs ----"
-          grep -Eo 'https?://[^"'"'"' <>]+' /tmp/config.js | head -n 300 || true
-          echo "---- test likely assets ----"
-          for u in             "$base/files/download.pdf"             "$base/files/source.pdf"             "$base/files/MI05.pdf"             "$base/files/assets/basic-html/page-45.html"             "$base/files/large/45.webp"             "$base/files/large/45.jpg"             "$base/files/thumb/45.jpg"; do
-              code=$(curl -L -s -o /dev/null -w '%{http_code}' "$u" || true)
-              echo "$code $u"
-          done
+          echo "Chrome:"
+          which google-chrome || which chromium || which chromium-browser || true
+          npm install --no-save playwright-core
+          cat > /tmp/probe.mjs <<'NODE'
+          import { chromium } from 'playwright-core';
+          const exe = '/usr/bin/google-chrome';
+          const browser = await chromium.launch({headless:true, executablePath:exe, args:['--no-sandbox']});
+          const page = await browser.newPage({viewport:{width:1440,height:1100}});
+          const urls = new Set();
+          page.on('request', r => {
+            const u=r.url();
+            if (/fliphtml5|MI05|\/files\//i.test(u)) urls.add(u);
+          });
+          await page.goto('https://online.fliphtml5.com/jeign/MI05/#p=45',{waitUntil:'domcontentloaded',timeout:60000});
+          await page.waitForTimeout(12000);
+          console.log('TITLE', await page.title());
+          console.log('URL', page.url());
+          console.log('---- network urls ----');
+          for (const u of [...urls].sort()) console.log(u);
+          console.log('---- body text excerpt ----');
+          console.log((await page.locator('body').innerText()).slice(0,12000));
+          await page.screenshot({path:'/tmp/page45.png',fullPage:true});
+          await browser.close();
+          NODE
+          node /tmp/probe.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mi05-page45-probe
+          path: /tmp/page45.png
