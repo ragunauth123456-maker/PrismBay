@@ -69,7 +69,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Anthropic Claude via GitHub Copilot (claude-haiku-4.5):\n\n' + body
+              body: 'Anthropic Claude via GitHub Copilot (current default Claude model):\n\n' + body
             });
 
       - name: Report failure
