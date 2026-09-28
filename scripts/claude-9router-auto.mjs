@@ -12,6 +12,7 @@ const ROUTER_API = `${ROUTER_BASE}/v1`;
 const PREFERRED_MODEL = "oc/muse-spark-1.3-contributor-free";
 const PINNED_9ROUTER = "9router@0.5.91";
 const PINNED_CLAUDE = "@anthropic-ai/claude-code@2.1.283";
+// Keep all generated router credentials local to the active cloud runtime.
 
 function fail(message) {
   console.error(`ERROR: ${message}`);
