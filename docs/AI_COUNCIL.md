@@ -42,6 +42,24 @@ The current route uses GitHub Copilot CLI's current default model rather than fo
 
 This route does not require an Anthropic API key or OAuth token. It does require GitHub Copilot access and consumes GitHub AI Credits under the owner's existing Copilot entitlement. It does not enable or purchase additional credits.
 
+## Automated open-weight five-model mesh
+
+The repository also includes a fully local open-weight council for **Qwen, Llama, Mistral, DeepSeek, and Gemma**. This route runs on a GitHub-hosted runner through Ollama and does not require external model API keys.
+
+The default CPU-sized models are:
+
+- Qwen: `qwen3:0.6b`
+- Llama: `llama3.2:1b`
+- Mistral: `ministral-3:3b`
+- DeepSeek: `deepseek-coder:1.3b`
+- Gemma: `gemma3:1b`
+
+The five models are linked through a shared-blackboard protocol. Round 1 is independent so model diversity is preserved. In Round 2, every model receives the complete first-round packet and critiques the other answers. The Mistral-family member then receives the original task, the five independent answers, and the five peer reviews and produces an open-model synthesis. ChatGPT can read that result and combine it with its own analysis and the genuine Claude council.
+
+This is intentionally different from pretending the models are one neural network. They remain separate model families and exchange outputs through an auditable GitHub workflow. The lightweight variants are chosen so they can run sequentially on ordinary GitHub-hosted CPU runners. They are useful as independent checks, but they are not equivalent to the largest hosted models in those families.
+
+Use the owner-only `[OPEN-MODEL-COUNCIL]` control issue for this mesh. No user PC, self-hosted runner, model API key, purchase, deployment, or external action is required.
+
 ## Safety and cost boundaries
 
 The council remains cloud-only. It must not connect K1, AGMADMINLPT18, another user computer, self-hosted runners, or remote desktop. It must not expose credentials, customer data, unpublished employer material, or private correspondence to unapproved services.
