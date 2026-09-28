@@ -27,15 +27,8 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install GitHub Copilot runtime
-        run: npm install --no-save @github/copilot @github/copilot-sdk
-
-      - name: Select an Anthropic Claude model without invoking it
-        id: model
-        env:
-          COPILOT_GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/copilot-claude-model.mjs
+      - name: Install GitHub Copilot CLI
+        run: npm install -g @github/copilot
 
       - name: Prepare council task
         env:
@@ -54,18 +47,20 @@ jobs:
 
       - name: Run Anthropic Claude through GitHub Copilot
         env:
-          COPILOT_GITHUB_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
-          COPILOT_MODEL: ${{ steps.model.outputs.model }}
         run: |
           umask 077
-          copilot -sp "$(cat /tmp/claude-council-task.txt)"             --model "$COPILOT_MODEL"             --available-tools='view,glob,grep'             --allow-tool='read'             --no-ask-user             --max-ai-credits=1             > /tmp/claude-council-response.txt
+          copilot -sp "$(cat /tmp/claude-council-task.txt)" \
+            --model=claude-haiku-4.5 \
+            --available-tools='view,glob,grep' \
+            --allow-tool='read' \
+            --no-ask-user \
+            --max-ai-credits=1 \
+            > /tmp/claude-council-response.txt
           test -s /tmp/claude-council-response.txt
 
       - name: Post Anthropic Claude response
         uses: actions/github-script@v7
-        env:
-          CLAUDE_MODEL: ${{ steps.model.outputs.model }}
         with:
           script: |
             const fs = require('fs');
@@ -75,7 +70,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Anthropic Claude via GitHub Copilot (' + process.env.CLAUDE_MODEL + '):\n\n' + body
+              body: 'Anthropic Claude via GitHub Copilot (claude-haiku-4.5):\n\n' + body
             });
 
       - name: Report failure
