@@ -44,7 +44,7 @@ This route does not require an Anthropic API key or OAuth token. It does require
 
 ## Automated open-weight five-model mesh
 
-The repository also includes a fully local open-weight council for **Qwen, Llama, Mistral, DeepSeek, and Gemma**. This route runs on a GitHub-hosted runner through Ollama and does not require external model API keys.
+The repository includes a fully local open-weight council for **Qwen, Llama, Mistral, DeepSeek, and Gemma**. This route runs on a GitHub-hosted runner through Ollama and does not require external model API keys.
 
 The default CPU-sized models are:
 
@@ -58,7 +58,7 @@ The five models are linked through a shared-blackboard protocol. Round 1 is inde
 
 This is intentionally different from pretending the models are one neural network. They remain separate model families and exchange outputs through an auditable GitHub workflow. The lightweight variants are chosen so they can run sequentially on ordinary GitHub-hosted CPU runners. They are useful as independent checks, but they are not equivalent to the largest hosted models in those families.
 
-Use the owner-only `[OPEN-MODEL-COUNCIL]` control issue for this mesh. No user PC, self-hosted runner, model API key, purchase, deployment, or external action is required.
+Use the owner-only `[OPEN-MESH]` control issue for this mesh. The canonical live control thread is issue #116. No user PC, self-hosted runner, model API key, purchase, deployment, or external action is required.
 
 ## Safety and cost boundaries
 
