@@ -2,6 +2,19 @@
 
 Status: repository integration prepared. No cloud VM, gateway account, provider login, secret or live LLM request has been provisioned or verified by this change. The existing GitHub Actions workers continue unchanged.
 
+## One-command Codespaces automation
+
+For the existing PrismBay Codespace, the repository now includes a local automation that starts 9Router in the background when needed, reads the active 9Router key from the Codespace-local 9Router data store without printing it, selects the approved OpenCode free model, writes Claude Code settings with file mode 0600, checks the connection, and then launches Claude Code.
+
+Use either route:
+
+- VS Code: **Terminal > Run Task > PrismBay: Start Claude Free via 9Router**
+- Terminal: `npm run claude:free`
+
+To make one harmless live verification request without entering Claude interactively, run `npm run claude:free:check`. Expected model response: `CLAUDE ROUTER WORKING`.
+
+The helper binds a newly started 9Router instance to `127.0.0.1`, keeps credentials out of repository files and terminal output, and uses the active key already stored by 9Router inside the Codespace. If the local key does not exist, the helper stops and asks for a key to be created in **Endpoint & Key**. It does not create GitHub secrets, expose port 20128 publicly, enable tunnels, connect user PCs, or enable paid models.
+
 ## Architecture and cost boundary
 
 9Router is an independently maintained third-party proxy. Its software is free. Upstream providers set their own quotas and prices; there is no guarantee of unlimited free Claude-model access. Anthropic does not endorse or audit third-party gateways and does not support non-Claude routing through gateways. Review the provider's current terms before authorizing access.
