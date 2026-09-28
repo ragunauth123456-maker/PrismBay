@@ -1,4 +1,4 @@
-name: Map FlipHTML5 MI05 Page Assets
+name: Fetch FlipHTML5 Native Assets
 
 on:
   push:
@@ -9,36 +9,36 @@ permissions:
   contents: read
 
 jobs:
-  map:
+  fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Map native large assets to pages 44-50
+      - name: Download native large page assets
         run: |
           set -euo pipefail
-          npm install --no-save playwright-core
-          cat > probe.mjs <<'NODE'
-          import { chromium } from 'playwright-core';
-          const browser = await chromium.launch({headless:true, executablePath:'/usr/bin/google-chrome', args:['--no-sandbox']});
-          for (const p of [44,45,46,47,48,49,50]) {
-            const ctx = await browser.newContext({viewport:{width:1400,height:1100}});
-            const page = await ctx.newPage();
-            const urls = new Set();
-            page.on('request', r => {
-              const u=r.url();
-              if (/\/files\/large\/[^?]+\.(webp|jpg|png)/i.test(u)) urls.add(u);
-            });
-            await page.goto('https://online.fliphtml5.com/jeign/MI05/#p='+p,{waitUntil:'domcontentloaded',timeout:60000});
-            await page.waitForTimeout(6500);
-            console.log('PAGE',p);
-            for (const u of [...urls].sort()) console.log(u);
-            console.log('ENDPAGE',p);
-            await ctx.close();
-          }
-          await browser.close();
-          NODE
-          node probe.mjs
+          mkdir -p /tmp/native
+          base='https://online.fliphtml5.com/jeign/MI05/files/large'
+          hashes=(
+            75aedac0b170a8568442352899a531c9
+            7a42d69f3b55d8e14dfbbcfb13109424
+            8a492a3d41a09b81ab6f52bcbd7380e2
+            c4a2396662da664b20fb87773f1791d5
+            c6907a03c28b6dc0a8fe58561c543b0b
+            c9593907a62da86a962d48ad59b66920
+            f7df3332e690494e9503f0f12fd06c08
+            266c379dc140036880fee6e1e7648b4f
+            6ee6f04a85273618318f7082d9876840
+            38a5492e766ccf2e44af559ecf8905e3
+            af3ccd00d30b2bab635e304dbea7f577
+            4b5a90768f38cd487cfc7ad5b844faff
+            eef9157fedfd96e860a074d7ce2abe75
+          )
+          for h in "${hashes[@]}"; do
+            curl -L --fail --silent --show-error "$base/$h.webp?1790589566" -o "/tmp/native/$h.webp"
+            identify "/tmp/native/$h.webp"
+          done
+          montage /tmp/native/*.webp -thumbnail 360x520 -tile 4x -geometry +8+24 -label '%f' /tmp/native/contact.jpg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mi05-native-candidate-pages
+          path: /tmp/native/
