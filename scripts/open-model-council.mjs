@@ -8,7 +8,7 @@ const DEFAULT_MODELS = [
   { family: "Qwen", model: "qwen3:0.6b" },
   { family: "Llama", model: "llama3.2:1b" },
   { family: "Mistral", model: "ministral-3:3b" },
-  { family: "DeepSeek", model: "deepseek-r1:1.5b" },
+  { family: "DeepSeek", model: "deepseek-coder:1.3b" },
   { family: "Gemma", model: "gemma3:1b" },
 ];
 
