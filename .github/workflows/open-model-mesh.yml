@@ -56,6 +56,8 @@ jobs:
           printf '%s\n' "$RAW_TASK" > /tmp/open-mesh-task.txt
 
       - name: Run Qwen + Llama + Mistral + DeepSeek + Gemma
+        id: mesh
+        continue-on-error: true
         env:
           OLLAMA_BASE_URL: http://127.0.0.1:11434
         shell: bash
@@ -71,14 +73,19 @@ jobs:
             "${extra[@]}"
 
       - name: Post model-mesh response
-        if: success()
+        if: always()
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            let body = fs.readFileSync('/tmp/open-mesh-output.md', 'utf8').trim();
-            if (body.length > 59000) {
-              body = body.slice(0, 59000) + '\n\n[Output truncated by GitHub comment limit.]';
+            let body;
+            if (fs.existsSync('/tmp/open-mesh-output.md')) {
+              body = fs.readFileSync('/tmp/open-mesh-output.md', 'utf8').trim();
+              if (body.length > 59000) {
+                body = body.slice(0, 59000) + '\n\n[Output truncated by GitHub comment limit.]';
+              }
+            } else {
+              body = 'Open-model mesh did not produce a report. Workflow: https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId;
             }
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -87,14 +94,7 @@ jobs:
               body
             });
 
-      - name: Report model-mesh failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'Open-model mesh did not complete. Workflow: https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId
-            });
+      - name: Mark incomplete mesh as failed
+        if: steps.mesh.outcome == 'failure'
+        shell: bash
+        run: exit 1
