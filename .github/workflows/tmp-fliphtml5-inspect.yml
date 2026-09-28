@@ -13,9 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Download native large page assets
         run: |
           set -euo pipefail
+          python -m pip install pillow
           mkdir -p /tmp/native
           base='https://online.fliphtml5.com/jeign/MI05/files/large'
           hashes=(
@@ -35,9 +39,26 @@ jobs:
           )
           for h in "${hashes[@]}"; do
             curl -L --fail --silent --show-error "$base/$h.webp?1790589566" -o "/tmp/native/$h.webp"
-            identify "/tmp/native/$h.webp"
           done
-          montage /tmp/native/*.webp -thumbnail 360x520 -tile 4x -geometry +8+24 -label '%f' /tmp/native/contact.jpg
+          python - <<'PY'
+          from PIL import Image,ImageOps,ImageDraw
+          import glob,os,math
+          files=sorted(glob.glob('/tmp/native/*.webp'))
+          thumbs=[]
+          for fn in files:
+              im=Image.open(fn).convert('RGB')
+              print(os.path.basename(fn),im.size)
+              thumb=ImageOps.contain(im,(360,520))
+              card=Image.new('RGB',(390,570),'white')
+              card.paste(thumb,((390-thumb.width)//2,10))
+              d=ImageDraw.Draw(card)
+              d.text((8,540),os.path.basename(fn)[:16],fill='black')
+              thumbs.append(card)
+          cols=4; rows=math.ceil(len(thumbs)/cols)
+          sheet=Image.new('RGB',(cols*390,rows*570),(220,220,220))
+          for i,t in enumerate(thumbs): sheet.paste(t,((i%cols)*390,(i//cols)*570))
+          sheet.save('/tmp/native/contact.jpg',quality=90)
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: mi05-native-candidate-pages
