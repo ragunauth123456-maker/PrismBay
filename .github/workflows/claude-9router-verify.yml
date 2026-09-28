@@ -4,9 +4,12 @@ on:
   pull_request:
     paths:
       - 'CLAUDE.md'
+      - 'package.json'
+      - '.vscode/tasks.json'
       - 'docs/CLAUDE_9ROUTER_CLOUD.md'
       - 'scripts/claude-9router.sh'
       - 'scripts/claude-9router.test.sh'
+      - 'scripts/claude-9router-auto.mjs'
       - '.github/workflows/claude-9router-verify.yml'
   workflow_dispatch:
 
@@ -22,5 +25,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate Bash and mock 9Router integration
+      - name: Validate Bash gateway wrapper
         run: bash scripts/claude-9router.test.sh
+      - name: Validate one-command automation
+        run: |
+          node --check scripts/claude-9router-auto.mjs
+          node scripts/claude-9router-auto.mjs --self-test

@@ -1,0 +1,302 @@
+#!/usr/bin/env node
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { spawn, spawnSync } from "node:child_process";
+import { DatabaseSync } from "node:sqlite";
+
+const ROUTER_BASE = "http://127.0.0.1:20128";
+const ROUTER_API = `${ROUTER_BASE}/v1`;
+const PREFERRED_MODEL = "oc/muse-spark-1.3-contributor-free";
+const PINNED_9ROUTER = "9router@0.5.91";
+const PINNED_CLAUDE = "@anthropic-ai/claude-code@2.1.283";
+
+function fail(message) {
+  console.error(`ERROR: ${message}`);
+  process.exit(1);
+}
+
+function commandExists(name) {
+  return spawnSync("which", [name], { stdio: "ignore" }).status === 0;
+}
+
+function run(command, args, options = {}) {
+  const result = spawnSync(command, args, {
+    stdio: "inherit",
+    env: options.env || process.env,
+    cwd: options.cwd || process.cwd(),
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`${command} exited with status ${result.status}`);
+}
+
+async function ensureTools() {
+  if (commandExists("9router") && commandExists("claude")) return;
+  console.log("Installing pinned 9Router and Claude Code packages...");
+  run("npm", [
+    "install",
+    "-g",
+    "--allow-scripts=9router,@anthropic-ai/claude-code",
+    PINNED_9ROUTER,
+    PINNED_CLAUDE,
+  ]);
+  if (!commandExists("9router") || !commandExists("claude")) {
+    throw new Error("9Router or Claude Code is still unavailable after installation.");
+  }
+}
+
+async function probe(url) {
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(2500) });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function routerHealthy() {
+  if (await probe(`${ROUTER_BASE}/api/health`)) return true;
+  return probe(`${ROUTER_BASE}/health`);
+}
+
+async function ensureRouter() {
+  if (await routerHealthy()) {
+    console.log("9Router is already running.");
+    return;
+  }
+
+  const dataDir = process.env.DATA_DIR || path.join(os.homedir(), ".9router");
+  await fsp.mkdir(dataDir, { recursive: true });
+  const logPath = path.join(dataDir, "prismbay-9router.log");
+  const out = fs.openSync(logPath, "a");
+  const child = spawn(
+    "9router",
+    ["--host", "127.0.0.1", "--no-browser", "--skip-update"],
+    {
+      detached: true,
+      stdio: ["ignore", out, out],
+      env: { ...process.env, NO_COLOR: "1" },
+    },
+  );
+  child.unref();
+  fs.closeSync(out);
+
+  console.log("Starting 9Router privately on 127.0.0.1:20128...");
+  for (let attempt = 0; attempt < 45; attempt += 1) {
+    if (await routerHealthy()) {
+      console.log("9Router is ready.");
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  throw new Error(`9Router did not become healthy. Inspect ${logPath}`);
+}
+
+function readLegacyKey(dataDir) {
+  const legacyPath = path.join(dataDir, "db.json");
+  if (!fs.existsSync(legacyPath)) return "";
+  try {
+    const parsed = JSON.parse(fs.readFileSync(legacyPath, "utf8"));
+    const rows = parsed.apiKeys || parsed.data?.apiKeys || [];
+    const row = rows.find((item) => item?.isActive !== false && typeof item?.key === "string");
+    return row?.key || "";
+  } catch {
+    return "";
+  }
+}
+
+export function readActiveKey({
+  homeDir = os.homedir(),
+  dataDir = process.env.DATA_DIR || path.join(homeDir, ".9router"),
+} = {}) {
+  if (process.env.NINE_ROUTER_API_KEY) return process.env.NINE_ROUTER_API_KEY;
+
+  const dbPath = path.join(dataDir, "db", "data.sqlite");
+  if (fs.existsSync(dbPath)) {
+    try {
+      const db = new DatabaseSync(dbPath, { readOnly: true });
+      const row = db
+        .prepare("SELECT key FROM apiKeys WHERE isActive = 1 ORDER BY createdAt DESC LIMIT 1")
+        .get();
+      db.close();
+      if (row?.key) return String(row.key);
+    } catch {
+      // Try the legacy JSON store below.
+    }
+  }
+  return readLegacyKey(dataDir);
+}
+
+async function listModels(apiKey) {
+  const response = await fetch(`${ROUTER_API}/models`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+    signal: AbortSignal.timeout(12000),
+  });
+  if (!response.ok) {
+    throw new Error(`9Router model catalog returned HTTP ${response.status}`);
+  }
+  const payload = await response.json();
+  const ids = Array.isArray(payload?.data)
+    ? payload.data.map((item) => item?.id).filter((id) => typeof id === "string")
+    : [];
+  if (!ids.length) throw new Error("9Router returned no model IDs.");
+  return ids;
+}
+
+export function selectModel(ids, requested = process.env.NINE_ROUTER_MODEL || PREFERRED_MODEL) {
+  if (ids.includes(requested)) return requested;
+  return (
+    ids.find((id) => id.startsWith("oc/") && id.includes("muse-spark-1.3") && id.includes("free")) ||
+    ids.find((id) => id.startsWith("oc/") && id.includes("free")) ||
+    ""
+  );
+}
+
+export function buildClaudeSettings(existing, apiKey, model) {
+  return {
+    ...(existing || {}),
+    hasCompletedOnboarding: true,
+    env: {
+      ...(existing?.env || {}),
+      ANTHROPIC_BASE_URL: ROUTER_API,
+      ANTHROPIC_AUTH_TOKEN: apiKey,
+      ANTHROPIC_DEFAULT_FABLE_MODEL: model,
+      ANTHROPIC_DEFAULT_OPUS_MODEL: model,
+      ANTHROPIC_DEFAULT_SONNET_MODEL: model,
+      ANTHROPIC_DEFAULT_HAIKU_MODEL: model,
+    },
+  };
+}
+
+async function configureClaude(apiKey, model, homeDir = os.homedir()) {
+  const claudeDir = path.join(homeDir, ".claude");
+  const settingsPath = path.join(claudeDir, "settings.json");
+  const backupPath = path.join(claudeDir, "settings.json.prismbay-backup");
+  await fsp.mkdir(claudeDir, { recursive: true, mode: 0o700 });
+
+  let existing = {};
+  if (fs.existsSync(settingsPath)) {
+    const raw = await fsp.readFile(settingsPath, "utf8");
+    try {
+      existing = JSON.parse(raw.replace(/,(\s*[}\]])/g, "$1"));
+    } catch {
+      throw new Error(`Existing Claude settings are not valid JSON: ${settingsPath}`);
+    }
+    if (!fs.existsSync(backupPath)) await fsp.copyFile(settingsPath, backupPath);
+  }
+
+  const next = buildClaudeSettings(existing, apiKey, model);
+  const tempPath = `${settingsPath}.tmp`;
+  await fsp.writeFile(tempPath, `${JSON.stringify(next, null, 2)}\n`, { mode: 0o600 });
+  await fsp.rename(tempPath, settingsPath);
+  await fsp.chmod(settingsPath, 0o600);
+  console.log(`Claude Code configured for ${model}. API key was not printed.`);
+}
+
+function wrapperEnv(apiKey, model) {
+  const env = {
+    ...process.env,
+    NINE_ROUTER_API_KEY: apiKey,
+    NINE_ROUTER_MODEL: model,
+  };
+  delete env.ANTHROPIC_API_KEY;
+  return env;
+}
+
+async function selfTest() {
+  const root = await fsp.mkdtemp(path.join(os.tmpdir(), "prismbay-router-test-"));
+  try {
+    const dataDir = path.join(root, ".9router");
+    await fsp.mkdir(path.join(dataDir, "db"), { recursive: true });
+    const db = new DatabaseSync(path.join(dataDir, "db", "data.sqlite"));
+    db.exec("CREATE TABLE apiKeys(id TEXT PRIMARY KEY, key TEXT, isActive INTEGER, createdAt TEXT)");
+    db.prepare("INSERT INTO apiKeys VALUES (?, ?, ?, ?)").run(
+      "1",
+      "sk-self-test",
+      1,
+      "2026-09-28T00:00:00Z",
+    );
+    db.close();
+
+    const prior = process.env.NINE_ROUTER_API_KEY;
+    delete process.env.NINE_ROUTER_API_KEY;
+    const key = readActiveKey({ homeDir: root, dataDir });
+    if (prior) process.env.NINE_ROUTER_API_KEY = prior;
+    if (key !== "sk-self-test") throw new Error("SQLite key lookup failed.");
+
+    const ids = ["oc/union-alpha", PREFERRED_MODEL];
+    const model = selectModel(ids);
+    if (model !== PREFERRED_MODEL) throw new Error("Preferred model selection failed.");
+
+    const settings = buildClaudeSettings({ env: { KEEP_ME: "1" } }, "secret", model);
+    if (
+      settings.env.KEEP_ME !== "1" ||
+      settings.env.ANTHROPIC_AUTH_TOKEN !== "secret" ||
+      settings.env.ANTHROPIC_DEFAULT_SONNET_MODEL !== PREFERRED_MODEL
+    ) {
+      throw new Error("Claude settings merge failed.");
+    }
+    console.log("PASS: Claude + 9Router automation self-test");
+  } finally {
+    await fsp.rm(root, { recursive: true, force: true });
+  }
+}
+
+async function main() {
+  const args = new Set(process.argv.slice(2));
+  if (args.has("--self-test")) {
+    await selfTest();
+    return;
+  }
+
+  const launch = args.has("--launch");
+  const verify = args.has("--verify");
+
+  await ensureTools();
+  await ensureRouter();
+
+  const apiKey = readActiveKey();
+  if (!apiKey) {
+    throw new Error(
+      "No active 9Router API key was found in the local 9Router data store. Open Endpoint & Key once and create an active key.",
+    );
+  }
+
+  const models = await listModels(apiKey);
+  const model = selectModel(models);
+  if (!model) {
+    throw new Error(
+      "No approved OpenCode free model is currently advertised by this 9Router instance.",
+    );
+  }
+
+  await configureClaude(apiKey, model);
+
+  const env = wrapperEnv(apiKey, model);
+  run("bash", ["scripts/claude-9router.sh", "--check"], { env });
+
+  if (verify) {
+    run(
+      "bash",
+      [
+        "scripts/claude-9router.sh",
+        "--run",
+        "--print",
+        "Reply only with: CLAUDE ROUTER WORKING",
+      ],
+      { env },
+    );
+    return;
+  }
+
+  if (launch) {
+    console.log("Opening Claude Code through the free 9Router model...");
+    run("bash", ["scripts/claude-9router.sh", "--run"], { env });
+    return;
+  }
+
+  console.log("Setup complete. Run: npm run claude:free");
+}
+
+main().catch((error) => fail(error?.message || String(error)));
