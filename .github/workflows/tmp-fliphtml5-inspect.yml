@@ -13,14 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Fetch publication HTML
+      - name: Fetch config and test assets
         run: |
           set -euo pipefail
-          curl -L --compressed -A 'Mozilla/5.0' 'https://online.fliphtml5.com/jeign/MI05/' -o /tmp/book.html
-          echo "SIZE=$(wc -c </tmp/book.html)"
-          echo "---- candidate asset/download references ----"
-          grep -Eo 'https?://[^"'"'"' <>]+' /tmp/book.html | grep -Ei 'pdf|download|files|assets|fliphtml5|MI05' | head -n 200 || true
-          echo "---- script/src references ----"
-          grep -Eo '(src|href)="[^"]+"' /tmp/book.html | head -n 200 || true
-          echo "---- interesting tokens ----"
-          grep -Eoi '.{0,120}(download|pdf|source|config|bookConfig|pages|page-45|45.jpg|45.webp).{0,220}' /tmp/book.html | head -n 200 || true
+          base='https://online.fliphtml5.com/jeign/MI05'
+          curl -L --compressed -A 'Mozilla/5.0' "$base/javascript/config.js" -o /tmp/config.js
+          echo "CONFIG_SIZE=$(wc -c </tmp/config.js)"
+          echo "---- config head ----"
+          head -c 12000 /tmp/config.js
+          echo
+          echo "---- relevant config tokens ----"
+          grep -Eoi '.{0,150}(download|pdf|source|file|page|large|thumb|text|bookConfig|pages).{0,300}' /tmp/config.js | head -n 300 || true
+          echo "---- candidate URLs ----"
+          grep -Eo 'https?://[^"'"'"' <>]+' /tmp/config.js | head -n 300 || true
+          echo "---- test likely assets ----"
+          for u in             "$base/files/download.pdf"             "$base/files/source.pdf"             "$base/files/MI05.pdf"             "$base/files/assets/basic-html/page-45.html"             "$base/files/large/45.webp"             "$base/files/large/45.jpg"             "$base/files/thumb/45.jpg"; do
+              code=$(curl -L -s -o /dev/null -w '%{http_code}' "$u" || true)
+              echo "$code $u"
+          done
