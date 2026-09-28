@@ -275,6 +275,10 @@ function wrapperEnv(apiKey, model) {
     ...process.env,
     NINE_ROUTER_API_KEY: apiKey,
     NINE_ROUTER_MODEL: model,
+    // 9Router exposes provider IDs that Claude Code may not recognize in its
+    // built-in model catalog. Allow the gateway to handle the advertised model
+    // rather than aborting on Claude Code's local window-size lookup.
+    CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT: "1",
   };
   delete env.ANTHROPIC_API_KEY;
   return env;
