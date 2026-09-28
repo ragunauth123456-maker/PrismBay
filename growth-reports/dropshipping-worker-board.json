@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T21:38:59.449Z",
+  "generatedAt": "2026-09-28T05:24:18.440Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-27T21:21:11.541Z",
+    "checkedAt": "2026-09-28T05:24:18.167Z",
     "validSupplierMatches": 2,
     "variantStock": 2,
     "countryFreightEstimates": 0,
@@ -25,6 +25,27 @@
       "executionMode": "scheduled_cj_and_manual_review",
       "candidateCount": 9,
       "blockers": [
+        {
+          "slug": "cordless-handheld-vacuum",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "hanging-closet-organizer",
+          "status": "destination_freight_required",
+          "sku": "CJJT254150701AZ",
+          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
+          "zeroPricedMethods": 22
+        },
+        {
+          "slug": "roll-up-dish-rack",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "extendable-high-zone-duster",
           "status": "supplier_search_needed",
@@ -66,27 +87,6 @@
           "sku": null,
           "shippingDiagnostic": null,
           "zeroPricedMethods": 0
-        },
-        {
-          "slug": "cordless-handheld-vacuum",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "hanging-closet-organizer",
-          "status": "destination_freight_required",
-          "sku": "CJJT254150701AZ",
-          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
-          "zeroPricedMethods": 22
-        },
-        {
-          "slug": "roll-up-dish-rack",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
         }
       ]
     },
@@ -98,15 +98,15 @@
       "state": "supplier_quote_needed",
       "products": [
         {
-          "slug": "rug-grippers",
-          "variantSku": "CJLY27903090001",
-          "zeroPricedMethods": 30,
-          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
-        },
-        {
           "slug": "hanging-closet-organizer",
           "variantSku": "CJJT254150701AZ",
           "zeroPricedMethods": 22,
+          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
+        },
+        {
+          "slug": "rug-grippers",
+          "variantSku": "CJLY27903090001",
+          "zeroPricedMethods": 30,
           "diagnostic": "zero_priced_methods_require_supplier_confirmation"
         }
       ]
