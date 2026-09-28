@@ -100,6 +100,39 @@ def parse_page_list(texts):
             out.append(urljoin(BASE,"files/large/"+v))
     return out
 
+
+def decode_book_hash_pages(texts, total=None):
+    encoded=None
+    for t in texts:
+        m=re.search(r'"bookConfig"\\s*:\\s*"([^"]+)"', t or "")
+        if m:
+            encoded=m.group(1)
+            break
+    if not encoded or not encoded.startswith("v01"):
+        return []
+    cmap={chr(ord("A")+i):h for i,h in enumerate("0123456789abcdef")}
+    body=encoded[6:]
+    start=0
+    while start < len(body) and (body[start].isdigit() or body[start].islower()):
+        start += 1
+    hexstr="".join(cmap[ch] for ch in body[start:] if ch in cmap)
+    hashes=[hexstr[i:i+32] for i in range(0,len(hexstr)-31,32)]
+    hashes=[h for h in hashes if re.fullmatch(r"[0-9a-f]{32}",h)]
+    print("DECODED_HASHES", len(hashes))
+    for ext in [".webp",".jpg",".png"]:
+        valid=[]
+        for h in hashes:
+            u=urljoin(BASE, "files/large/"+h+ext)
+            rr=get(u,18)
+            if rr is not None and rr.status_code==200 and len(rr.content)>5000 and "image" in rr.headers.get("content-type","").lower():
+                valid.append(u)
+                if total and len(valid)>=total:
+                    break
+        if valid:
+            print("HASH_EXT", ext, "VALID_HASH_PAGES", len(valid))
+            return valid
+    return []
+
 def probe_pattern():
     patterns = [
         ("files/large/{n}.jpg", lambda n:n),
@@ -233,7 +266,9 @@ def main():
 
     total=parse_total_pages(texts)
     plist=parse_page_list(texts)
-    pattern=probe_pattern()
+    if not plist:
+        plist=decode_book_hash_pages(texts,total)
+    pattern=None if plist else probe_pattern()
     print("TOTAL",total,"PAGELIST",len(plist),"PATTERN",pattern)
     urls=image_urls(total,plist,pattern)
 
