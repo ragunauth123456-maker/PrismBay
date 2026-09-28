@@ -104,7 +104,7 @@ def parse_page_list(texts):
 def decode_book_hash_pages(texts, total=None):
     encoded=None
     for t in texts:
-        m=re.search(r'"bookConfig"\\s*:\\s*"([^"]+)"', t or "")
+        m=re.search(r'"bookConfig"\s*:\s*"([^"]+)"', t or "")
         if m:
             encoded=m.group(1)
             break
