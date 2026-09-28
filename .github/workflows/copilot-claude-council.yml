@@ -51,7 +51,6 @@ jobs:
         run: |
           umask 077
           copilot -sp "$(cat /tmp/claude-council-task.txt)" \
-            --model=claude-haiku-4.5 \
             --available-tools='view,glob,grep' \
             --allow-tool='read' \
             --no-ask-user \
