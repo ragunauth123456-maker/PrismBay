@@ -38,7 +38,8 @@ jobs:
           name: AGM-Inc-FlipHTML5-extract
           path: |
             /tmp/fliphtml5_extract/AGM_Inc_feature.pdf
-            /tmp/fliphtml5_extract/report.json\n            /tmp/fliphtml5_extract/config_*.txt
+            /tmp/fliphtml5_extract/report.json
+            /tmp/fliphtml5_extract/config_*.txt
           if-no-files-found: error
       - name: Report result
         if: always()
