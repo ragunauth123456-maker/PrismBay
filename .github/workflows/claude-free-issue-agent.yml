@@ -12,7 +12,7 @@ jobs:
   run-claude:
     if: >-
       github.event.issue.pull_request == null &&
-      startsWith(github.event.issue.title, '[CLAUDE-CLOUD]') &&
+      (startsWith(github.event.issue.title, '[CLAUDE-CLOUD]') || startsWith(github.event.issue.title, '[AI-COUNCIL]')) &&
       github.event.comment.user.login == github.repository_owner
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -26,9 +26,21 @@ jobs:
       - name: Prepare owner-approved task
         env:
           CLAUDE_TASK: ${{ github.event.comment.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
         run: |
           umask 077
-          printf '%s\n' "$CLAUDE_TASK" > /tmp/claude-task.txt
+          if [[ "$ISSUE_TITLE" == "[AI-COUNCIL]"* ]]; then
+            {
+              printf '%s\n' "You are the independent Claude reviewer in a two-model council with ChatGPT."
+              printf '%s\n' "Do the task independently. Challenge weak assumptions. Do not defer to ChatGPT."
+              printf '%s\n' "For repository work, inspect evidence before conclusions and obey AGENTS.md and CLAUDE.md."
+              printf '%s\n' "Return concise sections: Independent answer, Evidence, Risks or disagreements, Recommended next action."
+              printf '\n%s\n' "TASK FROM CHATGPT:"
+              printf '%s\n' "$CLAUDE_TASK"
+            } > /tmp/claude-task.txt
+          else
+            printf '%s\n' "$CLAUDE_TASK" > /tmp/claude-task.txt
+          fi
 
       - name: Run Claude Code through 9Router and OpenCode Free
         run: |
