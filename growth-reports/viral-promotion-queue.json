@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-09-27T16:35:06.825Z",
+  "updatedAt": "2026-09-28T10:11:33.196Z",
   "supplierIntegration": "awaiting-cj-auth",
   "items": [
     {
       "rank": 1,
       "slug": "cordless-handheld-vacuum",
       "product": "Cordless Handheld Vacuum",
-      "attentionScore": 99.5,
+      "attentionScore": 97.6,
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,
@@ -17,7 +17,7 @@
       "rank": 2,
       "slug": "hanging-closet-organizer",
       "product": "Hanging Closet Organizer",
-      "attentionScore": 78.8,
+      "attentionScore": 80.6,
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,

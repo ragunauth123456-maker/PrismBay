@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-27T16:35:06.825Z",
+  "updatedAt": "2026-09-28T10:11:33.196Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -9,11 +9,11 @@
       "slug": "cordless-handheld-vacuum",
       "name": "Cordless Handheld Vacuum",
       "query": "cordless handheld vacuum",
-      "attentionScore": 99.5,
+      "attentionScore": 97.6,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 100,
-        "mentionsLast7Days": 3,
+        "publicMentions": 101,
+        "mentionsLast7Days": 2,
         "mentionsLast30Days": 11,
         "sourcesAvailable": [
           "Google News",
@@ -61,12 +61,12 @@
       "slug": "hanging-closet-organizer",
       "name": "Hanging Closet Organizer",
       "query": "hanging closet organizer",
-      "attentionScore": 78.8,
+      "attentionScore": 80.6,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 47,
+        "publicMentions": 48,
         "mentionsLast7Days": 1,
-        "mentionsLast30Days": 6,
+        "mentionsLast30Days": 7,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -168,7 +168,7 @@
       "attentionScore": 68.5,
       "attentionLabel": "promotion-watch",
       "evidence": {
-        "publicMentions": 27,
+        "publicMentions": 26,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
@@ -269,11 +269,11 @@
       "slug": "sheet-laundry-detangler",
       "name": "Bed Sheet Laundry Detangler",
       "query": "sheet laundry detangler",
-      "attentionScore": 33.5,
+      "attentionScore": 29.8,
       "attentionLabel": "low-signal",
       "evidence": {
         "publicMentions": 3,
-        "mentionsLast7Days": 1,
+        "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
           "Google News",
@@ -413,7 +413,7 @@
             "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNYjdvWlg4Y0JBWG10b0F6VVcwTU1MMnAxTFRvQzEyeW5lYThwT3JnLTdyQjlmaEFzVjBKMzBmWml5dVotSVJLUmY5Rkd2UF9CY2tPNUF6SU54X1M1S0c0dUdqQlVnTUw0U0FEdjFYOE1POU1zQTE1cl9KVlF4R1MwOG9kR1F3WjZOLXYxbkFxSlFQODlIY3g1bWNWVmVqcmhVbk1pc2lQVGpudk1hTnJSNExyeTktdUJoa2JQM05uakN1aWZ1aHJPbmVmY0VxaVRFRldkNXktZ9IB3AFBVV95cUxNR3p5OHB6OG9YOTZGTEVDWmVFck96SjF0RndINDlwVmcyVUFBVGgzODBXcEhMWWtzM3ZFRmo3N2hWS01JdlJUVnhLSzYyaVQzV2FIeHBYbkllVTZnRWlwSW55OGlDN0ZOa2lLUENJN3VQdElod1NYYlVXeGVWT2xlLUFiX2NmUUx5TEtpd29WZnFkMzhyYnhuWUFWVTJEM3Y4NllfYnlaY0dFZ056Z3dwdFVOUC05SkkzeFdaVVhSLWVfRVMtUDBJSUhQcWxtenpfU0k1a2tYZTNHbndv?oc=5"
           },
           {
-            "title": "11 Best Baby Bottle Brushes To Remove Bacteria And Germs In 2026 - momjunction.com",
+            "title": "11 Best Baby Bottle Brushes To Remove Bacteria And Germs In 2026 - MomJunction",
             "source": "Google News",
             "publishedAt": "2026-02-09T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBSSnZJWk02YnZ0a196a2FxNGRxV29yeFJscE4tOUxEb1czcXdQREwta0NRNy1kSmNFVklxd2VENmRRSjkzdnQzX1Bob2dScW1pLXF5YzBGSDBDYnJwalZ0bERjOWdyZEZvcmlwN0ZOYjFhRl9UQmxyQklsMA?oc=5"
@@ -501,7 +501,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Met Gala 2025's 'fabulous' blue carpet was made by this Kerala brand from Alleppey: 'Incredibly proud' | Fashion Trends - hindustantimes.com",
+            "title": "Met Gala 2025's 'fabulous' blue carpet was made by this Kerala brand from Alleppey: 'Incredibly proud' | Fashion Trends - Hindustan Times",
             "source": "Google News",
             "publishedAt": "2025-05-06T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQZHhfWl84emR2bHk3dlJFbW9aMGswWnJfbTJCejU4LUw4ZEVPYldrd09WNVQ4ZkhwYkkxWTJ4UWx5QkdydEhOR3JXdkowREhqaHlNTm5oclVBUnRNNFIzUGxnNVBpblI1U2hsTjNFR0hLamxETnNZMlpvNWdHMFhXNnlEMUVTMlVMUTV6bmZ0dmtXdDI1SHlnb0dyUzczZllqUFdwbnBQSURMQVBHNnhjeXZtaGRHWmUtaTZTNlVWcXU4YVRpSndZanpHcDJzZ2s4bHBhX3hJVzRRMk5IZUpKQUhzUG01cDJYTW1KTEFtVFNOT2xVOXpQYtIB_gFBVV95cUxOcnBVVjlNZC1ZYU1xc0FtczV6ZU42T3NkQlBydnVCYTRlUGZBSzg4ZUtVU3pockpDck5Hc3B2SjZWMTBwMHB0ZWJoRC1LY3FNTm0tLTdiTHJTZkZQWUJTcXc1eHhtdlJhbGtJMmlvcHo3bDFlZEI5WnVqTmdEN181MEoxWThjcTJiS2NPYTFRemw0NTZtVmItM2JBUE1RcE1jazF5M2JhazI4R1RPZmhndFo0QVJzOFNxb3hCS1hsUHgzUi1UdUdRU05iaV92YzU1YnNtdXY4SlZaRFJGRXF6RkZ2ak1QWmVWRFhiV29vaFZUbE1HOTBkbVkzWVM5QQ?oc=5"
