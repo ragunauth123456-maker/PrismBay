@@ -36,9 +36,9 @@ For the free fallback reviewer, use the existing `[AI-COUNCIL]` issue. That rout
 
 ## Zero-secret Anthropic route through GitHub Copilot
 
-For this personally owned repository, GitHub Copilot CLI can authenticate inside GitHub Actions with the short-lived built-in `GITHUB_TOKEN`. The council workflow requests the `copilot-requests: write` permission, discovers the Claude models allowed by the repository owner's Copilot entitlement without invoking a model, and then runs an Anthropic Claude model through Copilot.
+For this personally owned repository, GitHub Copilot CLI can authenticate inside GitHub Actions with the short-lived built-in `GITHUB_TOKEN`. The council workflow requests the `copilot-requests: write` permission and invokes an Anthropic Claude model through the officially documented Copilot CLI path.
 
-The workflow prefers `claude-sonnet-5`, then `claude-opus-5`, `claude-haiku-4.5`, and finally another advertised Claude model. Each response is constrained with `--max-ai-credits=1`, uses only read-oriented repository tools, and posts the result back to the owner-only `[CLAUDE-COPILOT]` issue.
+The current route is pinned to `claude-haiku-4.5` for a low-cost compatibility test and controlled council reviews. Each response is constrained with `--max-ai-credits=1`, uses only read-oriented repository tools, and posts the result back to the owner-only `[CLAUDE-COPILOT]` issue. A stronger Claude model can be substituted only after its availability and cost behavior are verified under the owner's existing Copilot entitlement.
 
 This route does not require an Anthropic API key or OAuth token. It does require GitHub Copilot access and consumes GitHub AI Credits under the owner's existing Copilot entitlement. It does not enable or purchase additional credits.
 
