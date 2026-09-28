@@ -1,4 +1,4 @@
-name: Inspect FlipHTML5 MI05
+name: Map FlipHTML5 MI05 Page Assets
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  inspect:
+  map:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -17,24 +17,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Capture high-resolution AGM feature spreads
+      - name: Map native large assets to pages 44-50
         run: |
           set -euo pipefail
           npm install --no-save playwright-core
           cat > probe.mjs <<'NODE'
           import { chromium } from 'playwright-core';
           const browser = await chromium.launch({headless:true, executablePath:'/usr/bin/google-chrome', args:['--no-sandbox']});
-          for (const p of [45,47,49]) {
-            const page = await browser.newPage({viewport:{width:1440,height:1100}, deviceScaleFactor:2});
+          for (const p of [44,45,46,47,48,49,50]) {
+            const ctx = await browser.newContext({viewport:{width:1400,height:1100}});
+            const page = await ctx.newPage();
+            const urls = new Set();
+            page.on('request', r => {
+              const u=r.url();
+              if (/\/files\/large\/[^?]+\.(webp|jpg|png)/i.test(u)) urls.add(u);
+            });
             await page.goto('https://online.fliphtml5.com/jeign/MI05/#p='+p,{waitUntil:'domcontentloaded',timeout:60000});
-            await page.waitForTimeout(7000);
-            await page.screenshot({path:'spread-'+p+'-2x.png',fullPage:true});
-            await page.close();
+            await page.waitForTimeout(6500);
+            console.log('PAGE',p);
+            for (const u of [...urls].sort()) console.log(u);
+            console.log('ENDPAGE',p);
+            await ctx.close();
           }
           await browser.close();
           NODE
           node probe.mjs
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mi05-agm-spreads-2x
-          path: spread-*-2x.png
