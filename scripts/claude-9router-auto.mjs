@@ -12,6 +12,7 @@ const ROUTER_API = `${ROUTER_BASE}/v1`;
 const PREFERRED_MODEL = "oc/muse-spark-1.3-contributor-free";
 const PINNED_9ROUTER = "9router@0.5.91";
 const PINNED_CLAUDE = "@anthropic-ai/claude-code@2.1.283";
+// Keep all generated router credentials local to the active cloud runtime.
 
 function fail(message) {
   console.error(`ERROR: ${message}`);
@@ -134,7 +135,7 @@ export function createLocalKey({
   dataDir = process.env.DATA_DIR || path.join(homeDir, ".9router"),
 } = {}) {
   const dbPath = path.join(dataDir, "db", "data.sqlite");
-  if (!fs.existsSync(dbPath)) return "";
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
   const machineFile = path.join(dataDir, "machine-id");
   let machineId = "";
@@ -162,6 +163,10 @@ export function createLocalKey({
 
   const db = new DatabaseSync(dbPath);
   try {
+    db.exec(
+      "CREATE TABLE IF NOT EXISTS apiKeys(id TEXT PRIMARY KEY, key TEXT UNIQUE NOT NULL, name TEXT, machineId TEXT, isActive INTEGER DEFAULT 1, createdAt TEXT NOT NULL)",
+    );
+    db.exec("CREATE INDEX IF NOT EXISTS idx_ak_key ON apiKeys(key)");
     const id = crypto.randomUUID();
     db.prepare(
       "INSERT INTO apiKeys(id, key, name, machineId, isActive, createdAt) VALUES(?, ?, ?, ?, 1, ?)",
