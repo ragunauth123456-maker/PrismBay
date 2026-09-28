@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-28T14:32:21.869Z",
+  "generatedAt": "2026-09-28T23:17:01.108Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-28T13:55:24.473Z",
+    "checkedAt": "2026-09-28T23:17:00.920Z",
     "validSupplierMatches": 2,
     "variantStock": 2,
     "countryFreightEstimates": 0,
@@ -25,6 +25,27 @@
       "executionMode": "scheduled_cj_and_manual_review",
       "candidateCount": 9,
       "blockers": [
+        {
+          "slug": "extendable-high-zone-duster",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "pan-scraper",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "rug-grippers",
+          "status": "destination_freight_required",
+          "sku": "CJLY27903090001",
+          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
+          "zeroPricedMethods": 30
+        },
         {
           "slug": "self-standing-floor-mop",
           "status": "supplier_search_needed",
@@ -66,27 +87,6 @@
           "sku": null,
           "shippingDiagnostic": null,
           "zeroPricedMethods": 0
-        },
-        {
-          "slug": "extendable-high-zone-duster",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "pan-scraper",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "rug-grippers",
-          "status": "destination_freight_required",
-          "sku": "CJLY27903090001",
-          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
-          "zeroPricedMethods": 30
         }
       ]
     },
@@ -98,15 +98,15 @@
       "state": "supplier_quote_needed",
       "products": [
         {
-          "slug": "hanging-closet-organizer",
-          "variantSku": "CJJT254150701AZ",
-          "zeroPricedMethods": 22,
-          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
-        },
-        {
           "slug": "rug-grippers",
           "variantSku": "CJLY27903090001",
           "zeroPricedMethods": 30,
+          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
+        },
+        {
+          "slug": "hanging-closet-organizer",
+          "variantSku": "CJJT254150701AZ",
+          "zeroPricedMethods": 22,
           "diagnostic": "zero_priced_methods_require_supplier_confirmation"
         }
       ]
