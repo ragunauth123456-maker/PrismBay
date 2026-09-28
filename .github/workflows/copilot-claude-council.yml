@@ -1,0 +1,91 @@
+name: Copilot Anthropic Claude Council
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+  copilot-requests: write
+
+jobs:
+  claude-council:
+    if: >-
+      github.event.issue.pull_request == null &&
+      startsWith(github.event.issue.title, '[CLAUDE-COPILOT]') &&
+      github.event.comment.user.login == github.repository_owner &&
+      contains(github.event.comment.body, '@claude-copilot')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install GitHub Copilot runtime
+        run: npm install --no-save @github/copilot @github/copilot-sdk
+
+      - name: Select an Anthropic Claude model without invoking it
+        id: model
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/copilot-claude-model.mjs
+
+      - name: Prepare council task
+        env:
+          RAW_TASK: ${{ github.event.comment.body }}
+        run: |
+          umask 077
+          {
+            printf '%s\n' "You are the independent Anthropic Claude reviewer in a two-model council with ChatGPT."
+            printf '%s\n' "Do the task independently. Challenge weak assumptions and do not simply agree with ChatGPT."
+            printf '%s\n' "For repository questions, inspect evidence before conclusions. Do not modify files."
+            printf '%s\n' "Never expose credentials, private correspondence, customer data, or unpublished employer material."
+            printf '%s\n' "Return: Independent answer, Evidence, Risks or disagreements, Recommended next action."
+            printf '\n%s\n' "TASK:"
+            printf '%s\n' "$RAW_TASK"
+          } > /tmp/claude-council-task.txt
+
+      - name: Run Anthropic Claude through GitHub Copilot
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          COPILOT_MODEL: ${{ steps.model.outputs.model }}
+        run: |
+          umask 077
+          copilot -sp "$(cat /tmp/claude-council-task.txt)"             --model "$COPILOT_MODEL"             --available-tools='view,glob,grep'             --allow-tool='read'             --no-ask-user             --max-ai-credits=1             > /tmp/claude-council-response.txt
+          test -s /tmp/claude-council-response.txt
+
+      - name: Post Anthropic Claude response
+        uses: actions/github-script@v7
+        env:
+          CLAUDE_MODEL: ${{ steps.model.outputs.model }}
+        with:
+          script: |
+            const fs = require('fs');
+            let body = fs.readFileSync('/tmp/claude-council-response.txt', 'utf8').trim();
+            if (body.length > 58000) body = body.slice(0, 58000) + '\n\n[Response truncated.]';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Anthropic Claude via GitHub Copilot (' + process.env.CLAUDE_MODEL + '):\n\n' + body
+            });
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Anthropic Claude via GitHub Copilot did not complete. Workflow: https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId
+            });
