@@ -7,10 +7,12 @@ on:
       - 'package.json'
       - '.vscode/tasks.json'
       - 'docs/CLAUDE_9ROUTER_CLOUD.md'
+      - 'docs/AI_COUNCIL.md'
       - 'scripts/claude-9router.sh'
       - 'scripts/claude-9router.test.sh'
       - 'scripts/claude-9router-auto.mjs'
       - '.github/workflows/claude-9router-verify.yml'
+      - '.github/workflows/claude-free-issue-agent.yml'
   workflow_dispatch:
 
 permissions:
