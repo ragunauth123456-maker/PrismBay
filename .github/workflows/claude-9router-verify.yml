@@ -17,6 +17,7 @@ on:
       - '.github/workflows/claude-free-issue-agent.yml'
       - '.github/workflows/genuine-claude-council.yml'
       - '.github/workflows/copilot-claude-council.yml'
+      - '.github/workflows/open-model-council.yml'
       - '.github/workflows/open-model-mesh.yml'
   workflow_dispatch:
 
