@@ -1,0 +1,184 @@
+name: Guyana final PDF after Claude review
+
+on:
+  schedule:
+    - cron: '3/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: guyana-final-pdf-after-claude
+  cancel-in-progress: false
+
+jobs:
+  continue-final-pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect completed Claude review
+        id: detect
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const issue_number = 104;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              per_page: 100
+            });
+            const completed = [...comments].reverse().find(c =>
+              c.user?.login === 'github-actions[bot]' &&
+              typeof c.body === 'string' &&
+              c.body.startsWith('Claude cloud response:') &&
+              !c.body.includes('Status: EVIDENCE NOT YET ACCESSED')
+            );
+            if (!completed) {
+              core.setOutput('ready', 'false');
+              return;
+            }
+            const marker = 'FINAL-PDF-AUTOMATION-HANDLED:' + completed.id;
+            const already = comments.some(c => typeof c.body === 'string' && c.body.includes(marker));
+            if (already) {
+              core.setOutput('ready', 'false');
+              return;
+            }
+            fs.writeFileSync('/tmp/claude-review.txt', completed.body, {mode: 0o600});
+            core.setOutput('ready', 'true');
+            core.setOutput('comment_id', String(completed.id));
+
+      - uses: actions/setup-node@v4
+        if: steps.detect.outputs.ready == 'true'
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        if: steps.detect.outputs.ready == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: Install PDF build dependencies
+        if: steps.detect.outputs.ready == 'true'
+        run: python -m pip install --disable-pip-version-check reportlab pymupdf
+
+      - name: Prepare final-integration task
+        if: steps.detect.outputs.ready == 'true'
+        run: |
+          cat > /tmp/final-pdf-task.txt <<'EOF'
+          You are the final integration editor for Guyana's Petroleum Transformation.
+          Evidence cut-off: 27 September 2026.
+
+          The independent Claude review is in /tmp/claude-review.txt.
+          The complete local review packet is in claude-review/guyana-edition2/.
+
+          Read the review and the local manuscript/evidence files. Produce a conservative PUBLIC RELEASE integration patch. Do not invent facts. Do not claim legal certification, independent audit completion, or external peer review completion. Where evidence remains unresolved, preserve an explicit qualification. Distinguish observed facts, enacted law, commenced law, announced policy, company/government targets, forecasts, and scenarios.
+
+          Required outcomes:
+          - Correct only findings supported by the local evidence and completed review.
+          - Preserve the evidence cut-off.
+          - Remove stale WORKING/candidate/internal-production wording from reader-facing cover/front matter where safe.
+          - Describe the release as a Public Release Edition, not as externally certified or peer-reviewed.
+          - Keep unresolved NRF, cost-audit, legal-assurance, environmental, household and Indigenous evidence limits explicit.
+          - Preserve the ten-part coherent manuscript architecture.
+          - Keep source IDs and source traceability.
+          - Update build_edition2_integrated_pdf.py only as needed to produce a reader-facing public-release PDF.
+          - Do not delete source/evidence files.
+          - Do not weaken factual qualifications to make the document sound more final.
+
+          Return ONLY a valid unified git diff against files under claude-review/guyana-edition2/. No markdown fences and no commentary.
+          EOF
+
+      - name: Generate integration patch through Claude Cloud Agent
+        if: steps.detect.outputs.ready == 'true'
+        run: |
+          node scripts/claude-9router-auto.mjs             --prompt-file=/tmp/final-pdf-task.txt             --output-file=/tmp/final-integration.patch
+
+      - name: Apply reviewed integration patch
+        if: steps.detect.outputs.ready == 'true'
+        run: |
+          test -s /tmp/final-integration.patch
+          git apply --check /tmp/final-integration.patch
+          git apply /tmp/final-integration.patch
+
+      - name: Build public-release PDF
+        if: steps.detect.outputs.ready == 'true'
+        working-directory: claude-review/guyana-edition2
+        run: |
+          python build_edition2_integrated_pdf.py
+          test -s guyana-petroleum-edition-2-expanded-working-manuscript.pdf
+          cp guyana-petroleum-edition-2-expanded-working-manuscript.pdf              Guyana_Petroleum_Transformation_Public_Release_Edition_2_1.pdf
+
+      - name: PDF QA
+        if: steps.detect.outputs.ready == 'true'
+        working-directory: claude-review/guyana-edition2
+        run: |
+          python - <<'PY'
+          import fitz, json, hashlib
+          p='Guyana_Petroleum_Transformation_Public_Release_Edition_2_1.pdf'
+          d=fitz.open(p)
+          assert d.page_count > 100, d.page_count
+          blank=[]
+          searchable=0
+          for i,page in enumerate(d):
+              txt=page.get_text('text').strip()
+              if txt: searchable += 1
+              if len(txt) < 20: blank.append(i+1)
+          assert searchable == d.page_count, (searchable,d.page_count)
+          assert not blank, blank
+          toc=d.get_toc()
+          assert len(toc) >= 10, len(toc)
+          sha=hashlib.sha256(open(p,'rb').read()).hexdigest()
+          qa={
+              'pdf':p,
+              'pages':d.page_count,
+              'searchable_pages':searchable,
+              'blank_or_nearblank_pages':blank,
+              'bookmarks':len(toc),
+              'sha256':sha,
+              'evidence_cutoff':'2026-09-27',
+              'release_status':'Public Release Edition; unresolved evidence limitations retained'
+          }
+          open('PUBLIC_RELEASE_QA.json','w').write(json.dumps(qa,indent=2)+'\n')
+          print(json.dumps(qa,indent=2))
+          PY
+
+      - name: Commit public-release candidate
+        if: steps.detect.outputs.ready == 'true'
+        env:
+          REVIEW_COMMENT_ID: ${{ steps.detect.outputs.comment_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="automation/guyana-public-release"
+          git checkout -B "$branch"
+          git add claude-review/guyana-edition2
+          git commit -m "Integrate Claude review and build Guyana public-release PDF" || true
+          git push --force-with-lease origin "$branch"
+
+      - name: Mark review handled and publish link
+        if: steps.detect.outputs.ready == 'true'
+        uses: actions/github-script@v7
+        env:
+          REVIEW_COMMENT_ID: ${{ steps.detect.outputs.comment_id }}
+        with:
+          script: |
+            const id = process.env.REVIEW_COMMENT_ID;
+            const marker = 'FINAL-PDF-AUTOMATION-HANDLED:' + id;
+            const branch = 'automation/guyana-public-release';
+            const url = 'https://github.com/' + context.repo.owner + '/' + context.repo.repo +
+              '/blob/' + branch +
+              '/claude-review/guyana-edition2/Guyana_Petroleum_Transformation_Public_Release_Edition_2_1.pdf';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 104,
+              body: marker + '\n\nAutomated final-PDF production completed after the completed Claude review.\n\nPublic-release PDF: ' + url + '\n\nThe release retains explicit unresolved-evidence limitations and does not claim legal certification, independent audit completion, or completed external peer review.'
+            });
