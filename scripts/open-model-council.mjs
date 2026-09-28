@@ -179,7 +179,7 @@ async function main() {
   await waitForOllama();
 
   const plan = loadModelPlan();
-  const activePlan = smoke ? plan.slice(0, 2) : plan;
+  const activePlan = plan;
   const failures = {};
   const roundOne = {};
   const roundTwo = {};
