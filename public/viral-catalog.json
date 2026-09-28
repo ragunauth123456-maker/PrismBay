@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-28T05:55:27.280Z",
+  "updatedAt": "2026-09-28T14:32:13.948Z",
   "market": "US",
   "methodology": "Public-news attention, freshness, and short-form demonstration fit. This is not PrismBay sales data and is not a TikTok, Amazon, Google, or Bing product ranking.",
   "refreshTargetHours": 6,
@@ -39,16 +39,16 @@
           "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOQTNQVmNWc0hscEFXSjk2LUE2X0lNTmdYeG1hcEhORGctQ3owV3dCQzM3LTNnY3VyRGVGX1RnZEhkM3FEMG44NUpoR0p2cy1Jdi1WZXFwLWJ2cGFiRkdZRnRsdVF0MlMyZE5rcGkwZ1o1QTllM3NFSUVqVE41MHBvTEh6STdCakZkWk1iMFJRcGZzdDVCVWd5X0g0bjM5WEnSAaQBQVVfeXFMTzdJRXN4NG9rdXhBUUlIZ045dXhjNzB2WVN0MUVNVGZZOWJwbWRTUW9lWWdIdEZVZnlITGRCYmZVSFRselFvWkhjaTVfRjRGbFkyT2c3MTNfMC1aNXg5eEJHZm9LS1dCVWZYenJQSk9WMFBwTWtKcmhKWm5SbjM1cUtjbkNHa0tTU0ZiNXQzZUNadGF1UVdkQzMyR2NwNC1JQ29DU18?oc=5"
         },
         {
-          "title": "The 6 Best Electric Scrubbers That Take the Work Out of Cleaning - Better Homes & Gardens",
-          "source": "Google News",
-          "publishedAt": "2026-09-23T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5fbnNNdTBZMG9wV2s3bnJMUlZDSXVKYTJUYmlPazcwV1VMRWpiazlUODIzbmtjWmFmbkVhSlVnTWpPLTFsMmxxaW9KNmNva0t1bUJRdmJyR2NYTV9mUXBkSA?oc=5"
-        },
-        {
           "title": "Spend Less Time Scrubbing With These Top-Tested Picks - Good Housekeeping",
           "source": "Google News",
           "publishedAt": "2026-06-25T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPeHdhUGRKUmlMQy1qT2hYWXZISTJDcExWc1hFVkoxQXQ0cldiWUVGTFlnOWNNVDQxS0kwRjg0MTFZaUp3X3M4WDhFUjNJLVRYT201NjNKZlkxWmNIYVd3T1JfSGs3dDFTMXQyUGNEcmVFdUtmSHJwUTduM015VGNYNHl4MFd4TDlRSnJBbw?oc=5"
+        },
+        {
+          "title": "The 6 Best Electric Scrubbers That Take the Work Out of Cleaning - Better Homes & Gardens",
+          "source": "Google News",
+          "publishedAt": "2026-09-23T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5fbnNNdTBZMG9wV2s3bnJMUlZDSXVKYTJUYmlPazcwV1VMRWpiazlUODIzbmtjWmFmbkVhSlVnTWpPLTFsMmxxaW9KNmNva0t1bUJRdmJyR2NYTV9mUXBkSA?oc=5"
         }
       ],
       "rank": 1
@@ -56,12 +56,12 @@
     {
       "slug": "garment-steamer",
       "name": "Portable Garment Steamer",
-      "signalScore": 89,
+      "signalScore": 86,
       "signalLabel": "high-attention",
       "evidence": {
         "publicMentions": 37,
         "mentionsLast7Days": 0,
-        "mentionsLast30Days": 15,
+        "mentionsLast30Days": 13,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -75,7 +75,7 @@
           "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQaXlNc3IwRkdxSWMwS0xGc1dQZEQyRkdjb0l6M2hvZDNual9lUHQzWm5MUS1BSHhNRzRHSGxrQm5tb3dKMXlpeS0tUlJ1TElEbWNoUkN2MGgzMnp4TjRkczE4VlQ0UmNNRy1hbWI2Y05Xa3Z3RzBkU1VpcWZ1OEdRNVgtVEl1UQ?oc=5"
         },
         {
-          "title": "Best travel steamers 2026: tested and reviewed for wrinkle-free packing - CN Traveller",
+          "title": "Best travel steamers 2026: tested and reviewed for wrinkle-free packing - cntraveller.com",
           "source": "Google News",
           "publishedAt": "2026-07-30T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ZRDlxanVrQ3JSeXhtdXBjS3JmVTdkQnV2LURHdldCN1BidHU0ZjhselZXRVZWLVhJUEpwaUMwTEgweU5mLVRmZnozS3dJUTk5TGZTZHctbHpmZHkySDktbE1hZ0Zsdw?oc=5"
@@ -87,13 +87,13 @@
           "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9HWkFheEdZLU5KN28wQmVlLVZWVFJZSUZpcFlSTmJLSFJJc3lacVNuUTNycF9SN0tnRmM4QnZ1SXNwcDFid3kya1RUU2J0cjEyQUxOY1N6YXI0UHI3?oc=5"
         },
         {
-          "title": "The best clothes steamers for removing creases, killing bacteria, and freshening up garments - telegraph.co.uk",
+          "title": "The best clothes steamers for removing creases, killing bacteria, and freshening up garments - The Telegraph",
           "source": "Google News",
           "publishedAt": "2026-03-18T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE53Y0l6RGxTd29FX2I5QThSem8xYVZkbmZoeFNEOTVRVVZqMWlxOEpGNFB6NnUydGlRc3NraGVUVGs3OFJJVnJ1SW9Lc2QwN0lBLW9NaF9BUFFuck9aUC1kblBjbG1KWVdFMUM3LWZlZ2pxMXcy?oc=5"
         },
         {
-          "title": "10 of the best handheld steamers on the market - vogue.com.au",
+          "title": "10 of the best handheld steamers on the market - Vogue AU",
           "source": "Google News",
           "publishedAt": "2026-01-08T08:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQdkdwdjFkSnptM0JmTmpLYWRPTjUwZEhjOEI3YTlCT2VmOG1GUVJ1dklzUnV5LTROeXJKQ3QzRnEyakRLQWRrUUhPNUJvZWZ2dlhWaXFoajlpTFkwdXhDaTZjT3M4LThxM3d4bXI0X1ZMUmtSdmZXN1A0ZkM4eWF0amE3ZkxJUEVsUXVuQlM4Zk91andHSk15YVRaUHJLN1JUVGlEc2hVajBRMlRYU0h3?oc=5"
@@ -104,12 +104,12 @@
     {
       "slug": "mattress-vacuum",
       "name": "Mattress Vacuum",
-      "signalScore": 82,
+      "signalScore": 80.5,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 109,
+        "publicMentions": 110,
         "mentionsLast7Days": 1,
-        "mentionsLast30Days": 7,
+        "mentionsLast30Days": 6,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -171,7 +171,7 @@
           "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1OVkM4ZWhzQmpyUlZ5Z3Jmc3pyel9STTVDZnF1VEdHdERlM21OcUt0UFlUTlVhZG5pUWhyS2hBRTdGZHRNUjhJWGhmQ01EZGZxSXZBcXVPT0Uweno4WXdwbzluUUJYeC1ySUNQTjJXVlE3Umo1YzVN?oc=5"
         },
         {
-          "title": "If You'd Rather Wash Your Car Than Strip Its Paint, These Cordless Power Washers Are The Tool You Want - popularmechanics.com",
+          "title": "If You'd Rather Wash Your Car Than Strip Its Paint, These Cordless Power Washers Are The Tool You Want - Popular Mechanics",
           "source": "Google News",
           "publishedAt": "2026-07-24T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQZzA5TzBxdm5yX1RYc3RkUHpOV0FRdmF2YnV6Vk9ma3cweHFkM0xoTzAxQXo5OThsS3BVZ2hOWTdXOWVlQUZnYTBXaHZfUkRmN1BsMVc5RlR1YngtdVNIdWZfZGJpRmd0dDBuMXNJLXlFRllZREJWYktndWYyWVJJU0Zn?oc=5"
@@ -200,10 +200,10 @@
     {
       "slug": "pethair",
       "name": "Reusable Pet Hair Remover",
-      "signalScore": 53,
+      "signalScore": 50,
       "signalLabel": "active",
       "evidence": {
-        "publicMentions": 19,
+        "publicMentions": 17,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
@@ -225,7 +225,7 @@
           "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9TRHBxazJndGdPZkxWeW5xUGRibHc4aGJjUjBRN2tueTdCU1I1dEx2N1RXSGYteThUejc1cWlBcnNiOGhDYmNYSVVRUk0wN1djTE9Ub2VZYzV5VGJYczFLTHo2MHhWdEpXckdnX3V5U0pyOUNTVFpN?oc=5"
         },
         {
-          "title": "Uproot Clean Promo Code LOUISAWARWICK10 – Get 10% Off Sitewide on Viral Pet Hair Removal Tools - Muzique Magazine",
+          "title": "Uproot Clean Promo Code LOUISAWARWICK10 – Get 10% Off Sitewide on Viral Pet Hair Removal Tools - muziquemagazine.com",
           "source": "Google News",
           "publishedAt": "2026-05-26T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNdDdxTXg5VTljRFBmTDlNd0VXaDV5eUJlbHp4NGxpT3RQdk1sUmVhM3RydDJ3OXJGR3dMalAxemlVYjhzT2NZZ2pLYlBSM2F0Rk1zVDNrR2x0NGJyb3FJOUNDY2x0eEVnRk90aGtvdENXX01MMUhSNTIzOEhnZHVHWHByRW1hYmpCa0tTcXc3clBKTjVNMkdkNmR4blJtYng3cVhkRTdoRHBuZEczeWNENUhST0hsY2pRcU9Udw?oc=5"
@@ -296,10 +296,10 @@
     {
       "slug": "home-caddy",
       "name": "Portable Home Caddy",
-      "signalScore": 23,
+      "signalScore": 21.5,
       "signalLabel": "baseline",
       "evidence": {
-        "publicMentions": 3,
+        "publicMentions": 2,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
@@ -319,12 +319,6 @@
           "source": "Google News",
           "publishedAt": "2026-04-30T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQOXNiQWdmazZNR0M4ZTdUMzNJaHhZN2NSMmZHa0tWTmNnYzE3MGltaUcyNjlrMEdfMnlSbk9RY29ycm4tdmd5Y0wtNk9IMktyTzhmN0ZKTzBLTkloRHhvNlgtM0pIcFE4N2NCSUU2WXE0d0NOUy1WS00zWDdzczlBeFk4b3lvQVhCVXNudU5mbG5nNVlNSVJ2MGctMmhPMFNWMFRDUklIZG9tVFZubTVhX3lZeDhXVjBUSTFmMXFtNNIBxAFBVV95cUxPSGJnSkU3ZHNOYURTUThBaXFWbXREOXJlaXR1NVBUMU1vSDBsZlBGRHBPc2xuU3pURkZ5ekhFcy1VaWN0NUhmdU1OdGZsdy1LZTh4X243Vm9SMERCLUJZeUU2LTlKUF81RFY1Q0wxRm03N1EtYndHZmZrczc1am9xTWttWHk5U1diWGhWd3k3VlRfV0ZHRXNHNHB3bkY5MEg5c1U2aDRmN3R3MHZHSUZNYWpLWDNqTzRqZF9qQTlpazlSRWNz?oc=5"
-        },
-        {
-          "title": "Target’s Sleek New $10 Organizer Is a Dorm Room Must-Have - parade.com",
-          "source": "Google News",
-          "publishedAt": "2026-07-29T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBaTUdJcXZxNVJhZUl4ZXJSa25PdV9Mb3NnMGc3SWFWU3B6ejY4UUJQZFBZM3N0Uk91ZVpjUUZzMzJ2cnRiWUNHNlJRTmlmbGRmeEVEMkZyN0lpc05MbUo4V1hsV0IzdnNBWEdMb0NoNE9OeTlJRTl4aVBOZ3k5ODA?oc=5"
         }
       ],
       "rank": 7
