@@ -2,6 +2,23 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "PrismBay: Auto-prepare Claude Free via 9Router",
+      "type": "shell",
+      "command": "npm run claude:free:setup",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
       "label": "PrismBay: Start Claude Free via 9Router",
       "type": "shell",
       "command": "npm run claude:free",

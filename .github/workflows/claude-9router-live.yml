@@ -1,0 +1,27 @@
+name: Claude Free Live Cloud Verification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/claude-9router-live.yml'
+      - 'scripts/claude-9router-auto.mjs'
+      - 'scripts/claude-9router.sh'
+      - 'package.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-free-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Claude Code through 9Router and OpenCode Free
+        run: node scripts/claude-9router-auto.mjs --verify
