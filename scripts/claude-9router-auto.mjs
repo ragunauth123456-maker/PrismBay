@@ -33,6 +33,24 @@ function run(command, args, options = {}) {
   if (result.status !== 0) throw new Error(`${command} exited with status ${result.status}`);
 }
 
+function runCapture(command, args, options = {}) {
+  const result = spawnSync(command, args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "inherit"],
+    env: options.env || process.env,
+    cwd: options.cwd || process.cwd(),
+    maxBuffer: 1024 * 1024,
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`${command} exited with status ${result.status}`);
+  return result.stdout || "";
+}
+
+function argValue(prefix) {
+  const item = process.argv.slice(2).find((arg) => arg.startsWith(`${prefix}=`));
+  return item ? item.slice(prefix.length + 1) : "";
+}
+
 async function ensureTools() {
   if (commandExists("9router") && commandExists("claude")) return;
   console.log("Installing pinned 9Router and Claude Code packages...");
@@ -319,6 +337,8 @@ async function main() {
 
   const launch = args.has("--launch");
   const verify = args.has("--verify");
+  const promptFile = argValue("--prompt-file");
+  const outputFile = argValue("--output-file");
 
   await ensureTools();
   await ensureRouter();
@@ -340,6 +360,24 @@ async function main() {
 
   const env = wrapperEnv(apiKey, model);
   run("bash", ["scripts/claude-9router.sh", "--check"], { env });
+
+  if (promptFile) {
+    const prompt = (await fsp.readFile(promptFile, "utf8")).trim();
+    if (!prompt) throw new Error("Claude task prompt is empty.");
+    const response = runCapture(
+      "bash",
+      ["scripts/claude-9router.sh", "--run", "--print", prompt],
+      { env },
+    ).trim();
+    if (!response) throw new Error("Claude returned an empty response.");
+    if (outputFile) {
+      await fsp.writeFile(outputFile, `${response}\n`, { mode: 0o600 });
+      console.log("Claude task completed. Response written to the protected output file.");
+    } else {
+      console.log(response);
+    }
+    return;
+  }
 
   if (verify) {
     run(
