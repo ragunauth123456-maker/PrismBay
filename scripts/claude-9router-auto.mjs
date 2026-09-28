@@ -4,6 +4,7 @@ import fsp from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { spawn, spawnSync } from "node:child_process";
+import crypto from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
 
 const ROUTER_BASE = "http://127.0.0.1:20128";
@@ -128,6 +129,58 @@ export function readActiveKey({
   return readLegacyKey(dataDir);
 }
 
+export function createLocalKey({
+  homeDir = os.homedir(),
+  dataDir = process.env.DATA_DIR || path.join(homeDir, ".9router"),
+} = {}) {
+  const dbPath = path.join(dataDir, "db", "data.sqlite");
+  if (!fs.existsSync(dbPath)) return "";
+
+  const machineFile = path.join(dataDir, "machine-id");
+  let machineId = "";
+  try {
+    machineId = fs.readFileSync(machineFile, "utf8").trim();
+  } catch {
+    machineId = crypto.randomBytes(8).toString("hex");
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(machineFile, machineId, { mode: 0o600 });
+  }
+  if (!machineId) machineId = crypto.randomBytes(8).toString("hex");
+
+  const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let keyId = "";
+  for (let i = 0; i < 6; i += 1) {
+    keyId += alphabet[crypto.randomInt(0, alphabet.length)];
+  }
+  const secret = process.env.API_KEY_SECRET || "endpoint-proxy-api-key-secret";
+  const crc = crypto
+    .createHmac("sha256", secret)
+    .update(machineId + keyId)
+    .digest("hex")
+    .slice(0, 8);
+  const key = `sk-${machineId}-${keyId}-${crc}`;
+
+  const db = new DatabaseSync(dbPath);
+  try {
+    const id = crypto.randomUUID();
+    db.prepare(
+      "INSERT INTO apiKeys(id, key, name, machineId, isActive, createdAt) VALUES(?, ?, ?, ?, 1, ?)",
+    ).run(id, key, "PrismBay Claude automation", machineId, new Date().toISOString());
+  } finally {
+    db.close();
+  }
+  return key;
+}
+
+function ensureActiveKey() {
+  const existing = readActiveKey();
+  if (existing) return existing;
+  const created = createLocalKey();
+  if (!created) return "";
+  console.log("Created a local 9Router API key for this cloud runtime. Key was not printed.");
+  return created;
+}
+
 async function listModels(apiKey) {
   const response = await fetch(`${ROUTER_API}/models`, {
     headers: { Authorization: `Bearer ${apiKey}` },
@@ -222,8 +275,15 @@ async function selfTest() {
     const prior = process.env.NINE_ROUTER_API_KEY;
     delete process.env.NINE_ROUTER_API_KEY;
     const key = readActiveKey({ homeDir: root, dataDir });
-    if (prior) process.env.NINE_ROUTER_API_KEY = prior;
     if (key !== "sk-self-test") throw new Error("SQLite key lookup failed.");
+    const writable = new DatabaseSync(path.join(dataDir, "db", "data.sqlite"));
+    writable.exec("DELETE FROM apiKeys");
+    writable.close();
+    const generated = createLocalKey({ homeDir: root, dataDir });
+    if (!generated.startsWith("sk-")) throw new Error("Local key generation failed.");
+    const reread = readActiveKey({ homeDir: root, dataDir });
+    if (reread !== generated) throw new Error("Generated key was not persisted.");
+    if (prior) process.env.NINE_ROUTER_API_KEY = prior;
 
     const ids = ["oc/union-alpha", PREFERRED_MODEL];
     const model = selectModel(ids);
@@ -256,11 +316,9 @@ async function main() {
   await ensureTools();
   await ensureRouter();
 
-  const apiKey = readActiveKey();
+  const apiKey = ensureActiveKey();
   if (!apiKey) {
-    throw new Error(
-      "No active 9Router API key was found in the local 9Router data store. Open Endpoint & Key once and create an active key.",
-    );
+    throw new Error("Unable to create or load a local 9Router API key.");
   }
 
   const models = await listModels(apiKey);
