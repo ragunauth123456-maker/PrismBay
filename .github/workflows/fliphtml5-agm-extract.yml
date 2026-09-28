@@ -1,0 +1,55 @@
+name: FlipHTML5 AGM PDF Extract
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  extract:
+    if: >-
+      github.event.issue.pull_request == null &&
+      startsWith(github.event.issue.title, '[FLIPHTML5-EXTRACT]') &&
+      github.event.comment.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install extraction dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr poppler-utils
+          python -m pip install --quiet requests pillow pypdf
+      - name: Extract AGM pages from public FlipHTML5 publication
+        env:
+          FLIP_URL: https://online.fliphtml5.com/jeign/MI05/
+          ANCHOR_PAGE: "45"
+          OUT_DIR: /tmp/fliphtml5_extract
+        run: python scripts/fliphtml5_agm_extract.py
+      - name: Upload extracted PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: AGM-Inc-FlipHTML5-extract
+          path: |
+            /tmp/fliphtml5_extract/AGM_Inc_feature.pdf
+            /tmp/fliphtml5_extract/report.json
+          if-no-files-found: error
+      - name: Report result
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = 'FlipHTML5 extraction workflow finished. ';
+            if (fs.existsSync('/tmp/fliphtml5_extract/report.json')) {
+              const r = JSON.parse(fs.readFileSync('/tmp/fliphtml5_extract/report.json','utf8'));
+              body += 'Keyword hits: ' + JSON.stringify(r.keyword_hits || []) + '. Selected pages: ' + JSON.stringify(r.selected_pages || []) + '. ';
+            }
+            body += 'Run: https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId;
+            await github.rest.issues.createComment({owner:context.repo.owner,repo:context.repo.repo,issue_number:context.issue.number,body});
