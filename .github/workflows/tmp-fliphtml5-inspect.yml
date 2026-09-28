@@ -1,0 +1,26 @@
+name: Inspect FlipHTML5 MI05
+
+on:
+  push:
+    branches:
+      - tmp/fliphtml5-extract-mi05-20260928
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Fetch publication HTML
+        run: |
+          set -euo pipefail
+          curl -L --compressed -A 'Mozilla/5.0' 'https://online.fliphtml5.com/jeign/MI05/' -o /tmp/book.html
+          echo "SIZE=$(wc -c </tmp/book.html)"
+          echo "---- candidate asset/download references ----"
+          grep -Eo 'https?://[^"'"'"' <>]+' /tmp/book.html | grep -Ei 'pdf|download|files|assets|fliphtml5|MI05' | head -n 200 || true
+          echo "---- script/src references ----"
+          grep -Eo '(src|href)="[^"]+"' /tmp/book.html | head -n 200 || true
+          echo "---- interesting tokens ----"
+          grep -Eoi '.{0,120}(download|pdf|source|config|bookConfig|pages|page-45|45.jpg|45.webp).{0,220}' /tmp/book.html | head -n 200 || true
