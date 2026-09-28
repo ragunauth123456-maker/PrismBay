@@ -1,0 +1,77 @@
+name: Genuine Claude Council
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  genuine-claude:
+    if: >-
+      github.event.issue.pull_request == null &&
+      startsWith(github.event.issue.title, '[CLAUDE-GENUINE]') &&
+      github.event.comment.user.login == github.repository_owner &&
+      contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect approved Anthropic authentication
+        id: auth
+        shell: bash
+        env:
+          CLAUDE_OAUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [[ -n "$CLAUDE_OAUTH" ]]; then
+            echo "mode=oauth" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$ANTHROPIC_KEY" ]]; then
+            echo "mode=api" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=none" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Report one-time authentication requirement
+        if: steps.auth.outputs.mode == 'none'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                'Genuine Anthropic Claude is not authenticated for this repository yet.',
+                '',
+                'The workflow is installed and ready. Add either the repository secret `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY`, then post the same @claude request again.',
+                'No credential value was read or printed by this check.'
+              ].join('\n')
+            });
+
+      - name: Run genuine Claude with subscription OAuth
+        if: steps.auth.outputs.mode == 'oauth'
+        uses: anthropics/claude-code-action@756cc22e19660d20e8cc9496b4f242475a7f7790
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          trigger_phrase: "@claude"
+          claude_args: >-
+            --max-turns 8
+            --allowedTools "Read,Glob,Grep,Bash(git status:*),Bash(git diff:*),Bash(git log:*)"
+
+      - name: Run genuine Claude with Anthropic API
+        if: steps.auth.outputs.mode == 'api'
+        uses: anthropics/claude-code-action@756cc22e19660d20e8cc9496b4f242475a7f7790
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}
+          trigger_phrase: "@claude"
+          claude_args: >-
+            --max-turns 8
+            --allowedTools "Read,Glob,Grep,Bash(git status:*),Bash(git diff:*),Bash(git log:*)"

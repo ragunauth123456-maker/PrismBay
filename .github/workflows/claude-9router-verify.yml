@@ -13,6 +13,7 @@ on:
       - 'scripts/claude-9router-auto.mjs'
       - '.github/workflows/claude-9router-verify.yml'
       - '.github/workflows/claude-free-issue-agent.yml'
+      - '.github/workflows/genuine-claude-council.yml'
   workflow_dispatch:
 
 permissions:

@@ -1,43 +1,49 @@
 # ChatGPT + Claude AI Council
 
-This project supports a two-model workflow in which ChatGPT coordinates the work and Claude Code acts as an independent reviewer through the GitHub-hosted 9Router/OpenCode Free route.
+This project supports two second-opinion routes behind one ChatGPT-led workflow.
+
+The **genuine Claude route** uses Anthropic's official `anthropics/claude-code-action` and authenticates with either `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY`. Outputs from this route may be attributed to Anthropic Claude.
+
+The **free fallback route** uses Claude Code as a client harness through 9Router/OpenCode Free. Its model may not be an Anthropic Claude model, so outputs from that route must be described as a free-model second opinion rather than as Claude.
 
 ## Operating model
 
 1. The owner gives ChatGPT a task in the normal ChatGPT conversation.
 2. ChatGPT performs its own analysis first.
-3. For work that benefits from an independent second model, ChatGPT posts a focused task to the dedicated `[AI-COUNCIL]` GitHub issue.
-4. GitHub Actions starts a fresh cloud runner, launches 9Router privately, selects an approved OpenCode free model, runs Claude Code headlessly, and posts Claude's answer back to the issue.
-5. ChatGPT reads Claude's response, compares it with its own analysis, resolves disagreements using evidence, and returns the combined result to the owner.
-6. For complex or consequential repository changes, ChatGPT may send the combined draft back to Claude for a final red-team or verification pass before implementation.
+3. When an independent second opinion would materially improve the result, ChatGPT sends a focused challenge to the genuine Claude control issue.
+4. GitHub Actions invokes Anthropic's official Claude Code Action using repository-held authentication. The workflow is read-only for repository contents and restricted to owner-triggered issue comments.
+5. ChatGPT reads Claude's response, compares it with its own analysis, and resolves disagreements using evidence.
+6. If genuine Claude authentication is unavailable, the existing free-model reviewer can still be used, but it is labeled accurately.
+7. For consequential work, ChatGPT may request a second red-team pass before returning the final result.
 
 ## Council roles
 
-ChatGPT is the coordinator, synthesizer, and user-facing decision support layer. It owns task decomposition, evidence gathering, comparison of model outputs, and the final response.
+**ChatGPT** is the coordinator, researcher, synthesizer, and user-facing layer. It decomposes tasks, gathers evidence, compares model outputs, and produces the final response.
 
-Claude is the independent second opinion. It should inspect evidence, challenge weak assumptions, identify missed risks, and propose a concrete next action. It should not simply agree with ChatGPT.
+**Anthropic Claude** is the independent reviewer when the genuine route is authenticated. It should challenge assumptions, identify missing evidence and risks, and propose alternative reasoning rather than simply agree.
 
-GitHub is the shared execution and audit layer. It records the task, the Claude response, workflow runs, code changes, tests, and pull requests.
+**OpenCode Free via 9Router** is an optional third opinion or fallback. It is not treated as Anthropic Claude unless the advertised model is independently verified as an Anthropic model through an authorized provider route.
+
+**GitHub** is the execution and audit layer. It records trigger comments, workflow runs, model responses, tests, and code changes.
 
 ## Recommended council modes
 
-Use an ordinary natural-language comment in the council issue. ChatGPT should state the desired role explicitly when useful, such as:
+ChatGPT can ask the second model for an independent solution, critique, red-team review, verification pass, implementation review, or publication audit.
 
-- Independent solution: solve the task without relying on ChatGPT's answer.
-- Critique: attack weaknesses in a proposed plan or draft.
-- Red team: search for failure modes, security risks, unsupported assumptions, or missing evidence.
-- Verification: test factual or technical claims against repository evidence.
-- Implementation review: inspect a proposed patch, tests, and rollback plan.
-- Publication audit: check a document for gaps, unsupported claims, consistency, and scrutiny resistance.
+For genuine Claude, use the owner-only `[CLAUDE-GENUINE]` issue and include `@claude` in the request. The official Anthropic action handles the Claude response.
 
-The workflow adds a council instruction automatically so Claude returns: Independent answer, Evidence, Risks or disagreements, and Recommended next action.
+For the free fallback reviewer, use the existing `[AI-COUNCIL]` issue. That route remains useful for additional model diversity but must not be represented as genuine Claude.
 
 ## Safety and cost boundaries
 
-The council remains cloud-only. It must not connect K1, AGMADMINLPT18, another user computer, self-hosted runners, or remote desktop. It must not expose credentials or private data. Paid models, purchases, supplier orders, Stripe actions, external outreach, public deployment, and automatic publishing still require separate owner authorization. Existing `AGENTS.md` and `CLAUDE.md` rules remain authoritative.
+The council remains cloud-only. It must not connect K1, AGMADMINLPT18, another user computer, self-hosted runners, or remote desktop. It must not expose credentials, customer data, unpublished employer material, or private correspondence to unapproved services.
 
-9Router and OpenCode Free are third-party components. Free-provider availability and quotas may change. The deterministic PrismBay workflows must continue to work without the council.
+The genuine Claude workflow grants repository contents read-only access and issue/pull-request comment permissions. It does not authorize deployment, purchases, supplier orders, Stripe actions, external outreach, social posting, or paid API spend beyond credentials the owner has explicitly provisioned.
+
+Credentials must remain in GitHub Actions secrets. The workflow checks only whether an approved secret exists and never prints its value.
+
+Existing `AGENTS.md` and `CLAUDE.md` rules remain authoritative.
 
 ## What "combined" means
 
-The models are not merged into one neural network. The practical combination is an orchestrated model council: one model reasons, the other independently challenges or verifies it, and ChatGPT synthesizes the evidence into one result for the owner. This preserves disagreement instead of hiding it and creates an auditable record in GitHub.
+The models are not merged into one neural network. The combination is an orchestrated council. ChatGPT reasons first, genuine Claude independently challenges or verifies the work, and ChatGPT synthesizes the evidence into one final result. A third free-model review can be added when useful. This keeps disagreement visible and auditable instead of hiding it.
