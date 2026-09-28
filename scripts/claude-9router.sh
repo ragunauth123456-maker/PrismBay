@@ -37,14 +37,19 @@ models="$(curl --fail --silent --show-error --max-time 12 -H "Authorization: Bea
   echo "Unable to list gateway models. Check the private endpoint key." >&2
   exit 1
 }
-MODEL_LIST_JSON="$models" ROUTER_MODEL="${NINE_ROUTER_MODEL:-}" node -e '
-let payload;
-try { payload=JSON.parse(process.env.MODEL_LIST_JSON); } catch { console.error("Invalid gateway model response"); process.exit(1); }
-const ids=Array.isArray(payload.data)?payload.data.map(x=>x.id).filter(x=>typeof x==="string"):[];
-if (!ids.length) { console.error("No models available. Connect an approved free provider in 9Router."); process.exit(1); }
-if (process.argv[1]==="--models") console.log(ids.join("\n"));
-const selected=process.env.ROUTER_MODEL;
-if (selected && !ids.includes(selected)) { console.error("Selected model is not advertised by this gateway."); process.exit(1); }
+printf '%s' "$models" | ROUTER_MODEL="${NINE_ROUTER_MODEL:-}" node -e '
+let input="";
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", chunk => { input += chunk; });
+process.stdin.on("end", () => {
+  let payload;
+  try { payload=JSON.parse(input); } catch { console.error("Invalid gateway model response"); process.exit(1); }
+  const ids=Array.isArray(payload.data)?payload.data.map(x=>x.id).filter(x=>typeof x==="string"):[];
+  if (!ids.length) { console.error("No models available. Connect an approved free provider in 9Router."); process.exit(1); }
+  if (process.argv[1]==="--models") console.log(ids.join("\n"));
+  const selected=process.env.ROUTER_MODEL;
+  if (selected && !ids.includes(selected)) { console.error("Selected model is not advertised by this gateway."); process.exit(1); }
+});
 ' -- "$mode"
 
 if [[ "$mode" == "--check" || "$mode" == "--models" ]]; then
