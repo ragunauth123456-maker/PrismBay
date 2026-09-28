@@ -5,7 +5,7 @@ PrismBay now has a zero-secret, cloud-only model mesh for five open-weight model
 - Qwen: `qwen3:0.6b`
 - Llama: `llama3.2:1b`
 - Mistral: `ministral-3:3b`
-- DeepSeek: `deepseek-r1:1.5b`
+- DeepSeek: `deepseek-coder:1.3b`
 - Gemma: `gemma3:1b`
 
 The models run locally inside a standard GitHub-hosted Ubuntu runner through Ollama. No model-provider API key is required and no user PC is involved.
