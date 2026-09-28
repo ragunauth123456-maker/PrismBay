@@ -21,11 +21,18 @@ if [[ "$mode" == "--run" ]]; then
   : "${NINE_ROUTER_MODEL:?Set NINE_ROUTER_MODEL to an ID listed by --models for an authorized free provider.}"
 fi
 
-health_url="${base%/v1}/health"
-curl --fail --silent --show-error --max-time 8 "$health_url" >/dev/null || {
+health_base="${base%/v1}"
+health_ok=0
+for health_url in "$health_base/api/health" "$health_base/health"; do
+  if curl --fail --silent --show-error --max-time 8 "$health_url" >/dev/null 2>&1; then
+    health_ok=1
+    break
+  fi
+done
+if [[ "$health_ok" -ne 1 ]]; then
   echo "9Router health check failed; verify the private gateway is running." >&2
   exit 1
-}
+fi
 models="$(curl --fail --silent --show-error --max-time 12 -H "Authorization: Bearer ${NINE_ROUTER_API_KEY}" "$base/models")" || {
   echo "Unable to list gateway models. Check the private endpoint key." >&2
   exit 1
