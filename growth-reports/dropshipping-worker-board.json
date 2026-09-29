@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T06:16:05.996Z",
+  "generatedAt": "2026-09-29T12:53:15.650Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-29T05:44:32.546Z",
+    "checkedAt": "2026-09-29T12:53:15.363Z",
     "validSupplierMatches": 2,
     "variantStock": 2,
     "countryFreightEstimates": 0,
@@ -25,6 +25,27 @@
       "executionMode": "scheduled_cj_and_manual_review",
       "candidateCount": 9,
       "blockers": [
+        {
+          "slug": "self-standing-floor-mop",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "window-washer-squeegee",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "bottle-brush-set",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "cordless-handheld-vacuum",
           "status": "supplier_search_needed",
@@ -66,27 +87,6 @@
           "sku": "CJLY27903090001",
           "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
           "zeroPricedMethods": 30
-        },
-        {
-          "slug": "self-standing-floor-mop",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "window-washer-squeegee",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "bottle-brush-set",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
         }
       ]
     },
