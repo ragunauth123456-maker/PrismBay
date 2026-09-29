@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-28T10:11:33.196Z",
+  "updatedAt": "2026-09-29T10:09:40.418Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -9,12 +9,12 @@
       "slug": "cordless-handheld-vacuum",
       "name": "Cordless Handheld Vacuum",
       "query": "cordless handheld vacuum",
-      "attentionScore": 97.6,
+      "attentionScore": 92,
       "attentionLabel": "high-attention",
       "evidence": {
         "publicMentions": 101,
-        "mentionsLast7Days": 2,
-        "mentionsLast30Days": 11,
+        "mentionsLast7Days": 1,
+        "mentionsLast30Days": 10,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -39,10 +39,10 @@
             "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNbXdYRW9tSWo4UWowdXBVTzFSYm8xdmZLdTlSVURKclRRRDNoXzhzWXRXbnlWR2Q4cjF6RWdTLUYxX3FDUElMZHZ6emRmczZqY2hEUndfdDQ5LXM4dEtiNE5FbjRKbi1KWjRid0dIZXRBTTM1a09YU0dlLTEwZVQ1WUstU3BwSVFybHNlTW9HYmJQVDlhTFBPVzhR?oc=5"
           },
           {
-            "title": "This Cordless Vacuum That Doubles as a Mop Made Shoppers Say ‘Bye-Bye Shark’ — and It’s on Sale at Amazon - People.com",
+            "title": "Admit it: You have a dream vacuum. The good news is, it’s probably on sale right now - NBC News",
             "source": "Google News",
-            "publishedAt": "2026-09-24T11:30:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQMkNDa2NwU3lld2hfNWEtMFY4dGh6Z2VOZTNjRGt4RzZ0dXZQVVAxc09QWGM4bnM1aUJobmxKV1hsRDBQWlFnTjRIakRmVU5aenFETXJNU2lObGU4V1hTYXdxZ3phcEllcTE4djNmVlNXQjQxWFlrUHFJdVVLZmhPVlBFNkxmcm44NDBtWkZsODAtdw?oc=5"
+            "publishedAt": "2026-06-26T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPU1VsWUdFTl95Y2dyR0hYU3JNUURSYkZLVFQtWnJtZFg4Mzc5TURHT05aZWREQXJoSnlLNkFrZmJab1hsOEVvckhjY0U2YjJnampkRnhZTFBWRWVpX2F1eXhjTndxeS01RkxLVFBCSTViMmUwZ2xKUExxbjREdHpheURlVVJhZkt1blZrS0tB?oc=5"
           }
         ]
       },
@@ -61,12 +61,12 @@
       "slug": "hanging-closet-organizer",
       "name": "Hanging Closet Organizer",
       "query": "hanging closet organizer",
-      "attentionScore": 80.6,
+      "attentionScore": 73.1,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 48,
-        "mentionsLast7Days": 1,
-        "mentionsLast30Days": 7,
+        "publicMentions": 46,
+        "mentionsLast7Days": 0,
+        "mentionsLast30Days": 5,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -116,7 +116,7 @@
       "attentionScore": 73,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 34,
+        "publicMentions": 36,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
@@ -137,16 +137,16 @@
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNME5UMWtzQUpSOHA2RWtIc1hxZEEwUUlnMGJ5cVRNN1VkZ1B4dWEtSE5JeHN1aVRSY0o0U2paMFlMSjl1NWxaaVFDZjVsWFBTOXYxcGtUb2ZsRlptQkhSNjRPWHdTVmJFdVZZT01uaG53RFcxUnJ3aVhIbkZyRmxQSw?oc=5"
           },
           {
-            "title": "The Dish Racks We Use (and Love) for Dry Dishes and Clutter-Free Counters - The Spruce",
+            "title": "The Dish Racks We Use (and Love) for Dry Dishes and Clutter-Free Counters - thespruce.com",
             "source": "Google News",
             "publishedAt": "2026-07-30T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1oQlI0bHl0dHVWR3phNW5Vd0t2RW96T2xGYjBVZnpURk54eXN6VnladzZMdnhjWFN1Ymt0ZUIxWndGenVIZXFvajV5anBOTTBSX29mcDdheFJDRE54alE?oc=5"
           },
           {
-            "title": "10 Clever Amazon Home and Kitchen Gadgets That Pull a Lot More Weight Than Their Under-$10 Price Tag Suggests - Real Simple",
+            "title": "My Tiny Bathroom Didn’t Have Any Counter Space Until I Found This Gem - Apartment Therapy",
             "source": "Google News",
-            "publishedAt": "2026-09-19T19:30:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUHVIbW03WHp0bXI4ZXNXNGpFT2ZtSXhKaUNhd04tdXVRbmM5RWoxS1pQcF9JSjRFN3VNUTJIby13bExHaHdvWDRaZWlqX29pcENKRVB5bDVRNnlERGJieWJPSGhUNnlyeUhhN0RfMFlNanR0UEVrMjg2N1NCa1gxQVlKc1QtLVdZenRKRg?oc=5"
+            "publishedAt": "2026-02-28T08:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPd0k5b1gtTDF1ekN1aG5aZ0FVQVNReTFRY2lLMWlCVXJnSmVHQWt0M1FTOTdlUXJ5c09VTHdscTRxQlZGTEtTVzR0NlRPbS0tRzExMzFZOWlMYnRmSDJpLXBtMjluU29ISUcwRXpQTW82bHY5ZUZZUzNVcm14T0Fjem9ITko5Wmc?oc=5"
           }
         ]
       },
@@ -168,7 +168,7 @@
       "attentionScore": 68.5,
       "attentionLabel": "promotion-watch",
       "evidence": {
-        "publicMentions": 26,
+        "publicMentions": 27,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
@@ -217,11 +217,11 @@
       "slug": "appliance-cord-organizer",
       "name": "Appliance Cord Organizer",
       "query": "appliance cord organizer",
-      "attentionScore": 45.5,
+      "attentionScore": 41.8,
       "attentionLabel": "research",
       "evidence": {
         "publicMentions": 10,
-        "mentionsLast7Days": 1,
+        "mentionsLast7Days": 0,
         "mentionsLast30Days": 2,
         "sourcesAvailable": [
           "Google News",
@@ -247,7 +247,7 @@
             "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFA2VHZmbDExRHlEdnRBa2RmWUI3REc1RUkyX05RWlB1QWlQVWVVVjZIbzlRMXY5Qm9UaDlOZDlHNF8tcXIzNzlWMFFxN0dDeXAyMGYwNmNVVnB5UWh0WnBEN2MxR1RWc2hnZTdpc1l5cw?oc=5"
           },
           {
-            "title": "The 7 Best Under‑Cabinet Lighting Options for Bright, Functional Kitchens - The Spruce",
+            "title": "The 7 Best Under‑Cabinet Lighting Options for Bright, Functional Kitchens - thespruce.com",
             "source": "Google News",
             "publishedAt": "2026-08-14T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1fUDFObWNzQ29yWnJsRkw0OW01ZmxNbm1pbGVVZEh6MEZfRFZaWUlfdFgza0RFM2xSWXYwdndIZmRGcmNNZ3RSM0RkWXdsdmw1blNkUl9HTFltVXYxQ2dCaUNVYnREeUJtTU9sSDRB?oc=5"
@@ -401,7 +401,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Keep Your Water Bottle Super Clean This Summer With Our Favorite Cleaning Brushes - The Spruce",
+            "title": "Keep Your Water Bottle Super Clean This Summer With Our Favorite Cleaning Brushes - thespruce.com",
             "source": "Google News",
             "publishedAt": "2026-05-22T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE8wVjR3S25uUmxHS180VmRZaHUzN3diM2EtZ29mYW1KTTJKX3BBSWlxOS1MZmtVSExfS1V5S2dCUFdjWDFnZW9FRjAyTTMtc0NKS1R3ZzFySGIzWVhkbll4NGhNV3lCMTg4VUN4YUh4elBKZUwwOUh2YQ?oc=5"
