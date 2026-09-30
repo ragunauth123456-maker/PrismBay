@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T17:54:23.017Z",
+  "generatedAt": "2026-09-30T17:58:01.532Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-30T12:35:12.843Z",
+    "checkedAt": "2026-09-30T17:58:00.190Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
     "countryFreightEstimates": 0,
@@ -26,27 +26,6 @@
       "candidateCount": 9,
       "blockers": [
         {
-          "slug": "self-standing-floor-mop",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "window-washer-squeegee",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "bottle-brush-set",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
           "slug": "cordless-handheld-vacuum",
           "status": "supplier_search_needed",
           "sku": null,
@@ -62,6 +41,27 @@
         },
         {
           "slug": "roll-up-dish-rack",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "self-standing-floor-mop",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "window-washer-squeegee",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "bottle-brush-set",
           "status": "supplier_search_needed",
           "sku": null,
           "shippingDiagnostic": null,
