@@ -12,6 +12,8 @@ test('every research category has an explicit positive identity policy',()=>{
  ['roll-up-dish-rack','Roll-Up Dish Drying Rack'],
  ['appliance-cord-organizer','Kitchen Appliance Cord Organizer Holder'],
  ['rug-grippers','Non-slip Rug Grippers'],
+ ['rug-grippers','Reusable Adhesive Carpet Gripper'],
+ ['rug-grippers','Non Slip Rug Corner Pads'],
  ['bottle-brush-set','Bottle Brush Cleaning Set'],
  ['sheet-laundry-detangler','Sheet Laundry Detangler Ball'],
  ['hanging-closet-organizer','Hanging Closet Shelf Storage Organizer'],
@@ -31,6 +33,9 @@ test('rejects all known CJ false positives including live supplier results',()=>
  ['hanging-closet-organizer','Shoe Cabinet With 2 Flip Drawers'],
  ['roll-up-dish-rack','Flower Print Lace-up Sneakers'],
  ['cordless-handheld-vacuum','Portable Industrial Wet-Dry Shop Vac'],
+ ['rug-grippers','Kitchen Rug Sets Of 3 Washable Boho Kitchen Rugs And Runner Carpets Non Slip Kitchen Area Rug For Laundry Room Entryway Hallway'],
+ ['rug-grippers','Non Slip Carpet'],
+ ['rug-grippers','Adhesive Rug'],
  ];
  for(const [slug,name] of negatives) assert.equal(matchesIntendedProduct({slug},name),false,slug+' '+name);
  assert.equal(matchesIntendedProduct({slug:'not-approved'},'Brand new stock'),false);

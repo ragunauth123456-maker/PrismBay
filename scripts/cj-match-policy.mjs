@@ -31,7 +31,9 @@ const policy = Object.freeze({
     excluded: [/\b(electrical junction|wall wiring)\b/i],
   },
   'rug-grippers': {
-    required: [/\b(rug|carpet)\b/i, /\b(grip|non[\s-]*slip|adhesive)\b/i],
+    // Non-slip describes rugs themselves too. Require an accessory identity
+    // instead of accepting an area rug as a rug-gripper product.
+    required: [/\b(rug|carpet)\b/i, /\b(grippers?|grip[\s-]*pads?|tape|corner[\s-]*(?:pads?|stickers?))\b/i],
     excluded: [/\b(carpet cleaner|vacuum)\b/i],
   },
   'bottle-brush-set': {

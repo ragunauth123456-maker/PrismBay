@@ -1,14 +1,14 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T13:02:17.516Z",
+  "generatedAt": "2026-09-30T13:35:37.043Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
     "checkedAt": "2026-09-30T12:35:12.843Z",
-    "validSupplierMatches": 2,
-    "variantStock": 2,
+    "validSupplierMatches": 1,
+    "variantStock": 1,
     "countryFreightEstimates": 0,
-    "falseMatches": 0
+    "falseMatches": 1
   },
   "constraints": {
     "supplierApprovalsRequired": true,
@@ -83,12 +83,20 @@
         },
         {
           "slug": "rug-grippers",
-          "status": "destination_freight_required",
+          "status": "identity_rejected",
           "sku": "CJLY27903090001",
           "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
           "zeroPricedMethods": 30
         }
       ]
+    },
+    {
+      "worker": "Quality Reviewer",
+      "priority": "high",
+      "action": "Reject CJ keyword false matches and update the explicit product-class regression tests.",
+      "state": "review_required",
+      "executionMode": "manual_copilot_review",
+      "rejectedFalseMatches": 1
     },
     {
       "worker": "Freight Analyst",
@@ -101,12 +109,6 @@
           "slug": "hanging-closet-organizer",
           "variantSku": "CJJT254150701AZ",
           "zeroPricedMethods": 22,
-          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
-        },
-        {
-          "slug": "rug-grippers",
-          "variantSku": "CJLY27903090001",
-          "zeroPricedMethods": 30,
           "diagnostic": "zero_priced_methods_require_supplier_confirmation"
         }
       ]

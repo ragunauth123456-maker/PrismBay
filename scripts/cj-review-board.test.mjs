@@ -2,6 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buildCJReview, mergeCJReview} from './cj-review-board.mjs';
 const base={checkedAt:'2026-09-26T16:52:56.364Z',market:'US',authentication:'verified'};
+test('rejects stocked kitchen rugs as gripper accessories even with a freight quote',()=>{
+ const b=buildCJReview({...base,results:[{
+  slug:'rug-grippers',candidate:'Reusable Rug Grippers',supplierVerified:true,
+  variantInventoryVerified:true,freightVerified:true,
+  product:{name:'Kitchen Rug Sets Of 3 Washable Boho Kitchen Rugs And Runner Carpets Non Slip Kitchen Area Rug For Laundry Room Entryway Hallway',sku:'CJLY2790309',variantSku:'CJLY27903090001'},
+ }]});
+ assert.equal(b.independentProductMatches,0);
+ assert.equal(b.rejectedFalseMatches,1);
+ assert.equal(b.verifiedVariantCount,0);
+ assert.equal(b.countryFreightEstimateCount,0);
+ assert.equal(b.candidates[0].status,'identity_rejected');
+ assert.equal(b.candidates[0].checkoutAllowed,false);
+});
 test('rejects the two unrelated products claimed as CJ supplier matches',()=>{
  const b=buildCJReview({...base,results:[
    {slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',supplierVerified:true,variantInventoryVerified:false,freightVerified:false,product:{name:'VEVOR Wet Dry Vac, 2.6 Gallon, Portable Shop Vacuum'}},
@@ -56,4 +69,24 @@ test('four scheduled batches accumulate without reviving stale evidence',()=>{
  const expired=mergeCJReview(previous,{...current,checkedAt:'2026-09-28T10:00:00Z'});
  assert.equal(expired.sourceCandidateCount,1);
  assert.equal(expired.saleReadyCount,0);
+});
+
+test('carried supplier classifications are checked against corrected identity rules',()=>{
+ const previous={checkedAt:'2026-09-30T06:00:00Z',candidates:[{
+  slug:'rug-grippers',candidate:'Reusable Rug Grippers',
+  observedProduct:'Kitchen Rug Sets Of 3 Washable Boho Kitchen Rugs And Runner Carpets Non Slip Kitchen Area Rug For Laundry Room Entryway Hallway',
+  supplierClaimedMatch:true,independentIdentityMatch:true,status:'commercial_review_required',
+  variantStockVerified:true,countryFreightEstimated:true,observedAt:'2026-09-30T06:00:00Z',
+ }]};
+ const fresh=buildCJReview({checkedAt:'2026-09-30T12:00:00Z',authentication:'verified',results:[
+  {slug:'bottle-brush-set',candidate:'Bottle Brush Set',supplierVerified:false},
+ ]});
+ const merged=mergeCJReview(previous,fresh);
+ const rug=merged.candidates.find(row=>row.slug==='rug-grippers');
+ assert.equal(rug.status,'identity_rejected');
+ assert.equal(rug.observedAt,'2026-09-30T06:00:00Z');
+ assert.equal(merged.independentProductMatches,0);
+ assert.equal(merged.verifiedVariantCount,0);
+ assert.equal(merged.countryFreightEstimateCount,0);
+ assert.equal(merged.rejectedFalseMatches,1);
 });
