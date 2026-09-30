@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-30T13:02:09.038Z",
+  "updatedAt": "2026-09-30T22:38:57.511Z",
   "market": "US",
   "methodology": "Public-news attention, freshness, and short-form demonstration fit. This is not PrismBay sales data and is not a TikTok, Amazon, Google, or Bing product ranking.",
   "refreshTargetHours": 6,
@@ -27,13 +27,13 @@
           "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQaXlNc3IwRkdxSWMwS0xGc1dQZEQyRkdjb0l6M2hvZDNual9lUHQzWm5MUS1BSHhNRzRHSGxrQm5tb3dKMXlpeS0tUlJ1TElEbWNoUkN2MGgzMnp4TjRkczE4VlQ0UmNNRy1hbWI2Y05Xa3Z3RzBkU1VpcWZ1OEdRNVgtVEl1UQ?oc=5"
         },
         {
-          "title": "Best travel steamers 2026: tested and reviewed for wrinkle-free packing - CN Traveller",
+          "title": "Best travel steamers 2026: tested and reviewed for wrinkle-free packing - cntraveller.com",
           "source": "Google News",
           "publishedAt": "2026-07-30T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ZRDlxanVrQ3JSeXhtdXBjS3JmVTdkQnV2LURHdldCN1BidHU0ZjhselZXRVZWLVhJUEpwaUMwTEgweU5mLVRmZnozS3dJUTk5TGZTZHctbHpmZHkySDktbE1hZ0Zsdw?oc=5"
         },
         {
-          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - people.com",
+          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - People.com",
           "source": "Google News",
           "publishedAt": "2026-05-06T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9HWkFheEdZLU5KN28wQmVlLVZWVFJZSUZpcFlSTmJLSFJJc3lacVNuUTNycF9SN0tnRmM4QnZ1SXNwcDFid3kya1RUU2J0cjEyQUxOY1N6YXI0UHI3?oc=5"
@@ -59,7 +59,7 @@
       "signalScore": 79,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 89,
+        "publicMentions": 88,
         "mentionsLast7Days": 1,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
@@ -69,7 +69,7 @@
       },
       "sampleSignals": [
         {
-          "title": "Back or joint pain? This electric scrubber means no kneeling down to clean — it's usually $150, but it's on sale for $45 ahead of October Prime Day - Yahoo Lifestyle Canada",
+          "title": "Back or joint pain? This electric scrubber means no kneeling down to clean — it's usually $150, but it's on sale for $45 ahead of October Prime Day - ca.style.yahoo.com",
           "source": "Google News",
           "publishedAt": "2026-09-22T16:25:20.000Z",
           "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxNcDFRcm1TT183LWtEanVuS2hYRWhqUkhsdlEyeHRZS0hsOUVBRXNKWkc1dE1oakk5TUlkcE1vRFlrWkVFVE5YWFZOcjg5MVp1SkgyZnpqY1NFc1Z5dHBkZ1UtV2ppdmRRTFFEOGx1TUNYYmlfc1d6aFk5ZUhOLTJoZ1R6MldTOUFDUnV5bWo0SWFma0xGMWUwM0F5S0VhbXQ4V3FuLTBySGwxMU9iZzN6OVZGVVUyNnBZUXhYRHJyYUZHMWJZWkg5U0R4RFkydEhDNjJ4M3NBVjlNSzFUWVFBNU5mRFU1RmNCckRMOGM5aE1Sdlo2QjNrRVRRd0NJa2Rra3R1S3dvSFk1T0N2Qmcw?oc=5"
@@ -81,16 +81,16 @@
           "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPeHdhUGRKUmlMQy1qT2hYWXZISTJDcExWc1hFVkoxQXQ0cldiWUVGTFlnOWNNVDQxS0kwRjg0MTFZaUp3X3M4WDhFUjNJLVRYT201NjNKZlkxWmNIYVd3T1JfSGs3dDFTMXQyUGNEcmVFdUtmSHJwUTduM015VGNYNHl4MFd4TDlRSnJBbw?oc=5"
         },
         {
-          "title": "Finally! 'A Scrubber That Is Not An Arm Workout' — And It's $19 Right Now - HuffPost",
-          "source": "Google News",
-          "publishedAt": "2026-09-24T16:18:54.000Z",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOQTNQVmNWc0hscEFXSjk2LUE2X0lNTmdYeG1hcEhORGctQ3owV3dCQzM3LTNnY3VyRGVGX1RnZEhkM3FEMG44NUpoR0p2cy1Jdi1WZXFwLWJ2cGFiRkdZRnRsdVF0MlMyZE5rcGkwZ1o1QTllM3NFSUVqVE41MHBvTEh6STdCakZkWk1iMFJRcGZzdDVCVWd5X0g0bjM5WEnSAaQBQVVfeXFMTzdJRXN4NG9rdXhBUUlIZ045dXhjNzB2WVN0MUVNVGZZOWJwbWRTUW9lWWdIdEZVZnlITGRCYmZVSFRselFvWkhjaTVfRjRGbFkyT2c3MTNfMC1aNXg5eEJHZm9LS1dCVWZYenJQSk9WMFBwTWtKcmhKWm5SbjM1cUtjbkNHa0tTU0ZiNXQzZUNadGF1UVdkQzMyR2NwNC1JQ29DU18?oc=5"
-        },
-        {
           "title": "These electric spin scrubbers clean grout, tubs, and floors with ease - businessinsider.com",
           "source": "Google News",
           "publishedAt": "2026-04-22T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE40c3JDUmdvYnFzQW4wNUE0VUdoWVMzUk1MT1VGOTBMbDdIT0tBcU1IbzMwWmNwME5za1ozalNqUWdkVDNMV1d0WUx5YUpOSU9TRGhWR1VVTzktT3VBOXR0d0pQM0hpQVZpU2hRdFN4M3dXRlpiejRwSUlDMA?oc=5"
+        },
+        {
+          "title": "Finally! 'A Scrubber That Is Not An Arm Workout' — And It's $19 Right Now - huffpost.com",
+          "source": "Google News",
+          "publishedAt": "2026-09-24T16:18:54.000Z",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOQTNQVmNWc0hscEFXSjk2LUE2X0lNTmdYeG1hcEhORGctQ3owV3dCQzM3LTNnY3VyRGVGX1RnZEhkM3FEMG44NUpoR0p2cy1Jdi1WZXFwLWJ2cGFiRkdZRnRsdVF0MlMyZE5rcGkwZ1o1QTllM3NFSUVqVE41MHBvTEh6STdCakZkWk1iMFJRcGZzdDVCVWd5X0g0bjM5WEnSAaQBQVVfeXFMTzdJRXN4NG9rdXhBUUlIZ045dXhjNzB2WVN0MUVNVGZZOWJwbWRTUW9lWWdIdEZVZnlITGRCYmZVSFRselFvWkhjaTVfRjRGbFkyT2c3MTNfMC1aNXg5eEJHZm9LS1dCVWZYenJQSk9WMFBwTWtKcmhKWm5SbjM1cUtjbkNHa0tTU0ZiNXQzZUNadGF1UVdkQzMyR2NwNC1JQ29DU18?oc=5"
         },
         {
           "title": "The 6 Best Electric Scrubbers That Take the Work Out of Cleaning - Better Homes & Gardens",
@@ -123,7 +123,7 @@
           "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1OVkM4ZWhzQmpyUlZ5Z3Jmc3pyel9STTVDZnF1VEdHdERlM21OcUt0UFlUTlVhZG5pUWhyS2hBRTdGZHRNUjhJWGhmQ01EZGZxSXZBcXVPT0Uweno4WXdwbzluUUJYeC1ySUNQTjJXVlE3Umo1YzVN?oc=5"
         },
         {
-          "title": "If You'd Rather Wash Your Car Than Strip Its Paint, These Cordless Power Washers Are The Tool You Want - popularmechanics.com",
+          "title": "If You'd Rather Wash Your Car Than Strip Its Paint, These Cordless Power Washers Are The Tool You Want - Popular Mechanics",
           "source": "Google News",
           "publishedAt": "2026-07-24T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQZzA5TzBxdm5yX1RYc3RkUHpOV0FRdmF2YnV6Vk9ma3cweHFkM0xoTzAxQXo5OThsS3BVZ2hOWTdXOWVlQUZnYTBXaHZfUkRmN1BsMVc5RlR1YngtdVNIdWZfZGJpRmd0dDBuMXNJLXlFRllZREJWYktndWYyWVJJU0Zn?oc=5"
@@ -135,7 +135,7 @@
           "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOX2xfRzZIY0x2R1ZlUE9NVm1XVVZ3THhxZFFwOEJqZHJ1MDBYenNDVGJEUzhISFMxbldXM2lLaDhURWV2a0VmdHYwdHFBX3JyUi1mMlZJcEZQc3VQSkxoaWo4ZUpPZWJxV19ySHFPYnRqV1VFTExyNE1TUmttV2Y1VHBybjh5dlZaRXZ4ckg2MnUzRG9pNUZ1RjlzYWR5NTRvRDBZQnRESkVsQXZsa19RUA?oc=5"
         },
         {
-          "title": "In a Decade of Testing Pressure Washers, These Are the Smallest, Most Powerful Models Yet - The New York Times",
+          "title": "In a Decade of Testing Pressure Washers, These Are the Smallest, Most Powerful Models Yet - nytimes.com",
           "source": "Google News",
           "publishedAt": "2026-06-05T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE12V2hOQ2d1Z0xiSU0ySWNYbmpaS0ZaOC1oc3QzazB3WU5oRHcxV1B1RjNhdHFmckxHc0pEdlRFUGQtN2dkUWtoTHZiQWVWSi02ZV9xTElkQ0xTNWw1MjFnakpCT0pkUTliaWh1aGVWN0RUdw?oc=5"
@@ -155,7 +155,7 @@
       "signalScore": 76,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 106,
+        "publicMentions": 100,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 5,
         "sourcesAvailable": [
@@ -177,7 +177,7 @@
           "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQcmFNWEdvTUxuY1RES2k4bXh1T0U2ci1nTHBJRXVud3F4ekF2NHF4NkF4LTlKR3lRWTNObHBGcjUzOGlLNUlHNXd1dGdOQXBYcEN6QllhNGZyVDFja2h1R3AzX1hIaFk4RUpsZ3JQT05Ga2pkelRscFRTaVJ0NFhyX0c3cVllQzIxTXoyeGhKcTNvLUJuRWNLd0g3Si1mYnRoUjEzZExKZGEtUXlsVlV3dQ?oc=5"
         },
         {
-          "title": "This Handheld Vacuum Cleaner Is A ‘Game-Changer’ For Mattress Grime — And It’s 34% Off - HuffPost",
+          "title": "This Handheld Vacuum Cleaner Is A ‘Game-Changer’ For Mattress Grime — And It’s 34% Off - huffpost.com",
           "source": "Google News",
           "publishedAt": "2026-09-22T16:18:28.000Z",
           "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOeVRLODl6aXZwcHU1M2VNUEx0NW1wbnJFTWFia09PX0tjM3BsN0d5eVRmdW5wR0pPTEUxVnJjNlpvTDBIQnNUN1FzTlpZRUlRYnFWRENNUURaMlFxb253TjMwOGNjdkNyMUs5VVluNEtiVENhOEV6SEhxd0VlVTZhOXpKZzgtNXRGOEHSAY8BQVVfeXFMTi0yUkdFNTlaYXNZLXhnNWY2Z0gwbXhEb0R3dVpYMW1zN0R1Q09pVnQ1SXlXZjZRRWx4NW5qM0NHYzdyWUd0eUNZcWhOMlJ3a1VyNzFva0hBNGpabzYzdm5zdkNsVEZoZFZ2TnhKaXhlc010cDJ0azAwcUR6NGFvd3NNOEJQa3NhV1p3bFIzUGM?oc=5"
@@ -213,7 +213,7 @@
       },
       "sampleSignals": [
         {
-          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - people.com",
+          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - People.com",
           "source": "Google News",
           "publishedAt": "2026-04-29T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE56STN5dFAtRmlSdG04UW8zZWlkemZwOW4wQTJFeUt5ZU9hYmhrYmJGb1Y1a3p3WDFsaVpkWFBLTkNyR2dMZnNzT2N5UjFoQ0pCZnNTc1hUOUQ3ZE0?oc=5"
@@ -261,7 +261,7 @@
       },
       "sampleSignals": [
         {
-          "title": "This $10 Brush Makes Cleaning Gross Corners So Much Easier, According To Reviews - HuffPost",
+          "title": "This $10 Brush Makes Cleaning Gross Corners So Much Easier, According To Reviews - huffpost.com",
           "source": "Google News",
           "publishedAt": "2026-03-10T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPWEZBUTZUMG15RkRMZC04Q3pFbkdONV9idXZmeU85Mzl3bUoyTHVkNTU1ZHNDOHNsQm5fZHJFdGZpUnpfWjVuZ0ROLW9aUUYyWGxVXzY5MnBmdGRZcEgyR1pSaXpFaDV6cG5fVXRDcWpVeWRsMlU3NFdmRjZmOHBKTDNxU1R3QkdsUFNDT9IBkgFBVV95cUxOMklBSTJwdEMtMjVMYnhWdWliWEFDbTlGaHRtcUFUcmRpRTRiWU1xUnJ3OWthdXJNRXI1RDFJNmo4MEVLYmQ1cC1DMFBxWjlJaElZZm1QWVBVQklPU3pqemVEaWZXMHVTdldUM0VRQXY5MzNsd1lMSUlVdTcyUjNRTVlQcXlwRzREQmJtRmRWY09vQQ?oc=5"
