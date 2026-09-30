@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DIGITAL_CHECKOUT_TOKENS, PHYSICAL_PRODUCTS, validatePaidStore, validateBuyerGuide, validateScorecard, validatePhysicalStore, validateCatalog } from './revenue-health-check.mjs';
+import { TARGETS, DIGITAL_CHECKOUT_TOKENS, PHYSICAL_PRODUCTS, validatePaidStore, validateBuyerGuide, validateScorecard, validatePhysicalStore, validateCatalog } from './revenue-health-check.mjs';
 import { ACTIVE_DIGITAL_OFFERS } from './digital-conversion-campaign.mjs';
 
 test('paid store requires every configured digital checkout token and customer policy routes', () => {
@@ -47,4 +47,11 @@ test('live paid-product acquisition guides enforce exact canonical, checkout, pr
     assert.throws(()=>validateBuyerGuide(html.replace('$'+offer.priceUsd,'$999'),offer),/buyer_guide_invalid/);
     assert.throws(()=>validateBuyerGuide(html.replace(offer.guide,'https://incorrect.example/'),offer),/buyer_guide_invalid/);
   }
+});
+
+ test('revenue checks and campaigns use the current GitHub owner', () => {
+  for (const url of [TARGETS.paidStore, TARGETS.freeScorecard, ...ACTIVE_DIGITAL_OFFERS.map(offer => offer.guide)]) {
+    assert.equal(new URL(url).hostname, 'ragunauthramsaroop.github.io');
+  }
+  assert.equal(new URL(TARGETS.catalog).pathname, '/repos/ragunauthramsaroop/PrismBay/contents/public/viral-catalog.json');
 });

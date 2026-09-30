@@ -2,10 +2,10 @@ import fs from 'node:fs/promises';
 import { ACTIVE_DIGITAL_OFFERS } from './digital-conversion-campaign.mjs';
 
 export const TARGETS = Object.freeze({
-  paidStore: 'https://ragunauth123456-maker.github.io/PrismBay/toolkits.html',
-  freeScorecard: 'https://ragunauth123456-maker.github.io/PrismBay/scorecard.html',
+  paidStore: 'https://ragunauthramsaroop.github.io/PrismBay/toolkits.html',
+  freeScorecard: 'https://ragunauthramsaroop.github.io/PrismBay/scorecard.html',
   physicalStore: 'https://prismbay-clean-49izhg.v2.appdeploy.ai/tiktok/',
-  catalog: 'https://api.github.com/repos/ragunauth123456-maker/PrismBay/contents/public/viral-catalog.json?ref=main',
+  catalog: 'https://api.github.com/repos/ragunauthramsaroop/PrismBay/contents/public/viral-catalog.json?ref=main',
 });
 
 export const DIGITAL_CHECKOUT_TOKENS = Object.freeze([

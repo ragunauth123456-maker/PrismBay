@@ -66,7 +66,16 @@ export function mergeCJReview(previous, fresh) {
     return Boolean(c.slug) && !seen.has(c.slug) && Number.isFinite(observedAt) &&
       observedAt <= now && now - observedAt < 30 * 36e5;
   }) : [];
-  const combined = [...current, ...retained];
+  // Recheck carried evidence after policy corrections. A prior accepted title
+  // must not preserve stock/freight approval for a newly rejected identity.
+  const combined = [...current, ...retained].map(row => {
+    if (matchesIntendedProduct({slug: row.slug}, row.observedProduct)) return row;
+    return {...row, independentIdentityMatch: row.slug ? false : null,
+      status: row.supplierClaimedMatch ? (row.slug ? 'identity_rejected' : 'manual_identity_check_required') : row.status,
+      variantStockVerified: false, countryFreightEstimated: false,
+      mediaRightsVerified: false, finalZipFreightVerified: false,
+      checkoutAllowed: false, automaticPromotionAllowed: false};
+  });
   return {
     ...fresh, latestBatchCandidateCount: fresh.sourceCandidateCount,
     sourceCandidateCount: combined.length, candidates: combined,
