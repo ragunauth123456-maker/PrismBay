@@ -1,5 +1,5 @@
 const KEY='927a4d6b8c21e5f73a90bc14d2ef6a31';
-const HOST='ragunauth123456-maker.github.io';
+const HOST='ragunauthramsaroop.github.io';
 const ROOT='https://'+HOST+'/PrismBay/';
 const URLS=[
   ROOT,
