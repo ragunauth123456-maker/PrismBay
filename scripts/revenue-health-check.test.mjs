@@ -17,7 +17,7 @@ test('free assessment remains visibly no-paywall and wired to its client script'
 });
 
 test('physical storefront must show all nine products and the supplier-verification safety boundary', () => {
-  const html = PHYSICAL_PRODUCTS.join(' ') + ' Supplier stock and final delivery route are reconfirmed before fulfillment';
+  const html = PHYSICAL_PRODUCTS.join(' ') + ' confirm the exact product, stock, total shipping cost and delivery estimate for your US ZIP code';
   assert.equal(validatePhysicalStore(html).productsVisible, 9);
   assert.throws(() => validatePhysicalStore(html.replace(PHYSICAL_PRODUCTS[0], '')), /physical_store_invalid/);
   assert.throws(() => validatePhysicalStore(PHYSICAL_PRODUCTS.join(' ')), /safety_copy_missing/);

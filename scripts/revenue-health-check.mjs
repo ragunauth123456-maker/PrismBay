@@ -64,7 +64,7 @@ export function validateScorecard(html) {
 export function validatePhysicalStore(html) {
   const missing = PHYSICAL_PRODUCTS.filter(name => !html.includes(name));
   if (missing.length) throw new Error('physical_store_invalid:' + JSON.stringify({ missing }));
-  if (!html.includes('Supplier stock and final delivery route are reconfirmed before fulfillment')) {
+  if (!html.includes('confirm the exact product, stock, total shipping cost and delivery estimate for your US ZIP code')) {
     throw new Error('physical_store_safety_copy_missing');
   }
   return { productsVisible: PHYSICAL_PRODUCTS.length, bytes: html.length };

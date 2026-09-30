@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-const ROOT='https://ragunauth123456-maker.github.io/PrismBay/';
+const ROOT='https://ragunauthramsaroop.github.io/PrismBay/';
 const KEY='927a4d6b8c21e5f73a90bc14d2ef6a31';
 test('IndexNow project-site key remains inside the same URL path as all submitted buyer pages',()=>{
   const keyLocation=ROOT+KEY+'.txt';
