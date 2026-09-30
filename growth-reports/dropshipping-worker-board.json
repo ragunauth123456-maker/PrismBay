@@ -1,14 +1,14 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T17:58:01.532Z",
+  "generatedAt": "2026-09-30T22:16:40.553Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-30T17:58:00.190Z",
+    "checkedAt": "2026-09-30T22:16:39.237Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
     "countryFreightEstimates": 0,
-    "falseMatches": 1
+    "falseMatches": 0
   },
   "constraints": {
     "supplierApprovalsRequired": true,
@@ -25,6 +25,27 @@
       "executionMode": "scheduled_cj_and_manual_review",
       "candidateCount": 9,
       "blockers": [
+        {
+          "slug": "extendable-high-zone-duster",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "pan-scraper",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "rug-grippers",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "cordless-handheld-vacuum",
           "status": "supplier_search_needed",
@@ -66,37 +87,8 @@
           "sku": null,
           "shippingDiagnostic": null,
           "zeroPricedMethods": 0
-        },
-        {
-          "slug": "extendable-high-zone-duster",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "pan-scraper",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "rug-grippers",
-          "status": "identity_rejected",
-          "sku": "CJLY27903090001",
-          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
-          "zeroPricedMethods": 30
         }
       ]
-    },
-    {
-      "worker": "Quality Reviewer",
-      "priority": "high",
-      "action": "Reject CJ keyword false matches and update the explicit product-class regression tests.",
-      "state": "review_required",
-      "executionMode": "manual_copilot_review",
-      "rejectedFalseMatches": 1
     },
     {
       "worker": "Freight Analyst",
