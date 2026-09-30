@@ -34,7 +34,7 @@ h1{font-size:clamp(34px,5vw,56px);line-height:1.1;letter-spacing:-.04em;margin:1
 </style>
 </head>
 <body>
-<header><nav class="wrap"><a class="brand" href="./">PrismBay <span>AI</span></a><div class="nav-links"><a href="toolkits.html">Toolkits</a><a href="scorecard.html">Free assessment</a><a href="https://github.com/ragunauth123456-maker/PrismBay/actions">GitHub Actions</a></div></nav></header>
+<header><nav class="wrap"><a class="brand" href="./">PrismBay <span>AI</span></a><div class="nav-links"><a href="toolkits.html">Toolkits</a><a href="scorecard.html">Free assessment</a><a href="https://github.com/ragunauthramsaroop/PrismBay/actions">GitHub Actions</a></div></nav></header>
 <main>
 <section class="hero"><div class="wrap"><p class="kicker">Read-only public dashboard</p><h1>Cloud operations</h1><p class="lead">Public status of scheduled GitHub research workers and the existing PrismBay attention catalog. Local K1 access and private n8n workflows are intentionally excluded.</p></div></section>
 <section class="wrap" aria-label="Service status"><div class="grid">
@@ -43,19 +43,19 @@ h1{font-size:clamp(34px,5vw,56px);line-height:1.1;letter-spacing:-.04em;margin:1
 <article class="card"><span class="tag">Protected local services</span><h2>K1 and n8n</h2><p class="state">Private access</p><p class="detail">Remote Desktop Commander and the existing K1 n8n remain on your Windows computer. Their status is not exposed by this public page.</p></article>
 </div>
 <p id="refreshed" class="detail" aria-live="polite">The page checks public sources on load and every five minutes.</p>
-<div class="links"><a class="btn" href="https://github.com/ragunauth123456-maker/PrismBay/actions/workflows/free-cloud-ops.yml">View cloud executions</a><a class="btn secondary" href="https://github.com/ragunauth123456-maker/PrismBay/pull/71">Deployment changes</a><a class="btn secondary" href="./toolkits.html">Public storefront</a></div>
+<div class="links"><a class="btn" href="https://github.com/ragunauthramsaroop/PrismBay/actions/workflows/free-cloud-ops.yml">View cloud executions</a><a class="btn secondary" href="https://github.com/ragunauthramsaroop/PrismBay/pull/71">Deployment changes</a><a class="btn secondary" href="./toolkits.html">Public storefront</a></div>
 </section>
 </main>
 <footer class="wrap note">Public, read-only telemetry. This page contains no credentials, API keys, remote-control interfaces, customer information, revenue figures or internal K1 status. GitHub schedules are best-effort and do not provide uninterrupted computing.</footer>
 <script type="module">
-const root="https://api.github.com/repos/ragunauth123456-maker/PrismBay/";
+const root="https://api.github.com/repos/ragunauthramsaroop/PrismBay/";
 const state=(id,value,kind)=>{const el=document.getElementById(id);el.textContent=value;el.className="state "+(kind||"");};
 const detail=(id,value)=>{document.getElementById(id).textContent=value;};
 const date=iso=>new Intl.DateTimeFormat("en-US",{timeZone:"America/Guyana",dateStyle:"medium",timeStyle:"short"}).format(new Date(iso));
 async function refresh(){
 const results=await Promise.allSettled([
 fetch(root+"actions/workflows/free-cloud-ops.yml/runs?per_page=1",{headers:{Accept:"application/vnd.github+json"},cache:"no-store"}),
-fetch("https://raw.githubusercontent.com/ragunauth123456-maker/PrismBay/main/public/viral-catalog.json",{cache:"no-store"})
+fetch("https://raw.githubusercontent.com/ragunauthramsaroop/PrismBay/main/public/viral-catalog.json",{cache:"no-store"})
 ]);
 try{
 if(results[0].status!=="fulfilled")throw Error("GitHub request unavailable");
