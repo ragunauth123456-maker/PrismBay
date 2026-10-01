@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ACTIVE_DIGITAL_OFFERS } from './digital-conversion-campaign.mjs';
+import { guidedSalesPlan } from './freellm-sales-worker.mjs';
 
 const ROOT = 'https://ragunauthramsaroop.github.io/PrismBay/';
 const LEARN = ROOT + 'learn/';
@@ -47,11 +48,34 @@ function keywordIntro(offer) {
   return 'Use a board briefing and white paper system when analysis needs to survive executive scrutiny. A practical system should separate verified facts, calculations, assumptions, source evidence and the decision being requested.';
 }
 
-export function buildOfferPage(offer) {
+export function salesPlanFromReport(offer, report) {
+  if (!report || report.offer?.slug !== offer.slug) return null;
+  if (report.freeLLM?.status !== 'ok') return null;
+  const strategy = report.freeLLM?.strategy;
+  if (!strategy) return null;
+  return guidedSalesPlan(offer, {
+    guideUrl: offer.guide,
+    checkoutUrl: offer.checkout
+  }, strategy);
+}
+
+async function readSalesReport(file = 'growth-reports/freellm-sales-worker-latest.json') {
+  try {
+    return JSON.parse(await fs.readFile(file, 'utf8'));
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
+export function buildOfferPage(offer, salesPlan = null) {
   const canonical = LEARN + pageSlugs[offer.slug];
   const checkout = checkoutWithRef(offer);
   const guide = guideWithUtm(offer);
   const deliverables = offer.deliverables.map(item => '<li>' + esc(item) + '</li>').join('');
+  const headline = salesPlan?.landingPageHeadline || offer.name;
+  const leadHook = salesPlan?.shortVideoHooks?.[0] || offer.actionableTip;
+  const strategy = salesPlan?.llmStrategy || 'baseline';
   const productJson = JSON.stringify({
     '@context':'https://schema.org',
     '@type':'Product',
@@ -81,12 +105,12 @@ export function buildOfferPage(offer) {
 <link rel="stylesheet" href="../buyer-guides.css">
 <script type="application/ld+json">${productJson}</script>
 </head>
-<body>
+<body data-sales-strategy="${esc(strategy)}">
 <a href="#main" class="skip">Skip to main content</a>
 <header class="nav"><div class="wrap"><a class="brand" href="../">PrismBay <em>AI</em></a><nav class="navlinks"><a href="./">Buyer guides</a><a href="../toolkits.html">All toolkits</a><a href="${guide}">Free guide</a></nav></div></header>
 <section class="hero"><div class="wrap">
 <p class="eyebrow">Professional document system</p>
-<h1>${esc(offer.name)}</h1>
+<h1>${esc(headline)}</h1>
 <p class="lead">${esc(descriptionFor(offer))}</p>
 <div class="buttons"><a class="btn primary" href="${guide}">Read the free guide</a><a class="btn outline" href="${checkout}" rel="noopener noreferrer">Get the editable toolkit, $${offer.priceUsd} USD</a></div>
 <p class="facts">One-time purchase. Professional document files. No subscription. This is not hosted AI software or bespoke consulting.</p>
@@ -97,7 +121,7 @@ export function buildOfferPage(offer) {
 <article class="article">
 <h2>When this toolkit is useful</h2>
 <p>${esc(keywordIntro(offer))}</p>
-<div class="callout"><p><strong>Start free.</strong> ${esc(offer.actionableTip)} The public guide gives you a practical example before you decide whether the editable files suit your work.</p></div>
+<div class="callout"><p><strong>Start free.</strong> ${esc(leadHook)} The public guide gives you a practical example before you decide whether the editable files suit your work.</p></div>
 <h2>What the paid package includes</h2>
 <ul>${deliverables}</ul>
 <h2>Who it is designed for</h2>
@@ -168,12 +192,16 @@ export function ownedSalesUrls() {
 
 export async function main(outputDir = process.argv[2] || 'growth-reports/owned-sales-pages') {
   await fs.mkdir(outputDir, { recursive: true });
+  const salesReport = await readSalesReport();
+  const strategies = {};
   await fs.writeFile(path.join(outputDir, 'index.html'), buildHub());
   for (const offer of ACTIVE_DIGITAL_OFFERS) {
-    await fs.writeFile(path.join(outputDir, pageSlugs[offer.slug]), buildOfferPage(offer));
+    const salesPlan = salesPlanFromReport(offer, salesReport);
+    strategies[offer.slug] = salesPlan?.llmStrategy || 'baseline';
+    await fs.writeFile(path.join(outputDir, pageSlugs[offer.slug]), buildOfferPage(offer, salesPlan));
   }
-  await fs.writeFile(path.join(outputDir, 'urls.json'), JSON.stringify({ urls: ownedSalesUrls() }, null, 2) + '\n');
-  console.log(JSON.stringify({status:'PASS',outputDir,pageCount:ACTIVE_DIGITAL_OFFERS.length + 1,urls:ownedSalesUrls()}));
+  await fs.writeFile(path.join(outputDir, 'urls.json'), JSON.stringify({ urls: ownedSalesUrls(), strategies }, null, 2) + '\n');
+  console.log(JSON.stringify({status:'PASS',outputDir,pageCount:ACTIVE_DIGITAL_OFFERS.length + 1,urls:ownedSalesUrls(),strategies}));
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
