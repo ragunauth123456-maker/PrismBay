@@ -2,28 +2,34 @@
 // Search terms change recall only. Every returned product must still pass
 // strict name, sale-status, US-stock and positive-price checks.
 const alternates = Object.freeze({
-  'cordless-handheld-vacuum':'cordless portable handheld car vacuum cleaner',
-  'hanging-closet-organizer':'hanging closet shelf storage organizer',
-  'roll-up-dish-rack':'silicone roll up dish drying rack',
-  'extendable-high-zone-duster':'telescopic microfiber duster',
-  'dryer-vent-cleaner-kit':'dryer vent lint cleaning brush kit',
-  'self-standing-floor-mop':'self standing floor mop',
-  'window-washer-squeegee':'window glass washer squeegee',
-  'appliance-cord-organizer':'kitchen appliance cord organizer',
-  'rug-grippers':'non slip rug gripper adhesive',
-  'bottle-brush-set':'bottle cleaning brush set',
-  'sheet-laundry-detangler':'bed sheet laundry detangler',
-  'pan-scraper':'non scratch pot pan scraper',
+  'cordless-handheld-vacuum':['cordless portable handheld car vacuum cleaner','mini cordless hand vacuum cleaner'],
+  'hanging-closet-organizer':['hanging closet shelf storage organizer','wardrobe hanging storage shelves organizer'],
+  'roll-up-dish-rack':['silicone roll up dish drying rack','over sink roll up drying rack'],
+  'extendable-high-zone-duster':['telescopic microfiber duster','extendable long reach dusting cleaner'],
+  'dryer-vent-cleaner-kit':['dryer vent lint cleaning brush kit','dryer duct lint cleaner brush'],
+  'self-standing-floor-mop':['self standing floor mop','upright standing flat mop'],
+  'window-washer-squeegee':['window glass washer squeegee','window cleaning squeegee washer'],
+  'appliance-cord-organizer':['kitchen appliance cord organizer','adhesive cord wrapper holder appliance'],
+  'rug-grippers':['non slip rug gripper adhesive','rug corner gripper pads'],
+  'bottle-brush-set':['bottle cleaning brush set','water bottle cleaning brush kit'],
+  'sheet-laundry-detangler':['bed sheet laundry detangler','laundry sheet anti tangle ball'],
+  'pan-scraper':['non scratch pot pan scraper','cookware dish pan cleaning scraper'],
 });
 
 export function candidateSearches(candidate) {
   const primary = typeof candidate?.query === 'string' ? candidate.query.trim() : '';
-  const secondary = alternates[String(candidate?.slug || '')] || '';
-  if (!primary || primary.length > 100 || !secondary) return primary ? [primary] : [];
-  return primary.toLowerCase() === secondary.toLowerCase() ? [primary] : [primary,secondary];
+  if (!primary || primary.length > 100) return [];
+  const extras = alternates[String(candidate?.slug || '')] || [];
+  const seen = new Set();
+  return [primary, ...extras].filter(query => {
+    const key = String(query || '').trim().toLowerCase();
+    if (!key || key.length > 100 || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 3);
 }
 
-export function uniqueEligibleProducts(productLists, limit = 2) {
+export function uniqueEligibleProducts(productLists, limit = 3) {
   if (!Number.isInteger(limit) || limit < 1 || limit > 3) throw new Error('Invalid candidate inspection limit');
   const out=[], seen=new Set();
   for (const products of productLists) {
@@ -40,7 +46,7 @@ export function uniqueEligibleProducts(productLists, limit = 2) {
 export function selectBestInspection(results) {
   if (!Array.isArray(results) || results.length===0) return null;
   // No amount of warehouse inventory can replace verified variant stock
-  // or a genuinely priced country freight estimate.
+  // or a genuinely priced freight estimate.
   const grade=r=>Number(Boolean(r.freightVerified))*4+
     Number(Boolean(r.variantInventoryVerified))*2+
     Number(Boolean(r.supplierVerified));
