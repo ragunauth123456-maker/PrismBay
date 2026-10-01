@@ -83,15 +83,17 @@ export function parseCJFreightTip(payload, scope = 'tip_example_zip_estimate', z
         services.length ? 'no_usable_tip_shipping_quote' : 'no_tip_shipping_methods_returned' };
 }
 
-export function freightRequest(vid, zip = null) {
+export function freightRequest(vid, zip = null, origin = 'US') {
   if (typeof vid !== 'string' || !vid.trim() || vid.length > 200) {
     throw new Error('A validated variant ID is required');
   }
   if (zip !== null && !/^\d{5}$/.test(zip)) {
     throw new Error('Illustrative US ZIP must be five digits');
   }
+  const source = String(origin || '').toUpperCase();
+  if (!/^[A-Z]{2}$/.test(source)) throw new Error('Origin must be a two-letter country code');
   return {
-    startCountryCode: 'US',
+    startCountryCode: source,
     endCountryCode: 'US',
     products: [{ quantity: 1, vid }],
     ...(zip ? { zip } : {}),
