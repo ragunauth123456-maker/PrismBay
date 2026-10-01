@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 import { ownedSalesUrls } from './owned-sales-page-worker.mjs';
 
 export function mergeSitemap(xml, date = new Date().toISOString().slice(0,10)) {
@@ -20,6 +21,6 @@ export async function main(target = process.argv[2]) {
   console.log(JSON.stringify({status:'PASS',target,urls:ownedSalesUrls().length}));
 }
 
-if (process.argv[1] && import.meta.url === new URL('file://' + process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main();
 }
