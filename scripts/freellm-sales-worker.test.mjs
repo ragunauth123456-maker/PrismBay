@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVE_DIGITAL_OFFERS, campaignForSlot } from './digital-conversion-campaign.mjs';
-import { deterministicSalesPlan, validateLLMPlan, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
+import { deterministicSalesPlan, validateLLMPlan, buildAssistedLLMPlan, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
 
 test('deterministic sales plan stays inside verified offer facts', () => {
   for (const [i, offer] of ACTIVE_DIGITAL_OFFERS.entries()) {
@@ -44,6 +44,26 @@ test('LLM validation rejects invented pricing and unsafe outcome claims', () => 
   }, offer), null);
 });
 
+test('assisted FreeLLM plan keeps safe model fields and replaces unsafe ones', () => {
+  const offer = ACTIVE_DIGITAL_OFFERS[0];
+  const campaign = campaignForSlot(0);
+  const plan = buildAssistedLLMPlan({
+    seoQueries: ['stakeholder engagement plan excel', 'stakeholder mapping workbook', 'Guaranteed stakeholder wins'],
+    landingPageHeadline: 'A practical stakeholder evidence system',
+    metaDescription: 'Get the $99 stakeholder package today',
+    socialDrafts: ['Start with a free stakeholder planning example.'],
+    shortVideoHooks: ['Assign an owner to each stakeholder commitment.'],
+    creatorPitch: 'Educational collaboration for stakeholder teams.',
+    experiments: ['Test evidence-led copy against workflow-led copy.']
+  }, offer, campaign);
+  assert.ok(plan);
+  assert.equal(plan.workerMode, 'freellmapi_assisted');
+  assert.equal(plan.landingPageHeadline, 'A practical stakeholder evidence system');
+  assert.match(plan.metaDescription, /\$49/);
+  assert.doesNotMatch(JSON.stringify(plan), /Guaranteed stakeholder wins|\$99/);
+  assert.ok(plan.llmFieldsAccepted >= 2);
+});
+
 test('FreeLLM request is optional and falls back when not configured', async () => {
   const offer = ACTIVE_DIGITAL_OFFERS[0];
   const result = await requestFreeLLM({ offer, campaign: campaignForSlot(0), env: {} });
@@ -78,6 +98,7 @@ test('FreeLLM OpenAI-compatible response is accepted when factual', async () => 
   });
   assert.equal(result.status, 'ok');
   assert.equal(result.plan.workerMode, 'freellmapi');
+  assert.equal(result.validationMode, 'strict');
   assert.equal(result.routedVia, 'kilo/free-model');
 });
 

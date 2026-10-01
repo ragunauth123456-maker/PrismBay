@@ -18,6 +18,7 @@ test('CI bootstrap uses only documented keyless free providers',()=>{
 
 test('CI bootstrap uses a run-scoped unified key and never prints it',()=>{
   assert.match(script,/UNIFIED_KEY="freellmapi-\$\(openssl rand -hex 24\)"/);
+  assert.match(script,/echo "::add-mask::\$UNIFIED_KEY"/);
   assert.match(script,/docker exec -e UNIFIED_KEY="\$UNIFIED_KEY"/);
   assert.match(script,/\/app\/server\/data\/freeapi\.db/);
   assert.match(script,/UPDATE settings SET value=\? WHERE key=\?/);
