@@ -104,10 +104,10 @@ test('sales worker report never claims a sale', async () => {
   assert.equal(report.freeLLM.configured, false);
 });
 
-test('FreeLLM sales request allows free-tier latency while keeping output tiny', async () => {
+test('FreeLLM sales request uses a bounded per-route timeout while keeping output tiny', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
   assert.match(source, /max_tokens:\s*24/);
-  assert.match(source, /AbortSignal\.timeout\(110000\)/);
+  assert.match(source, /AbortSignal\.timeout\(60000\)/);
 });
 
 test('FreeLLM strategy router accepts only the four allowed positioning labels', () => {
