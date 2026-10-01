@@ -2,19 +2,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buildCJReview, mergeCJReview} from './cj-review-board.mjs';
 const base={checkedAt:'2026-09-26T16:52:56.364Z',market:'US',authentication:'verified'};
+
 test('rejects stocked kitchen rugs as gripper accessories even with a freight quote',()=>{
  const b=buildCJReview({...base,results:[{
   slug:'rug-grippers',candidate:'Reusable Rug Grippers',supplierVerified:true,
-  variantInventoryVerified:true,freightVerified:true,
+  variantInventoryVerified:true,freightVerified:true,freightQuoteScope:'country_estimate',
   product:{name:'Kitchen Rug Sets Of 3 Washable Boho Kitchen Rugs And Runner Carpets Non Slip Kitchen Area Rug For Laundry Room Entryway Hallway',sku:'CJLY2790309',variantSku:'CJLY27903090001'},
  }]});
  assert.equal(b.independentProductMatches,0);
  assert.equal(b.rejectedFalseMatches,1);
  assert.equal(b.verifiedVariantCount,0);
+ assert.equal(b.freightEstimateCount,0);
  assert.equal(b.countryFreightEstimateCount,0);
  assert.equal(b.candidates[0].status,'identity_rejected');
  assert.equal(b.candidates[0].checkoutAllowed,false);
 });
+
 test('rejects the two unrelated products claimed as CJ supplier matches',()=>{
  const b=buildCJReview({...base,results:[
    {slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',supplierVerified:true,variantInventoryVerified:false,freightVerified:false,product:{name:'VEVOR Wet Dry Vac, 2.6 Gallon, Portable Shop Vacuum'}},
@@ -25,16 +28,40 @@ test('rejects the two unrelated products claimed as CJ supplier matches',()=>{
  assert.equal(b.saleReadyCount,0);
  assert.ok(b.candidates.every(c=>c.status==='identity_rejected'&&!c.checkoutAllowed&&!c.automaticPromotionAllowed));
 });
-test('correctly matched and fully quoted product still requires manual commercial approval',()=>{
- const b=buildCJReview({...base,results:[{slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',supplierVerified:true,variantInventoryVerified:true,freightVerified:true,product:{name:'Cordless Portable Handheld Vacuum Cleaner'}}]});
+
+test('correct country estimate still requires manual commercial approval',()=>{
+ const b=buildCJReview({...base,results:[{
+  slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',
+  supplierVerified:true,variantInventoryVerified:true,freightVerified:true,freightQuoteScope:'country_estimate',
+  product:{name:'Cordless Portable Handheld Vacuum Cleaner'}
+ }]});
  assert.equal(b.independentProductMatches,1);
  assert.equal(b.verifiedVariantCount,1);
+ assert.equal(b.freightEstimateCount,1);
  assert.equal(b.countryFreightEstimateCount,1);
+ assert.equal(b.illustrativeZipFreightEstimateCount,0);
  assert.equal(b.saleReadyCount,0);
  assert.equal(b.candidates[0].status,'commercial_review_required');
  assert.equal(b.candidates[0].checkoutAllowed,false);
  assert.equal(b.candidates[0].mediaRightsVerified,false);
 });
+
+test('Tip ZIP estimate is tracked separately from a country estimate',()=>{
+ const b=buildCJReview({...base,results:[{
+  slug:'pressure-washer',candidate:'Cordless Pressure Washer',liveStoreProduct:true,retailPriceUsd:69.95,
+  supplierVerified:true,variantInventoryVerified:true,freightVerified:true,freightQuoteScope:'tip_example_zip_estimate',
+  product:{name:'Cordless Portable Pressure Washer'}
+ }]});
+ assert.equal(b.liveStoreCandidateCount,1);
+ assert.equal(b.freightEstimateCount,1);
+ assert.equal(b.countryFreightEstimateCount,0);
+ assert.equal(b.illustrativeZipFreightEstimateCount,1);
+ assert.equal(b.candidates[0].freightEstimateVerified,true);
+ assert.equal(b.candidates[0].countryFreightEstimated,false);
+ assert.equal(b.candidates[0].illustrativeZipFreightEstimated,true);
+ assert.equal(b.candidates[0].checkoutAllowed,false);
+});
+
 test('zero-price freight methods and SKU remain blocked in sanitized review',()=>{
  const b=buildCJReview({...base,results:[{
   slug:'hanging-closet-organizer',candidate:'Hanging Closet Organizer',
@@ -49,13 +76,14 @@ test('zero-price freight methods and SKU remain blocked in sanitized review',()=
  assert.equal(b.candidates[0].zeroPricedMethodCount,11);
  assert.equal(b.candidates[0].checkoutAllowed,false);
 });
+
 test('unknown identity and missing reports fail closed',()=>{
  const b=buildCJReview({...base,results:[{candidate:'new item',supplierVerified:true,product:{name:'Mystery item'}}]});
  assert.equal(b.candidates[0].status,'manual_identity_check_required');
  assert.throws(()=>buildCJReview({results:[]}),/invalid/);
 });
 
-test('four scheduled batches accumulate without reviving stale evidence',()=>{
+test('scheduled batches accumulate without reviving stale evidence',()=>{
  const previous=buildCJReview({checkedAt:'2026-09-26T12:00:00Z',authentication:'verified',results:[
   {slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',supplierVerified:true,product:{name:'Cordless Handheld Vacuum Cleaner'},variantInventoryVerified:false,freightVerified:false}
  ]});
@@ -87,6 +115,7 @@ test('carried supplier classifications are checked against corrected identity ru
  assert.equal(rug.observedAt,'2026-09-30T06:00:00Z');
  assert.equal(merged.independentProductMatches,0);
  assert.equal(merged.verifiedVariantCount,0);
+ assert.equal(merged.freightEstimateCount,0);
  assert.equal(merged.countryFreightEstimateCount,0);
  assert.equal(merged.rejectedFalseMatches,1);
 });
