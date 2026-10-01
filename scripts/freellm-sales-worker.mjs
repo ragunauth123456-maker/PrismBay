@@ -21,6 +21,28 @@ function cleanStringArray(value, maxItems, maxLen) {
   return out;
 }
 
+function containsWrongPrice(text, offer) {
+  const amounts = [...String(text ?? '').matchAll(/\$(\d+(?:\.\d{1,2})?)/g)].map(m => Number(m[1]));
+  return amounts.some(amount => amount !== offer.priceUsd);
+}
+
+function cleanOfferString(value, offer, max) {
+  const cleaned = cleanString(value, max);
+  if (!cleaned || containsWrongPrice(cleaned, offer)) return null;
+  return cleaned;
+}
+
+function cleanOfferArray(value, offer, maxItems, maxLen) {
+  if (!Array.isArray(value)) return [];
+  const out = [];
+  for (const item of value) {
+    const cleaned = cleanOfferString(item, offer, maxLen);
+    if (cleaned && !out.includes(cleaned)) out.push(cleaned);
+    if (out.length >= maxItems) break;
+  }
+  return out;
+}
+
 export function deterministicSalesPlan(offer, campaign) {
   return {
     workerMode: 'deterministic_fallback',
@@ -94,6 +116,47 @@ export function validateLLMPlan(value, offer) {
   };
 }
 
+export function buildAssistedLLMPlan(value, offer, campaign) {
+  if (!value || typeof value !== 'object') return null;
+  const fallback = deterministicSalesPlan(offer, campaign);
+  let accepted = 0;
+
+  const headline = cleanOfferString(value.landingPageHeadline, offer, 120);
+  if (headline) accepted++;
+
+  const meta = cleanOfferString(value.metaDescription, offer, 180);
+  if (meta) accepted++;
+
+  const creatorPitch = cleanOfferString(value.creatorPitch, offer, 700);
+  if (creatorPitch) accepted++;
+
+  const seoQueries = cleanOfferArray(value.seoQueries, offer, 8, 110);
+  if (seoQueries.length >= 2) accepted++;
+
+  const socialDrafts = cleanOfferArray(value.socialDrafts, offer, 6, 650);
+  if (socialDrafts.length >= 1) accepted++;
+
+  const shortVideoHooks = cleanOfferArray(value.shortVideoHooks, offer, 5, 180);
+  if (shortVideoHooks.length >= 1) accepted++;
+
+  const experiments = cleanOfferArray(value.experiments, offer, 6, 240);
+  if (experiments.length >= 1) accepted++;
+
+  if (accepted < 2) return null;
+
+  return {
+    workerMode: 'freellmapi_assisted',
+    seoQueries: seoQueries.length >= 2 ? seoQueries : fallback.seoQueries,
+    landingPageHeadline: headline || fallback.landingPageHeadline,
+    metaDescription: meta || fallback.metaDescription,
+    socialDrafts: socialDrafts.length ? socialDrafts : fallback.socialDrafts,
+    shortVideoHooks: shortVideoHooks.length ? shortVideoHooks : fallback.shortVideoHooks,
+    creatorPitch: creatorPitch || fallback.creatorPitch,
+    experiments: experiments.length ? experiments : fallback.experiments,
+    llmFieldsAccepted: accepted
+  };
+}
+
 function normalizeBaseUrl(base) {
   const clean = String(base || '').trim().replace(/\/+$/, '');
   if (!clean) return null;
@@ -149,10 +212,12 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
     if (!response.ok) return { plan: null, status: 'http_' + response.status };
     const content = payload?.choices?.[0]?.message?.content;
     const parsed = extractJson(content);
-    const plan = validateLLMPlan(parsed, offer);
+    const strictPlan = validateLLMPlan(parsed, offer);
+    const plan = strictPlan || buildAssistedLLMPlan(parsed, offer, campaign);
     return {
       plan,
       status: plan ? 'ok' : 'invalid_output',
+      validationMode: strictPlan ? 'strict' : plan ? 'assisted' : 'rejected',
       routedVia: response.headers?.get?.('x-routed-via') || null,
       fallbackAttempts: response.headers?.get?.('x-fallback-attempts') || null
     };
@@ -186,6 +251,8 @@ export async function buildSalesWorkerReport({ nowMs = Date.now(), fetchImpl = f
       status: llm.status,
       routedVia: llm.routedVia || null,
       fallbackAttempts: llm.fallbackAttempts || null,
+      validationMode: llm.validationMode || null,
+      workerMode: plan.workerMode,
       sourceProject: 'https://github.com/tashfeenahmed/freellmapi'
     },
     workers: {
