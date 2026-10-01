@@ -1,14 +1,14 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T15:36:09.745Z",
+  "generatedAt": "2026-10-01T15:41:35.389Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-10-01T15:36:08.491Z",
-    "validSupplierMatches": 1,
-    "variantStock": 1,
-    "freightEstimates": 1,
-    "countryFreightEstimates": 0,
+    "checkedAt": "2026-10-01T15:41:34.004Z",
+    "validSupplierMatches": 5,
+    "variantStock": 3,
+    "freightEstimates": 3,
+    "countryFreightEstimates": 2,
     "illustrativeZipFreightEstimates": 1,
     "falseMatches": 0
   },
@@ -25,7 +25,7 @@
       "action": "Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.",
       "state": "review_required",
       "executionMode": "scheduled_cj_and_manual_review",
-      "candidateCount": 17,
+      "candidateCount": 15,
       "blockers": [
         {
           "slug": "scrubber",
@@ -36,16 +36,9 @@
         },
         {
           "slug": "pethair",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "crevice",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
+          "status": "variant_stock_required",
+          "sku": "CJYD2079690",
+          "shippingDiagnostic": "variant_stock_unverified",
           "zeroPricedMethods": 0
         },
         {
@@ -63,13 +56,6 @@
           "zeroPricedMethods": 0
         },
         {
-          "slug": "garment-steamer",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
           "slug": "mini-mop",
           "status": "supplier_search_needed",
           "sku": null,
@@ -78,9 +64,9 @@
         },
         {
           "slug": "drain-catcher",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
+          "status": "variant_stock_required",
+          "sku": "CJCF1653868",
+          "shippingDiagnostic": "variant_stock_unverified",
           "zeroPricedMethods": 0
         },
         {
