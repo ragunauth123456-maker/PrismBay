@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T19:14:45.419Z",
+  "generatedAt": "2026-10-01T22:42:06.183Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-10-01T15:41:34.004Z",
-    "validSupplierMatches": 5,
+    "checkedAt": "2026-10-01T22:42:04.925Z",
+    "validSupplierMatches": 6,
     "variantStock": 3,
     "freightEstimates": 3,
     "countryFreightEstimates": 2,
@@ -27,6 +27,20 @@
       "executionMode": "scheduled_cj_and_manual_review",
       "candidateCount": 15,
       "blockers": [
+        {
+          "slug": "cordless-handheld-vacuum",
+          "status": "variant_stock_required",
+          "sku": "CJXC1113517",
+          "shippingDiagnostic": "variant_stock_unverified",
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "roll-up-dish-rack",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "scrubber",
           "status": "supplier_search_needed",
@@ -71,20 +85,6 @@
         },
         {
           "slug": "home-caddy",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "cordless-handheld-vacuum",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "roll-up-dish-rack",
           "status": "supplier_search_needed",
           "sku": null,
           "shippingDiagnostic": null,
