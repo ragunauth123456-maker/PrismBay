@@ -2,6 +2,19 @@ import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { matchesIntendedProduct } from './cj-match-policy.mjs';
 
+const illustrativeScopes = new Set(['example_zip_estimate','tip_example_zip_estimate']);
+
+function normalizeFreight(row) {
+  const scope = row?.freightQuoteScope || null;
+  const estimated = Boolean(row?.freightEstimateVerified ?? row?.countryFreightEstimated);
+  return {
+    ...row,
+    freightEstimateVerified: estimated,
+    countryFreightEstimated: Boolean(estimated && (!scope || scope === 'country_estimate')),
+    illustrativeZipFreightEstimated: Boolean(estimated && illustrativeScopes.has(scope)),
+  };
+}
+
 // Sanitized read-only handoff. A matched product never implies sale readiness.
 export function buildCJReview(report) {
   if (!report || !Array.isArray(report.results) || !Number.isFinite(Date.parse(report.checkedAt))) {
@@ -13,6 +26,8 @@ export function buildCJReview(report) {
     const productName = String(row.product?.name || '');
     const slug = typeof row.slug === 'string' ? row.slug : null;
     const identity = slug ? matchesIntendedProduct({slug}, productName) : null;
+    const freightScope = row.freightQuoteScope || null;
+    const freightEstimateVerified = Boolean(identity === true && row.variantInventoryVerified && row.freightVerified);
     let status = 'supplier_search_needed';
     if (row.supplierVerified) {
       status = identity === false ? 'identity_rejected' :
@@ -25,38 +40,45 @@ export function buildCJReview(report) {
     }
     return {
       slug, candidate: intended, observedProduct: productName || null,
+      liveStoreProduct: Boolean(row.liveStoreProduct),
+      retailPriceUsd: Number.isFinite(Number(row.retailPriceUsd)) ? Number(row.retailPriceUsd) : null,
       // Public CJ catalog identifiers only, never credentials, account IDs or customer data.
       observedSupplierSku: typeof row.product?.sku === 'string' ? row.product.sku : null,
       observedVariantSku: typeof row.product?.variantSku === 'string' ? row.product.variantSku : null,
       freightDiagnostic: typeof row.freightDiagnostic === 'string' ? row.freightDiagnostic :
         (Number(row.zeroPriceQuoteCount) > 0 ? 'zero_priced_methods_require_supplier_confirmation' : null),
-      freightQuoteScope: row.freightQuoteScope || null,
+      freightQuoteScope: freightScope,
       zeroPricedMethodCount: Number.isInteger(row.zeroPriceQuoteCount) ? row.zeroPriceQuoteCount : 0,
       supplierClaimedMatch: Boolean(row.supplierVerified),
       independentIdentityMatch: identity, status,
       variantStockVerified: Boolean(identity === true && row.variantInventoryVerified),
-      countryFreightEstimated: Boolean(identity === true && row.variantInventoryVerified && row.freightVerified),
+      freightEstimateVerified,
+      countryFreightEstimated: Boolean(freightEstimateVerified && freightScope === 'country_estimate'),
+      illustrativeZipFreightEstimated: Boolean(freightEstimateVerified && illustrativeScopes.has(freightScope)),
       mediaRightsVerified: false, finalZipFreightVerified: false,
       checkoutAllowed: false, automaticPromotionAllowed: false,
     };
   });
   return {
-    schemaVersion: 1, checkedAt: report.checkedAt, market: report.market || 'US',
+    schemaVersion: 2, checkedAt: report.checkedAt, market: report.market || 'US',
     authenticationVerified, sourceCandidateCount: report.results.length,
+    liveStoreCandidateCount: candidates.filter(c => c.liveStoreProduct).length,
     independentProductMatches: candidates.filter(c => c.independentIdentityMatch === true).length,
     rejectedFalseMatches: candidates.filter(c => c.status === 'identity_rejected').length,
     verifiedVariantCount: candidates.filter(c => c.variantStockVerified).length,
+    freightEstimateCount: candidates.filter(c => c.freightEstimateVerified).length,
     countryFreightEstimateCount: candidates.filter(c => c.countryFreightEstimated).length,
+    illustrativeZipFreightEstimateCount: candidates.filter(c => c.illustrativeZipFreightEstimated).length,
     saleReadyCount: 0,
     zeroPricedCandidateCount: candidates.filter(c => c.zeroPricedMethodCount > 0).length,
     allRequireManualCommercialApproval: true,
-    note: 'Country-level freight is not a destination ZIP quote. Product media and checkout require separate authorization.',
+    note: 'Freight estimates are not final buyer ZIP approval. Product media and checkout require separate authorization.',
     candidates,
   };
 }
 
-// Carry forward distinct batches for up to thirty hours so four scheduled
-// checks form a rolling twelve-candidate review rather than overwriting each other.
+// Carry forward distinct batches for up to thirty hours so scheduled checks
+// form a rolling supplier review rather than overwriting each other.
 export function mergeCJReview(previous, fresh) {
   const current = fresh.candidates.map(c => ({...c, observedAt: fresh.checkedAt}));
   const now = Date.parse(fresh.checkedAt);
@@ -68,21 +90,26 @@ export function mergeCJReview(previous, fresh) {
   }) : [];
   // Recheck carried evidence after policy corrections. A prior accepted title
   // must not preserve stock/freight approval for a newly rejected identity.
-  const combined = [...current, ...retained].map(row => {
+  const combined = [...current, ...retained].map(source => {
+    const row = normalizeFreight(source);
     if (matchesIntendedProduct({slug: row.slug}, row.observedProduct)) return row;
     return {...row, independentIdentityMatch: row.slug ? false : null,
       status: row.supplierClaimedMatch ? (row.slug ? 'identity_rejected' : 'manual_identity_check_required') : row.status,
-      variantStockVerified: false, countryFreightEstimated: false,
+      variantStockVerified: false, freightEstimateVerified: false,
+      countryFreightEstimated: false, illustrativeZipFreightEstimated: false,
       mediaRightsVerified: false, finalZipFreightVerified: false,
       checkoutAllowed: false, automaticPromotionAllowed: false};
   });
   return {
     ...fresh, latestBatchCandidateCount: fresh.sourceCandidateCount,
     sourceCandidateCount: combined.length, candidates: combined,
+    liveStoreCandidateCount: combined.filter(c => c.liveStoreProduct).length,
     independentProductMatches: combined.filter(c => c.independentIdentityMatch === true).length,
     rejectedFalseMatches: combined.filter(c => c.status === 'identity_rejected').length,
     verifiedVariantCount: combined.filter(c => c.variantStockVerified).length,
+    freightEstimateCount: combined.filter(c => c.freightEstimateVerified).length,
     countryFreightEstimateCount: combined.filter(c => c.countryFreightEstimated).length,
+    illustrativeZipFreightEstimateCount: combined.filter(c => c.illustrativeZipFreightEstimated).length,
     saleReadyCount: 0,
     zeroPricedCandidateCount: combined.filter(c => c.zeroPricedMethodCount > 0).length,
   };
@@ -90,13 +117,17 @@ export function mergeCJReview(previous, fresh) {
 
 export async function main(source = 'growth-reports/cj-supplier-verification.json', destination = 'growth-reports/cj-worker-review.json') {
   const report = JSON.parse(await fs.readFile(source, 'utf8'));
-  // Prior artifact schema lacks slugs, so join exactly by normalized candidate names
-  // to our published, unverified research catalog, never by fuzzy supplier titles.
+  // Prior artifact schemas may lack slugs. Join exactly by normalized candidate
+  // names from both the live-store and research catalogs, never by fuzzy titles.
   try {
-    const catalog = JSON.parse(await fs.readFile('public/viral-candidates.json', 'utf8'));
-    const names = new Map((catalog.candidates || []).map(c => [String(c.name || '').trim().toLowerCase(), c.slug]));
+    const catalogs = await Promise.all([
+      fs.readFile('services/physical-orders/live-catalog-candidates.json', 'utf8').then(JSON.parse).catch(() => ({candidates:[]})),
+      fs.readFile('public/viral-candidates.json', 'utf8').then(JSON.parse).catch(() => ({candidates:[]})),
+    ]);
+    const names = new Map(catalogs.flatMap(c => c.candidates || [])
+      .map(c => [String(c.name || '').trim().toLowerCase(), c.slug]));
     report.results = report.results.map(r => ({...r, slug: r.slug || names.get(String(r.candidate || '').trim().toLowerCase()) || null}));
-  } catch { /* Missing catalog leaves every identity match awaiting manual review. */ }
+  } catch { /* Missing catalogs leave identities awaiting manual review. */ }
   const current = buildCJReview(report);
   let previous = null;
   try { previous = JSON.parse(await fs.readFile(destination, 'utf8')); } catch { /* first batch */ }
@@ -105,10 +136,13 @@ export async function main(source = 'growth-reports/cj-supplier-verification.jso
   await fs.writeFile(destination, JSON.stringify(output, null, 2) + '\n');
   const summary = {
     checkedAt: output.checkedAt, cjAuthentication: output.authenticationVerified,
-    candidatesReviewed: output.sourceCandidateCount, genuineMatches: output.independentProductMatches,
+    candidatesReviewed: output.sourceCandidateCount, liveStoreCandidates: output.liveStoreCandidateCount,
+    genuineMatches: output.independentProductMatches,
     falseMatchesRejected: output.rejectedFalseMatches,
     variantsConfirmed: output.verifiedVariantCount,
+    freightEstimates: output.freightEstimateCount,
     countryFreightEstimates: output.countryFreightEstimateCount,
+    illustrativeZipFreightEstimates: output.illustrativeZipFreightEstimateCount,
     zeroPricedCandidatesNeedingManualQuote: output.zeroPricedCandidateCount,
     saleReady: 0,
   };
