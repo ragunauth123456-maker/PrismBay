@@ -11,6 +11,12 @@ on:
       - 'scripts/revenue-health-check*'
       - 'scripts/viral-product-engine.mjs'
       - 'scripts/dropshipping-dispatch.mjs'
+      - 'scripts/freellm-sales-worker.mjs'
+      - 'scripts/freellm-sales-worker.test.mjs'
+      - 'scripts/owned-sales-page-worker.mjs'
+      - 'scripts/owned-sales-page-worker.test.mjs'
+      - 'scripts/sales-sitemap-sync.mjs'
+      - 'scripts/sales-sitemap-sync.test.mjs'
 
 permissions:
   contents: write
@@ -33,7 +39,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs scripts/board-freshness.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs scripts/board-freshness.test.mjs scripts/freellm-sales-worker.test.mjs scripts/owned-sales-page-worker.test.mjs scripts/sales-sitemap-sync.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -71,6 +77,44 @@ jobs:
             echo "Running $role"
             node scripts/organic-growth-agent.mjs "$role"
           done
+      - name: Run FreeLLM sales intelligence with safe fallback
+        env:
+          FREELLMAPI_BASE_URL: ${{ secrets.FREELLMAPI_BASE_URL }}
+          FREELLMAPI_API_KEY: ${{ secrets.FREELLMAPI_API_KEY }}
+          FREELLMAPI_MODEL: ${{ secrets.FREELLMAPI_MODEL }}
+        run: node scripts/freellm-sales-worker.mjs
+      - name: Generate verified owned-search sales pages
+        run: node scripts/owned-sales-page-worker.mjs
+      - name: Publish verified owned-search sales pages to existing GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          syncdir="$RUNNER_TEMP/prismbay-owned-sales-pages"
+          git fetch origin gh-pages
+          git worktree add --detach "$syncdir" origin/gh-pages
+          git -C "$syncdir" config user.name 'github-actions[bot]'
+          git -C "$syncdir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p "$syncdir/learn"
+          cp growth-reports/owned-sales-pages/*.html "$syncdir/learn/"
+          node scripts/sales-sitemap-sync.mjs "$syncdir/sitemap.xml"
+          git -C "$syncdir" add learn sitemap.xml
+          if git -C "$syncdir" diff --cached --quiet; then
+            echo 'Owned sales pages unchanged'
+          else
+            git -C "$syncdir" commit -m 'chore: publish verified PrismBay buyer acquisition pages'
+            for attempt in 1 2 3; do
+              git fetch origin gh-pages
+              if ! git -C "$syncdir" rebase origin/gh-pages; then
+                git -C "$syncdir" rebase --abort || true
+                echo 'Concurrent gh-pages change requires review. No force push.'
+                exit 1
+              fi
+              git -C "$syncdir" push origin HEAD:gh-pages && break
+              if [[ "$attempt" == "3" ]]; then exit 1; fi
+              sleep $((attempt * 3))
+            done
+          fi
       - name: Coordinate dropshipping worker assignments and supplier blockers
         run: node scripts/dropshipping-dispatch.mjs
       - name: Publish sanitized dropshipping worker board for owner review
@@ -133,10 +177,12 @@ jobs:
           name: prismbay-cloud-ops-${{ github.run_id }}
           path: |
             growth-reports/*.json
+            growth-reports/owned-sales-pages/*.html
+            growth-reports/owned-sales-pages/urls.json
             public/viral-catalog.json
           if-no-files-found: warn
           retention-days: 2
       - name: Write clear execution summary
         if: always()
         shell: bash
-        run: echo 'Cloud execution completed. Review prior step outcomes and the short-lived reports artifact. No Stripe charges, CJ orders, or social posts are initiated by this workflow.' >> "$GITHUB_STEP_SUMMARY"
+        run: echo 'Cloud execution completed. Verified owned-search pages are maintained on the existing GitHub Pages branch. No Stripe charges, CJ orders, cold emails, or social posts are initiated by this workflow.' >> "$GITHUB_STEP_SUMMARY"

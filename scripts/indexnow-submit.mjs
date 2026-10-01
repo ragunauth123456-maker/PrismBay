@@ -1,12 +1,18 @@
 const KEY='927a4d6b8c21e5f73a90bc14d2ef6a31';
 const HOST='ragunauthramsaroop.github.io';
 const ROOT='https://'+HOST+'/PrismBay/';
-const URLS=[
+const CORE_URLS=[
   ROOT,
   ROOT+'toolkits.html',
   ROOT+'stakeholder-engagement-plan-template.html',
   ROOT+'esg-monthly-reporting-template.html',
   ROOT+'board-briefing-white-paper-template.html'
+];
+const SALES_URLS=[
+  ROOT+'learn/',
+  ROOT+'learn/stakeholder-mapping-toolkit.html',
+  ROOT+'learn/esg-reporting-toolkit.html',
+  ROOT+'learn/board-briefing-white-paper-system.html'
 ];
 const event=process.env.GITHUB_EVENT_NAME||'manual';
 const hour=new Date().getUTCHours();
@@ -18,10 +24,16 @@ const keyLocation=ROOT+KEY+'.txt';
 const keyProof=await fetch(keyLocation,{redirect:'follow',signal:AbortSignal.timeout(10000)});
 const proofText=(await keyProof.text()).trim();
 if(!keyProof.ok || proofText!==KEY) throw new Error('indexnow_key_proof_failed_http_'+keyProof.status);
-for(const url of URLS){
+for(const url of CORE_URLS){
   const r=await fetch(url,{method:'HEAD',redirect:'follow',signal:AbortSignal.timeout(10000)});
   if(!r.ok) throw new Error('public_url_not_live_'+r.status+'_'+url);
 }
+const liveSalesUrls=[];
+for(const url of SALES_URLS){
+  const r=await fetch(url,{method:'HEAD',redirect:'follow',signal:AbortSignal.timeout(10000)});
+  if(r.ok) liveSalesUrls.push(url);
+}
+const URLS=[...CORE_URLS,...liveSalesUrls];
 const payload={host:HOST,key:KEY,keyLocation,urlList:URLS};
 const r=await fetch('https://api.indexnow.org/indexnow',{
   method:'POST',

@@ -45,3 +45,16 @@ The output in `growth-reports/hook-creative-writer.json` contains an educational
 Offline checks: `node --test scripts/digital-conversion-campaign.test.mjs scripts/organic-growth-agent.test.mjs`. Existing physical supplier and TikTok approval safeguards remain unchanged.
 
 The cloud revenue health check also fetches all three live free paid-product buyer guides and enforces the correct canonical page, advertised price, existing Stripe checkout reference and refund/support route. If a guide disappears or loses its matching checkout link, the existing six-hour Actions run fails and retains diagnostic output. This is storefront integrity, never proof of a payment or customer acquisition.
+
+
+## FreeLLM sales acquisition workers (1 October 2026)
+
+The existing buyer-acquisition and free-cloud workflows now include a sales-intelligence layer based on the MIT-licensed FreeLLMAPI project at https://github.com/tashfeenahmed/freellmapi. PrismBay does not vendor the router or expose provider credentials in this repository.
+
+When repository secrets `FREELLMAPI_BASE_URL` and `FREELLMAPI_API_KEY` point to an owner-controlled FreeLLMAPI instance, `scripts/freellm-sales-worker.mjs` uses its OpenAI-compatible `/v1/chat/completions` route with `auto:smart` by default. `FREELLMAPI_MODEL` may override the model or routing profile. If the router is unavailable or unconfigured, the worker fails open to deterministic copy built only from verified PrismBay offer facts.
+
+The worker produces demand queries, conversion copy, short-video hooks, creator-partner drafts and A/B-test ideas for the three existing digital document products. It rejects invented prices, scarcity, testimonials, rankings, guaranteed outcomes and unsupported commercial claims. Social output remains draft-only and no cold email is sent.
+
+`scripts/owned-sales-page-worker.mjs` separately generates four factual owned-search pages from the existing verified offer catalog. The already-authorized `PrismBay Free Cloud Operations` workflow uses its existing repository write permission to maintain these pages on the existing `gh-pages` branch under `/learn/`, then `scripts/sales-sitemap-sync.mjs` adds them to the existing sitemap. The buyer-acquisition workflow submits the live URLs through the existing IndexNow route. The pages use only existing guide links, prices, deliverables, Stripe Payment Links, refund/support routes and commercial disclosures.
+
+These workers improve owned-channel buyer acquisition. They do not prove a sale. Report revenue only from a paid Stripe transaction.
