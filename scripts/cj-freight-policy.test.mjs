@@ -57,11 +57,14 @@ test('malformed, negative and missing pricing never becomes a quote', () => {
   assert.equal(q.invalid,5);
 });
 
-test('freight request uses CJ official simple-endpoint fields only', () => {
+test('freight request uses CJ official fields and a verified origin', () => {
   assert.deepEqual(freightRequest('SKU-V1'), {
     startCountryCode:'US',endCountryCode:'US',products:[{quantity:1,vid:'SKU-V1'}]});
-  assert.equal(freightRequest('SKU-V1','10001').zip,'10001');
+  assert.deepEqual(freightRequest('SKU-V1',null,'CN'), {
+    startCountryCode:'CN',endCountryCode:'US',products:[{quantity:1,vid:'SKU-V1'}]});
+  assert.equal(freightRequest('SKU-V1','10001','CN').zip,'10001');
   assert.throws(()=>freightRequest('SKU-V1','A100'),/ZIP/);
+  assert.throws(()=>freightRequest('SKU-V1',null,'CHINA'),/Origin/);
   assert.throws(()=>freightRequest('',null),/variant ID/);
 });
 
