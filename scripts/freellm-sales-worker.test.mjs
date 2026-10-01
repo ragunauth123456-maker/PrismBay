@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVE_DIGITAL_OFFERS, campaignForSlot } from './digital-conversion-campaign.mjs';
-import { deterministicSalesPlan, validateLLMPlan, buildAssistedLLMPlan, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
+import { deterministicSalesPlan, validateLLMPlan, buildAssistedLLMPlan, parseSalesStrategy, guidedSalesPlan, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
 
 test('deterministic sales plan stays inside verified offer facts', () => {
   for (const [i, offer] of ACTIVE_DIGITAL_OFFERS.entries()) {
@@ -71,18 +71,10 @@ test('FreeLLM request is optional and falls back when not configured', async () 
   assert.equal(result.plan, null);
 });
 
-test('FreeLLM OpenAI-compatible response is accepted when factual', async () => {
+test('FreeLLM OpenAI-compatible response selects a bounded sales strategy', async () => {
   const offer = ACTIVE_DIGITAL_OFFERS[1];
   const body = {
-    choices: [{ message: { content: JSON.stringify({
-      seoQueries: ['monthly esg reporting template', 'esg kpi workbook', 'social performance reporting pack', 'esg executive brief template'],
-      landingPageHeadline: 'ESG reporting files for a repeatable monthly process',
-      metaDescription: 'Free ESG reporting guide plus an optional $99 one-time editable document package.',
-      socialDrafts: ['Start with a free monthly ESG reporting guide.', 'Optional editable ESG files: $99 one time.', 'Build a clearer evidence trail before reporting.'],
-      shortVideoHooks: ['A dashboard does not repair an unverified KPI.', 'Assign an owner to every reported metric.', 'Trace each KPI to supporting evidence.'],
-      creatorPitch: 'Educational collaboration for ESG reporting teams.',
-      experiments: ['Test evidence-led copy.', 'Test free-guide-first CTA.', 'Test deliverable-led copy.']
-    }) } }]
+    choices: [{ message: { content: 'evidence-led' } }]
   };
   const fakeFetch = async () => ({
     ok: true,
@@ -97,8 +89,10 @@ test('FreeLLM OpenAI-compatible response is accepted when factual', async () => 
     env: { FREELLMAPI_BASE_URL:'http://localhost:3001', FREELLMAPI_API_KEY:'freellmapi-test', FREELLMAPI_MODEL:'auto:smart' }
   });
   assert.equal(result.status, 'ok');
-  assert.equal(result.plan.workerMode, 'freellmapi');
-  assert.equal(result.validationMode, 'strict');
+  assert.equal(result.plan.workerMode, 'freellmapi_guided');
+  assert.equal(result.plan.llmStrategy, 'evidence-led');
+  assert.equal(result.validationMode, 'guided_strategy');
+  assert.equal(result.strategy, 'evidence-led');
   assert.equal(result.routedVia, 'kilo/free-model');
 });
 
@@ -110,17 +104,34 @@ test('sales worker report never claims a sale', async () => {
   assert.equal(report.freeLLM.configured, false);
 });
 
-test('FreeLLM sales request keeps output bounded while allowing free-tier latency', async () => {
+test('FreeLLM sales request allows free-tier latency while keeping output tiny', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /max_tokens:\s*768/);
+  assert.match(source, /max_tokens:\s*24/);
   assert.match(source, /AbortSignal\.timeout\(110000\)/);
 });
 
-test('FreeLLM prompt requests a compact four-field JSON schema', async () => {
+test('FreeLLM strategy router accepts only the four allowed positioning labels', () => {
+  assert.equal(parseSalesStrategy('evidence-led'), 'evidence-led');
+  assert.equal(parseSalesStrategy('I choose workflow led.'), 'workflow-led');
+  assert.equal(parseSalesStrategy('FREE GUIDE FIRST'), 'free-guide-first');
+  assert.equal(parseSalesStrategy('deliverables-led'), 'deliverables-led');
+  assert.equal(parseSalesStrategy('guaranteed-sales-first'), null);
+});
+
+test('guided sales plan uses the model choice without inventing commercial facts', () => {
+  const offer = ACTIVE_DIGITAL_OFFERS[0];
+  const plan = guidedSalesPlan(offer, campaignForSlot(0), 'free-guide-first');
+  assert.equal(plan.workerMode, 'freellmapi_guided');
+  assert.equal(plan.llmStrategy, 'free-guide-first');
+  assert.match(plan.landingPageHeadline, /Start with the free/);
+  assert.match(plan.metaDescription, /\$49/);
+  assert.doesNotMatch(JSON.stringify(plan), /guaranteed|best[- ]?seller|only \d+ left/i);
+});
+
+test('FreeLLM strategy request stays tiny for free-tier reliability', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /Return exactly these fields: seoQueries/);
-  assert.match(source, /landingPageHeadline/);
-  assert.match(source, /shortVideoHooks/);
-  assert.match(source, /experiments/);
-  assert.match(source, /Do not add explanations, URLs, prices, or extra fields/);
+  assert.match(source, /max_tokens:\s*24/);
+  assert.match(source, /Reply with exactly one label and nothing else/);
+  assert.match(source, /evidence-led/);
+  assert.match(source, /deliverables-led/);
 });
