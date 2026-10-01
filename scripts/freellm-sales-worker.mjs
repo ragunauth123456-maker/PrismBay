@@ -157,6 +157,62 @@ export function buildAssistedLLMPlan(value, offer, campaign) {
   };
 }
 
+
+export function parseSalesStrategy(value) {
+  const text = String(value ?? '').toLowerCase();
+  const strategies = [
+    ['evidence-led', /\bevidence[\s_-]*led\b/],
+    ['workflow-led', /\b(?:workflow|process)[\s_-]*led\b/],
+    ['free-guide-first', /\bfree[\s_-]*guide[\s_-]*first\b/],
+    ['deliverables-led', /\b(?:deliverables?|files?)[\s_-]*led\b/]
+  ];
+  for (const [label, pattern] of strategies) {
+    if (pattern.test(text)) return label;
+  }
+  return null;
+}
+
+export function guidedSalesPlan(offer, campaign, strategy) {
+  const fallback = deterministicSalesPlan(offer, campaign);
+  const choices = {
+    'evidence-led': {
+      query: offer.name.toLowerCase() + ' evidence template',
+      headline: 'Build ' + offer.name + ' around traceable evidence',
+      hook: 'Start with evidence you can trace before the next review.',
+      experiment: 'Test an evidence-led headline against the standard toolkit headline.'
+    },
+    'workflow-led': {
+      query: offer.name.toLowerCase() + ' workflow template',
+      headline: offer.name + ' for a repeatable working process',
+      hook: 'Turn a one-off task into a repeatable documented process.',
+      experiment: 'Test workflow-led copy against deliverable-led copy.'
+    },
+    'free-guide-first': {
+      query: 'free ' + offer.name.toLowerCase() + ' guide',
+      headline: 'Start with the free ' + offer.name + ' guide',
+      hook: 'Start with the free guide, test the workflow, then decide whether editable files fit the work.',
+      experiment: 'Test a free-guide-first CTA against a direct toolkit CTA.'
+    },
+    'deliverables-led': {
+      query: offer.name.toLowerCase() + ' editable files',
+      headline: offer.name + ': editable files for practical implementation',
+      hook: 'Use the free guide first, then review the editable files listed in the toolkit.',
+      experiment: 'Test deliverable-led copy against problem-led copy.'
+    }
+  };
+  const selected = choices[strategy];
+  if (!selected) return null;
+  return {
+    ...fallback,
+    workerMode: 'freellmapi_guided',
+    llmStrategy: strategy,
+    seoQueries: [selected.query, ...fallback.seoQueries.filter(q => q !== selected.query)].slice(0, 4),
+    landingPageHeadline: selected.headline,
+    shortVideoHooks: [selected.hook, ...fallback.shortVideoHooks.filter(h => h !== selected.hook)].slice(0, 3),
+    experiments: [selected.experiment, ...fallback.experiments.filter(e => e !== selected.experiment)].slice(0, 3)
+  };
+}
+
 function normalizeBaseUrl(base) {
   const clean = String(base || '').trim().replace(/\/+$/, '');
   if (!clean) return null;
@@ -169,25 +225,23 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
   if (!base || !key) return { plan: null, status: 'not_configured' };
 
   const prompt = [
-    'You are a conversion copy analyst for PrismBay professional document toolkits.',
-    'Return one compact JSON object only. Your response must begin with { and end with }. Do not use markdown.',
-    'Use only the supplied facts. Do not invent customers, results, scarcity, rankings, testimonials, revenue, delivery timing, product features, discounts or claims.',
-    'Never promise outcomes. Keep the free guide separate from the optional paid package.',
-    'Return exactly these fields: seoQueries (array of 4 search queries), landingPageHeadline (one short headline), shortVideoHooks (array of 3 hooks), experiments (array of 3 A/B tests).',
-    'Do not add explanations, URLs, prices, or extra fields.',
+    'Choose the strongest positioning angle for this PrismBay professional document toolkit.',
+    'Reply with exactly one label and nothing else:',
+    'evidence-led',
+    'workflow-led',
+    'free-guide-first',
+    'deliverables-led',
     '',
+    'Choose from the verified facts below. Do not infer sales, customers, outcomes, scarcity, rankings or testimonials.',
     'FACTS:',
     JSON.stringify({
       title: offer.name,
-      priceUsd: offer.priceUsd,
       audience: offer.audience,
       problem: offer.problem,
       educationalHook: offer.educationalHook,
       actionableTip: offer.actionableTip,
       deliverables: offer.deliverables,
-      freeGuide: campaign.guideUrl,
-      checkout: campaign.checkoutUrl,
-      commercialDisclosure: 'One-time professional document package. Not hosted AI software, bespoke consulting, or a guarantee of results.'
+      commercialDisclosure: 'One-time professional document package. The free guide remains available without purchase.'
     })
   ].join('\n');
 
@@ -201,10 +255,10 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
       },
       body: JSON.stringify({
         model: String(env.FREELLMAPI_MODEL || 'auto:smart'),
-        temperature: 0.35,
-        max_tokens: 768,
+        temperature: 0,
+        max_tokens: 24,
         messages: [
-          { role: 'system', content: 'Return valid compact JSON only, grounded in the supplied commercial facts. No prose before or after the JSON.' },
+          { role: 'system', content: 'Return exactly one allowed positioning label. No explanation.' },
           { role: 'user', content: prompt }
         ]
       }),
@@ -213,13 +267,13 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
     const payload = await response.json().catch(() => null);
     if (!response.ok) return { plan: null, status: 'http_' + response.status };
     const content = payload?.choices?.[0]?.message?.content;
-    const parsed = extractJson(content);
-    const strictPlan = validateLLMPlan(parsed, offer);
-    const plan = strictPlan || buildAssistedLLMPlan(parsed, offer, campaign);
+    const strategy = parseSalesStrategy(content);
+    const plan = strategy ? guidedSalesPlan(offer, campaign, strategy) : null;
     return {
       plan,
       status: plan ? 'ok' : 'invalid_output',
-      validationMode: strictPlan ? 'strict' : plan ? 'assisted' : 'rejected',
+      validationMode: plan ? 'guided_strategy' : 'rejected',
+      strategy,
       routedVia: response.headers?.get?.('x-routed-via') || null,
       fallbackAttempts: response.headers?.get?.('x-fallback-attempts') || null
     };
@@ -254,6 +308,7 @@ export async function buildSalesWorkerReport({ nowMs = Date.now(), fetchImpl = f
       routedVia: llm.routedVia || null,
       fallbackAttempts: llm.fallbackAttempts || null,
       validationMode: llm.validationMode || null,
+      strategy: llm.strategy || plan.llmStrategy || null,
       workerMode: plan.workerMode,
       sourceProject: 'https://github.com/tashfeenahmed/freellmapi'
     },
