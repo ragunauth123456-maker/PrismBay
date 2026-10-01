@@ -6,7 +6,11 @@ const URLS=[
   ROOT+'toolkits.html',
   ROOT+'stakeholder-engagement-plan-template.html',
   ROOT+'esg-monthly-reporting-template.html',
-  ROOT+'board-briefing-white-paper-template.html'
+  ROOT+'board-briefing-white-paper-template.html',
+  ROOT+'learn/',
+  ROOT+'learn/stakeholder-mapping-toolkit.html',
+  ROOT+'learn/esg-reporting-toolkit.html',
+  ROOT+'learn/board-briefing-white-paper-system.html'
 ];
 const event=process.env.GITHUB_EVENT_NAME||'manual';
 const hour=new Date().getUTCHours();
