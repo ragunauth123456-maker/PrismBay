@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T22:39:04.746Z",
+  "generatedAt": "2026-10-01T05:54:11.074Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-09-30T22:16:39.237Z",
+    "checkedAt": "2026-10-01T05:54:09.953Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
     "countryFreightEstimates": 0,
@@ -26,27 +26,6 @@
       "candidateCount": 9,
       "blockers": [
         {
-          "slug": "extendable-high-zone-duster",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "pan-scraper",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "rug-grippers",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
           "slug": "cordless-handheld-vacuum",
           "status": "supplier_search_needed",
           "sku": null,
@@ -62,6 +41,27 @@
         },
         {
           "slug": "roll-up-dish-rack",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "extendable-high-zone-duster",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "pan-scraper",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "rug-grippers",
           "status": "supplier_search_needed",
           "sku": null,
           "shippingDiagnostic": null,
