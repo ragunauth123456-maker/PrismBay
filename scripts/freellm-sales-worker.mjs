@@ -201,12 +201,13 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
       body: JSON.stringify({
         model: String(env.FREELLMAPI_MODEL || 'auto:smart'),
         temperature: 0.35,
+        max_tokens: 768,
         messages: [
           { role: 'system', content: 'Return accurate, concise JSON grounded only in the supplied commercial facts.' },
           { role: 'user', content: prompt }
         ]
       }),
-      signal: AbortSignal.timeout(45000)
+      signal: AbortSignal.timeout(110000)
     });
     const payload = await response.json().catch(() => null);
     if (!response.ok) return { plan: null, status: 'http_' + response.status };

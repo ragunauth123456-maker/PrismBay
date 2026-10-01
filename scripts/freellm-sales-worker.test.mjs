@@ -109,3 +109,9 @@ test('sales worker report never claims a sale', async () => {
   assert.equal(report.distribution.coldEmail, false);
   assert.equal(report.freeLLM.configured, false);
 });
+
+test('FreeLLM sales request keeps output bounded while allowing free-tier latency', async () => {
+  const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
+  assert.match(source, /max_tokens:\s*768/);
+  assert.match(source, /AbortSignal\.timeout\(110000\)/);
+});
