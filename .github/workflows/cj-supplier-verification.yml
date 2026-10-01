@@ -13,6 +13,10 @@ on:
       - '.github/workflows/cj-supplier-verification.yml'
       - 'scripts/cj-match-policy.mjs'
       - 'scripts/cj-review-board.mjs'
+      - 'scripts/cj-search-strategy.mjs'
+      - 'scripts/cj-search-strategy.test.mjs'
+      - 'scripts/cj-freight-policy.mjs'
+      - 'scripts/cj-freight-policy.test.mjs'
 
 permissions:
   contents: write
@@ -43,7 +47,7 @@ jobs:
           import fs from 'node:fs/promises';
           import assert from 'node:assert/strict';
           import {hasApprovedProductClass, matchesIntendedProduct} from './scripts/cj-match-policy.mjs';
-          import { parseCJFreight, freightRequest, chooseQuote } from './scripts/cj-freight-policy.mjs';
+          import { parseCJFreight, parseCJFreightTip, freightRequest, freightTipRequest, chooseQuote } from './scripts/cj-freight-policy.mjs';
           import { createCJReadOnlyClient } from './scripts/cj-api-limiter.mjs';
           import { candidateSearches, uniqueEligibleProducts, selectBestInspection } from './scripts/cj-search-strategy.mjs';
           
@@ -142,7 +146,7 @@ jobs:
             let candidatesReturned = 0;
             let searchesAttempted = 0;
             let searchErrors = 0;
-            // One primary query plus one category-specific alternate at most.
+            // One primary query plus up to two category-specific alternates.
             // Every result still passes the strict identity and warehouse filters.
             for (const query of candidateSearches(candidate)) {
               searchesAttempted += 1;
@@ -168,16 +172,16 @@ jobs:
               const products = flatten(search);
               candidatesReturned += products.length;
               eligibleGroups.push(eligibleProducts(products, candidate));
-              if (uniqueEligibleProducts(eligibleGroups, 2).length >= 2) break;
+              if (uniqueEligibleProducts(eligibleGroups, 3).length >= 2) break;
             }
-            const eligible = uniqueEligibleProducts(eligibleGroups, 2);
+            const eligible = uniqueEligibleProducts(eligibleGroups, 3);
             if (!eligible.length) {
               results.push({...base,
                 status: searchErrors === searchesAttempted ? 'search_error' : 'manual_supplier_match_required',
                 candidatesReturned, searchesAttempted, searchErrors,
                 reason: searchErrors === searchesAttempted ?
-                  'Both limited CJ supplier searches failed; await a fresh read-only run.' :
-                  'Neither approved query returned a matching on-sale product with a positive price and verified US product inventory.',
+                  'All bounded CJ supplier searches failed; await a fresh read-only run.' :
+                  'No approved query returned a matching on-sale product with a positive price and verified US product inventory.',
               });
               continue;
             }
@@ -225,14 +229,17 @@ jobs:
 
             // Verify shipping independently of the supplier match. A zero-dollar
             // result is ambiguous, NOT evidence of approved free shipping.
-            // If country-only quotes have no positive price, retry once using
-            // an illustrative US ZIP. A sample ZIP never validates a buyer's address.
+            // Start with CJ's simple country estimate. When it is unusable, use
+            // CJ's documented Freight Calculation Tip with verified variant
+            // dimensions, weight and product logistics properties. An illustrative
+            // ZIP is still only a trial quote and never validates a buyer's address.
             const freightOptions = [];
             let zeroPriceQuoteCount = 0;
             let freightQuoteScope = null;
             let freightDiagnostic = variantInventoryVerified ? 'not_quoted' : 'variant_stock_unverified';
             if (variantInventoryVerified && variant?.vid) {
               let countryQuote = null;
+              let tipQuote = null;
               let exampleQuote = null;
               try {
                 const country = await jsonFetch(BASE + '/logistic/freightCalculate', {
@@ -243,19 +250,51 @@ jobs:
               } catch {
                 freightDiagnostic = 'country_quote_api_error';
               }
-              if (!countryQuote || countryQuote.offers.length === 0) {
+
+              if (!countryQuote?.offers.length) {
                 try {
+                  const detailUrl = new URL(BASE + '/product/query');
+                  detailUrl.searchParams.set('pid', String(item.id));
+                  const detailResponse = await jsonFetch(detailUrl, { headers: headers(token) });
                   const zip = '10001'; // Illustrative NYC ZIP only, never a customer delivery quote
+                  const tip = await jsonFetch(BASE + '/logistic/freightCalculateTip', {
+                    method:'POST', headers:headers(token),
+                    body:JSON.stringify(freightTipRequest({
+                      variant,
+                      detail: detailResponse?.data,
+                      zip,
+                      origin: 'US',
+                    })),
+                  });
+                  tipQuote = parseCJFreightTip(tip, 'tip_example_zip_estimate', zip);
+                  if (tip?.code === 1600300 && !tipQuote.offers.length) {
+                    freightDiagnostic = 'tip_request_rejected';
+                  }
+                } catch {
+                  freightDiagnostic = 'tip_quote_unavailable';
+                }
+              }
+
+              // Preserve one simple illustrative-ZIP fallback if CJ Tip metadata is
+              // unavailable for an older catalog record.
+              if (!countryQuote?.offers.length && !tipQuote?.offers.length) {
+                try {
+                  const zip = '10001';
                   const sample = await jsonFetch(BASE + '/logistic/freightCalculate', {
                     method:'POST', headers:headers(token),
                     body:JSON.stringify(freightRequest(String(variant.vid), zip)),
                   });
                   exampleQuote = parseCJFreight(sample, 'example_zip_estimate', zip);
                 } catch {
-                  freightDiagnostic = 'illustrative_zip_quote_api_error';
+                  if (freightDiagnostic === 'not_quoted') freightDiagnostic = 'illustrative_zip_quote_api_error';
                 }
               }
-              const evaluated = chooseQuote(countryQuote || parseCJFreight({data:[]}), exampleQuote);
+
+              const evaluated = chooseQuote(
+                countryQuote || parseCJFreight({data:[]}),
+                exampleQuote,
+                tipQuote,
+              );
               freightOptions.push(...evaluated.offers);
               zeroPriceQuoteCount = evaluated.zeroPriced;
               freightQuoteScope = evaluated.scope;
@@ -283,7 +322,7 @@ jobs:
             }
             const best = selectBestInspection(inspected);
             results.push({...best, alternativesInspected:inspected.length, searchesAttempted,searchErrors,candidatesReturned,
-              alternativeNote:'A supplier match never authorizes a listing. Both alternatives require independent variant and freight checks.'});
+              alternativeNote:'A supplier match never authorizes a listing. Every inspected alternative requires independent variant and freight checks.'});
           }
 
           const report = {

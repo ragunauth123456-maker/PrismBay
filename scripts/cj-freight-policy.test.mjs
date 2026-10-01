@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseCJFreight, freightRequest, chooseQuote } from './cj-freight-policy.mjs';
+import { parseCJFreight, parseCJFreightTip, freightRequest, freightTipRequest, chooseQuote } from './cj-freight-policy.mjs';
 
 test('eleven zero-priced CJ methods are NOT free-shipping proof', () => {
   const rows = Array.from({ length: 11 }, (_, i) => ({
@@ -24,10 +24,24 @@ test('illustrative ZIP quote never authorizes delivery to the buyer', () => {
   assert.equal(chosen.zeroPriced,1);
 });
 
-test('positive country quote is preferred to an example ZIP quote', () => {
+test('Tip quote uses total postage and stays an illustrative estimate', () => {
+  const tip = parseCJFreightTip({data:[{
+    discountFee:4.09, wrapPostage:4.50, totalPostageFee:5.12,
+    arrivalTime:'5-9', option:{enName:'CJPacket'},
+  }]},'tip_example_zip_estimate','10001');
+  assert.equal(tip.offers[0].usd,5.12);
+  assert.equal(tip.offers[0].name,'CJPacket');
+  assert.equal(tip.offers[0].exampleZip,'10001');
+  const country = parseCJFreight({data:[{logisticName:'Carrier',logisticPrice:0}]});
+  const chosen = chooseQuote(country,null,tip);
+  assert.equal(chosen.scope,'tip_example_zip_estimate');
+  assert.equal(chosen.finalDestinationVerified,false);
+});
+
+test('positive country quote is preferred to a Tip estimate', () => {
   const country = parseCJFreight({data:[{logisticName:'A',logisticPrice:'8.50',logisticAging:'4-9'}]});
-  const example = parseCJFreight({data:[{logisticName:'B',logisticPrice:7}]},'example_zip_estimate','10001');
-  assert.equal(chooseQuote(country,example).scope,'country_estimate');
+  const tip = parseCJFreightTip({data:[{totalPostageFee:7,option:{enName:'B'}}]},'tip_example_zip_estimate','10001');
+  assert.equal(chooseQuote(country,null,tip).scope,'country_estimate');
 });
 
 test('malformed, negative and missing pricing never becomes a quote', () => {
@@ -49,4 +63,33 @@ test('freight request uses CJ official simple-endpoint fields only', () => {
   assert.equal(freightRequest('SKU-V1','10001').zip,'10001');
   assert.throws(()=>freightRequest('SKU-V1','A100'),/ZIP/);
   assert.throws(()=>freightRequest('',null),/variant ID/);
+});
+
+test('Tip request converts variant mm3 to cm3 and uses verified product properties', () => {
+  const request = freightTipRequest({
+    variant:{variantSku:'CJABC01',variantWeight:480,variantVolume:6000000},
+    detail:{packWeight:'530.0',productProEnSet:['COMMON'],productType:'0'},
+    zip:'10001',
+    origin:'US',
+  });
+  const row = request.reqDTOS[0];
+  assert.equal(row.weight,480);
+  assert.equal(row.wrapWeight,530);
+  assert.equal(row.volume,6000);
+  assert.deepEqual(row.productProp,['COMMON']);
+  assert.deepEqual(row.skuList,['CJABC01']);
+  assert.equal(row.shippingMode,2);
+  assert.equal(row.zip,'10001');
+});
+
+test('Tip request fails closed when freight-critical metadata is missing', () => {
+  assert.throws(()=>freightTipRequest({
+    variant:{variantSku:'CJABC01',variantWeight:480,variantVolume:6000000},
+    detail:{productProEnSet:[]},
+  }),/requires verified SKU/);
+  assert.throws(()=>freightTipRequest({
+    variant:{variantSku:'CJABC01',variantWeight:480,variantVolume:6000000},
+    detail:{productProEnSet:['COMMON']},
+    zip:'bad',
+  }),/ZIP/);
 });
