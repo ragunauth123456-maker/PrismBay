@@ -174,11 +174,21 @@ export function parseSalesStrategy(value) {
     }[numeric];
   }
 
+  const explicitWord = text.match(/(?:answer|choice|option|pick|select(?:ion)?)\s*[:#-]?\s*(one|two|three|four)\b/)?.[1];
+  if (explicitWord) {
+    return {
+      one:'evidence-led',
+      two:'workflow-led',
+      three:'free-guide-first',
+      four:'deliverables-led'
+    }[explicitWord];
+  }
+
   const wordMap = [
-    ['evidence-led', /\b(?:one|first)\b|\bevidence\b|\btrace(?:able|ability)?\b|\bproof\b/],
-    ['workflow-led', /\b(?:two|second)\b|\bworkflow\b|\bprocess\b|\brepeatable\b/],
-    ['free-guide-first', /\b(?:three|third)\b|\bfree\b|\bguide\b|\bexample\b/],
-    ['deliverables-led', /\b(?:four|fourth)\b|\bdeliverables?\b|\bfiles?\b|\btemplates?\b/]
+    ['evidence-led', /\bevidence\b|\btrace(?:able|ability)?\b|\bproof\b/],
+    ['workflow-led', /\bworkflow\b|\bprocess\b|\brepeatable\b/],
+    ['free-guide-first', /\bfree\b|\bguide\b|\bexample\b/],
+    ['deliverables-led', /\bdeliverables?\b|\bfiles?\b|\btemplates?\b/]
   ];
   for (const [label, pattern] of wordMap) {
     if (pattern.test(text)) return label;
