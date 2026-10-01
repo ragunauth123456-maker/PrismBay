@@ -65,9 +65,7 @@ command -v openssl >/dev/null 2>&1 || {
   exit 1
 }
 
-CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$$}"
-DATA_DIR="${RUNNER_TEMP}/freellmapi-${GITHUB_RUN_ID:-$$}"
-mkdir -p "$DATA_DIR"
+CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$}"
 ENC_KEY="$(openssl rand -hex 32)"
 UNIFIED_KEY="freellmapi-$(openssl rand -hex 24)"
 CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"smartest"}}'
@@ -80,7 +78,6 @@ trap cleanup EXIT
 docker run -d --rm \
   --name "$CONTAINER" \
   -p 127.0.0.1:3001:3001 \
-  -v "$DATA_DIR:/app/server/data" \
   -e NODE_ENV=production \
   -e PORT=3001 \
   -e HOST=0.0.0.0 \
@@ -98,35 +95,26 @@ for _ in {1..60}; do
 done
 curl -fsS --max-time 5 http://127.0.0.1:3001/api/ping >/dev/null
 
-DB_PATH="$DATA_DIR/freeapi.db"
-for _ in {1..30}; do
-  [[ -f "$DB_PATH" ]] && break
+key_installed=false
+for _ in {1..20}; do
+  if docker exec -e UNIFIED_KEY="$UNIFIED_KEY" "$CONTAINER" node -e '
+    const Database=require("better-sqlite3");
+    const db=new Database("/app/server/data/freeapi.db");
+    const key=process.env.UNIFIED_KEY;
+    const result=db.prepare("UPDATE settings SET value=? WHERE key=?").run(key,"unified_api_key");
+    if (!result.changes) db.prepare("INSERT INTO settings(key,value) VALUES(?,?)").run("unified_api_key",key);
+    db.close();
+  ' >/dev/null 2>&1; then
+    key_installed=true
+    break
+  fi
   sleep 1
 done
-[[ -f "$DB_PATH" ]] || {
-  echo "FreeLLMAPI database did not initialize." >&2
+if [[ "$key_installed" != "true" ]]; then
+  echo "FreeLLMAPI started, but its run-scoped unified key could not be installed." >&2
+  docker logs --tail 80 "$CONTAINER" 2>&1 | sed -E 's/freellmapi-[A-Za-z0-9]+/[redacted-key]/g' || true
   exit 1
-}
-
-export DB_PATH UNIFIED_KEY
-python3 <<'PY'
-import os, sqlite3, time
-db_path=os.environ["DB_PATH"]
-key=os.environ["UNIFIED_KEY"]
-for attempt in range(20):
-    try:
-        conn=sqlite3.connect(db_path, timeout=10)
-        cur=conn.execute("UPDATE settings SET value=? WHERE key='unified_api_key'", (key,))
-        if cur.rowcount == 0:
-            conn.execute("INSERT INTO settings(key,value) VALUES('unified_api_key',?)", (key,))
-        conn.commit()
-        conn.close()
-        break
-    except sqlite3.OperationalError:
-        if attempt == 19:
-            raise
-        time.sleep(1)
-PY
+fi
 
 MODELS_FILE="$RUNNER_TEMP/freellmapi-models.json"
 models_ready=false
