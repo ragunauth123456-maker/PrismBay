@@ -9,6 +9,8 @@ on:
       - 'scripts/digital-conversion-campaign.mjs'
       - 'scripts/buyer-acquisition-worker.mjs'
       - 'scripts/buyer-acquisition-worker.test.mjs'
+      - 'scripts/freellm-sales-worker.mjs'
+      - 'scripts/freellm-sales-worker.test.mjs'
       - 'scripts/indexnow-submit.mjs'
       - 'scripts/indexnow-submit.test.mjs'
       - '.github/workflows/buyer-acquisition.yml'
@@ -18,6 +20,8 @@ on:
       - 'scripts/digital-conversion-campaign.mjs'
       - 'scripts/buyer-acquisition-worker.mjs'
       - 'scripts/buyer-acquisition-worker.test.mjs'
+      - 'scripts/freellm-sales-worker.mjs'
+      - 'scripts/freellm-sales-worker.test.mjs'
       - 'scripts/indexnow-submit.mjs'
       - 'scripts/indexnow-submit.test.mjs'
       - '.github/workflows/buyer-acquisition.yml'
@@ -39,9 +43,15 @@ jobs:
         with:
           node-version: '22'
       - name: Verify conversion worker safeguards
-        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs scripts/indexnow-submit.test.mjs
+        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs scripts/freellm-sales-worker.test.mjs scripts/indexnow-submit.test.mjs
       - name: Build current buyer-to-checkout campaign from live offer
         run: node scripts/buyer-acquisition-worker.mjs
+      - name: Run FreeLLM sales intelligence with safe fallback
+        env:
+          FREELLMAPI_BASE_URL: ${{ secrets.FREELLMAPI_BASE_URL }}
+          FREELLMAPI_API_KEY: ${{ secrets.FREELLMAPI_API_KEY }}
+          FREELLMAPI_MODEL: ${{ secrets.FREELLMAPI_MODEL }}
+        run: node scripts/freellm-sales-worker.mjs
       - name: Notify participating search engines about live buyer guides
         if: github.event_name != 'pull_request'
         run: node scripts/indexnow-submit.mjs
@@ -52,9 +62,11 @@ jobs:
           path: |
             growth-reports/buyer-acquisition-latest.json
             growth-reports/buyer-acquisition-latest.md
+            growth-reports/freellm-sales-worker-latest.json
           retention-days: 7
       - name: Summary
         run: |
           echo '## Buyer acquisition worker' >> "$GITHUB_STEP_SUMMARY"
-          echo 'This worker validates a real existing guide -> Stripe checkout path and generates a channel-ready truthful conversion asset every two hours.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'It does not claim revenue without a paid Stripe transaction.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This worker validates a real existing guide -> Stripe checkout path and generates truthful conversion assets every two hours.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'FreeLLMAPI is used when its endpoint and unified key are configured; otherwise the sales worker falls back to deterministic verified copy.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'It does not claim revenue without a paid Stripe transaction and does not send cold email or auto-post social content.' >> "$GITHUB_STEP_SUMMARY"
