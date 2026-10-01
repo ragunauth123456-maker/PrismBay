@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 import { ACTIVE_DIGITAL_OFFERS, campaignForSlot, currentSixHourSlot } from './digital-conversion-campaign.mjs';
 
 const forbidden = /guaranteed|best[- ]?seller|limited stock|only\s+\d+\s+left|thousands of customers|verified customer|proven results|instant results|make money fast|risk[- ]free/i;
@@ -222,6 +223,6 @@ export async function main() {
   return report;
 }
 
-if (process.argv[1] && import.meta.url === new URL('file://' + process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main();
 }
