@@ -2,8 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {matchesIntendedProduct,hasApprovedProductClass,approvedClassCount} from './cj-match-policy.mjs';
 
-test('every research category has an explicit positive identity policy',()=>{
+test('every live and research category has an explicit positive identity policy',()=>{
  const positives=[
+ ['scrubber','Electric Spin Scrubber Cleaning Tool'],
+ ['pethair','Reusable Pet Hair Remover Roller'],
+ ['crevice','Gap Crevice Cleaning Brush'],
+ ['pressure-washer','Cordless Portable Pressure Washer'],
+ ['mattress-vacuum','Mattress Bed Vacuum Cleaner'],
+ ['garment-steamer','Portable Garment Clothes Steamer'],
+ ['mini-mop','Mini Self Squeeze Mop'],
+ ['drain-catcher','Sink Drain Strainer Catcher'],
+ ['home-caddy','Portable Cleaning Supply Caddy'],
  ['cordless-handheld-vacuum','Cordless Portable Handheld Vacuum Cleaner'],
  ['extendable-high-zone-duster','Extendable High Reach Microfiber Duster'],
  ['dryer-vent-cleaner-kit','Dryer Vent Cleaning Brush Kit'],
@@ -19,14 +28,24 @@ test('every research category has an explicit positive identity policy',()=>{
  ['hanging-closet-organizer','Hanging Closet Shelf Storage Organizer'],
  ['pan-scraper','Non-Scratch Pan Scraper'],
  ];
- assert.equal(approvedClassCount(),12);
+ assert.equal(approvedClassCount(),21);
  for(const [slug,name] of positives){
    assert.equal(hasApprovedProductClass(slug),true,slug);
    assert.equal(matchesIntendedProduct({slug},name),true,slug+' '+name);
  }
 });
-test('rejects all known CJ false positives including live supplier results',()=>{
+
+test('rejects known CJ and live-store false positives',()=>{
  const negatives=[
+ ['scrubber','Electric Spin Scrubber Replacement Brush Heads'],
+ ['pethair','Pet Grooming Deshedding Brush'],
+ ['crevice','Vacuum Crevice Nozzle Attachment'],
+ ['pressure-washer','Cordless Pressure Washer Nozzle Replacement'],
+ ['mattress-vacuum','Mattress Storage Bag'],
+ ['garment-steamer','Facial Steamer'],
+ ['mini-mop','Mini Mop Replacement Pad Only'],
+ ['drain-catcher','Drain Snake Auger'],
+ ['home-caddy','Shower Caddy Organizer'],
  ['cordless-handheld-vacuum','VEVOR Wet Dry Vac, 2.6 Gallon, 2.5 Peak HP, 3 In 1 Shop Vacuum With Blowing Function, Portable With Attachments To Clean Floor, Upholstery, Gap, Car, ETL Listed, Yellow'],
  ['hanging-closet-organizer','Wall-door Mounted Jewelry Wardrobe Large Capacity Mirror And LED Light Lockable Organizer'],
  ['cordless-handheld-vacuum','VEVOR Stand Airless Paint Sprayer'],
