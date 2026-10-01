@@ -1,13 +1,13 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T13:57:07.094Z",
+  "generatedAt": "2026-10-01T15:27:20.320Z",
   "researchCandidates": 12,
   "publishedResearchSignals": 12,
   "verifiedCJStatus": {
-    "checkedAt": "2026-10-01T13:15:14.246Z",
+    "checkedAt": "2026-10-01T15:27:18.931Z",
     "validSupplierMatches": 1,
     "variantStock": 1,
-    "countryFreightEstimates": 0,
+    "countryFreightEstimates": 1,
     "falseMatches": 0
   },
   "constraints": {
@@ -23,8 +23,22 @@
       "action": "Investigate specific catalog SKUs, incorrect product matches and incomplete stock evidence.",
       "state": "review_required",
       "executionMode": "scheduled_cj_and_manual_review",
-      "candidateCount": 9,
+      "candidateCount": 8,
       "blockers": [
+        {
+          "slug": "cordless-handheld-vacuum",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
+        {
+          "slug": "roll-up-dish-rack",
+          "status": "supplier_search_needed",
+          "sku": null,
+          "shippingDiagnostic": null,
+          "zeroPricedMethods": 0
+        },
         {
           "slug": "self-standing-floor-mop",
           "status": "supplier_search_needed",
@@ -41,27 +55,6 @@
         },
         {
           "slug": "bottle-brush-set",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "cordless-handheld-vacuum",
-          "status": "supplier_search_needed",
-          "sku": null,
-          "shippingDiagnostic": null,
-          "zeroPricedMethods": 0
-        },
-        {
-          "slug": "hanging-closet-organizer",
-          "status": "destination_freight_required",
-          "sku": "CJJT254150701AZ",
-          "shippingDiagnostic": "zero_priced_methods_require_supplier_confirmation",
-          "zeroPricedMethods": 22
-        },
-        {
-          "slug": "roll-up-dish-rack",
           "status": "supplier_search_needed",
           "sku": null,
           "shippingDiagnostic": null,
@@ -87,21 +80,6 @@
           "sku": null,
           "shippingDiagnostic": null,
           "zeroPricedMethods": 0
-        }
-      ]
-    },
-    {
-      "worker": "Freight Analyst",
-      "priority": "high",
-      "executionMode": "scheduled_cj_and_manual_review",
-      "action": "Check SKU-specific origin and destination ZIP quotes. Zero-dollar CJ methods require written supplier confirmation before treating shipping as free.",
-      "state": "supplier_quote_needed",
-      "products": [
-        {
-          "slug": "hanging-closet-organizer",
-          "variantSku": "CJJT254150701AZ",
-          "zeroPricedMethods": 22,
-          "diagnostic": "zero_priced_methods_require_supplier_confirmation"
         }
       ]
     },
