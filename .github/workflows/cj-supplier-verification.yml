@@ -5,13 +5,15 @@ name: PrismBay CJ Supplier Verification
 # Read-only: no orders, payments, listing, email or publishing.
 on:
   schedule:
-    - cron: '17 0,6,12,18 * * *' # Four 3-product batches/day, bounded CJ API checks
+    - cron: '17 0,6,12,18 * * *' # Four 3-product batches/day: 9 live products + 3 research candidates
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - '.github/workflows/cj-supplier-verification.yml'
+      - 'services/physical-orders/live-catalog-candidates.json'
       - 'scripts/cj-match-policy.mjs'
+      - 'scripts/cj-match-policy.test.mjs'
       - 'scripts/cj-review-board.mjs'
       - 'scripts/cj-search-strategy.mjs'
       - 'scripts/cj-search-strategy.test.mjs'
@@ -120,12 +122,17 @@ jobs:
           console.log('::add-mask::' + token);
           console.log('CJ authentication PASS');
           
-          const catalog = JSON.parse(await fs.readFile('public/viral-candidates.json', 'utf8'));
-          const allCandidates = Array.isArray(catalog?.candidates) ? catalog.candidates.slice(0, 12) : [];
-          // Four 3-product batches per day cover twelve research candidates with bounded API use.
-          const slot = process.env.GITHUB_EVENT_NAME === 'schedule' ? Math.floor(new Date().getUTCHours() / 6) : 0;
-          const candidates = allCandidates.slice(slot * 3, slot * 3 + 3);
-          if (candidates.length === 0) throw new Error('No research candidates available for supplier verification.');
+          const researchCatalog = JSON.parse(await fs.readFile('public/viral-candidates.json', 'utf8'));
+          const liveCatalog = JSON.parse(await fs.readFile('services/physical-orders/live-catalog-candidates.json', 'utf8'));
+          const liveCandidates = Array.isArray(liveCatalog?.candidates) ? liveCatalog.candidates.slice(0, 9) : [];
+          const researchCandidates = Array.isArray(researchCatalog?.candidates) ? researchCatalog.candidates.slice(0, 3) : [];
+          const allCandidates = [...liveCandidates, ...researchCandidates];
+          // Scheduled checks cover all nine live products plus three research candidates each day.
+          // A code push verifies all nine live products immediately so revenue blockers are tested first.
+          const scheduled = process.env.GITHUB_EVENT_NAME === 'schedule';
+          const slot = scheduled ? Math.floor(new Date().getUTCHours() / 6) : null;
+          const candidates = scheduled ? allCandidates.slice(slot * 3, slot * 3 + 3) : liveCandidates;
+          if (candidates.length === 0) throw new Error('No supplier-verification candidates are available.');
           function flatten(payload) {
             const groups = payload?.data?.content;
             return Array.isArray(groups) ? groups.flatMap(group => Array.isArray(group?.productList) ? group.productList : []) : [];
@@ -135,6 +142,8 @@ jobs:
           for (const candidate of candidates) {
             const base = {
               slug:String(candidate?.slug || ''), candidate: String(candidate?.name || ''), query: String(candidate?.query || ''),
+              liveStoreProduct:Boolean(candidate?.liveStoreProduct),
+              retailPriceUsd:positiveNumber(candidate?.retailPriceUsd),
               supplierVerified: false, variantInventoryVerified: false,
               freightVerified: false, fulfillmentReady: false,
             };
@@ -172,7 +181,7 @@ jobs:
               const products = flatten(search);
               candidatesReturned += products.length;
               eligibleGroups.push(eligibleProducts(products, candidate));
-              if (uniqueEligibleProducts(eligibleGroups, 3).length >= 2) break;
+              if (uniqueEligibleProducts(eligibleGroups, 3).length >= 3) break;
             }
             const eligible = uniqueEligibleProducts(eligibleGroups, 3);
             if (!eligible.length) {
@@ -326,8 +335,11 @@ jobs:
           }
 
           const report = {
-            schemaVersion:3, checkedAt:new Date().toISOString(), market:'US',
+            schemaVersion:4, checkedAt:new Date().toISOString(), market:'US',
+            verificationMode:scheduled ? 'scheduled_batch' : 'live_catalog_priority',
             batchSlot:slot, catalogCandidateCount:allCandidates.length,
+            liveCatalogCandidateCount:liveCandidates.length,
+            researchCandidateCount:researchCandidates.length,
             authentication:'verified', apiKeyExposed:false, accessTokenExposed:false,
             ordersEnabled:false, paymentsEnabled:false, automaticListingEnabled:false, automaticPublishingEnabled:false,
             candidateCount:results.length,
