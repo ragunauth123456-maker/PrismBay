@@ -73,14 +73,32 @@ jobs:
               positiveNumber(item?.sellPrice);
           }
           
-          function eligibleProducts(products, candidate) {
+          function eligibleProducts(products, candidate, {requireUsWarehouse = true} = {}) {
             return products.filter(item =>
               String(item?.saleStatus) === '3' &&
-              Number(item?.verifiedWarehouse) === 1 &&
-              count(item?.totalVerifiedInventory) >= 10 &&
               price(item) !== null &&
-              matchesIntendedProduct(candidate, item?.nameEn)
+              matchesIntendedProduct(candidate, item?.nameEn) &&
+              (!requireUsWarehouse || (
+                Number(item?.verifiedWarehouse) === 1 &&
+                count(item?.totalVerifiedInventory) >= 10
+              ))
             ).sort((a, b) => count(b.totalVerifiedInventory) - count(a.totalVerifiedInventory));
+          }
+
+          function pickPhysicalStock(stockRows, vid) {
+            const rows = stockRows.filter(row =>
+              String(row?.vid || '') === String(vid) &&
+              /^[A-Z]{2}$/.test(String(row?.countryCode || '').toUpperCase()) &&
+              count(row?.totalInventoryNum) >= 10 &&
+              count(row?.cjInventoryNum) >= 1
+            );
+            const rank = code => code === 'US' ? 0 : code === 'CN' ? 1 : 2;
+            rows.sort((a, b) => {
+              const ac = String(a.countryCode || '').toUpperCase();
+              const bc = String(b.countryCode || '').toUpperCase();
+              return rank(ac) - rank(bc) || count(b.cjInventoryNum) - count(a.cjInventoryNum);
+            });
+            return rows[0] || null;
           }
           
           // Reproduce the false positives from the first live run and fail before
@@ -155,9 +173,11 @@ jobs:
             let candidatesReturned = 0;
             let searchesAttempted = 0;
             let searchErrors = 0;
-            // One primary query plus up to two category-specific alternates.
-            // Every result still passes the strict identity and warehouse filters.
-            for (const query of candidateSearches(candidate)) {
+            let globalFallbackAttempted = false;
+            const searches = candidateSearches(candidate);
+
+            // Prefer CJ-held US stock. This is the fastest and lowest-risk route.
+            for (const query of searches) {
               searchesAttempted += 1;
               const url = new URL(BASE + '/product/listV2');
               url.searchParams.set('page', '1');
@@ -174,23 +194,52 @@ jobs:
                 search = await jsonFetch(url, { headers: headers(token) });
               } catch (error) {
                 searchErrors += 1;
-                // Never hammer CJ's exhausted daily quota.
                 if (String(error?.message || '').includes('1600201')) break;
                 continue;
               }
               const products = flatten(search);
               candidatesReturned += products.length;
-              eligibleGroups.push(eligibleProducts(products, candidate));
+              eligibleGroups.push(eligibleProducts(products, candidate, {requireUsWarehouse:true}));
               if (uniqueEligibleProducts(eligibleGroups, 3).length >= 3) break;
             }
+
+            // If US inventory is unavailable, inspect a tightly bounded global
+            // fallback. The later variant-stock check still requires physical CJ
+            // inventory and the freight check must price delivery to the US.
+            if (!uniqueEligibleProducts(eligibleGroups, 3).length && searchErrors < searchesAttempted) {
+              globalFallbackAttempted = true;
+              for (const query of searches.slice(0, 2)) {
+                searchesAttempted += 1;
+                const url = new URL(BASE + '/product/listV2');
+                url.searchParams.set('page', '1');
+                url.searchParams.set('size', '20');
+                url.searchParams.set('keyWord', query);
+                url.searchParams.set('sort', 'desc');
+                url.searchParams.set('orderBy', '1');
+                url.searchParams.append('features', 'enable_category');
+                let search;
+                try {
+                  search = await jsonFetch(url, { headers: headers(token) });
+                } catch (error) {
+                  searchErrors += 1;
+                  if (String(error?.message || '').includes('1600201')) break;
+                  continue;
+                }
+                const products = flatten(search);
+                candidatesReturned += products.length;
+                eligibleGroups.push(eligibleProducts(products, candidate, {requireUsWarehouse:false}));
+                if (uniqueEligibleProducts(eligibleGroups, 3).length >= 3) break;
+              }
+            }
+
             const eligible = uniqueEligibleProducts(eligibleGroups, 3);
             if (!eligible.length) {
               results.push({...base,
                 status: searchErrors === searchesAttempted ? 'search_error' : 'manual_supplier_match_required',
-                candidatesReturned, searchesAttempted, searchErrors,
+                candidatesReturned, searchesAttempted, searchErrors, globalFallbackAttempted,
                 reason: searchErrors === searchesAttempted ?
                   'All bounded CJ supplier searches failed; await a fresh read-only run.' :
-                  'No approved query returned a matching on-sale product with a positive price and verified US product inventory.',
+                  'No approved query returned a matching on-sale product with a positive price after US and bounded global sourcing checks.',
               });
               continue;
             }
@@ -198,19 +247,18 @@ jobs:
             const inspected = [];
             for (const item of eligible) {
 
-            // CJ's product/query endpoint is a summary. Variant identities and
-            // physical US stock come from the separate documented endpoints.
+            // Variant identity and physical inventory come from CJ's dedicated
+            // endpoints. Prefer US stock, then CN, then another CJ-held origin.
             const variantsUrl = new URL(BASE + '/product/variant/query');
             variantsUrl.searchParams.set('pid', String(item.id));
-            variantsUrl.searchParams.set('countryCode', 'US');
             let variant = null;
             let variantInventoryVerified = false;
+            let originCountryCode = null;
             let variantCheck = 'variant_details_unavailable';
             try {
               const variantsResponse = await jsonFetch(variantsUrl, { headers: headers(token) });
               const variants = Array.isArray(variantsResponse?.data) ? variantsResponse.data : [];
               variantCheck = 'manual_variant_inventory_check_required';
-              // Bound API traffic and require same PID, VID, positive unit price and CJ-held US stock.
               for (const choice of variants.slice(0, 5)) {
                 if (String(choice?.pid || '') !== String(item.id) || !choice?.vid ||
                     positiveNumber(choice?.variantSellPrice) === null) continue;
@@ -220,16 +268,12 @@ jobs:
                 try { stockResponse = await jsonFetch(stockUrl, { headers: headers(token) }); }
                 catch { continue; }
                 const stockRows = Array.isArray(stockResponse?.data) ? stockResponse.data : [];
-                const hasPhysicalUsInventory = stockRows.some(row =>
-                  String(row?.vid || '') === String(choice.vid) &&
-                  String(row?.countryCode || '').toUpperCase() === 'US' &&
-                  count(row?.totalInventoryNum) >= 10 &&
-                  count(row?.cjInventoryNum) >= 1
-                );
-                if (!hasPhysicalUsInventory) continue;
+                const stock = pickPhysicalStock(stockRows, choice.vid);
+                if (!stock) continue;
                 variant = choice;
+                originCountryCode = String(stock.countryCode).toUpperCase();
                 variantInventoryVerified = true;
-                variantCheck = 'verified_us_cj_stock';
+                variantCheck = 'verified_' + originCountryCode.toLowerCase() + '_cj_stock';
                 break;
               }
             } catch {
@@ -253,7 +297,7 @@ jobs:
               try {
                 const country = await jsonFetch(BASE + '/logistic/freightCalculate', {
                   method:'POST', headers:headers(token),
-                  body:JSON.stringify(freightRequest(String(variant.vid))),
+                  body:JSON.stringify(freightRequest(String(variant.vid), null, originCountryCode)),
                 });
                 countryQuote = parseCJFreight(country, 'country_estimate');
               } catch {
@@ -272,7 +316,7 @@ jobs:
                       variant,
                       detail: detailResponse?.data,
                       zip,
-                      origin: 'US',
+                      origin: originCountryCode,
                     })),
                   });
                   tipQuote = parseCJFreightTip(tip, 'tip_example_zip_estimate', zip);
@@ -291,7 +335,7 @@ jobs:
                   const zip = '10001';
                   const sample = await jsonFetch(BASE + '/logistic/freightCalculate', {
                     method:'POST', headers:headers(token),
-                    body:JSON.stringify(freightRequest(String(variant.vid), zip)),
+                    body:JSON.stringify(freightRequest(String(variant.vid), zip, originCountryCode)),
                   });
                   exampleQuote = parseCJFreight(sample, 'example_zip_estimate', zip);
                 } catch {
@@ -317,25 +361,25 @@ jobs:
               variantInventoryVerified,
               freightVerified:variantInventoryVerified && freightOptions.length > 0,
               status: !variantInventoryVerified ? 'supplier_product_matched_variant_pending' :
-                !freightOptions.length ? 'supplier_matched_freight_pending' : 'supplier_matched_us_freight_estimate',
+                !freightOptions.length ? 'supplier_matched_freight_pending' : 'supplier_matched_freight_estimate',
               product:{
                 id:String(item.id), sku:item.sku || item.spu || null,
                 name:item.nameEn, productCostUsd:price(item,variant),
                 verifiedProductInventory:count(item.totalVerifiedInventory),
-                warehouse:'US', variantId:variant?.vid || null, variantSku:variant?.variantSku || null,
-              }, variantCheck, zeroPriceQuoteCount, freightOptions, freightQuoteScope, freightDiagnostic,
-              shippingDisclaimer:'US-to-US country or illustrative ZIP estimate only. Confirm the actual buyer ZIP, carrier, variant, total landed cost and supplier acceptance before any sale.',
+                warehouse:originCountryCode, variantId:variant?.vid || null, variantSku:variant?.variantSku || null,
+              }, variantCheck, originCountryCode, zeroPriceQuoteCount, freightOptions, freightQuoteScope, freightDiagnostic,
+              shippingDisclaimer:(originCountryCode || 'Unknown origin') + '-to-US estimate only. Confirm the actual buyer ZIP, carrier, variant, total landed cost, delivery timing and supplier acceptance before any sale.',
               fulfillmentNote:'No ordering, payment, listing or automatic publishing is enabled.',
             });
               if (freightOptions.length) break;
             }
             const best = selectBestInspection(inspected);
-            results.push({...best, alternativesInspected:inspected.length, searchesAttempted,searchErrors,candidatesReturned,
-              alternativeNote:'A supplier match never authorizes a listing. Every inspected alternative requires independent variant and freight checks.'});
+            results.push({...best, alternativesInspected:inspected.length, searchesAttempted,searchErrors,candidatesReturned,globalFallbackAttempted,
+              alternativeNote:'A supplier match never authorizes a listing. Every inspected alternative requires independent variant, physical inventory and freight checks.'});
           }
 
           const report = {
-            schemaVersion:4, checkedAt:new Date().toISOString(), market:'US',
+            schemaVersion:5, checkedAt:new Date().toISOString(), market:'US',
             verificationMode:scheduled ? 'scheduled_batch' : 'live_catalog_priority',
             batchSlot:slot, catalogCandidateCount:allCandidates.length,
             liveCatalogCandidateCount:liveCandidates.length,
