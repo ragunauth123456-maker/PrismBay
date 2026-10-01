@@ -274,6 +274,16 @@ function normalizeBaseUrl(base) {
   return clean.endsWith('/v1') ? clean : clean + '/v1';
 }
 
+export function freeLLMModelCandidates(env = process.env) {
+  const configured = String(env.FREELLMAPI_MODEL || '').trim();
+  return [...new Set([
+    configured,
+    'stepfun/step-3.7-flash:free',
+    'auto:reliable',
+    'auto:fast'
+  ].filter(Boolean))];
+}
+
 export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env = process.env } = {}) {
   const base = normalizeBaseUrl(env.FREELLMAPI_BASE_URL);
   const key = String(env.FREELLMAPI_API_KEY || '').trim();
@@ -300,45 +310,79 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
     })
   ].join('\n');
 
-  try {
-    const response = await fetchImpl(base + '/chat/completions', {
-      method: 'POST',
-      headers: {
-        authorization: 'Bearer ' + key,
-        'content-type': 'application/json',
-        'x-freellm-task-type': 'chat'
-      },
-      body: JSON.stringify({
-        model: String(env.FREELLMAPI_MODEL || 'auto:fast'),
-        temperature: 0,
-        max_tokens: 16,
-        messages: [
-          { role: 'system', content: 'Return exactly one digit: 1, 2, 3, or 4. No explanation.' },
-          { role: 'user', content: prompt }
-        ]
-      }),
-      signal: AbortSignal.timeout(110000)
-    });
-    const payload = await response.json().catch(() => null);
-    if (!response.ok) return { plan: null, status: 'http_' + response.status };
-    const candidates = assistantTextCandidates(payload);
-    let strategy = null;
-    for (const candidate of candidates) {
-      strategy = parseSalesStrategy(candidate);
-      if (strategy) break;
+  let lastStatus = 'invalid_output';
+  let lastErrorClass = null;
+  let lastRoutedVia = null;
+  let lastFallbackAttempts = null;
+  let routeAttempts = 0;
+
+  for (const model of freeLLMModelCandidates(env)) {
+    routeAttempts += 1;
+    try {
+      const response = await fetchImpl(base + '/chat/completions', {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer ' + key,
+          'content-type': 'application/json',
+          'x-freellm-task-type': 'chat'
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0,
+          max_tokens: 24,
+          messages: [
+            { role: 'system', content: 'Return exactly one digit: 1, 2, 3, or 4. No explanation.' },
+            { role: 'user', content: prompt }
+          ]
+        }),
+        signal: AbortSignal.timeout(60000)
+      });
+
+      lastRoutedVia = response.headers?.get?.('x-routed-via') || lastRoutedVia;
+      lastFallbackAttempts = response.headers?.get?.('x-fallback-attempts') || lastFallbackAttempts;
+
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        lastStatus = 'http_' + response.status;
+        continue;
+      }
+
+      const candidates = assistantTextCandidates(payload);
+      let strategy = null;
+      for (const candidate of candidates) {
+        strategy = parseSalesStrategy(candidate);
+        if (strategy) break;
+      }
+      const plan = strategy ? guidedSalesPlan(offer, campaign, strategy) : null;
+      if (!plan) {
+        lastStatus = 'invalid_output';
+        continue;
+      }
+
+      return {
+        plan,
+        status: 'ok',
+        validationMode: 'guided_strategy',
+        strategy,
+        requestedModel: model,
+        routeAttempts,
+        routedVia: lastRoutedVia,
+        fallbackAttempts: lastFallbackAttempts
+      };
+    } catch (error) {
+      lastStatus = 'request_failed';
+      lastErrorClass = error?.name || 'Error';
     }
-    const plan = strategy ? guidedSalesPlan(offer, campaign, strategy) : null;
-    return {
-      plan,
-      status: plan ? 'ok' : 'invalid_output',
-      validationMode: plan ? 'guided_strategy' : 'rejected',
-      strategy,
-      routedVia: response.headers?.get?.('x-routed-via') || null,
-      fallbackAttempts: response.headers?.get?.('x-fallback-attempts') || null
-    };
-  } catch (error) {
-    return { plan: null, status: 'request_failed', errorClass: error?.name || 'Error' };
   }
+
+  return {
+    plan: null,
+    status: lastStatus,
+    errorClass: lastErrorClass,
+    routeAttempts,
+    routedVia: lastRoutedVia,
+    fallbackAttempts: lastFallbackAttempts
+  };
 }
 
 export async function buildSalesWorkerReport({ nowMs = Date.now(), fetchImpl = fetch, env = process.env } = {}) {
@@ -368,6 +412,8 @@ export async function buildSalesWorkerReport({ nowMs = Date.now(), fetchImpl = f
       fallbackAttempts: llm.fallbackAttempts || null,
       validationMode: llm.validationMode || null,
       strategy: llm.strategy || plan.llmStrategy || null,
+      requestedModel: llm.requestedModel || null,
+      routeAttempts: llm.routeAttempts || 0,
       workerMode: plan.workerMode,
       sourceProject: 'https://github.com/tashfeenahmed/freellmapi'
     },
