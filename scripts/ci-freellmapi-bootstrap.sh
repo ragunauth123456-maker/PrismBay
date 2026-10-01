@@ -1,0 +1,180 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${GITHUB_ACTIONS:-}" != "true" ]]; then
+  echo "This helper is for GitHub-hosted Actions only." >&2
+  exit 2
+fi
+
+BASE_URL="${FREELLMAPI_BASE_URL:-}"
+API_KEY="${FREELLMAPI_API_KEY:-}"
+MODEL="${FREELLMAPI_MODEL:-auto:smart}"
+
+probe_chat() {
+  local base="$1"
+  local key="$2"
+  local headers="${RUNNER_TEMP}/freellmapi-smoke-headers.txt"
+  local body="${RUNNER_TEMP}/freellmapi-smoke-body.json"
+  local payload='{"model":"auto:smart","messages":[{"role":"user","content":"Reply with the single word ready."}],"temperature":0,"max_tokens":24}'
+  local status
+  status="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' \
+    --connect-timeout 10 --max-time 90 \
+    -H "Authorization: Bearer $key" \
+    -H 'Content-Type: application/json' \
+    -X POST "$base/v1/chat/completions" \
+    -d "$payload" || true)"
+  [[ "$status" == "200" ]] || return 1
+  python3 - "$body" <<'PY'
+import json, sys
+with open(sys.argv[1], encoding="utf-8") as f:
+    data=json.load(f)
+content=((data.get("choices") or [{}])[0].get("message") or {}).get("content")
+if not isinstance(content, str) or not content.strip():
+    raise SystemExit(1)
+PY
+  local routed
+  routed="$(awk 'BEGIN{IGNORECASE=1} /^x-routed-via:/{sub(/^[^:]+:[[:space:]]*/,""); sub(/\r$/,""); print; exit}' "$headers")"
+  if [[ -n "$routed" ]]; then
+    echo "FreeLLMAPI routed smoke request through: $routed"
+  else
+    echo "FreeLLMAPI smoke request succeeded."
+  fi
+}
+
+if [[ -n "$BASE_URL" && -n "$API_KEY" ]]; then
+  BASE_URL="${BASE_URL%/}"
+  if probe_chat "$BASE_URL" "$API_KEY"; then
+    {
+      echo "FREELLMAPI_BASE_URL=$BASE_URL"
+      echo "FREELLMAPI_API_KEY=$API_KEY"
+      echo "FREELLMAPI_MODEL=$MODEL"
+      echo "FREELLMAPI_CI_MODE=remote"
+    } >> "$GITHUB_ENV"
+    echo "Using configured FreeLLMAPI endpoint."
+    exit 0
+  fi
+  echo "Configured FreeLLMAPI endpoint did not pass a live smoke test. Starting a run-scoped local router instead."
+fi
+
+command -v docker >/dev/null 2>&1 || {
+  echo "Docker is required on the GitHub-hosted runner." >&2
+  exit 1
+}
+command -v openssl >/dev/null 2>&1 || {
+  echo "OpenSSL is required on the GitHub-hosted runner." >&2
+  exit 1
+}
+
+CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$$}"
+DATA_DIR="${RUNNER_TEMP}/freellmapi-${GITHUB_RUN_ID:-$$}"
+mkdir -p "$DATA_DIR"
+ENC_KEY="$(openssl rand -hex 32)"
+UNIFIED_KEY="freellmapi-$(openssl rand -hex 24)"
+CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"smartest"}}'
+
+cleanup() {
+  docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+
+docker run -d --rm \
+  --name "$CONTAINER" \
+  -p 127.0.0.1:3001:3001 \
+  -v "$DATA_DIR:/app/server/data" \
+  -e NODE_ENV=production \
+  -e PORT=3001 \
+  -e HOST=0.0.0.0 \
+  -e ENCRYPTION_KEY="$ENC_KEY" \
+  -e FREEAPI_CONFIG_JSON="$CONFIG" \
+  -e FREELLMAPI_UPDATE_CHECK=off \
+  -e FREEAPI_BLOCK_PRIVATE_PROVIDER_URLS=true \
+  ghcr.io/tashfeenahmed/freellmapi:latest >/dev/null
+
+for _ in {1..60}; do
+  if curl -fsS --max-time 3 http://127.0.0.1:3001/api/ping >/dev/null 2>&1; then
+    break
+  fi
+  sleep 2
+done
+curl -fsS --max-time 5 http://127.0.0.1:3001/api/ping >/dev/null
+
+DB_PATH="$DATA_DIR/freeapi.db"
+for _ in {1..30}; do
+  [[ -f "$DB_PATH" ]] && break
+  sleep 1
+done
+[[ -f "$DB_PATH" ]] || {
+  echo "FreeLLMAPI database did not initialize." >&2
+  exit 1
+}
+
+export DB_PATH UNIFIED_KEY
+python3 <<'PY'
+import os, sqlite3, time
+db_path=os.environ["DB_PATH"]
+key=os.environ["UNIFIED_KEY"]
+for attempt in range(20):
+    try:
+        conn=sqlite3.connect(db_path, timeout=10)
+        cur=conn.execute("UPDATE settings SET value=? WHERE key='unified_api_key'", (key,))
+        if cur.rowcount == 0:
+            conn.execute("INSERT INTO settings(key,value) VALUES('unified_api_key',?)", (key,))
+        conn.commit()
+        conn.close()
+        break
+    except sqlite3.OperationalError:
+        if attempt == 19:
+            raise
+        time.sleep(1)
+PY
+
+MODELS_FILE="$RUNNER_TEMP/freellmapi-models.json"
+models_ready=false
+for _ in {1..30}; do
+  status="$(curl -sS -o "$MODELS_FILE" -w '%{http_code}' --max-time 10 \
+    -H "Authorization: Bearer $UNIFIED_KEY" \
+    http://127.0.0.1:3001/v1/models || true)"
+  if [[ "$status" == "200" ]] && python3 - "$MODELS_FILE" <<'PY'
+import json, sys
+with open(sys.argv[1], encoding="utf-8") as f:
+    data=json.load(f)
+rows=data.get("data")
+raise SystemExit(0 if isinstance(rows, list) and len(rows) > 0 else 1)
+PY
+  then
+    models_ready=true
+    break
+  fi
+  sleep 3
+done
+
+if [[ "$models_ready" != "true" ]]; then
+  echo "FreeLLMAPI started, but its free model catalog did not become routable." >&2
+  docker logs --tail 80 "$CONTAINER" 2>&1 | sed -E 's/freellmapi-[A-Za-z0-9]+/[redacted-key]/g' || true
+  exit 1
+fi
+
+smoke_ok=false
+for _ in {1..4}; do
+  if probe_chat "http://127.0.0.1:3001" "$UNIFIED_KEY"; then
+    smoke_ok=true
+    break
+  fi
+  sleep 5
+done
+[[ "$smoke_ok" == "true" ]] || {
+  echo "FreeLLMAPI free-provider routing did not pass the live chat smoke test." >&2
+  docker logs --tail 80 "$CONTAINER" 2>&1 | sed -E 's/freellmapi-[A-Za-z0-9]+/[redacted-key]/g' || true
+  exit 1
+}
+
+{
+  echo "FREELLMAPI_BASE_URL=http://127.0.0.1:3001"
+  echo "FREELLMAPI_API_KEY=$UNIFIED_KEY"
+  echo "FREELLMAPI_MODEL=auto:smart"
+  echo "FREELLMAPI_CI_MODE=ephemeral-keyless"
+} >> "$GITHUB_ENV"
+
+trap - EXIT
+echo "$CONTAINER" > "$RUNNER_TEMP/freellmapi-container-name"
+echo "FreeLLMAPI is live for this workflow run with keyless free providers."
