@@ -29,8 +29,10 @@ test('CI bootstrap uses a run-scoped unified key and never prints it',()=>{
 
 test('CI bootstrap verifies a live chat before exporting the route',()=>{
   assert.match(script,/\/v1\/chat\/completions/);
-  assert.match(script,/FREELLMAPI_MODEL=auto:smart/);
+  assert.match(script,/FREELLMAPI_MODEL=auto:fast/);
   assert.match(script,/FREELLMAPI_CI_MODE=ephemeral-keyless/);
+  assert.match(script,/"model":"auto:fast"/);
+  assert.match(script,/"routing":\{"strategy":"fastest"\}/);
 });
 
 test('CI bootstrap never provisions or calls a paid infrastructure API',()=>{

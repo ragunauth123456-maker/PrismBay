@@ -8,14 +8,14 @@ fi
 
 BASE_URL="${FREELLMAPI_BASE_URL:-}"
 API_KEY="${FREELLMAPI_API_KEY:-}"
-MODEL="${FREELLMAPI_MODEL:-auto:smart}"
+MODEL="${FREELLMAPI_MODEL:-auto:fast}"
 
 probe_chat() {
   local base="$1"
   local key="$2"
   local headers="${RUNNER_TEMP}/freellmapi-smoke-headers.txt"
   local body="${RUNNER_TEMP}/freellmapi-smoke-body.json"
-  local payload='{"model":"auto:smart","messages":[{"role":"user","content":"Reply with the single word ready."}],"temperature":0,"max_tokens":24}'
+  local payload='{"model":"auto:fast","messages":[{"role":"user","content":"Reply with the single word ready."}],"temperature":0,"max_tokens":24}'
   local status
   status="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' \
     --connect-timeout 10 --max-time 90 \
@@ -69,7 +69,7 @@ CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$}"
 ENC_KEY="$(openssl rand -hex 32)"
 UNIFIED_KEY="freellmapi-$(openssl rand -hex 24)"
 echo "::add-mask::$UNIFIED_KEY"
-CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"smartest"}}'
+CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"fastest"}}'
 
 cleanup() {
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
@@ -160,7 +160,7 @@ done
 {
   echo "FREELLMAPI_BASE_URL=http://127.0.0.1:3001"
   echo "FREELLMAPI_API_KEY=$UNIFIED_KEY"
-  echo "FREELLMAPI_MODEL=auto:smart"
+  echo "FREELLMAPI_MODEL=auto:fast"
   echo "FREELLMAPI_CI_MODE=ephemeral-keyless"
 } >> "$GITHUB_ENV"
 
