@@ -3,10 +3,14 @@ import assert from 'node:assert/strict';
 import {candidateSearches,uniqueEligibleProducts,selectBestInspection} from './cj-search-strategy.mjs';
 
 test('approved categories receive two bounded alternate searches',()=>{
- const c=candidateSearches({slug:'cordless-handheld-vacuum',query:'cordless handheld vacuum'});
- assert.equal(c.length,3);
- assert.match(c[1],/portable/);
- assert.match(c[2],/mini/);
+ const research=candidateSearches({slug:'cordless-handheld-vacuum',query:'cordless handheld vacuum'});
+ assert.equal(research.length,3);
+ assert.match(research[1],/portable/);
+ assert.match(research[2],/mini/);
+ const live=candidateSearches({slug:'pressure-washer',query:'cordless pressure washer'});
+ assert.equal(live.length,3);
+ assert.match(live[1],/battery/);
+ assert.match(live[2],/car/);
  assert.equal(candidateSearches({slug:'unapproved',query:'unknown'}).length,1);
  assert.deepEqual(candidateSearches({slug:'unapproved'}),[]);
 });

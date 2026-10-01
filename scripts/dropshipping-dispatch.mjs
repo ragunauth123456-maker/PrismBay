@@ -11,7 +11,7 @@ export function makeDispatch({catalog, queue, review, growthReports = {}, now = 
   const tasks = [];
   const candidates = reviewFresh && Array.isArray(review.candidates) ? review.candidates : [];
   const blocked = candidates.filter(c => c.status !== 'commercial_review_required');
-  const freightBlocked = blocked.filter(c => c.variantStockVerified && !c.countryFreightEstimated);
+  const freightBlocked = blocked.filter(c => c.variantStockVerified && !c.freightEstimateVerified);
   const reviewTasks = blocked.map(c => ({
     slug: c.slug, status: c.status,
     sku: c.observedVariantSku || c.observedSupplierSku || null,
@@ -58,7 +58,7 @@ export function makeDispatch({catalog, queue, review, growthReports = {}, now = 
   return {
     schemaVersion: 2, generatedAt:new Date(now).toISOString(),
     researchCandidates:candidateCount, publishedResearchSignals:Array.isArray(catalog?.candidates) ? catalog.candidates.length : 0,
-    verifiedCJStatus:reviewFresh ? {checkedAt:review.checkedAt,validSupplierMatches:review.independentProductMatches,variantStock:review.verifiedVariantCount,countryFreightEstimates:review.countryFreightEstimateCount,falseMatches:review.rejectedFalseMatches} : null,
+    verifiedCJStatus:reviewFresh ? {checkedAt:review.checkedAt,validSupplierMatches:review.independentProductMatches,variantStock:review.verifiedVariantCount,freightEstimates:review.freightEstimateCount ?? review.countryFreightEstimateCount,countryFreightEstimates:review.countryFreightEstimateCount,illustrativeZipFreightEstimates:review.illustrativeZipFreightEstimateCount ?? 0,falseMatches:review.rejectedFalseMatches} : null,
     constraints:{supplierApprovalsRequired:true,customerOrdersEnabled:false,autoPublishingEnabled:false,livePaymentsAuthorized:false},
     tasks,
     note:'Existing scheduled scripts execute Trend, Creative, CRO, Creator, Readiness, Analytics and Offer checks. Supplier CJ checks execute on their separate schedule. Any manual Copilot or supplier follow-up remains pending until invoked or confirmed.',

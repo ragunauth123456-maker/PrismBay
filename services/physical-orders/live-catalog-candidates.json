@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "source": "PrismBay Clean live storefront and authenticated Stripe live product catalog",
+  "market": "US",
+  "candidates": [
+    {"slug":"scrubber","name":"5-in-1 Electric Spin Scrubber","query":"electric spin scrubber","retailPriceUsd":29.95,"liveStoreProduct":true},
+    {"slug":"pethair","name":"Reusable Pet Hair Remover","query":"reusable pet hair remover roller","retailPriceUsd":14.95,"liveStoreProduct":true},
+    {"slug":"crevice","name":"3-in-1 Crevice Cleaning Brush","query":"crevice gap cleaning brush","retailPriceUsd":12.95,"liveStoreProduct":true},
+    {"slug":"pressure-washer","name":"Cordless Pressure Washer","query":"cordless pressure washer","retailPriceUsd":69.95,"liveStoreProduct":true},
+    {"slug":"mattress-vacuum","name":"Mattress Vacuum","query":"mattress bed vacuum cleaner","retailPriceUsd":39.95,"liveStoreProduct":true},
+    {"slug":"garment-steamer","name":"Portable Garment Steamer","query":"portable garment clothes steamer","retailPriceUsd":29.95,"liveStoreProduct":true},
+    {"slug":"mini-mop","name":"Self-Squeeze Mini Mop","query":"mini self squeeze mop","retailPriceUsd":24.95,"liveStoreProduct":true},
+    {"slug":"drain-catcher","name":"Sink Drain Catcher 2-Pack","query":"sink drain catcher strainer","retailPriceUsd":12.95,"liveStoreProduct":true},
+    {"slug":"home-caddy","name":"Portable Home Caddy","query":"portable cleaning supply caddy","retailPriceUsd":24.95,"liveStoreProduct":true}
+  ]
+}
