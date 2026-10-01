@@ -1,0 +1,110 @@
+name: PrismBay External Traffic Factory
+
+on:
+  schedule:
+    - cron: '11 12 * * *' # 08:11 Guyana, once daily
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/external-traffic-worker.mjs'
+      - 'scripts/external-traffic-worker.test.mjs'
+      - 'scripts/freellm-sales-worker.mjs'
+      - 'scripts/ci-freellmapi-bootstrap.sh'
+      - '.github/workflows/external-traffic-factory.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/external-traffic-worker.mjs'
+      - 'scripts/external-traffic-worker.test.mjs'
+      - 'scripts/freellm-sales-worker.mjs'
+      - 'scripts/ci-freellmapi-bootstrap.sh'
+      - '.github/workflows/external-traffic-factory.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prismbay-external-traffic-factory
+  cancel-in-progress: true
+
+jobs:
+  build-distribution-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install deterministic video renderer
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+      - name: Verify external traffic safeguards
+        run: node --test scripts/external-traffic-worker.test.mjs scripts/freellm-sales-worker.test.mjs scripts/ci-freellmapi-bootstrap.test.mjs
+      - name: Start FreeLLMAPI acquisition router
+        if: github.event_name != 'pull_request'
+        env:
+          FREELLMAPI_BASE_URL: ${{ secrets.FREELLMAPI_BASE_URL }}
+          FREELLMAPI_API_KEY: ${{ secrets.FREELLMAPI_API_KEY }}
+          FREELLMAPI_MODEL: ${{ secrets.FREELLMAPI_MODEL }}
+        run: bash scripts/ci-freellmapi-bootstrap.sh
+      - name: Generate three original traffic videos and six channel packages
+        if: github.event_name != 'pull_request'
+        run: node scripts/external-traffic-worker.mjs --render
+      - name: Publish social media files to PrismBay GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          syncdir="$RUNNER_TEMP/prismbay-external-social"
+          git fetch origin gh-pages
+          git worktree add --detach "$syncdir" origin/gh-pages
+          git -C "$syncdir" config user.name 'github-actions[bot]'
+          git -C "$syncdir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p "$syncdir/media/social"
+          for slug in stakeholder esg whitepaper; do
+            cp "growth-reports/external-social/$slug/$slug.mp4" "$syncdir/media/social/$slug.mp4"
+          done
+          cp growth-reports/external-social/distribution-queue.json "$syncdir/media/social/distribution-queue.json"
+          git -C "$syncdir" add media/social
+          if git -C "$syncdir" diff --cached --quiet; then
+            echo 'External social media unchanged'
+          else
+            git -C "$syncdir" commit -m 'chore: publish PrismBay external traffic media'
+            for attempt in 1 2 3; do
+              git fetch origin gh-pages
+              if ! git -C "$syncdir" rebase origin/gh-pages; then
+                git -C "$syncdir" rebase --abort || true
+                exit 1
+              fi
+              git -C "$syncdir" push origin HEAD:gh-pages && break
+              if [[ "$attempt" == "3" ]]; then exit 1; fi
+              sleep $((attempt * 3))
+            done
+          fi
+      - name: Retain traffic factory evidence
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-external-traffic-${{ github.run_id }}
+          path: |
+            growth-reports/external-social/distribution-queue.json
+            growth-reports/external-social/*/*.mp4
+          retention-days: 7
+      - name: Summarize external distribution factory
+        if: always()
+        run: |
+          echo '## PrismBay external traffic factory' >> "$GITHUB_STEP_SUMMARY"
+          echo 'FreeLLM selects bounded positioning strategies for all three verified digital offers.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The worker renders original silent 1080x1920 H264 videos and prepares separate UTM-tagged YouTube and TikTok packages.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Media is published to GitHub Pages for the authorized scheduler. No cold email, paid advertising, fabricated reviews, or unverified physical-product promotion is performed.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Stop run-scoped FreeLLMAPI router
+        if: always() && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/freellmapi-container-name" ]]; then
+            docker rm -f "$(cat "$RUNNER_TEMP/freellmapi-container-name")" >/dev/null 2>&1 || true
+          fi
