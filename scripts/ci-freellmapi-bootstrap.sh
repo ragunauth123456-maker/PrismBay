@@ -8,14 +8,16 @@ fi
 
 BASE_URL="${FREELLMAPI_BASE_URL:-}"
 API_KEY="${FREELLMAPI_API_KEY:-}"
-MODEL="${FREELLMAPI_MODEL:-auto:fast}"
+MODEL="${FREELLMAPI_MODEL:-stepfun/step-3.7-flash:free}"
 
 probe_chat() {
   local base="$1"
   local key="$2"
+  local model="${3:-auto:reliable}"
   local headers="${RUNNER_TEMP}/freellmapi-smoke-headers.txt"
   local body="${RUNNER_TEMP}/freellmapi-smoke-body.json"
-  local payload='{"model":"auto:fast","messages":[{"role":"user","content":"Reply with the single word ready."}],"temperature":0,"max_tokens":24}'
+  local payload
+  payload="$(printf '{"model":"%s","messages":[{"role":"user","content":"Reply with the single word ready."}],"temperature":0,"max_tokens":24}' "$model")"
   local status
   status="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' \
     --connect-timeout 10 --max-time 90 \
@@ -43,7 +45,7 @@ PY
 
 if [[ -n "$BASE_URL" && -n "$API_KEY" ]]; then
   BASE_URL="${BASE_URL%/}"
-  if probe_chat "$BASE_URL" "$API_KEY"; then
+  if probe_chat "$BASE_URL" "$API_KEY" "$MODEL"; then
     {
       echo "FREELLMAPI_BASE_URL=$BASE_URL"
       echo "FREELLMAPI_API_KEY=$API_KEY"
@@ -69,7 +71,7 @@ CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$}"
 ENC_KEY="$(openssl rand -hex 32)"
 UNIFIED_KEY="freellmapi-$(openssl rand -hex 24)"
 echo "::add-mask::$UNIFIED_KEY"
-CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"fastest"}}'
+CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"reliable"}}'
 
 cleanup() {
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
@@ -144,12 +146,14 @@ if [[ "$models_ready" != "true" ]]; then
 fi
 
 smoke_ok=false
-for _ in {1..4}; do
-  if probe_chat "http://127.0.0.1:3001" "$UNIFIED_KEY"; then
-    smoke_ok=true
-    break
-  fi
-  sleep 5
+for smoke_model in "$MODEL" "auto:reliable"; do
+  for _ in {1..2}; do
+    if probe_chat "http://127.0.0.1:3001" "$UNIFIED_KEY" "$smoke_model"; then
+      smoke_ok=true
+      break 2
+    fi
+    sleep 3
+  done
 done
 [[ "$smoke_ok" == "true" ]] || {
   echo "FreeLLMAPI free-provider routing did not pass the live chat smoke test." >&2
@@ -160,7 +164,7 @@ done
 {
   echo "FREELLMAPI_BASE_URL=http://127.0.0.1:3001"
   echo "FREELLMAPI_API_KEY=$UNIFIED_KEY"
-  echo "FREELLMAPI_MODEL=auto:fast"
+  echo "FREELLMAPI_MODEL=$MODEL"
   echo "FREELLMAPI_CI_MODE=ephemeral-keyless"
 } >> "$GITHUB_ENV"
 
