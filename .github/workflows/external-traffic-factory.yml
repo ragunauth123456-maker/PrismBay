@@ -38,10 +38,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install deterministic video renderer
+      - name: Verify deterministic video renderer
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          ffmpeg -version
+          ffprobe -version
+          test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+          test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
       - name: Verify external traffic safeguards
         run: node --test scripts/external-traffic-worker.test.mjs scripts/freellm-sales-worker.test.mjs scripts/ci-freellmapi-bootstrap.test.mjs
       - name: Start FreeLLMAPI acquisition router
