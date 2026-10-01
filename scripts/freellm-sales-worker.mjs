@@ -170,10 +170,11 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
 
   const prompt = [
     'You are a conversion copy analyst for PrismBay professional document toolkits.',
-    'Return one JSON object only. Do not use markdown.',
+    'Return one compact JSON object only. Your response must begin with { and end with }. Do not use markdown.',
     'Use only the supplied facts. Do not invent customers, results, scarcity, rankings, testimonials, revenue, delivery timing, product features, discounts or claims.',
     'Never promise outcomes. Keep the free guide separate from the optional paid package.',
-    'Fields: seoQueries (array 4-8), landingPageHeadline, metaDescription, socialDrafts (array 3-6), shortVideoHooks (array 3-5), creatorPitch, experiments (array 3-6).',
+    'Return exactly these fields: seoQueries (array of 4 search queries), landingPageHeadline (one short headline), shortVideoHooks (array of 3 hooks), experiments (array of 3 A/B tests).',
+    'Do not add explanations, URLs, prices, or extra fields.',
     '',
     'FACTS:',
     JSON.stringify({
@@ -203,7 +204,7 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
         temperature: 0.35,
         max_tokens: 768,
         messages: [
-          { role: 'system', content: 'Return accurate, concise JSON grounded only in the supplied commercial facts.' },
+          { role: 'system', content: 'Return valid compact JSON only, grounded in the supplied commercial facts. No prose before or after the JSON.' },
           { role: 'user', content: prompt }
         ]
       }),

@@ -115,3 +115,12 @@ test('FreeLLM sales request keeps output bounded while allowing free-tier latenc
   assert.match(source, /max_tokens:\s*768/);
   assert.match(source, /AbortSignal\.timeout\(110000\)/);
 });
+
+test('FreeLLM prompt requests a compact four-field JSON schema', async () => {
+  const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
+  assert.match(source, /Return exactly these fields: seoQueries/);
+  assert.match(source, /landingPageHeadline/);
+  assert.match(source, /shortVideoHooks/);
+  assert.match(source, /experiments/);
+  assert.match(source, /Do not add explanations, URLs, prices, or extra fields/);
+});
