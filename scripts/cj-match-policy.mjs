@@ -2,6 +2,44 @@
 // No product reaches checkout, even on an identity match, without separate stock,
 // freight, media-rights, pricing and manual commercial approval.
 const policy = Object.freeze({
+  // Live PrismBay Clean storefront products. These are checked before new
+  // research candidates so supplier verification targets revenue-bearing pages.
+  'scrubber': {
+    required: [/\b(scrubber|scrubbing)\b/i, /\b(electric|spin|rotat\w*|powered|cordless)\b/i],
+    excluded: [/\b(replacement|brush heads?|accessor(?:y|ies)|pad only)\b/i],
+  },
+  'pethair': {
+    required: [/\b(pet|dog|cat)\b/i, /\b(hair|fur|lint)\b/i, /\b(remover|roller|brush|cleaner)\b/i],
+    excluded: [/\b(vacuum|grooming|deshedding|shampoo)\b/i],
+  },
+  'crevice': {
+    required: [/\b(crevice|gap|groove)\b/i, /\b(clean\w*|brush|scrub\w*)\b/i],
+    excluded: [/\b(vacuum|nozzle|attachment)\b/i],
+  },
+  'pressure-washer': {
+    required: [/\b(pressure|power)\s+washer\b/i, /\b(cordless|battery|portable|recharge\w*)\b/i],
+    excluded: [/\b(nozzle|hose|adapter|pump|replacement|gun only)\b/i],
+  },
+  'mattress-vacuum': {
+    required: [/\b(mattress|bed)\b/i, /\b(vacuum|vac)\b/i],
+    excluded: [/\b(cover|storage bag|air pump|shop[\s-]*vac|wet[\s/-]*dry)\b/i],
+  },
+  'garment-steamer': {
+    required: [/\b(garment|clothes|clothing)\b/i, /\b(steamer|steam iron)\b/i],
+    excluded: [/\b(facial|food|wallpaper)\b/i],
+  },
+  'mini-mop': {
+    required: [/\bmop\b/i, /\b(mini|compact|small|self[\s-]*squeez\w*)\b/i],
+    excluded: [/\b(robot|replacement|refill|pad only)\b/i],
+  },
+  'drain-catcher': {
+    required: [/\b(sink|drain)\b/i, /\b(catcher|strainer|filter|basket)\b/i],
+    excluded: [/\b(sewer machine|drain snake|auger)\b/i],
+  },
+  'home-caddy': {
+    required: [/\bcaddy\b/i, /\b(clean\w*|supply|storage|organizer|home)\b/i],
+    excluded: [/\b(shower|golf|baby|stroller)\b/i],
+  },
   'cordless-handheld-vacuum': {
     required: [/\b(vacuum|vac)\b/i, /\b(handheld|hand-held|cordless)\b/i],
     excluded: [/\b(shop[\s-]*vac|wet[\s/-]*dry|gallon|industrial|canister|upright|robot|paint sprayer)\b/i],
