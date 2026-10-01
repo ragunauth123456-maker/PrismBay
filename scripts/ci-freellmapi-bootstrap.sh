@@ -65,9 +65,7 @@ command -v openssl >/dev/null 2>&1 || {
   exit 1
 }
 
-CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$$}"
-DATA_DIR="${RUNNER_TEMP}/freellmapi-${GITHUB_RUN_ID:-$$}"
-mkdir -p "$DATA_DIR"
+CONTAINER="prismbay-freellmapi-${GITHUB_RUN_ID:-$}"
 ENC_KEY="$(openssl rand -hex 32)"
 UNIFIED_KEY="freellmapi-$(openssl rand -hex 24)"
 CONFIG='{"keys":[{"platform":"kilo","label":"prismbay-ci"},{"platform":"ovh","label":"prismbay-ci"},{"platform":"aihorde","label":"prismbay-ci"}],"routing":{"strategy":"smartest"}}'
