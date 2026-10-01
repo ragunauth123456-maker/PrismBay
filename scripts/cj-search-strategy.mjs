@@ -2,6 +2,15 @@
 // Search terms change recall only. Every returned product must still pass
 // strict name, sale-status, US-stock and positive-price checks.
 const alternates = Object.freeze({
+  'scrubber':['cordless electric spin scrubber cleaning brush','electric bathroom tile scrubber'],
+  'pethair':['reusable pet hair lint roller remover','pet fur remover roller sofa'],
+  'crevice':['gap cleaning brush crevice tool','window track groove cleaning brush'],
+  'pressure-washer':['battery portable pressure washer','cordless car pressure washer'],
+  'mattress-vacuum':['bed mattress vacuum cleaner','handheld mattress dust vacuum'],
+  'garment-steamer':['handheld clothes steamer portable','travel garment steam iron'],
+  'mini-mop':['compact squeeze mini mop','small self squeeze cleaning mop'],
+  'drain-catcher':['sink drain strainer catcher','kitchen sink drain filter basket'],
+  'home-caddy':['portable cleaning caddy organizer','cleaning supplies storage caddy'],
   'cordless-handheld-vacuum':['cordless portable handheld car vacuum cleaner','mini cordless hand vacuum cleaner'],
   'hanging-closet-organizer':['hanging closet shelf storage organizer','wardrobe hanging storage shelves organizer'],
   'roll-up-dish-rack':['silicone roll up dish drying rack','over sink roll up drying rack'],
