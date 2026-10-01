@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ACTIVE_DIGITAL_OFFERS, campaignForSlot } from './digital-conversion-campaign.mjs';
-import { deterministicSalesPlan, validateLLMPlan, buildAssistedLLMPlan, parseSalesStrategy, guidedSalesPlan, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
+import { deterministicSalesPlan, validateLLMPlan, buildAssistedLLMPlan, parseSalesStrategy, guidedSalesPlan, assistantTextCandidates, requestFreeLLM, buildSalesWorkerReport } from './freellm-sales-worker.mjs';
 
 test('deterministic sales plan stays inside verified offer facts', () => {
   for (const [i, offer] of ACTIVE_DIGITAL_OFFERS.entries()) {
@@ -106,7 +106,7 @@ test('sales worker report never claims a sale', async () => {
 
 test('FreeLLM sales request allows free-tier latency while keeping output tiny', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /max_tokens:\s*8/);
+  assert.match(source, /max_tokens:\s*16/);
   assert.match(source, /AbortSignal\.timeout\(110000\)/);
 });
 
@@ -134,8 +134,46 @@ test('guided sales plan uses the model choice without inventing commercial facts
 
 test('FreeLLM strategy request stays tiny for free-tier reliability', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /max_tokens:\s*8/);
+  assert.match(source, /max_tokens:\s*16/);
   assert.match(source, /Reply with exactly one digit and nothing else/);
   assert.match(source, /1 = evidence-led/);
   assert.match(source, /4 = deliverables-led/);
+});
+
+test('FreeLLM classifier reads reasoning output when normal content is empty', async () => {
+  const offer = ACTIVE_DIGITAL_OFFERS[0];
+  const body = {
+    choices: [{ message: { content: '', reasoning_content: 'The best angle is option 3 because the free guide reduces buyer friction.' } }]
+  };
+  const fakeFetch = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => body,
+    headers: { get: name => name === 'x-routed-via' ? 'kilo/fast-free-model' : null }
+  });
+  const result = await requestFreeLLM({
+    offer,
+    campaign: campaignForSlot(0),
+    fetchImpl: fakeFetch,
+    env: { FREELLMAPI_BASE_URL:'http://localhost:3001', FREELLMAPI_API_KEY:'freellmapi-test', FREELLMAPI_MODEL:'auto:fast' }
+  });
+  assert.equal(result.status, 'ok');
+  assert.equal(result.strategy, 'free-guide-first');
+});
+
+test('assistant text candidates handles OpenAI content arrays and reasoning fields', () => {
+  const values = assistantTextCandidates({
+    choices: [{
+      message: {
+        content: [{ type:'text', text:'Choice: 2' }],
+        reasoning_content: 'workflow'
+      }
+    }]
+  });
+  assert.deepEqual(values, ['Choice: 2', 'workflow']);
+});
+
+test('FreeLLM defaults to auto fast for the classification task', async () => {
+  const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
+  assert.match(source, /FREELLMAPI_MODEL \|\| 'auto:fast'/);
 });
