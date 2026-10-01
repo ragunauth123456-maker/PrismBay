@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { ACTIVE_DIGITAL_OFFERS } from './digital-conversion-campaign.mjs';
 
 const ROOT = 'https://ragunauthramsaroop.github.io/PrismBay/';
@@ -175,6 +176,6 @@ export async function main(outputDir = process.argv[2] || 'growth-reports/owned-
   console.log(JSON.stringify({status:'PASS',outputDir,pageCount:ACTIVE_DIGITAL_OFFERS.length + 1,urls:ownedSalesUrls()}));
 }
 
-if (process.argv[1] && import.meta.url === new URL('file://' + process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main();
 }
