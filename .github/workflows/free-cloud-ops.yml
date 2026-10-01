@@ -13,6 +13,8 @@ on:
       - 'scripts/dropshipping-dispatch.mjs'
       - 'scripts/freellm-sales-worker.mjs'
       - 'scripts/freellm-sales-worker.test.mjs'
+      - 'scripts/ci-freellmapi-bootstrap.sh'
+      - 'scripts/ci-freellmapi-bootstrap.test.mjs'
       - 'scripts/owned-sales-page-worker.mjs'
       - 'scripts/owned-sales-page-worker.test.mjs'
       - 'scripts/sales-sitemap-sync.mjs'
@@ -39,7 +41,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run existing offline regression tests
-        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs scripts/board-freshness.test.mjs scripts/freellm-sales-worker.test.mjs scripts/owned-sales-page-worker.test.mjs scripts/sales-sitemap-sync.test.mjs
+        run: node --test scripts/revenue-health-check.test.mjs scripts/issue62-monitoring.test.mjs scripts/youtube-publishing-guard.test.mjs scripts/youtube-publishing-gateway.test.mjs scripts/youtube-publishing-entrypoint.test.mjs scripts/cj-api-limiter.test.mjs scripts/cj-match-policy.test.mjs scripts/cj-freight-policy.test.mjs scripts/cj-review-board.test.mjs scripts/dropshipping-dispatch.test.mjs scripts/organic-growth-agent.test.mjs scripts/board-freshness.test.mjs scripts/freellm-sales-worker.test.mjs scripts/ci-freellmapi-bootstrap.test.mjs scripts/owned-sales-page-worker.test.mjs scripts/sales-sitemap-sync.test.mjs
       - name: Poll approved Cloudflare task requests (optional)
         env:
           PRISMBAY_CF_ENDPOINT: ${{ secrets.PRISMBAY_CF_ENDPOINT }}
@@ -77,11 +79,13 @@ jobs:
             echo "Running $role"
             node scripts/organic-growth-agent.mjs "$role"
           done
-      - name: Run FreeLLM sales intelligence with safe fallback
+      - name: Start live FreeLLMAPI free-model router
         env:
           FREELLMAPI_BASE_URL: ${{ secrets.FREELLMAPI_BASE_URL }}
           FREELLMAPI_API_KEY: ${{ secrets.FREELLMAPI_API_KEY }}
           FREELLMAPI_MODEL: ${{ secrets.FREELLMAPI_MODEL }}
+        run: bash scripts/ci-freellmapi-bootstrap.sh
+      - name: Run FreeLLM sales intelligence with safe fallback
         run: node scripts/freellm-sales-worker.mjs
       - name: Generate verified owned-search sales pages
         run: node scripts/owned-sales-page-worker.mjs
@@ -185,4 +189,13 @@ jobs:
       - name: Write clear execution summary
         if: always()
         shell: bash
-        run: echo 'Cloud execution completed. Verified owned-search pages are maintained on the existing GitHub Pages branch. No Stripe charges, CJ orders, cold emails, or social posts are initiated by this workflow.' >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo "FreeLLMAPI mode: ${FREELLMAPI_CI_MODE:-deterministic-fallback}" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Cloud execution completed. Verified owned-search pages are maintained on the existing GitHub Pages branch. No Stripe charges, CJ orders, cold emails, or social posts are initiated by this workflow.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Stop run-scoped FreeLLMAPI router
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/freellmapi-container-name" ]]; then
+            docker rm -f "$(cat "$RUNNER_TEMP/freellmapi-container-name")" >/dev/null 2>&1 || true
+          fi

@@ -11,6 +11,8 @@ on:
       - 'scripts/buyer-acquisition-worker.test.mjs'
       - 'scripts/freellm-sales-worker.mjs'
       - 'scripts/freellm-sales-worker.test.mjs'
+      - 'scripts/ci-freellmapi-bootstrap.sh'
+      - 'scripts/ci-freellmapi-bootstrap.test.mjs'
       - 'scripts/owned-sales-page-worker.mjs'
       - 'scripts/owned-sales-page-worker.test.mjs'
       - 'scripts/sales-sitemap-sync.mjs'
@@ -26,6 +28,8 @@ on:
       - 'scripts/buyer-acquisition-worker.test.mjs'
       - 'scripts/freellm-sales-worker.mjs'
       - 'scripts/freellm-sales-worker.test.mjs'
+      - 'scripts/ci-freellmapi-bootstrap.sh'
+      - 'scripts/ci-freellmapi-bootstrap.test.mjs'
       - 'scripts/owned-sales-page-worker.mjs'
       - 'scripts/owned-sales-page-worker.test.mjs'
       - 'scripts/sales-sitemap-sync.mjs'
@@ -51,14 +55,17 @@ jobs:
         with:
           node-version: '22'
       - name: Verify conversion worker safeguards
-        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs scripts/freellm-sales-worker.test.mjs scripts/owned-sales-page-worker.test.mjs scripts/sales-sitemap-sync.test.mjs scripts/indexnow-submit.test.mjs
+        run: node --test scripts/digital-conversion-campaign.test.mjs scripts/buyer-acquisition-worker.test.mjs scripts/freellm-sales-worker.test.mjs scripts/ci-freellmapi-bootstrap.test.mjs scripts/owned-sales-page-worker.test.mjs scripts/sales-sitemap-sync.test.mjs scripts/indexnow-submit.test.mjs
       - name: Build current buyer-to-checkout campaign from live offer
         run: node scripts/buyer-acquisition-worker.mjs
-      - name: Run FreeLLM sales intelligence with safe fallback
+      - name: Start live FreeLLMAPI free-model router
+        if: github.event_name != 'pull_request'
         env:
           FREELLMAPI_BASE_URL: ${{ secrets.FREELLMAPI_BASE_URL }}
           FREELLMAPI_API_KEY: ${{ secrets.FREELLMAPI_API_KEY }}
           FREELLMAPI_MODEL: ${{ secrets.FREELLMAPI_MODEL }}
+        run: bash scripts/ci-freellmapi-bootstrap.sh
+      - name: Run FreeLLM sales intelligence with safe fallback
         run: node scripts/freellm-sales-worker.mjs
       - name: Notify participating search engines about live buyer guides
         if: github.event_name != 'pull_request'
@@ -76,5 +83,13 @@ jobs:
         run: |
           echo '## Buyer acquisition worker' >> "$GITHUB_STEP_SUMMARY"
           echo 'This worker validates a real existing guide -> Stripe checkout path and generates truthful conversion assets every two hours.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'FreeLLMAPI is used when its endpoint and unified key are configured; otherwise the sales worker falls back to deterministic verified copy.' >> "$GITHUB_STEP_SUMMARY"
+          echo "FreeLLMAPI mode: ${FREELLMAPI_CI_MODE:-deterministic-fallback}" >> "$GITHUB_STEP_SUMMARY"
+          echo 'GitHub-hosted runs start a loopback-only FreeLLMAPI router with keyless free providers when no remote endpoint is configured.' >> "$GITHUB_STEP_SUMMARY"
           echo 'It does not claim revenue without a paid Stripe transaction and does not send cold email or auto-post social content.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Stop run-scoped FreeLLMAPI router
+        if: always() && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if [[ -f "$RUNNER_TEMP/freellmapi-container-name" ]]; then
+            docker rm -f "$(cat "$RUNNER_TEMP/freellmapi-container-name")" >/dev/null 2>&1 || true
+          fi
