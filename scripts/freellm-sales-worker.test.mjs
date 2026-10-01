@@ -106,15 +106,19 @@ test('sales worker report never claims a sale', async () => {
 
 test('FreeLLM sales request allows free-tier latency while keeping output tiny', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /max_tokens:\s*24/);
+  assert.match(source, /max_tokens:\s*8/);
   assert.match(source, /AbortSignal\.timeout\(110000\)/);
 });
 
 test('FreeLLM strategy router accepts only the four allowed positioning labels', () => {
-  assert.equal(parseSalesStrategy('evidence-led'), 'evidence-led');
-  assert.equal(parseSalesStrategy('I choose workflow led.'), 'workflow-led');
-  assert.equal(parseSalesStrategy('FREE GUIDE FIRST'), 'free-guide-first');
-  assert.equal(parseSalesStrategy('deliverables-led'), 'deliverables-led');
+  assert.equal(parseSalesStrategy('1'), 'evidence-led');
+  assert.equal(parseSalesStrategy('Choice: 2'), 'workflow-led');
+  assert.equal(parseSalesStrategy('3.'), 'free-guide-first');
+  assert.equal(parseSalesStrategy('I choose option 4'), 'deliverables-led');
+  assert.equal(parseSalesStrategy('focus on traceable evidence'), 'evidence-led');
+  assert.equal(parseSalesStrategy('use a repeatable process'), 'workflow-led');
+  assert.equal(parseSalesStrategy('lead with the free guide'), 'free-guide-first');
+  assert.equal(parseSalesStrategy('show the editable files'), 'deliverables-led');
   assert.equal(parseSalesStrategy('guaranteed-sales-first'), null);
 });
 
@@ -130,8 +134,8 @@ test('guided sales plan uses the model choice without inventing commercial facts
 
 test('FreeLLM strategy request stays tiny for free-tier reliability', async () => {
   const source = await import('node:fs').then(fs => fs.readFileSync('scripts/freellm-sales-worker.mjs','utf8'));
-  assert.match(source, /max_tokens:\s*24/);
-  assert.match(source, /Reply with exactly one label and nothing else/);
-  assert.match(source, /evidence-led/);
-  assert.match(source, /deliverables-led/);
+  assert.match(source, /max_tokens:\s*8/);
+  assert.match(source, /Reply with exactly one digit and nothing else/);
+  assert.match(source, /1 = evidence-led/);
+  assert.match(source, /4 = deliverables-led/);
 });

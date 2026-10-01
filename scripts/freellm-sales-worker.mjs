@@ -159,12 +159,21 @@ export function buildAssistedLLMPlan(value, offer, campaign) {
 
 
 export function parseSalesStrategy(value) {
-  const text = String(value ?? '').toLowerCase();
+  const text = String(value ?? '').toLowerCase().trim();
+  const numeric = text.match(/(?:^|\D)([1-4])(?:\D|$)/)?.[1];
+  if (numeric) {
+    return {
+      '1':'evidence-led',
+      '2':'workflow-led',
+      '3':'free-guide-first',
+      '4':'deliverables-led'
+    }[numeric];
+  }
   const strategies = [
-    ['evidence-led', /\bevidence[\s_-]*led\b/],
-    ['workflow-led', /\b(?:workflow|process)[\s_-]*led\b/],
-    ['free-guide-first', /\bfree[\s_-]*guide[\s_-]*first\b/],
-    ['deliverables-led', /\b(?:deliverables?|files?)[\s_-]*led\b/]
+    ['evidence-led', /\bevidence\b|\btrace(?:able|ability)?\b|\bproof\b/],
+    ['workflow-led', /\bworkflow\b|\bprocess\b|\brepeatable\b/],
+    ['free-guide-first', /\bfree\b|\bguide\b|\bexample\b/],
+    ['deliverables-led', /\bdeliverables?\b|\bfiles?\b|\btemplates?\b/]
   ];
   for (const [label, pattern] of strategies) {
     if (pattern.test(text)) return label;
@@ -226,11 +235,11 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
 
   const prompt = [
     'Choose the strongest positioning angle for this PrismBay professional document toolkit.',
-    'Reply with exactly one label and nothing else:',
-    'evidence-led',
-    'workflow-led',
-    'free-guide-first',
-    'deliverables-led',
+    'Reply with exactly one digit and nothing else:',
+    '1 = evidence-led',
+    '2 = workflow-led',
+    '3 = free-guide-first',
+    '4 = deliverables-led',
     '',
     'Choose from the verified facts below. Do not infer sales, customers, outcomes, scarcity, rankings or testimonials.',
     'FACTS:',
@@ -256,9 +265,9 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
       body: JSON.stringify({
         model: String(env.FREELLMAPI_MODEL || 'auto:smart'),
         temperature: 0,
-        max_tokens: 24,
+        max_tokens: 8,
         messages: [
-          { role: 'system', content: 'Return exactly one allowed positioning label. No explanation.' },
+          { role: 'system', content: 'Return exactly one digit: 1, 2, 3, or 4. No explanation.' },
           { role: 'user', content: prompt }
         ]
       }),
