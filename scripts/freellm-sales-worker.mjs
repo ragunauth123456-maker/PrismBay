@@ -160,7 +160,11 @@ export function buildAssistedLLMPlan(value, offer, campaign) {
 
 export function parseSalesStrategy(value) {
   const text = String(value ?? '').toLowerCase().trim();
-  const numeric = text.match(/(?:^|\D)([1-4])(?:\D|$)/)?.[1];
+  if (!text) return null;
+
+  const explicit = text.match(/(?:answer|choice|option|pick|select(?:ion)?)\s*[:#-]?\s*([1-4])\b/);
+  const numericMatches = [...text.matchAll(/(?:^|\D)([1-4])(?:\D|$)/g)];
+  const numeric = explicit?.[1] || numericMatches.at(-1)?.[1];
   if (numeric) {
     return {
       '1':'evidence-led',
@@ -169,16 +173,48 @@ export function parseSalesStrategy(value) {
       '4':'deliverables-led'
     }[numeric];
   }
-  const strategies = [
-    ['evidence-led', /\bevidence\b|\btrace(?:able|ability)?\b|\bproof\b/],
-    ['workflow-led', /\bworkflow\b|\bprocess\b|\brepeatable\b/],
-    ['free-guide-first', /\bfree\b|\bguide\b|\bexample\b/],
-    ['deliverables-led', /\bdeliverables?\b|\bfiles?\b|\btemplates?\b/]
+
+  const wordMap = [
+    ['evidence-led', /\b(?:one|first)\b|\bevidence\b|\btrace(?:able|ability)?\b|\bproof\b/],
+    ['workflow-led', /\b(?:two|second)\b|\bworkflow\b|\bprocess\b|\brepeatable\b/],
+    ['free-guide-first', /\b(?:three|third)\b|\bfree\b|\bguide\b|\bexample\b/],
+    ['deliverables-led', /\b(?:four|fourth)\b|\bdeliverables?\b|\bfiles?\b|\btemplates?\b/]
   ];
-  for (const [label, pattern] of strategies) {
+  for (const [label, pattern] of wordMap) {
     if (pattern.test(text)) return label;
   }
   return null;
+}
+
+function textValue(value) {
+  if (typeof value === 'string') return value.trim();
+  if (!Array.isArray(value)) return '';
+  return value.map(part => {
+    if (typeof part === 'string') return part;
+    if (typeof part?.text === 'string') return part.text;
+    if (typeof part?.content === 'string') return part.content;
+    return '';
+  }).filter(Boolean).join(' ').trim();
+}
+
+export function assistantTextCandidates(payload) {
+  const choice = payload?.choices?.[0];
+  const message = choice?.message;
+  const values = [
+    textValue(message?.content),
+    textValue(message?.reasoning_content),
+    textValue(message?.reasoning),
+    textValue(choice?.text),
+    textValue(payload?.output_text)
+  ];
+
+  if (Array.isArray(payload?.output)) {
+    for (const item of payload.output) {
+      values.push(textValue(item?.content));
+      values.push(textValue(item?.text));
+    }
+  }
+  return [...new Set(values.filter(Boolean))];
 }
 
 export function guidedSalesPlan(offer, campaign, strategy) {
@@ -263,9 +299,9 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
         'x-freellm-task-type': 'chat'
       },
       body: JSON.stringify({
-        model: String(env.FREELLMAPI_MODEL || 'auto:smart'),
+        model: String(env.FREELLMAPI_MODEL || 'auto:fast'),
         temperature: 0,
-        max_tokens: 8,
+        max_tokens: 16,
         messages: [
           { role: 'system', content: 'Return exactly one digit: 1, 2, 3, or 4. No explanation.' },
           { role: 'user', content: prompt }
@@ -275,8 +311,12 @@ export async function requestFreeLLM({ offer, campaign, fetchImpl = fetch, env =
     });
     const payload = await response.json().catch(() => null);
     if (!response.ok) return { plan: null, status: 'http_' + response.status };
-    const content = payload?.choices?.[0]?.message?.content;
-    const strategy = parseSalesStrategy(content);
+    const candidates = assistantTextCandidates(payload);
+    let strategy = null;
+    for (const candidate of candidates) {
+      strategy = parseSalesStrategy(candidate);
+      if (strategy) break;
+    }
     const plan = strategy ? guidedSalesPlan(offer, campaign, strategy) : null;
     return {
       plan,
