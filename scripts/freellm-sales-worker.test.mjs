@@ -115,6 +115,7 @@ test('FreeLLM strategy router accepts only the four allowed positioning labels',
   assert.equal(parseSalesStrategy('Choice: 2'), 'workflow-led');
   assert.equal(parseSalesStrategy('3.'), 'free-guide-first');
   assert.equal(parseSalesStrategy('I choose option 4'), 'deliverables-led');
+  assert.equal(parseSalesStrategy('option three'), 'free-guide-first');
   assert.equal(parseSalesStrategy('focus on traceable evidence'), 'evidence-led');
   assert.equal(parseSalesStrategy('use a repeatable process'), 'workflow-led');
   assert.equal(parseSalesStrategy('lead with the free guide'), 'free-guide-first');
