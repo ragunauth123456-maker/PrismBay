@@ -17,6 +17,7 @@ test('IndexNow project-site key remains inside the same URL path as all submitte
   ];
   assert.match(KEY,/^[A-Za-z0-9-]{8,128}$/);
   assert.equal(urls.length,9);
+  assert.equal(urls.filter(url=>url.includes('/learn/')).length,4);
   for(const url of urls) assert.ok(url.startsWith(ROOT));
   assert.ok(keyLocation.startsWith(ROOT));
 });
