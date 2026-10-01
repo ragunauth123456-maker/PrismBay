@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-30T10:01:12.136Z",
+  "updatedAt": "2026-10-01T10:29:02.375Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -21,7 +21,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "This Handheld Vacuum Is 91% Off at Amazon - People.com",
+            "title": "This Handheld Vacuum Is 91% Off at Amazon - people.com",
             "source": "Google News",
             "publishedAt": "2026-09-29T23:15:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPdHhLX21KR0ltRWJlTGMwMXJjOFJSaTY5NldZSTBqRERyQ3cxbWZEM24zZXR5SS1kbkxCOUNBT1Q0Z2RfM19jRlB1OXRnaHJFRmE2UkgtU2dLT2hUQzdSZTJYUDlnSi1YLXZjRWc2SHJNY0d1d0FfUEZrY1N0SzBtWTBsZE5PMlRsckpDaTlxNA?oc=5"
@@ -73,19 +73,19 @@
         ],
         "sampleSignals": [
           {
-            "title": "12 Organizers That Will Help Keep Your New Fall Wardrobe From Ending Up on the Floor—Starting at $8 - Real Simple",
-            "source": "Google News",
-            "publishedAt": "2026-09-10T07:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNTEktQnJlSWx1UGpURHMxc3VaaVRIaklobEQxSGYtejQ3NW96Qk1Ed25rTlFwRUxfNUx3Y2VsYTduLVg2aURmMDhjYklwS2l2MnhVT2NocnpUZmhmaTlwVmZoSFVYRHBxZGpDMGJOckVNckZMbERudFFRem9uVWl2bkVSUQ?oc=5"
-          },
-          {
             "title": "I Doubled My Closet Storage with This $25 Hanging Organizer - Apartment Therapy",
             "source": "Google News",
             "publishedAt": "2026-07-12T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPWFp5N1QwRWRBSlduLVVKYUtGSWFaLXZWWnB3RGVZQ1VFVGotVkdhMWhKMTBxQ3JnVHpJVGJJd0FmYW5NcWgxdlhmM0MtMDNSZkVNa1BMZVdGTjlQSW5ET1paa2p6cFRtWVFMWHpna1ZjdlIzVzI0VnJfdHhJckhvY2RzaFpvZVFSQUE?oc=5"
           },
           {
-            "title": "Stocked Up a Little Too Well for Sweater Weather? These Stacking Storage Bins Keep Your Collection Organized - People.com",
+            "title": "12 Organizers That Will Help Keep Your New Fall Wardrobe From Ending Up on the Floor—Starting at $8 - Real Simple",
+            "source": "Google News",
+            "publishedAt": "2026-09-10T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNTEktQnJlSWx1UGpURHMxc3VaaVRIaklobEQxSGYtejQ3NW96Qk1Ed25rTlFwRUxfNUx3Y2VsYTduLVg2aURmMDhjYklwS2l2MnhVT2NocnpUZmhmaTlwVmZoSFVYRHBxZGpDMGJOckVNckZMbERudFFRem9uVWl2bkVSUQ?oc=5"
+          },
+          {
+            "title": "Stocked Up a Little Too Well for Sweater Weather? These Stacking Storage Bins Keep Your Collection Organized - people.com",
             "source": "Google News",
             "publishedAt": "2026-09-16T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNdUt2cm1naldDczF5TFc0bExVNFFsTlBOTFdrOWh6NHpHSl9FckJJc0NoaTFWWmZST2hZWWJQU0Q5TWxzZVlxTjNGZ0pzOXQ5SDlOTFF4QkR2dkVMXzhrelhZcjUxT0d3WkJmRVdaQjRYQjF0d2lDWWUwZmJQNUs2ZA?oc=5"
@@ -116,7 +116,7 @@
       "attentionScore": 73,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 35,
+        "publicMentions": 34,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
@@ -361,7 +361,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "This window cleaning set is our top pick – and it's on sale - realhomes.com",
+            "title": "This window cleaning set is our top pick – and it's on sale - Real Homes",
             "source": "Google News",
             "publishedAt": "2020-05-02T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQVE1RZEw3ZXFWNHlYcmQ3bHNKU214UVBSZU9WTVlxUVk0TjNCUkNaYWNzRHpWS0lrZVNBTUcwYVpiU3lmeWdGNDlQSGloV21senpDMW9NUnlkdFdwTFdKVmZYUE1xVC1qY0REQkZKVGQxUVpXQTBFUThicXNVN1FQTTlXVjBaT04tREdiR0ZHSWw?oc=5"
