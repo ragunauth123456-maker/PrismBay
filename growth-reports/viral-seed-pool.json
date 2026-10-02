@@ -1,6 +1,19 @@
 {
   "schemaVersion": 1,
   "taxonomyVersion": 1,
-  "updatedAt": "2026-10-01T10:29:02.375Z",
-  "records": []
+  "updatedAt": "2026-10-02T10:04:21.539Z",
+  "records": [
+    {
+      "slug": "upholstery-cleaner",
+      "status": "observing",
+      "evidence": [
+        {
+          "title": "9 Best Upholstery Cleaners for Stains, Pets, and More, Tested by Cleaning Experts",
+          "link": "https://www.goodhousekeeping.com/home/cleaning/g73193266/best-upholstery-cleaner/",
+          "publishedAt": "2026-10-01T19:15:00.000Z",
+          "source": "good-housekeeping"
+        }
+      ]
+    }
+  ]
 }
