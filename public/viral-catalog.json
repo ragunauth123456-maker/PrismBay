@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-02T13:13:28.914Z",
+  "updatedAt": "2026-10-02T22:35:23.646Z",
   "market": "US",
   "methodology": "Public-news attention, freshness, and short-form demonstration fit. This is not PrismBay sales data and is not a TikTok, Amazon, Google, or Bing product ranking.",
   "refreshTargetHours": 6,
@@ -11,7 +11,7 @@
       "signalScore": 84.5,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 35,
+        "publicMentions": 36,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 12,
         "sourcesAvailable": [
@@ -27,7 +27,7 @@
           "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ZRDlxanVrQ3JSeXhtdXBjS3JmVTdkQnV2LURHdldCN1BidHU0ZjhselZXRVZWLVhJUEpwaUMwTEgweU5mLVRmZnozS3dJUTk5TGZTZHctbHpmZHkySDktbE1hZ0Zsdw?oc=5"
         },
         {
-          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - People.com",
+          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - people.com",
           "source": "Google News",
           "publishedAt": "2026-05-06T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9HWkFheEdZLU5KN28wQmVlLVZWVFJZSUZpcFlSTmJLSFJJc3lacVNuUTNycF9SN0tnRmM4QnZ1SXNwcDFid3kya1RUU2J0cjEyQUxOY1N6YXI0UHI3?oc=5"
@@ -39,7 +39,7 @@
           "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQdkdwdjFkSnptM0JmTmpLYWRPTjUwZEhjOEI3YTlCT2VmOG1GUVJ1dklzUnV5LTROeXJKQ3QzRnEyakRLQWRrUUhPNUJvZWZ2dlhWaXFoajlpTFkwdXhDaTZjT3M4LThxM3d4bXI0X1ZMUmtSdmZXN1A0ZkM4eWF0amE3ZkxJUEVsUXVuQlM4Zk91andHSk15YVRaUHJLN1JUVGlEc2hVajBRMlRYU0h3?oc=5"
         },
         {
-          "title": "The Best Travel Steamers To Keep Clothing Wrinkle-Free On The Go - forbes.com",
+          "title": "The Best Travel Steamers To Keep Clothing Wrinkle-Free On The Go - Forbes",
           "source": "Google News",
           "publishedAt": "2024-09-13T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPOEltbERZMDMtemlzdFRPSUdTZGFXLVJDTUJpWWZrMGtSLVVFMDlSWWxHS3YzSXpydFhpWUlyTmd5dTYyMTBaMEtuT1VMazI2SUxzQkhSSVZEV0tqTTdzRGhlYlZxWEw5RVhxSkpsS0xsQjA4cFNkX2Jjb1NYem04OTR0TzNnQlZ1WlE?oc=5"
@@ -59,7 +59,7 @@
       "signalScore": 80.5,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 98,
+        "publicMentions": 95,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 7,
         "sourcesAvailable": [
@@ -102,14 +102,62 @@
       "rank": 2
     },
     {
+      "slug": "mattress-vacuum",
+      "name": "Mattress Vacuum",
+      "signalScore": 74.5,
+      "signalLabel": "high-attention",
+      "evidence": {
+        "publicMentions": 106,
+        "mentionsLast7Days": 0,
+        "mentionsLast30Days": 4,
+        "sourcesAvailable": [
+          "Google News",
+          "Bing News"
+        ]
+      },
+      "sampleSignals": [
+        {
+          "title": "I Finally Got a Bed Vacuum, and Now I’m Never Going to Be Without One Again - Apartment Therapy",
+          "source": "Google News",
+          "publishedAt": "2026-05-19T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNbkpkQUFEYVRYc3gzc0Q0MUdkdE1pb2VORTFxbi1XbXk5OXBDYWg0Rmk3R01ZSUt6ZzNlRzRRWGR2RzRGQ09FQVNJNlZOMHk2eU9zZ0p1c1Q1dHpLbXZLZ29RcDQyX1JDZWpPME1pSlRyOG1XUTV2TlRYcDhLUWpXbFFJQkFvS09tb2YyQi1HYnE?oc=5"
+        },
+        {
+          "title": "Is a Mattress Vacuum the Allergy Solution We’ve Been Needing? I Tested One to Find Out - CNET",
+          "source": "Google News",
+          "publishedAt": "2026-06-27T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQcmFNWEdvTUxuY1RES2k4bXh1T0U2ci1nTHBJRXVud3F4ekF2NHF4NkF4LTlKR3lRWTNObHBGcjUzOGlLNUlHNXd1dGdOQXBYcEN6QllhNGZyVDFja2h1R3AzX1hIaFk4RUpsZ3JQT05Ga2pkelRscFRTaVJ0NFhyX0c3cVllQzIxTXoyeGhKcTNvLUJuRWNLd0g3Si1mYnRoUjEzZExKZGEtUXlsVlV3dQ?oc=5"
+        },
+        {
+          "title": "Turns out you do need a mattress vacuum — here’s why I love mine - NJ.com",
+          "source": "Google News",
+          "publishedAt": "2026-08-16T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxORUVHTHVGWkZtVUhlMG1CSUpQUjRzM0dwTWhNem9pM3ppNkRiZjFxZzRCNkVIc0dhd3RUVU4zTU91am9UQVVYcFZsU2k5a1d1WVFFWHBFTHBpUWJaQzc5bEpxR1hUb1AyZW4wVTRRaE94OW1BYU90cUNWZkcwVzlSWW96VzdzYkZuajBkN2JqSjJzNjBkeEtjTUx6QWtmemRvRUhVT21OWmplTkhh0gHAAUFVX3lxTE95S1VXaDg0OFdlMm85aXdBSjN0aHJUTElRWEhEdlhpaWRCMDlnXzVia2p5NFpJZTEwcUZvVGhnNGJzMDR4N0NWamlXS28yMzRiME15aHdsV3RYMWZucGpRTkFVUEZYakZLeEJJR2w4b0Y1NlNOU1ZURVVsTDRyOVN1SHZyRk5COUJNbnFLbExVMEhrNkszREZJcnp3dnVDck5oZXZYMllyRlN5S3NwMmFNU0FkZ0s1YkJ2TE1EZFpYSw?oc=5"
+        },
+        {
+          "title": "This Handheld Vacuum Cleaner Is A ‘Game-Changer’ For Mattress Grime — And It’s 34% Off - HuffPost",
+          "source": "Google News",
+          "publishedAt": "2026-09-22T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOeVRLODl6aXZwcHU1M2VNUEx0NW1wbnJFTWFia09PX0tjM3BsN0d5eVRmdW5wR0pPTEUxVnJjNlpvTDBIQnNUN1FzTlpZRUlRYnFWRENNUURaMlFxb253TjMwOGNjdkNyMUs5VVluNEtiVENhOEV6SEhxd0VlVTZhOXpKZzgtNXRGOEHSAY8BQVVfeXFMTi0yUkdFNTlaYXNZLXhnNWY2Z0gwbXhEb0R3dVpYMW1zN0R1Q09pVnQ1SXlXZjZRRWx4NW5qM0NHYzdyWUd0eUNZcWhOMlJ3a1VyNzFva0hBNGpabzYzdm5zdkNsVEZoZFZ2TnhKaXhlc010cDJ0azAwcUR6NGFvd3NNOEJQa3NhV1p3bFIzUGM?oc=5"
+        },
+        {
+          "title": "Amazon’s mattress vacuum uses UV light and heat to deep clean beds - AL.com",
+          "source": "Google News",
+          "publishedAt": "2026-07-31T07:00:00.000Z",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbzVTWEJoMDJjVjhXZDI0Y3pidGdOVVpsYmk2b2YwNnBWN21RbnJlMFEzOFFDb0luZUpsZHQ5TEJkR0NLY1I4TE5xbXJWcGVZbjN2UE41b085WmhBNnpKQmhRSGJ3Q3FjdlRjRTR3b2pNWm8taDM1Rjkza0ZqdDlfXzZaWV9TN1dEVDNNZXZqak9oY1FoSUVxaGVXTDJHRTIwYlRiTDBrS1Q5UdIBvgFBVV95cUxQSmFCYUJJckRseEt2Ql8xalZQUHV0VVg0cldzQ0MybUUzMDlES25DWGZ3cjR2cFlPUnBDdi1VMlVyQnRRaEhfeFlfYl9LZW5qX1BEczFxZE1aYV9LZl9yTFF0N2d6ZEpLRG9DODlKdDU4NGtlUUxUc0hmQmhpWnZBeUtoU2k3OFJGOURxcE1nNENjZm43RGJjeWZ6NFN0N0NCaTR0N0VKMkVOSjlFOWJnNnA1dEh1SHIwa3lCdVFn?oc=5"
+        }
+      ],
+      "rank": 3
+    },
+    {
       "slug": "pressure-washer",
       "name": "Cordless Pressure Washer",
-      "signalScore": 77,
+      "signalScore": 74,
       "signalLabel": "high-attention",
       "evidence": {
         "publicMentions": 102,
         "mentionsLast7Days": 0,
-        "mentionsLast30Days": 5,
+        "mentionsLast30Days": 3,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -147,63 +195,15 @@
           "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNTWJJdnI5YnFKNlFnNUNhY09iVVFJZ1ZvMHJmQ2FYcEQtbU0xYmRBNzQ5Y3NrRXJ6NS04Sl9uSXBSUDJoSEh2QXVBM3VlQzQtbHdIVWl5S2dDNGxQNzYxdDFuQnQtWEFmdUpLSEU3STlaSkhLSFF3d1JxMVFxZEtZXzYzbTQ1UdIBmgFBVV95cUxPZERNWEJkcWM1a0pySUFEZC12OXE2Q1F1Q3hjSEk1Ql9SUktmSjczWG13Y0doWHV0ZkpGSm9LUnA4eEIwWFg3ZU95TVlZTDQ0WkFtSUhDWDRIY29ITmlJTUljZ3lvNHdYWXNFQ2hGQVo1djZzWkZudTZPdEJtOHJGRDV0Q2pUQkE4OG00WFh6R3ZjQ1Q2NEhldGV3?oc=5"
         }
       ],
-      "rank": 3
-    },
-    {
-      "slug": "mattress-vacuum",
-      "name": "Mattress Vacuum",
-      "signalScore": 74.5,
-      "signalLabel": "high-attention",
-      "evidence": {
-        "publicMentions": 107,
-        "mentionsLast7Days": 0,
-        "mentionsLast30Days": 4,
-        "sourcesAvailable": [
-          "Google News",
-          "Bing News"
-        ]
-      },
-      "sampleSignals": [
-        {
-          "title": "I Finally Got a Bed Vacuum, and Now I’m Never Going to Be Without One Again - Apartment Therapy",
-          "source": "Google News",
-          "publishedAt": "2026-05-19T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNbkpkQUFEYVRYc3gzc0Q0MUdkdE1pb2VORTFxbi1XbXk5OXBDYWg0Rmk3R01ZSUt6ZzNlRzRRWGR2RzRGQ09FQVNJNlZOMHk2eU9zZ0p1c1Q1dHpLbXZLZ29RcDQyX1JDZWpPME1pSlRyOG1XUTV2TlRYcDhLUWpXbFFJQkFvS09tb2YyQi1HYnE?oc=5"
-        },
-        {
-          "title": "Is a Mattress Vacuum the Allergy Solution We’ve Been Needing? I Tested One to Find Out - cnet.com",
-          "source": "Google News",
-          "publishedAt": "2026-06-27T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQcmFNWEdvTUxuY1RES2k4bXh1T0U2ci1nTHBJRXVud3F4ekF2NHF4NkF4LTlKR3lRWTNObHBGcjUzOGlLNUlHNXd1dGdOQXBYcEN6QllhNGZyVDFja2h1R3AzX1hIaFk4RUpsZ3JQT05Ga2pkelRscFRTaVJ0NFhyX0c3cVllQzIxTXoyeGhKcTNvLUJuRWNLd0g3Si1mYnRoUjEzZExKZGEtUXlsVlV3dQ?oc=5"
-        },
-        {
-          "title": "Turns out you do need a mattress vacuum — here’s why I love mine - nj.com",
-          "source": "Google News",
-          "publishedAt": "2026-08-16T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxORUVHTHVGWkZtVUhlMG1CSUpQUjRzM0dwTWhNem9pM3ppNkRiZjFxZzRCNkVIc0dhd3RUVU4zTU91am9UQVVYcFZsU2k5a1d1WVFFWHBFTHBpUWJaQzc5bEpxR1hUb1AyZW4wVTRRaE94OW1BYU90cUNWZkcwVzlSWW96VzdzYkZuajBkN2JqSjJzNjBkeEtjTUx6QWtmemRvRUhVT21OWmplTkhh0gHAAUFVX3lxTE95S1VXaDg0OFdlMm85aXdBSjN0aHJUTElRWEhEdlhpaWRCMDlnXzVia2p5NFpJZTEwcUZvVGhnNGJzMDR4N0NWamlXS28yMzRiME15aHdsV3RYMWZucGpRTkFVUEZYakZLeEJJR2w4b0Y1NlNOU1ZURVVsTDRyOVN1SHZyRk5COUJNbnFLbExVMEhrNkszREZJcnp3dnVDck5oZXZYMllyRlN5S3NwMmFNU0FkZ0s1YkJ2TE1EZFpYSw?oc=5"
-        },
-        {
-          "title": "This Handheld Vacuum Cleaner Is A ‘Game-Changer’ For Mattress Grime — And It’s 34% Off - HuffPost",
-          "source": "Google News",
-          "publishedAt": "2026-09-22T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOeVRLODl6aXZwcHU1M2VNUEx0NW1wbnJFTWFia09PX0tjM3BsN0d5eVRmdW5wR0pPTEUxVnJjNlpvTDBIQnNUN1FzTlpZRUlRYnFWRENNUURaMlFxb253TjMwOGNjdkNyMUs5VVluNEtiVENhOEV6SEhxd0VlVTZhOXpKZzgtNXRGOEHSAY8BQVVfeXFMTi0yUkdFNTlaYXNZLXhnNWY2Z0gwbXhEb0R3dVpYMW1zN0R1Q09pVnQ1SXlXZjZRRWx4NW5qM0NHYzdyWUd0eUNZcWhOMlJ3a1VyNzFva0hBNGpabzYzdm5zdkNsVEZoZFZ2TnhKaXhlc010cDJ0azAwcUR6NGFvd3NNOEJQa3NhV1p3bFIzUGM?oc=5"
-        },
-        {
-          "title": "Amazon’s mattress vacuum uses UV light and heat to deep clean beds - AL.com",
-          "source": "Google News",
-          "publishedAt": "2026-07-31T07:00:00.000Z",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbzVTWEJoMDJjVjhXZDI0Y3pidGdOVVpsYmk2b2YwNnBWN21RbnJlMFEzOFFDb0luZUpsZHQ5TEJkR0NLY1I4TE5xbXJWcGVZbjN2UE41b085WmhBNnpKQmhRSGJ3Q3FjdlRjRTR3b2pNWm8taDM1Rjkza0ZqdDlfXzZaWV9TN1dEVDNNZXZqak9oY1FoSUVxaGVXTDJHRTIwYlRiTDBrS1Q5UdIBvgFBVV95cUxQSmFCYUJJckRseEt2Ql8xalZQUHV0VVg0cldzQ0MybUUzMDlES25DWGZ3cjR2cFlPUnBDdi1VMlVyQnRRaEhfeFlfYl9LZW5qX1BEczFxZE1aYV9LZl9yTFF0N2d6ZEpLRG9DODlKdDU4NGtlUUxUc0hmQmhpWnZBeUtoU2k3OFJGOURxcE1nNENjZm43RGJjeWZ6NFN0N0NCaTR0N0VKMkVOSjlFOWJnNnA1dEh1SHIwa3lCdVFn?oc=5"
-        }
-      ],
       "rank": 4
     },
     {
       "slug": "pethair",
       "name": "Reusable Pet Hair Remover",
-      "signalScore": 44,
+      "signalScore": 42.5,
       "signalLabel": "watch",
       "evidence": {
-        "publicMentions": 13,
+        "publicMentions": 12,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
@@ -213,7 +213,7 @@
       },
       "sampleSignals": [
         {
-          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - People.com",
+          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - people.com",
           "source": "Google News",
           "publishedAt": "2026-04-29T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE56STN5dFAtRmlSdG04UW8zZWlkemZwOW4wQTJFeUt5ZU9hYmhrYmJGb1Y1a3p3WDFsaVpkWFBLTkNyR2dMZnNzT2N5UjFoQ0pCZnNTc1hUOUQ3ZE0?oc=5"
@@ -362,7 +362,7 @@
       },
       "sampleSignals": [
         {
-          "title": "7 reasons your sink won't drain – plus expert tips to unclog a sink like a pro - Homes and Gardens",
+          "title": "7 reasons your sink won't drain – plus expert tips to unclog a sink like a pro - homesandgardens.com",
           "source": "Google News",
           "publishedAt": "2025-06-25T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPanpVUU5ldG5La1Ryb1hfRnhOZlFRdFpLbkhDLTNSZnlSa3NVbzdOelJPWVAzNjZ5WVZTcDFQZHNfaWg1UHUwdGZ3MWdncHkteklzMlhvODZ6cXZHNldJQ1hlblFxbks5eUEzU1E2QnNOam8td1RTQ3RRcW5xcTB0VQ?oc=5"
