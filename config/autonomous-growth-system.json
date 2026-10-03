@@ -78,7 +78,7 @@
     "stock_or_variant_cannot_be_verified_after_alternative_routes",
     "landed_economics_fail_margin_floor",
     "commercialization_requires_unapproved_or_noncompliant_action",
-    "rights_or_claims_cannot_be supported"
+    "rights_or_claims_cannot_be_supported"
   ],
   "scaleConditions": [
     "verified_non_test_paid_order",
