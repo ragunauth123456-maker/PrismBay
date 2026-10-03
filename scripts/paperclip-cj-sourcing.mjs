@@ -11,14 +11,6 @@ export function positiveNumber(value) {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
-export function chooseProduct(products, candidate) {
-  return (Array.isArray(products) ? products : []).filter(item =>
-    String(item?.saleStatus) === '3' &&
-    positiveNumber(item?.nowPrice ?? item?.discountPrice ?? item?.sellPrice) !== null &&
-    matchesIntendedProduct(candidate, item?.nameEn)
-  ).sort((a,b) => Number(b?.totalVerifiedInventory || 0) - Number(a?.totalVerifiedInventory || 0))[0] || null;
-}
-
 function productName(item = {}) {
   return String(item?.nameEn ?? item?.productNameEn ?? item?.productName ?? item?.name ?? '').trim();
 }
@@ -30,6 +22,28 @@ function productId(item = {}) {
 
 function productSku(item = {}) {
   return String(item?.sku ?? item?.productSku ?? item?.spu ?? '').trim();
+}
+
+export function chooseProducts(products, candidate, limit = 3) {
+  const rows = (Array.isArray(products) ? products : []).filter(item =>
+    String(item?.saleStatus) === '3' &&
+    positiveNumber(item?.nowPrice ?? item?.discountPrice ?? item?.sellPrice) !== null &&
+    matchesIntendedProduct(candidate, productName(item))
+  ).sort((a, b) => Number(b?.totalVerifiedInventory || 0) - Number(a?.totalVerifiedInventory || 0));
+  const seen = new Set();
+  const selected = [];
+  for (const item of rows) {
+    const id = productId(item);
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    selected.push(item);
+    if (selected.length >= Math.max(1, Math.min(Number(limit) || 3, 5))) break;
+  }
+  return selected;
+}
+
+export function chooseProduct(products, candidate) {
+  return chooseProducts(products, candidate, 1)[0] || null;
 }
 
 function unwrapKnownProduct(payload) {
@@ -109,7 +123,7 @@ function flatten(payload) {
   return Array.isArray(groups)?groups.flatMap(g=>Array.isArray(g?.productList)?g.productList:[]):[];
 }
 
-function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.3'}; }
+function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.4'}; }
 
 async function lookupKnownProduct({client,base,token,candidate}) {
   const exactVariantSku=String(candidate?.exactVariantSku||'').trim();
@@ -127,23 +141,71 @@ async function lookupKnownProduct({client,base,token,candidate}) {
   }
 }
 
+async function inspectProductRoute({client,base,token,candidate,product}) {
+  let variant=null,stock=null;
+  let variantChoices=[];
+  try {
+    const vurl=new URL(base+'/product/variant/query');
+    vurl.searchParams.set('pid',String(productId(product)));
+    const vr=await client(vurl,{headers:headers(token)});
+    variantChoices=candidateVariantChoices(vr?.data,candidate).slice(0,3);
+    for(const choice of variantChoices){
+      const surl=new URL(base+'/product/stock/queryByVid');
+      surl.searchParams.set('vid',String(choice.vid));
+      let sr;
+      try{sr=await client(surl,{headers:headers(token)});}catch{continue;}
+      const picked=chooseStock(sr?.data,choice.vid);
+      if(!picked) continue;
+      variant=choice;
+      stock=picked;
+      break;
+    }
+  } catch {}
+  const productCostUsd=positiveNumber(variant?.variantSellPrice) ?? positiveNumber(variantChoices[0]?.variantSellPrice) ?? positiveNumber(product?.nowPrice ?? product?.discountPrice ?? product?.sellPrice);
+  return { product, variant, stock, variantChoices, productCostUsd };
+}
+
 export async function sourceCandidate({client,base,token,candidate}) {
   const known=await lookupKnownProduct({client,base,token,candidate});
-  let product=known.product;
+  let productChoices=known.product?[known.product]:[];
   let searchScope=known.scope;
-  if(!product){
+
+  if(!productChoices.length){
     for (const requireUs of [true,false]) {
+      const accumulated=[];
+      const seen=new Set();
       for (const query of (candidate.queries||[candidate.query]).slice(0,2)) {
         const url=new URL(base+'/product/listV2');
-        url.searchParams.set('page','1'); url.searchParams.set('size','20'); url.searchParams.set('keyWord',query);
-        url.searchParams.set('sort','desc'); url.searchParams.set('orderBy','1'); url.searchParams.append('features','enable_category');
-        if(requireUs){ url.searchParams.set('countryCode','US'); url.searchParams.set('startWarehouseInventory','10'); url.searchParams.set('verifiedWarehouse','1'); }
-        try { product=chooseProduct(flatten(await client(url,{headers:headers(token)})),candidate); } catch { product=null; }
-        if(product){ searchScope=requireUs?'us_verified_warehouse':'global_fallback'; break; }
+        url.searchParams.set('page','1');
+        url.searchParams.set('size','20');
+        url.searchParams.set('keyWord',query);
+        url.searchParams.set('sort','desc');
+        url.searchParams.set('orderBy','1');
+        url.searchParams.append('features','enable_category');
+        if(requireUs){
+          url.searchParams.set('countryCode','US');
+          url.searchParams.set('startWarehouseInventory','10');
+          url.searchParams.set('verifiedWarehouse','1');
+        }
+        let rows=[];
+        try { rows=chooseProducts(flatten(await client(url,{headers:headers(token)})),candidate,3); } catch { rows=[]; }
+        for(const row of rows){
+          const id=productId(row);
+          if(!id||seen.has(id)) continue;
+          seen.add(id);
+          accumulated.push(row);
+          if(accumulated.length>=3) break;
+        }
+        if(accumulated.length>=3) break;
       }
-      if(product) break;
+      if(accumulated.length){
+        productChoices=accumulated;
+        searchScope=requireUs?'us_verified_warehouse':'global_fallback';
+        break;
+      }
     }
   }
+
   const baseResult={
     slug:candidate.slug,
     candidate:candidate.name,
@@ -151,33 +213,33 @@ export async function sourceCandidate({client,base,token,candidate}) {
     searchScope,
     knownIdentityAttempted:known.attempted,
     knownIdentityRevalidated:Boolean(known.product),
-    supplierVerified:Boolean(product),
+    supplierVerified:productChoices.length>0,
     variantInventoryVerified:false,
     freightVerified:false,
     commercialState:'research_only'
   };
-  if(!product) return {...baseResult,status:known.attempted?'known_identity_unavailable_fallback_failed':'supplier_match_not_found'};
+  if(!productChoices.length) return {...baseResult,status:known.attempted?'known_identity_unavailable_fallback_failed':'supplier_match_not_found',supplierAlternativesInspected:0};
 
-  let variant=null,stock=null,variantChoices=[];
-  try {
-    const vurl=new URL(base+'/product/variant/query'); vurl.searchParams.set('pid',String(product.id));
-    const vr=await client(vurl,{headers:headers(token)});
-    variantChoices=candidateVariantChoices(vr?.data,candidate);
-    for(const choice of variantChoices){
-      const surl=new URL(base+'/product/stock/queryByVid'); surl.searchParams.set('vid',String(choice.vid));
-      let sr; try{sr=await client(surl,{headers:headers(token)});}catch{continue;}
-      const picked=chooseStock(sr?.data,choice.vid); if(!picked) continue;
-      variant=choice; stock=picked; break;
-    }
-  } catch {}
+  const inspections=[];
+  for(const product of productChoices.slice(0,3)){
+    const inspection=await inspectProductRoute({client,base,token,candidate,product});
+    inspections.push(inspection);
+    if(inspection.variant&&inspection.stock) break;
+  }
+  const selected=inspections.find(x=>x.variant&&x.stock) || inspections[0];
+  const product=selected.product;
+  const variant=selected.variant;
+  const stock=selected.stock;
+  const variantChoices=selected.variantChoices;
+  const productCostUsd=selected.productCostUsd;
+  const selectedSupplierRank=Math.max(1,productChoices.findIndex(x=>productId(x)===productId(product))+1);
   const exactVariantRequired=Boolean(String(candidate?.exactVariantSku||'').trim());
-  const productCostUsd=positiveNumber(variant?.variantSellPrice) ?? positiveNumber(variantChoices[0]?.variantSellPrice) ?? positiveNumber(product?.nowPrice ?? product?.discountPrice ?? product?.sellPrice);
   const inventory=stock?Number(stock.cjInventoryNum||0):null;
   const variantStatus=variant&&stock?'variant_stock_verified':exactVariantRequired?'known_variant_stock_required':'variant_stock_required';
-  const result={...baseResult,status:variantStatus,variantInventoryVerified:Boolean(variant&&stock),product:{
-    id:String(product.id),
-    name:product.nameEn,
-    sku:product.sku||product.productSku||product.spu||candidate.exactSupplierSku||null,
+  const result={...baseResult,status:variantStatus,variantInventoryVerified:Boolean(variant&&stock),supplierAlternativesFound:productChoices.length,supplierAlternativesInspected:inspections.length,selectedSupplierRank,fallbackSupplierUsed:selectedSupplierRank>1,product:{
+    id:String(productId(product)),
+    name:productName(product),
+    sku:productSku(product)||candidate.exactSupplierSku||null,
     variantId:variant?.vid||variantChoices[0]?.vid||null,
     variantSku:variant?.variantSku||variantChoices[0]?.variantSku||candidate.exactVariantSku||null,
     exactVariantRequired,
@@ -214,19 +276,24 @@ export async function sourceCandidate({client,base,token,candidate}) {
 }
 
 export async function main(){
-  const apiKey=String(process.env.CJ_API_KEY||'').trim(); if(!apiKey) throw new Error('CJ_API_KEY is required');
-  const client=createCJReadOnlyClient(); const base='https://developers.cjdropshipping.com/api2.0/v1';
-  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.3'},body:JSON.stringify({apiKey})});
-  const token=String(auth?.data?.accessToken||''); if(!token) throw new Error('CJ authentication returned no access token'); console.log('::add-mask::'+token);
+  const apiKey=String(process.env.CJ_API_KEY||'').trim();
+  if(!apiKey) throw new Error('CJ_API_KEY is required');
+  const client=createCJReadOnlyClient();
+  const base='https://developers.cjdropshipping.com/api2.0/v1';
+  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.4'},body:JSON.stringify({apiKey})});
+  const token=String(auth?.data?.accessToken||'');
+  if(!token) throw new Error('CJ authentication returned no access token');
+  console.log('::add-mask::'+token);
   const catalog=JSON.parse(await fs.readFile('paperclip/prismbay-global-commerce/research/supplier-candidates.json','utf8'));
   const rotation=selectRotatingCandidates(catalog.candidates||[],{
     batchSize:Number(process.env.PAPERCLIP_CJ_BATCH_SIZE||5),
     anchorCount:Number(process.env.PAPERCLIP_CJ_ANCHOR_COUNT||2),
     slot:process.env.PAPERCLIP_CJ_ROTATION_SLOT,
   });
-  const results=[]; for(const candidate of rotation.selected) results.push(await sourceCandidate({client,base,token,candidate}));
+  const results=[];
+  for(const candidate of rotation.selected) results.push(await sourceCandidate({client,base,token,candidate}));
   const report={
-    schemaVersion:4,
+    schemaVersion:5,
     checkedAt:new Date().toISOString(),
     market:catalog.market||'US',
     mode:'paperclip_global_commerce_read_only',
@@ -238,13 +305,15 @@ export async function main(){
     supplierMatches:results.filter(x=>x.supplierVerified).length,
     verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,
     freightEstimates:results.filter(x=>x.freightVerified).length,
+    supplierFallbacksUsed:results.filter(x=>x.fallbackSupplierUsed).length,
     ordersEnabled:false,
     listingsEnabled:false,
     profitReadyCount:0,
     results,
   };
-  await fs.mkdir('growth-reports',{recursive:true}); await fs.writeFile('growth-reports/paperclip-cj-sourcing.json',JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({catalogCandidateCount:report.catalogCandidateCount,candidateCount:report.candidateCount,rotation:report.rotation,knownIdentityAttempts:report.knownIdentityAttempts,knownIdentityRevalidations:report.knownIdentityRevalidations,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,results:results.map(r=>({slug:r.slug,status:r.status,searchScope:r.searchScope,knownIdentityRevalidated:r.knownIdentityRevalidated,productCostUsd:r.product?.productCostUsd??null,variantSku:r.product?.variantSku??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
+  await fs.mkdir('growth-reports',{recursive:true});
+  await fs.writeFile('growth-reports/paperclip-cj-sourcing.json',JSON.stringify(report,null,2)+'\n');
+  console.log(JSON.stringify({catalogCandidateCount:report.catalogCandidateCount,candidateCount:report.candidateCount,rotation:report.rotation,knownIdentityAttempts:report.knownIdentityAttempts,knownIdentityRevalidations:report.knownIdentityRevalidations,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,supplierFallbacksUsed:report.supplierFallbacksUsed,results:results.map(r=>({slug:r.slug,status:r.status,searchScope:r.searchScope,knownIdentityRevalidated:r.knownIdentityRevalidated,supplierAlternativesFound:r.supplierAlternativesFound??0,supplierAlternativesInspected:r.supplierAlternativesInspected??0,selectedSupplierRank:r.selectedSupplierRank??null,fallbackSupplierUsed:r.fallbackSupplierUsed??false,productCostUsd:r.product?.productCostUsd??null,variantSku:r.product?.variantSku??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
   return report;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) await main();
