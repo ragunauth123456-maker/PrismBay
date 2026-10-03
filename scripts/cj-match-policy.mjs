@@ -28,6 +28,8 @@ const policy = Object.freeze({
   'knife-cleaning-brush': { required: [/\b(knife|cutlery|flatware)\b/i, /\bbrush\b/i, /\b(clean|washing|scrub)\w*\b/i], excluded: [/\b(electric toothbrush|hair|paint|makeup)\b/i] },
   'car-trash-can': { required: [/\b(car|auto|vehicle)\b/i, /\b(trash|garbage|waste)\b/i, /\b(can|bin|container)\b/i], excluded: [/\b(kitchen|outdoor wheelie|dumpster)\b/i] },
   'collapsible-microwave-cover': { required: [/\bmicrowave\b/i, /\bcover\b/i, /\b(collapsible|foldable|food|plate)\b/i], excluded: [/\b(replacement part|waveguide|motor|oven appliance)\b/i] },
+  'toilet-scrubber-kit': { required: [/\btoilet\b/i, /\b(scrubber|brush|wand)\b/i, /\b(kit|refill|clean\w*|system)\b/i], excluded: [/\b(plunger|auger|snake|bidet|seat cover)\b/i] },
+  'mini-bag-sealer': { required: [/\b(bag|plastic|snack)\b/i, /\bseal(?:er|ing)\b/i, /\b(mini|portable|handheld|recharge\w*)\b/i], excluded: [/\b(vacuum sealer machine|industrial|impulse tabletop)\b/i] },
 });
 
 export function hasApprovedProductClass(slug) {

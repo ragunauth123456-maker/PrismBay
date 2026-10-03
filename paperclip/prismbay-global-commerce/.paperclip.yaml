@@ -31,15 +31,15 @@ routines:
   global-opportunity-scan:
     triggers:
       - kind: schedule
-        cronExpression: "29 */3 * * *"
+        cronExpression: "17 * * * *"
         timezone: "America/Guyana"
   supplier-and-economics-review:
     triggers:
       - kind: schedule
-        cronExpression: "47 */6 * * *"
+        cronExpression: "47 */3 * * *"
         timezone: "America/Guyana"
-  daily-scale-kill-review:
+  scale-kill-review:
     triggers:
       - kind: schedule
-        cronExpression: "20 8 * * *"
+        cronExpression: "20 */4 * * *"
         timezone: "America/Guyana"

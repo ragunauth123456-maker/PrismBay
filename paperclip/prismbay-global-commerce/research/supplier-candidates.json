@@ -1,13 +1,16 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "asOf": "2026-10-02",
   "market": "US",
   "mode": "research_only",
+  "selectionRule": "Highest current demand signal plus low fulfillment complexity. Every candidate still requires exact supplier, variant, stock, freight and unit-economics verification.",
   "candidates": [
-    {"slug":"car-seat-headrest-hooks","name":"Car Seat Headrest Hooks","query":"car seat back headrest hook","queries":["car seat back headrest hook","auto seat headrest hanger hooks"],"researchScore":90,"liveStoreProduct":false,"searchStrategy":"alternate_exact_synonyms_after_initial_no_match"},
-    {"slug":"microfiber-car-detailing-cloths","name":"Microfiber Car Detailing Cloth Kit","query":"microfiber car detailing towel set","queries":["microfiber car detailing towel set","microfiber car wash towel pack"],"researchScore":90,"liveStoreProduct":false,"searchStrategy":"prefer_supplier_prepacked_set_after_single_unit_economics_failed"},
-    {"slug":"knife-cleaning-brush","name":"Knife and Cutlery Cleaning Brush","query":"double sided knife cleaning brush","queries":["double sided knife cleaning brush","cutlery washing brush knife"],"researchScore":89,"liveStoreProduct":false,"searchStrategy":"alternate_exact_synonyms_after_initial_no_match"},
-    {"slug":"car-trash-can","name":"Compact Car Trash Can","query":"car door trash can","queries":["car door trash can","car seat trash bin"],"researchScore":88,"liveStoreProduct":false,"searchStrategy":"seek_stocked_variant_after_initial_product_match"},
-    {"slug":"collapsible-microwave-cover","name":"Collapsible Microwave Food Cover","query":"microwave splatter cover collapsible","queries":["microwave splatter cover collapsible","folding microwave plate cover"],"researchScore":86,"liveStoreProduct":false,"searchStrategy":"alternate_exact_synonyms_after_initial_no_match"}
+    {"slug":"toilet-scrubber-kit","name":"Disposable Toilet Scrubber Brush Kit","query":"disposable toilet scrubber brush kit","queries":["disposable toilet scrubber brush kit","toilet wand scrubber cleaning kit"],"researchScore":95,"liveStoreProduct":false,"searchStrategy":"prefer dry tool kits without chemical refill claims"},
+    {"slug":"mini-bag-sealer","name":"Portable Mini Snack Bag Sealer","query":"portable mini bag sealer","queries":["portable mini bag sealer","handheld snack plastic bag sealer"],"researchScore":90,"liveStoreProduct":false,"searchStrategy":"prefer rechargeable or simple battery model with verified stock and positive freight"},
+    {"slug":"microfiber-car-detailing-cloths","name":"Microfiber Car Detailing Cloth Kit","query":"microfiber car detailing towel set","queries":["microfiber car detailing towel set","microfiber car wash towel pack"],"researchScore":92,"liveStoreProduct":false,"searchStrategy":"prefer supplier prepacked multi-unit set and low landed cost per cloth"},
+    {"slug":"car-seat-headrest-hooks","name":"Car Seat Headrest Hooks","query":"car seat back headrest hook","queries":["car seat back headrest hook","auto seat headrest hanger hooks"],"researchScore":92,"liveStoreProduct":false,"searchStrategy":"prefer universal multi-pack with simple fit geometry"},
+    {"slug":"knife-cleaning-brush","name":"Knife and Cutlery Cleaning Brush","query":"double sided knife cleaning brush","queries":["double sided knife cleaning brush","cutlery washing brush knife"],"researchScore":90,"liveStoreProduct":false,"searchStrategy":"prefer non-powered compact design with safe hand guard geometry"},
+    {"slug":"car-trash-can","name":"Compact Car Trash Can","query":"car door trash can","queries":["car door trash can","car seat trash bin"],"researchScore":89,"liveStoreProduct":false,"searchStrategy":"seek stocked compact variant with low dimensional freight"},
+    {"slug":"collapsible-microwave-cover","name":"Collapsible Microwave Food Cover","query":"microwave splatter cover collapsible","queries":["microwave splatter cover collapsible","folding microwave plate cover"],"researchScore":86,"liveStoreProduct":false,"searchStrategy":"require material and food-contact suitability evidence before commercialization"}
   ]
 }
