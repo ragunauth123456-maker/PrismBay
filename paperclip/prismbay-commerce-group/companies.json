@@ -1,9 +1,12 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "parent": "PrismBay Commerce Group",
   "objective": "Generate verified, profitable dropshipping sales for PrismBay Clean.",
   "masterExecutionPrompt": "paperclip/prismbay-commerce-group/MASTER_EXECUTION_PROMPT.md",
   "noIdleContract": "paperclip/prismbay-commerce-group/NO_IDLE_UNTIL_FIRST_SALE.md",
+  "strictKpiContract": "config/strict-kpis.json",
+  "strictKpiScorecard": "growth-reports/strict-kpi-scorecard.json",
+  "kpiRule": "Missing evidence receives zero credit. Activity alone is not success. Integrity breaches force critical red.",
   "companies": [
     {"id":"product-intelligence","name":"PrismBay Product Intelligence","funnelStage":"product_discovery","mission":"Find products with strong commercial potential before competitors saturate them.","primaryKpi":"commercially_viable_candidates_reaching_supplier_verification","implementation":["paperclip/prismbay-global-commerce","scripts/global-commerce-opportunity-engine.mjs"]},
     {"id":"supplier-fulfillment","name":"PrismBay Supplier and Fulfillment Intelligence","funnelStage":"supplier_verification","mission":"Protect margin, delivery performance, product quality and customer experience.","primaryKpi":"verified_products_and_fulfillment_risk","implementation":["scripts/paperclip-cj-sourcing.mjs","scripts/cj-review-board.mjs",".github/workflows/cj-supplier-verification.yml"]},
@@ -47,6 +50,9 @@
     "allCompaniesActiveBeforeFirstSale": true,
     "anotherCycleRequiredBeforeFirstSale": true,
     "firstSaleWarRoomUntilVerifiedSale": true,
+    "strictKpisMandatory": true,
+    "missingEvidenceGetsZeroKpiCredit": true,
+    "integrityBreachForcesCriticalKpi": true,
     "ownerEscalationOnlyForOwnerOnlyActions": true,
     "paidSpendRequiresApproval": true,
     "outreachRequiresApproval": true,

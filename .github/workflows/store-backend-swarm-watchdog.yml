@@ -9,6 +9,7 @@ on:
     paths:
       - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
       - 'config/store-backend-swarm.json'
+      - 'config/strict-kpis.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
@@ -17,6 +18,7 @@ on:
     paths:
       - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
       - 'config/store-backend-swarm.json'
+      - 'config/strict-kpis.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
@@ -41,10 +43,10 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Test watchdog policy
+      - name: Test watchdog and strict KPI policy
         run: node --test scripts/store-backend-swarm-watchdog.test.mjs
 
-      - name: Verify store health and committed swarm contract
+      - name: Verify store health, swarm contract and KPI floors
         run: node scripts/store-backend-swarm-watchdog.mjs
 
       - name: Retain backend swarm evidence
@@ -64,7 +66,12 @@ jobs:
           console.log(`- Configured workers: ${s.configuredWorkerCount}`);
           console.log(`- Cadence: ${s.cadence}`);
           console.log(`- Public storefront checks passing: ${s.publicHealth.filter(x=>x.ok).length}/${s.publicHealth.length}`);
+          console.log(`- KPI green threshold: ${s.kpiPolicy.greenAtOrAbove}/100`);
+          console.log(`- KPI miss threshold: below ${s.kpiPolicy.redBelow}/100`);
+          console.log(`- Intervention after consecutive misses: ${s.kpiPolicy.consecutiveRedBeforeIntervention}`);
+          console.log(`- Role rewrite after consecutive misses: ${s.kpiPolicy.consecutiveRedBeforeRoleRewrite}`);
           console.log(`- Runtime authority: ${s.runtimeAuthority}`);
           console.log(`- Checked at: ${s.checkedAt}`);
-          console.log('- GitHub does not infer private AppDeploy cron execution state; AppDeploy remains authoritative for runtime status.');
+          console.log('- Missing evidence gets zero credit; activity alone is not success; integrity breach forces critical.');
+          console.log('- GitHub does not infer private AppDeploy runtime KPI scores; AppDeploy remains authoritative for runtime worker performance.');
           NODE
