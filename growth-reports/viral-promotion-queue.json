@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-02T10:04:21.539Z",
+  "updatedAt": "2026-10-03T09:27:01.579Z",
   "supplierIntegration": "awaiting-cj-auth",
   "items": [
     {
       "rank": 1,
       "slug": "cordless-handheld-vacuum",
       "product": "Cordless Handheld Vacuum",
-      "attentionScore": 92,
+      "attentionScore": 90.1,
       "supplierReady": false,
       "freightReady": false,
       "promotionReady": false,

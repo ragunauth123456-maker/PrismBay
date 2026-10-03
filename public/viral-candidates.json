@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-02T10:04:21.539Z",
+  "updatedAt": "2026-10-03T09:27:01.579Z",
   "market": "US",
   "supplierIntegration": "awaiting-cj-auth",
   "methodology": "Public attention and recency identify candidates. Supplier promotion requires verified US inventory and product-level checks. Freight and checkout creation occur only after supplier validation.",
@@ -9,12 +9,12 @@
       "slug": "cordless-handheld-vacuum",
       "name": "Cordless Handheld Vacuum",
       "query": "cordless handheld vacuum",
-      "attentionScore": 92,
+      "attentionScore": 90.1,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 102,
+        "publicMentions": 100,
         "mentionsLast7Days": 2,
-        "mentionsLast30Days": 8,
+        "mentionsLast30Days": 7,
         "sourcesAvailable": [
           "Google News",
           "Bing News"
@@ -27,10 +27,10 @@
             "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPdHhLX21KR0ltRWJlTGMwMXJjOFJSaTY5NldZSTBqRERyQ3cxbWZEM24zZXR5SS1kbkxCOUNBT1Q0Z2RfM19jRlB1OXRnaHJFRmE2UkgtU2dLT2hUQzdSZTJYUDlnSi1YLXZjRWc2SHJNY0d1d0FfUEZrY1N0SzBtWTBsZE5PMlRsckpDaTlxNA?oc=5"
           },
           {
-            "title": "Black + Decker's handheld vacuum with 47,400+ reviews is on sale for $38— plus more best mini vacuums to shop on Amazon - ca.style.yahoo.com",
+            "title": "BLACK+DECKER® Launches dustbuster® mini™, a Cordless Handheld Vacuum Weighing Under 1 lb. - Yahoo Finance",
             "source": "Google News",
-            "publishedAt": "2026-07-20T07:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQd0diVGlZVTdZMm9BN1JwaUtxR1NuNTV0UDhyei1uSE5qdndvNmR3WS1IZnBfVk9QRHZwYW1mUnl2RHVSRThTSUV6NC1KZHZ3aGZSZ2wtV2hnbDBzbGpnQkJBZmxDQWpfUm1td1ViOFhMSmxiUkswOW5Eb0lQbXVkQndOWVpncjRDOG5JQ3UxRTZIdkNJYkF0cWFjYzd2dkhSZVJhUmxZZ0xMS1hWS2t6TDFicHV3OUtlTm9JSENsNkE0TklsZGtHeWRCbWkyREdoeXA5V1FPbUs1ODZCYUctVjhRTjYyMVl2LU5R?oc=5"
+            "publishedAt": "2026-10-01T14:10:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOdER4d2FJall4NWRNN0ZwbDRFeDVuN1FYTFpZcFZnZ1ZoSF83R2hYanRSd3V6RDdJcEhfT3BVLTdOenc1N29BZl9ja0E1UjZSdENhVWR5dzBTa0RrM0tYaEpwS2ZqRC0xejlNakVHTUZsSm0wS2FscUktRkFYdW9UbnhkQUpXV25HWUc5WmtjUGN3S0Yxck1pVE44SE1DNGs?oc=5"
           },
           {
             "title": "Our Editors Tested 300 Vacuums, but Only 10 Made the List—and Our Best Budget Pick Just Got Another Price Cut - Real Simple",
@@ -64,7 +64,7 @@
       "attentionScore": 71.3,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 45,
+        "publicMentions": 44,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
@@ -116,7 +116,7 @@
       "attentionScore": 71.1,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 34,
+        "publicMentions": 33,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 3,
         "sourcesAvailable": [
@@ -131,7 +131,7 @@
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8xNGhfekNqcklvNmFnN1NuTWVuWFJwLW5TWkxqakRXZVQxNk8yTlhWaGtubTRIT094Y09uNS16TFJoeGFJZ0VPYkVMNnpuRElpXzRjNVRQVG5JQWkzT0hBMnhfcm9FaF9M?oc=5"
           },
           {
-            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - Food & Wine",
+            "title": "This $7 Kitchen Hack Helps Keep Sink Grime and Puddles Under Control - foodandwine.com",
             "source": "Google News",
             "publishedAt": "2026-06-05T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNME5UMWtzQUpSOHA2RWtIc1hxZEEwUUlnMGJ5cVRNN1VkZ1B4dWEtSE5JeHN1aVRSY0o0U2paMFlMSjl1NWxaaVFDZjVsWFBTOXYxcGtUb2ZsRlptQkhSNjRPWHdTVmJFdVZZT01uaG53RFcxUnJ3aVhIbkZyRmxQSw?oc=5"
@@ -143,10 +143,10 @@
             "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1oQlI0bHl0dHVWR3phNW5Vd0t2RW96T2xGYjBVZnpURk54eXN6VnladzZMdnhjWFN1Ymt0ZUIxWndGenVIZXFvajV5anBOTTBSX29mcDdheFJDRE54alE?oc=5"
           },
           {
-            "title": "This Foldable Dish Rack Drains, Conceals, and Extends Your Counterspace - Livingetc",
+            "title": "10 Clever Amazon Home and Kitchen Gadgets That Pull a Lot More Weight Than Their Under-$10 Price Tag Suggests - Real Simple",
             "source": "Google News",
-            "publishedAt": "2026-06-25T07:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9SUU9hSG9jNm9TOWp3c2JJV0hNV2NuWDRjTHpIVkxTZHktTWlyWk9VcWRCeG1HVDJZQ3N4NEMxSzhTYXNfc2RqRVBKb2F4cGwwSHZzbVZzTUZELTZJUF81QzAyZHVVOUl0bFpsbjZhLUswUQ?oc=5"
+            "publishedAt": "2026-09-19T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPUHVIbW03WHp0bXI4ZXNXNGpFT2ZtSXhKaUNhd04tdXVRbmM5RWoxS1pQcF9JSjRFN3VNUTJIby13bExHaHdvWDRaZWlqX29pcENKRVB5bDVRNnlERGJieWJPSGhUNnlyeUhhN0RfMFlNanR0UEVrMjg2N1NCa1gxQVlKc1QtLVdZenRKRg?oc=5"
           }
         ]
       },
@@ -168,7 +168,7 @@
       "attentionScore": 70.4,
       "attentionLabel": "high-attention",
       "evidence": {
-        "publicMentions": 27,
+        "publicMentions": 25,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
@@ -177,7 +177,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - ca.style.yahoo.com",
+            "title": "Dryer fires are a major household hazard. This 'must-have' vent cleaner helps prevent them — it's under $20 - Yahoo Lifestyle Canada",
             "source": "Google News",
             "publishedAt": "2026-08-11T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPNHlsSk1uanVvSjRscmNoSkxIZVVMZjlsMmFDaXc3VEpUUzBjd1d2UGlwRnRuSE9XNXhvVXhQUW9tOXdEU1BjUFFFU0Jrc19mTFZzbTcxLTV5bzFIaUx5RU1YMGZEZFVQTUlyUWR4U1NWVWZsNUZQbk9UWjhMaktnb19LNFJ5bVcyMWM2b3F5S3FnLWROQ1IwTzhHZUgydUhwb2hPRlpFQUo5ZjFTMVVLTzFsYmluWGNvNkZRSHB1bThZX0NzX0JVMnNfNWJRVUY5Y2ZCLUV0bGJqTW8?oc=5"
@@ -189,7 +189,7 @@
             "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1YY1R3S1Vab08tdnA5S2FGUWV6TVVqTDhKQnpGQzVKdlhpZ19WVTM1WnVYRkZKV1VqWFBWcXVVbFJ0OFpVRW5DVVMzNGVWRWhMVEpyUEd1NzFnNVlHb3dGMTVzZVQtNU5tUlVtSm4tNVo?oc=5"
           },
           {
-            "title": "Sealegend Dryer Vent Cleaning Vacuum Hose Review: My Dryer Is So Much Cleaner Now - dengarden.com",
+            "title": "Sealegend Dryer Vent Cleaning Vacuum Hose Review: My Dryer Is So Much Cleaner Now - Dengarden",
             "source": "Google News",
             "publishedAt": "2026-01-27T08:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOREpad2RpUUhyM2tUcEROY21oU3JNOVMxaTJXMzUtb25YY3ZJd08wdXpDRzh5RTVlT3I4YzVHQWhSQXowTF9CaEY1cWhQWC16NVdQa19hNjByeXV5OGtsazZ5aE9LeWRBSjJfTFNYREd5dHQtS2phWUo4bnlfaF92U1h0ZlQxQVdrVWdEa3F0WGFfWFZINWI3ajNONHQxV1N3M0UzY0RxXzItRnBaVWJyMVljVXdFRGZpc0E?oc=5"
@@ -217,10 +217,10 @@
       "slug": "appliance-cord-organizer",
       "name": "Appliance Cord Organizer",
       "query": "appliance cord organizer",
-      "attentionScore": 40,
+      "attentionScore": 41.8,
       "attentionLabel": "research",
       "evidence": {
-        "publicMentions": 9,
+        "publicMentions": 10,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 2,
         "sourcesAvailable": [
@@ -229,7 +229,7 @@
         ],
         "sampleSignals": [
           {
-            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - Food & Wine",
+            "title": "I Didn’t Think There Was a Fix for My Tiny Kitchen — Until I Found These 43-Cent Tools - foodandwine.com",
             "source": "Google News",
             "publishedAt": "2026-07-26T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1XNnJBdTh6VUQxUTZOdlQxQ1RNNEp5ZUxwTThBSEQxLTRJSHZPSFRxUUNCZFduYlBTa1hHYjg5MU9IUXJidkJjM0Njb0ZCQnZMM3pzYmVjRDQ4ZnlPV1hqanNscWJpT3pLMkQ2OWFvSHBHMldzUzFBd2dtSzFfNkk?oc=5"
@@ -269,10 +269,10 @@
       "slug": "sheet-laundry-detangler",
       "name": "Bed Sheet Laundry Detangler",
       "query": "sheet laundry detangler",
-      "attentionScore": 29.8,
+      "attentionScore": 31.6,
       "attentionLabel": "low-signal",
       "evidence": {
-        "publicMentions": 3,
+        "publicMentions": 4,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 1,
         "sourcesAvailable": [
@@ -285,6 +285,12 @@
             "source": "Google News",
             "publishedAt": "2026-09-21T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNanRCX21aVXIteW9BSUJ3UFIwNHdVV0VSQWxES1pZUllEMF9tTHhUcDZYcWwwLUZtQ2tTU1o2QU5Ia0cyODBTc1lQWHQzQUdFMkhwbUNyQXZwQnJ3MGZfZ0Q2XzlSUTR1dXQzNmU4WS1TSUtuMWE1T3d5c042VksybVcwUjdPb2t6d1E?oc=5"
+          },
+          {
+            "title": "The 49 Coolest Things on Amazon Under $25 - HGTV",
+            "source": "Google News",
+            "publishedAt": "2026-06-16T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9XSTFKR0lJRW5HVWdxdy1WVjdEZ1pCcENEcFI2WmNSM0Q4c0R0OUsteTd4bzM0LVg4cGd3c2tvcVVnZHpLbmVCZUNiQkpESEc2aDZHUk9hTGhvd0Z5dVFKcVdzWnZiZk5aLXFlbDI2V18tWHpMSndac29R?oc=5"
           },
           {
             "title": "Is The Shark Tank Wad-Free Bed Sheet Laundry Detangler Worth Purchasing? - House Digest",
@@ -312,47 +318,13 @@
       "rank": 6
     },
     {
-      "slug": "self-standing-floor-mop",
-      "name": "Self-Standing Floor Mop",
-      "query": "self standing floor mop",
-      "attentionScore": 29.4,
-      "attentionLabel": "low-signal",
-      "evidence": {
-        "publicMentions": 1,
-        "mentionsLast7Days": 1,
-        "mentionsLast30Days": 1,
-        "sourcesAvailable": [
-          "Google News",
-          "Bing News"
-        ],
-        "sampleSignals": [
-          {
-            "title": "Amazon has 20% off these space-saving cleaning tools for minimalists - USA Today",
-            "source": "Google News",
-            "publishedAt": "2026-09-25T17:26:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxONFZyZk9VbDdXWGYyWXIzRUFLZDdwNk9JWnh0V2dXXzR6MzNVdnRweHlNWUtIWlU2TkJtaFpfVWZWLUxNSUlkZkRLQ0pYa3MzNzFyenlSYURzRlNsNkxxS0RTVGNkN05zcUxUTDVyS0ViaVdUa2oyMEpXUVBPQXJrV2tEZHJRbndyQzd2VnZyc3RPa3JtVVdzdmZ1RjB3SG9tenBpTER2UlNJSnFyZDREYjJyc24zNEUwbGd0d2gzc3Y?oc=5"
-          }
-        ]
-      },
-      "supplier": null,
-      "supplierReady": false,
-      "freightReady": false,
-      "promotionReady": false,
-      "mediaRightsReady": false,
-      "liveStripePricingReady": false,
-      "listed": false,
-      "discoveryEvidence": [],
-      "nextAction": "connect-cj",
-      "rank": 7
-    },
-    {
       "slug": "bottle-brush-set",
       "name": "Bottle Brush Cleaning Set",
       "query": "bottle brush cleaning set",
-      "attentionScore": 28.2,
+      "attentionScore": 30,
       "attentionLabel": "low-signal",
       "evidence": {
-        "publicMentions": 4,
+        "publicMentions": 5,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 0,
         "sourcesAvailable": [
@@ -379,10 +351,10 @@
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5VVDlIY3NTbzNFWlY3Wm1XNF95cktMX2ZDckhFNlJ0UEdudUEzbDEzSlo4MHpqc0pMUmxYZm9uWU5BNkVBUG1xblhkcm1fMm9jX1ZSeUQ4OFFDUWJHbUNoclBVNDFKRmt2NWFDZ204eWhLQU5FR0xJSFJpZWxwT3M?oc=5"
           },
           {
-            "title": "11 Best Baby Bottle Brushes To Remove Bacteria And Germs In 2026 - MomJunction",
+            "title": "Cool things with near-perfect Amazon reviews that are under-the-radar - mic.com",
             "source": "Google News",
-            "publishedAt": "2026-02-09T08:00:00.000Z",
-            "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBSSnZJWk02YnZ0a196a2FxNGRxV29yeFJscE4tOUxEb1czcXdQREwta0NRNy1kSmNFVklxd2VENmRRSjkzdnQzX1Bob2dScW1pLXF5YzBGSDBDYnJwalZ0bERjOWdyZEZvcmlwN0ZOYjFhRl9UQmxyQklsMA?oc=5"
+            "publishedAt": "2024-05-07T07:00:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQY3l0eWpVTG12TXJMQXJJc1ppYWhONkVRSUlfLVVla2FNaWowYXpUSHF0NkxjRXItZDVCck12emZtLXMwR0tmZEVzT01kVTQ3bnlMWkxOZlptM095TkppNU5wbXNaWlBYQWs5VEgteXRGTjZ4SEhGV1Q4dC10a3dXWldKdmE5V24xWGJNYmIxaXRHZE5uOXNjSzB4WmZIOUk?oc=5"
           }
         ]
       },
@@ -395,7 +367,7 @@
       "listed": false,
       "discoveryEvidence": [],
       "nextAction": "connect-cj",
-      "rank": 8
+      "rank": 7
     },
     {
       "slug": "window-washer-squeegee",
@@ -423,6 +395,40 @@
             "source": "Google News",
             "publishedAt": "2026-08-14T07:00:00.000Z",
             "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5VVW5NRWgxR2dpcFNXM0MxRE1vVVN3ZE9hTUJQcXJEb3ZkNEd1bExPcnVQT1FDVHpPQ21PUExrS2RES0FIbmtPd2NET2FMaV9mcG9WcUNYOU1FRXdTWlVUUzg1UmlGYlhJVWN3WUpYNVkyUm8?oc=5"
+          }
+        ]
+      },
+      "supplier": null,
+      "supplierReady": false,
+      "freightReady": false,
+      "promotionReady": false,
+      "mediaRightsReady": false,
+      "liveStripePricingReady": false,
+      "listed": false,
+      "discoveryEvidence": [],
+      "nextAction": "connect-cj",
+      "rank": 8
+    },
+    {
+      "slug": "self-standing-floor-mop",
+      "name": "Self-Standing Floor Mop",
+      "query": "self standing floor mop",
+      "attentionScore": 25.7,
+      "attentionLabel": "low-signal",
+      "evidence": {
+        "publicMentions": 1,
+        "mentionsLast7Days": 0,
+        "mentionsLast30Days": 1,
+        "sourcesAvailable": [
+          "Google News",
+          "Bing News"
+        ],
+        "sampleSignals": [
+          {
+            "title": "Amazon has 20% off these space-saving cleaning tools for minimalists - USA Today",
+            "source": "Google News",
+            "publishedAt": "2026-09-25T17:26:00.000Z",
+            "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxONFZyZk9VbDdXWGYyWXIzRUFLZDdwNk9JWnh0V2dXXzR6MzNVdnRweHlNWUtIWlU2TkJtaFpfVWZWLUxNSUlkZkRLQ0pYa3MzNzFyenlSYURzRlNsNkxxS0RTVGNkN05zcUxUTDVyS0ViaVdUa2oyMEpXUVBPQXJrV2tEZHJRbndyQzd2VnZyc3RPa3JtVVdzdmZ1RjB3SG9tenBpTER2UlNJSnFyZDREYjJyc24zNEUwbGd0d2gzc3Y?oc=5"
           }
         ]
       },
