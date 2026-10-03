@@ -1,0 +1,48 @@
+name: PrismBay Retail Commercial Authorization
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'config/retail-commercial-authorization.json'
+      - 'scripts/cj-review-board.mjs'
+      - 'scripts/retail-commercial-authorization.test.mjs'
+      - '.github/workflows/retail-commercial-authorization.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'config/retail-commercial-authorization.json'
+      - 'scripts/cj-review-board.mjs'
+      - 'scripts/retail-commercial-authorization.test.mjs'
+      - '.github/workflows/retail-commercial-authorization.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  validate-authorization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test commercial authorization and supplier review
+        run: >-
+          node --test
+          scripts/retail-commercial-authorization.test.mjs
+          scripts/cj-review-board.test.mjs
+          scripts/retail-promotion-swarm.test.mjs
+
+      - name: Re-run live CJ verification after approved main change
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run cj-supplier-verification.yml --ref main

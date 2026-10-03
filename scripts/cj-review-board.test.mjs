@@ -29,7 +29,7 @@ test('rejects the two unrelated products claimed as CJ supplier matches',()=>{
  assert.ok(b.candidates.every(c=>c.status==='identity_rejected'&&!c.checkoutAllowed&&!c.automaticPromotionAllowed));
 });
 
-test('correct country estimate still requires manual commercial approval',()=>{
+test('correct country estimate still requires exact destination freight',()=>{
  const b=buildCJReview({...base,results:[{
   slug:'cordless-handheld-vacuum',candidate:'Cordless Handheld Vacuum',
   supplierVerified:true,variantInventoryVerified:true,freightVerified:true,freightQuoteScope:'country_estimate',
@@ -41,7 +41,7 @@ test('correct country estimate still requires manual commercial approval',()=>{
  assert.equal(b.countryFreightEstimateCount,1);
  assert.equal(b.illustrativeZipFreightEstimateCount,0);
  assert.equal(b.saleReadyCount,0);
- assert.equal(b.candidates[0].status,'commercial_review_required');
+ assert.equal(b.candidates[0].status,'final_zip_freight_required');
  assert.equal(b.candidates[0].checkoutAllowed,false);
  assert.equal(b.candidates[0].mediaRightsVerified,false);
 });

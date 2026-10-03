@@ -15,8 +15,46 @@ function normalizeFreight(row) {
   };
 }
 
+function authorizationFor(authorization, slug, finalZipFreightVerified) {
+  const ownerAuthorized = authorization?.ownerAuthorized === true;
+  const originalMedia = ownerAuthorized &&
+    authorization?.media?.promotionMediaRightsVerified === true &&
+    authorization?.media?.policy === 'original_graphics_and_original_copy_only' &&
+    authorization?.media?.supplierMediaAuthorized !== true &&
+    authorization?.media?.thirdPartyMediaAuthorized !== true;
+  const promotionAuthorized = ownerAuthorized &&
+    authorization?.promotion?.automaticPromotionAllowedAfterAllOtherGates === true &&
+    authorization?.paidSpendAuthorized !== true &&
+    authorization?.bulkOutreachAuthorized !== true;
+  const checkoutSkus = new Set(Array.isArray(authorization?.checkoutInfrastructure?.verifiedCheckoutSkus)
+    ? authorization.checkoutInfrastructure.verifiedCheckoutSkus.map(String)
+    : []);
+  const checkoutInfrastructureVerified = ownerAuthorized &&
+    authorization?.checkoutInfrastructure?.deployed === true &&
+    authorization?.checkoutInfrastructure?.stripeWebhookSecretConfigured === true &&
+    checkoutSkus.has(String(slug || ''));
+  const checkoutAllowed = checkoutInfrastructureVerified && finalZipFreightVerified === true;
+  return {
+    mediaRightsVerified: originalMedia,
+    promotionMediaPolicy: originalMedia ? 'original_graphics_and_original_copy_only' : null,
+    checkoutInfrastructureVerified,
+    checkoutAllowed,
+    automaticPromotionAllowed: promotionAuthorized,
+  };
+}
+
+function isSaleReady(candidate = {}) {
+  return candidate.independentIdentityMatch === true &&
+    candidate.variantStockVerified === true &&
+    candidate.freightEstimateVerified === true &&
+    candidate.finalZipFreightVerified === true &&
+    candidate.mediaRightsVerified === true &&
+    candidate.checkoutAllowed === true &&
+    candidate.automaticPromotionAllowed === true;
+}
+
 // Sanitized read-only handoff. A matched product never implies sale readiness.
-export function buildCJReview(report) {
+export function buildCJReview(report, authorization = null) {
   if (!report || !Array.isArray(report.results) || !Number.isFinite(Date.parse(report.checkedAt))) {
     throw new Error('CJ verification report missing or invalid');
   }
@@ -27,18 +65,23 @@ export function buildCJReview(report) {
     const slug = typeof row.slug === 'string' ? row.slug : null;
     const identity = slug ? matchesIntendedProduct({slug}, productName) : null;
     const freightScope = row.freightQuoteScope || null;
+    const variantStockVerified = Boolean(identity === true && row.variantInventoryVerified);
     const freightEstimateVerified = Boolean(identity === true && row.variantInventoryVerified && row.freightVerified);
+    const finalZipFreightVerified = Boolean(freightEstimateVerified && row.finalZipFreightVerified === true);
+    const commercial = authorizationFor(authorization, slug, finalZipFreightVerified);
     let status = 'supplier_search_needed';
     if (row.supplierVerified) {
       status = identity === false ? 'identity_rejected' :
         identity === null ? 'manual_identity_check_required' :
         !row.variantInventoryVerified ? 'variant_stock_required' :
         !row.freightVerified ? 'destination_freight_required' :
+        !finalZipFreightVerified ? 'final_zip_freight_required' :
+        !commercial.checkoutAllowed ? 'checkout_review_required' :
         'commercial_review_required';
     } else if (row.status === 'search_error') {
       status = 'supplier_api_retry_required';
     }
-    return {
+    const candidate = {
       slug, candidate: intended, observedProduct: productName || null,
       liveStoreProduct: Boolean(row.liveStoreProduct),
       retailPriceUsd: Number.isFinite(Number(row.retailPriceUsd)) ? Number(row.retailPriceUsd) : null,
@@ -51,16 +94,17 @@ export function buildCJReview(report) {
       zeroPricedMethodCount: Number.isInteger(row.zeroPriceQuoteCount) ? row.zeroPriceQuoteCount : 0,
       supplierClaimedMatch: Boolean(row.supplierVerified),
       independentIdentityMatch: identity, status,
-      variantStockVerified: Boolean(identity === true && row.variantInventoryVerified),
+      variantStockVerified,
       freightEstimateVerified,
       countryFreightEstimated: Boolean(freightEstimateVerified && freightScope === 'country_estimate'),
       illustrativeZipFreightEstimated: Boolean(freightEstimateVerified && illustrativeScopes.has(freightScope)),
-      mediaRightsVerified: false, finalZipFreightVerified: false,
-      checkoutAllowed: false, automaticPromotionAllowed: false,
+      finalZipFreightVerified,
+      ...commercial,
     };
+    return candidate;
   });
   return {
-    schemaVersion: 2, checkedAt: report.checkedAt, market: report.market || 'US',
+    schemaVersion: 3, checkedAt: report.checkedAt, market: report.market || 'US',
     authenticationVerified, sourceCandidateCount: report.results.length,
     liveStoreCandidateCount: candidates.filter(c => c.liveStoreProduct).length,
     independentProductMatches: candidates.filter(c => c.independentIdentityMatch === true).length,
@@ -69,10 +113,15 @@ export function buildCJReview(report) {
     freightEstimateCount: candidates.filter(c => c.freightEstimateVerified).length,
     countryFreightEstimateCount: candidates.filter(c => c.countryFreightEstimated).length,
     illustrativeZipFreightEstimateCount: candidates.filter(c => c.illustrativeZipFreightEstimated).length,
-    saleReadyCount: 0,
+    finalZipFreightCount: candidates.filter(c => c.finalZipFreightVerified).length,
+    mediaRightsVerifiedCount: candidates.filter(c => c.mediaRightsVerified).length,
+    checkoutInfrastructureVerifiedCount: candidates.filter(c => c.checkoutInfrastructureVerified).length,
+    promotionAuthorizedCount: candidates.filter(c => c.automaticPromotionAllowed).length,
+    saleReadyCount: candidates.filter(isSaleReady).length,
     zeroPricedCandidateCount: candidates.filter(c => c.zeroPricedMethodCount > 0).length,
     allRequireManualCommercialApproval: true,
-    note: 'Freight estimates are not final buyer ZIP approval. Product media and checkout require separate authorization.',
+    ownerCommercialAuthorizationLoaded: authorization?.ownerAuthorized === true,
+    note: 'Country and illustrative ZIP freight estimates are not final buyer ZIP approval. Checkout remains blocked until exact destination freight is verified. Promotion media is restricted to original graphics and original copy unless separate rights evidence exists.',
     candidates,
   };
 }
@@ -89,7 +138,7 @@ export function mergeCJReview(previous, fresh) {
       observedAt <= now && now - observedAt < 30 * 36e5;
   }) : [];
   // Recheck carried evidence after policy corrections. A prior accepted title
-  // must not preserve stock/freight approval for a newly rejected identity.
+  // must not preserve stock/freight or commercial approval for a newly rejected identity.
   const combined = [...current, ...retained].map(source => {
     const row = normalizeFreight(source);
     if (matchesIntendedProduct({slug: row.slug}, row.observedProduct)) return row;
@@ -97,7 +146,8 @@ export function mergeCJReview(previous, fresh) {
       status: row.supplierClaimedMatch ? (row.slug ? 'identity_rejected' : 'manual_identity_check_required') : row.status,
       variantStockVerified: false, freightEstimateVerified: false,
       countryFreightEstimated: false, illustrativeZipFreightEstimated: false,
-      mediaRightsVerified: false, finalZipFreightVerified: false,
+      mediaRightsVerified: false, promotionMediaPolicy: null,
+      finalZipFreightVerified: false, checkoutInfrastructureVerified: false,
       checkoutAllowed: false, automaticPromotionAllowed: false};
   });
   return {
@@ -110,7 +160,11 @@ export function mergeCJReview(previous, fresh) {
     freightEstimateCount: combined.filter(c => c.freightEstimateVerified).length,
     countryFreightEstimateCount: combined.filter(c => c.countryFreightEstimated).length,
     illustrativeZipFreightEstimateCount: combined.filter(c => c.illustrativeZipFreightEstimated).length,
-    saleReadyCount: 0,
+    finalZipFreightCount: combined.filter(c => c.finalZipFreightVerified).length,
+    mediaRightsVerifiedCount: combined.filter(c => c.mediaRightsVerified).length,
+    checkoutInfrastructureVerifiedCount: combined.filter(c => c.checkoutInfrastructureVerified).length,
+    promotionAuthorizedCount: combined.filter(c => c.automaticPromotionAllowed).length,
+    saleReadyCount: combined.filter(isSaleReady).length,
     zeroPricedCandidateCount: combined.filter(c => c.zeroPricedMethodCount > 0).length,
   };
 }
@@ -128,7 +182,11 @@ export async function main(source = 'growth-reports/cj-supplier-verification.jso
       .map(c => [String(c.name || '').trim().toLowerCase(), c.slug]));
     report.results = report.results.map(r => ({...r, slug: r.slug || names.get(String(r.candidate || '').trim().toLowerCase()) || null}));
   } catch { /* Missing catalogs leave identities awaiting manual review. */ }
-  const current = buildCJReview(report);
+  let authorization = null;
+  try {
+    authorization = JSON.parse(await fs.readFile('config/retail-commercial-authorization.json', 'utf8'));
+  } catch { /* Missing owner authorization keeps commercial gates closed. */ }
+  const current = buildCJReview(report, authorization);
   let previous = null;
   try { previous = JSON.parse(await fs.readFile(destination, 'utf8')); } catch { /* first batch */ }
   const output = mergeCJReview(previous, current);
@@ -143,8 +201,12 @@ export async function main(source = 'growth-reports/cj-supplier-verification.jso
     freightEstimates: output.freightEstimateCount,
     countryFreightEstimates: output.countryFreightEstimateCount,
     illustrativeZipFreightEstimates: output.illustrativeZipFreightEstimateCount,
+    finalZipFreight: output.finalZipFreightCount,
+    mediaRightsVerified: output.mediaRightsVerifiedCount,
+    checkoutInfrastructureVerified: output.checkoutInfrastructureVerifiedCount,
+    promotionAuthorized: output.promotionAuthorizedCount,
     zeroPricedCandidatesNeedingManualQuote: output.zeroPricedCandidateCount,
-    saleReady: 0,
+    saleReady: output.saleReadyCount,
   };
   console.log(JSON.stringify(summary));
   if (process.env.GITHUB_STEP_SUMMARY) {
