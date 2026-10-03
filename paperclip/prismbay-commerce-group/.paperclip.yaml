@@ -34,6 +34,11 @@ agents:
     adapter:
       type: claude_local
 routines:
+  store-backend-swarm-watchdog:
+    triggers:
+      - kind: schedule
+        cronExpression: "*/10 * * * *"
+        timezone: "America/Guyana"
   first-sale-war-room:
     triggers:
       - kind: schedule
