@@ -9,6 +9,7 @@ on:
     paths:
       - 'paperclip/prismbay-commerce-group/**'
       - 'config/sales-strategy-portfolio.json'
+      - 'config/strict-kpis.json'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
       - 'scripts/paperclip-no-idle-guard.mjs'
@@ -17,6 +18,8 @@ on:
       - 'scripts/paperclip-sales-strategy-engine.test.mjs'
       - 'scripts/prioritize-commercial-candidates.mjs'
       - 'scripts/prioritize-commercial-candidates.test.mjs'
+      - 'scripts/strict-kpi-scorecard.mjs'
+      - 'scripts/strict-kpi-scorecard.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
   workflow_run:
     workflows:
@@ -31,6 +34,7 @@ on:
     paths:
       - 'paperclip/prismbay-commerce-group/**'
       - 'config/sales-strategy-portfolio.json'
+      - 'config/strict-kpis.json'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
       - 'scripts/paperclip-no-idle-guard.mjs'
@@ -39,6 +43,8 @@ on:
       - 'scripts/paperclip-sales-strategy-engine.test.mjs'
       - 'scripts/prioritize-commercial-candidates.mjs'
       - 'scripts/prioritize-commercial-candidates.test.mjs'
+      - 'scripts/strict-kpi-scorecard.mjs'
+      - 'scripts/strict-kpi-scorecard.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
 
 permissions:
@@ -61,13 +67,14 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate master execution contracts and ten-company organization
+      - name: Validate master execution contracts, organization and KPI system
         shell: bash
         run: |
           test -s paperclip/prismbay-commerce-group/MASTER_EXECUTION_PROMPT.md
           test -s paperclip/prismbay-commerce-group/NO_IDLE_UNTIL_FIRST_SALE.md
           test -s config/sales-strategy-portfolio.json
-          node --test scripts/paperclip-commerce-group.test.mjs scripts/paperclip-no-idle-guard.test.mjs scripts/paperclip-sales-strategy-engine.test.mjs scripts/prioritize-commercial-candidates.test.mjs
+          test -s config/strict-kpis.json
+          node --test scripts/paperclip-commerce-group.test.mjs scripts/paperclip-no-idle-guard.test.mjs scripts/paperclip-sales-strategy-engine.test.mjs scripts/prioritize-commercial-candidates.test.mjs scripts/strict-kpi-scorecard.test.mjs
 
       - name: Refresh independent opportunity board
         run: node scripts/global-commerce-opportunity-engine.mjs
@@ -96,12 +103,16 @@ jobs:
       - name: Enforce no-idle operation until first verified sale
         run: node scripts/paperclip-no-idle-guard.mjs
 
-      - name: Retain consolidated executive dashboard
+      - name: Score every company against strict KPIs
+        run: node scripts/strict-kpi-scorecard.mjs
+
+      - name: Retain consolidated executive dashboard and KPI scorecard
         uses: actions/upload-artifact@v4
         with:
           name: prismbay-commerce-group-${{ github.run_id }}
           path: |
             growth-reports/prismbay-commerce-group-dashboard.json
+            growth-reports/strict-kpi-scorecard.json
             growth-reports/sales-strategy-board.json
             growth-reports/global-commerce-opportunities.json
             growth-reports/paperclip-revenue-board.json
@@ -111,12 +122,13 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: First Sale War Room summary
+      - name: First Sale War Room and strict KPI summary
         run: |
           node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs=require('fs');
           const d=JSON.parse(fs.readFileSync('growth-reports/prismbay-commerce-group-dashboard.json','utf8'));
           const s=JSON.parse(fs.readFileSync('growth-reports/sales-strategy-board.json','utf8'));
+          const k=JSON.parse(fs.readFileSync('growth-reports/strict-kpi-scorecard.json','utf8'));
           const w=d.firstSaleWarRoom || {};
           const n=d.noIdleUntilFirstSale || {};
           console.log('## PrismBay Commerce Group | CEO First Sale War Room');
@@ -135,4 +147,11 @@ jobs:
           console.log(`- Next cycle required before first sale: ${n.nextCycleRequired === true}`);
           console.log(`- External owner action required: ${(d.externalActionsAwaitingOwnerApproval || []).join(', ') || 'none'}`);
           console.log(`- Next commercial action: ${d.scoreboard?.nextAction || 'none'}`);
+          console.log('');
+          console.log('## Strict KPI Scorecard');
+          console.log(`- Parent controller: ${k.parentController.score}/100 (${k.parentController.band})`);
+          for (const [id,row] of Object.entries(k.companies)) {
+            console.log(`- ${id}: ${row.score}/100 (${row.band}); evidence gaps=${row.evidenceGaps.length}`);
+          }
+          console.log('- Rule: missing evidence receives zero credit; activity alone is not success; integrity breach = critical.');
           NODE
