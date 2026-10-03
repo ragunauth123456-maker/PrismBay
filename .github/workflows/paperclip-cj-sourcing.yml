@@ -17,6 +17,8 @@ on:
       - 'scripts/paperclip-cj-sourcing.test.mjs'
       - 'scripts/supplier-economics-stress-test.mjs'
       - 'scripts/supplier-economics-stress-test.test.mjs'
+      - 'scripts/supplier-commercial-ranker.mjs'
+      - 'scripts/supplier-commercial-ranker.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
   push:
     branches: [main]
@@ -31,6 +33,8 @@ on:
       - 'scripts/paperclip-cj-sourcing.test.mjs'
       - 'scripts/supplier-economics-stress-test.mjs'
       - 'scripts/supplier-economics-stress-test.test.mjs'
+      - 'scripts/supplier-commercial-ranker.mjs'
+      - 'scripts/supplier-commercial-ranker.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
 
 permissions:
@@ -51,6 +55,7 @@ jobs:
           scripts/cj-freight-policy.test.mjs
           scripts/paperclip-cj-sourcing.test.mjs
           scripts/supplier-economics-stress-test.test.mjs
+          scripts/supplier-commercial-ranker.test.mjs
 
   source-products:
     if: github.event_name != 'pull_request'
@@ -70,6 +75,8 @@ jobs:
         run: node scripts/paperclip-cj-sourcing.mjs
       - name: Stress-test provisional landed economics
         run: node scripts/supplier-economics-stress-test.mjs
+      - name: Re-rank candidates using verified commercial evidence
+        run: node scripts/supplier-commercial-ranker.mjs
       - name: Retain supplier and economics evidence
         uses: actions/upload-artifact@v4
         with:
@@ -77,5 +84,6 @@ jobs:
           path: |
             growth-reports/paperclip-cj-sourcing.json
             growth-reports/supplier-economics-stress-test.json
+            growth-reports/supplier-commercial-rank.json
           if-no-files-found: error
           retention-days: 14
