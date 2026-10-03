@@ -13,16 +13,32 @@ function rangeUpper(value) {
   const values = value.trim().replace(/[≥≤]/g, '').split('-').map(Number).filter(Number.isFinite);
   return values.length && values.every(v => v > 0) ? Math.max(...values) : null;
 }
-
+function normalizeRoute(row = {}, index = 0) {
+  const variantId = String(row?.cjVariantId || row?.variantId || '').trim();
+  const supplierCostUsd = positiveNumber(row?.supplierCostUsd);
+  const originCountryCode = String(row?.originCountryCode || 'US').toUpperCase();
+  const routeId = String(row?.routeId || `route-${index + 1}`).trim().replace(/[^A-Za-z0-9._-]/g, '').slice(0, 60);
+  if (!variantId || variantId.length > 200 || !supplierCostUsd || !/^[A-Z]{2}$/.test(originCountryCode) || !routeId) return null;
+  return Object.freeze({ routeId, variantId, supplierCostUsd, originCountryCode });
+}
 function catalogFingerprint(product) {
-  return crypto.createHash('sha256').update(JSON.stringify({ sku: product.sku, variantId: product.variantId, supplierCostUsd: product.supplierCostUsd, retailUsd: product.retailUsd, originCountryCode: product.originCountryCode, feeRatePct: product.feeRatePct, returnReservePct: product.returnReservePct, stripePaymentUrl: product.stripePaymentUrl })).digest('base64url');
+  return crypto.createHash('sha256').update(JSON.stringify({ sku: product.sku, routes: product.routes, retailUsd: product.retailUsd, feeRatePct: product.feeRatePct, returnReservePct: product.returnReservePct, stripePaymentUrl: product.stripePaymentUrl })).digest('base64url');
 }
 function normalizeCatalog(raw = {}) {
   const map = new Map();
   for (const row of Array.isArray(raw?.products) ? raw.products : []) {
-    const sku = safeSku(row?.sku), variantId = String(row?.cjVariantId || '').trim(), supplierCostUsd = positiveNumber(row?.supplierCostUsd), retailUsd = positiveNumber(row?.retailUsd), originCountryCode = String(row?.originCountryCode || 'US').toUpperCase(), feeRatePct = positiveNumber(row?.feeRatePct) ?? 3.2, returnReservePct = positiveNumber(row?.returnReservePct) ?? 5, stripePaymentUrl = safePaymentUrl(row?.stripePaymentUrl);
-    if (!sku || !variantId || variantId.length > 200 || !supplierCostUsd || !retailUsd || !stripePaymentUrl || !/^[A-Z]{2}$/.test(originCountryCode)) continue;
-    const product = { sku, variantId, supplierCostUsd, retailUsd, originCountryCode, feeRatePct, returnReservePct, stripePaymentUrl };
+    const sku = safeSku(row?.sku), retailUsd = positiveNumber(row?.retailUsd), feeRatePct = positiveNumber(row?.feeRatePct) ?? 3.2, returnReservePct = positiveNumber(row?.returnReservePct) ?? 5, stripePaymentUrl = safePaymentUrl(row?.stripePaymentUrl);
+    const rawRoutes = Array.isArray(row?.routes) && row.routes.length ? row.routes : [{ cjVariantId: row?.cjVariantId, supplierCostUsd: row?.supplierCostUsd, originCountryCode: row?.originCountryCode, routeId: row?.routeId || 'primary' }];
+    const seen = new Set();
+    const routes = rawRoutes.slice(0, 5).map((route, index) => normalizeRoute(route, index)).filter(route => {
+      if (!route) return false;
+      const key = `${route.variantId}:${route.originCountryCode}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    if (!sku || !retailUsd || !stripePaymentUrl || !routes.length) continue;
+    const product = { sku, routes, retailUsd, feeRatePct, returnReservePct, stripePaymentUrl, variantId: routes[0].variantId, supplierCostUsd: routes[0].supplierCostUsd, originCountryCode: routes[0].originCountryCode };
     map.set(sku, Object.freeze({ ...product, catalogFingerprint: catalogFingerprint(product) }));
   }
   return map;
@@ -44,7 +60,7 @@ export function issueQuoteToken({ sku, quantity, zip, freightUsd, economics, cat
   if (!secret || String(secret).length < 32) throw new Error('QUOTE_SIGNING_SECRET must be at least 32 characters');
   if (!fingerprint || typeof fingerprint !== 'string') throw new Error('catalog fingerprint required');
   const exp = Math.floor(now / 1000) + Math.max(60, Math.min(Number(ttlSeconds) || 900, 1800));
-  const payload = canonicalPayload({ v: 3, jti: nonce || crypto.randomBytes(18).toString('base64url'), sku, quantity, zipHash: zipDigest(zip, secret), freightUsd, contributionUsd: economics.contributionUsd, catalogFingerprint: fingerprint, exp });
+  const payload = canonicalPayload({ v: 4, jti: nonce || crypto.randomBytes(18).toString('base64url'), sku, quantity, zipHash: zipDigest(zip, secret), freightUsd, contributionUsd: economics.contributionUsd, catalogFingerprint: fingerprint, exp });
   return `${payload}.${signPayload(payload, secret)}`;
 }
 export function verifyQuoteToken({ token, zip, secret, now = Date.now() }) {
@@ -53,12 +69,12 @@ export function verifyQuoteToken({ token, zip, secret, now = Date.now() }) {
   if (!destinationZip || !payload || !signature || extra) return { valid: false, reason: 'invalid_quote_token' };
   if (!safeEqualText(signPayload(payload, secret), signature)) return { valid: false, reason: 'invalid_quote_signature' };
   let decoded; try { decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')); } catch { return { valid: false, reason: 'invalid_quote_payload' }; }
-  if (decoded?.v !== 3 || !/^[A-Za-z0-9_-]{16,80}$/.test(String(decoded?.jti || '')) || !safeSku(decoded?.sku) || !intInRange(decoded?.quantity, 1, 25) || !positiveNumber(decoded?.freightUsd) || !positiveNumber(decoded?.contributionUsd) || !/^[A-Za-z0-9_-]{32,100}$/.test(String(decoded?.catalogFingerprint || '')) || !Number.isInteger(decoded?.exp)) return { valid: false, reason: 'invalid_quote_payload' };
+  if (decoded?.v !== 4 || !/^[A-Za-z0-9_-]{16,80}$/.test(String(decoded?.jti || '')) || !safeSku(decoded?.sku) || !intInRange(decoded?.quantity, 1, 25) || !positiveNumber(decoded?.freightUsd) || !positiveNumber(decoded?.contributionUsd) || !/^[A-Za-z0-9_-]{32,100}$/.test(String(decoded?.catalogFingerprint || '')) || !Number.isInteger(decoded?.exp)) return { valid: false, reason: 'invalid_quote_payload' };
   if (decoded.exp <= Math.floor(now / 1000)) return { valid: false, reason: 'quote_expired' };
   if (!safeEqualText(decoded.zipHash, zipDigest(destinationZip, secret))) return { valid: false, reason: 'quote_destination_mismatch' };
   return { valid: true, quote: decoded };
 }
-function cjHeaders(token) { return { 'CJ-Access-Token': token, 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/2.0' }; }
+function cjHeaders(token) { return { 'CJ-Access-Token': token, 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/2.1' }; }
 async function jsonFetch(fetchImpl, url, options = {}) { const response = await fetchImpl(url, options); if (!response?.ok) throw new Error(`upstream_${response?.status || 'error'}`); return response.json(); }
 
 function simpleFreightMethods(payload) {
@@ -70,6 +86,7 @@ function tipFreightMethods(payload) {
     return { name: String(row?.option?.enName || row?.channel?.enName || '').trim(), usd, aging: String(row?.arrivalTime || row?.option?.arrivalTime || '').trim() || null, evidence: 'zip_tip' };
   }).filter(row => row.name && row.usd).sort((a, b) => a.usd - b.usd);
 }
+function routeProduct(product, route) { return { ...product, variantId: route.variantId, supplierCostUsd: route.supplierCostUsd, originCountryCode: route.originCountryCode, routeId: route.routeId }; }
 function buildTipRequest({ variant, detail, product, quantity, zip }) {
   const sku = String(variant?.variantSku || '').trim();
   const unitWeight = positiveNumber(variant?.variantWeight);
@@ -81,24 +98,9 @@ function buildTipRequest({ variant, detail, product, quantity, zip }) {
   const wrapWeight = Math.ceil(Math.max(unitWeight, packWeight || unitWeight) * quantity);
   const volume = Number(((unitVolumeMm3 * quantity) / 1000).toFixed(3));
   if (!(volume > 0)) return null;
-  const row = {
-    srcAreaCode: product.originCountryCode,
-    destAreaCode: 'US',
-    weight,
-    wrapWeight,
-    volume,
-    totalGoodsAmount: +(product.supplierCostUsd * quantity).toFixed(2),
-    productProp: props,
-    skuList: [sku],
-    freightTrialSkuList: [{ skuQuantity: quantity, sku }],
-    shippingMode: 2,
-    zip,
-  };
+  const row = { srcAreaCode: product.originCountryCode, destAreaCode: 'US', weight, wrapWeight, volume, totalGoodsAmount: +(product.supplierCostUsd * quantity).toFixed(2), productProp: props, skuList: [sku], freightTrialSkuList: [{ skuQuantity: quantity, sku }], shippingMode: 2, zip };
   const productType = String(detail?.productType ?? '').trim();
-  if (/^[01345]$/.test(productType)) {
-    row.productTypes = [productType];
-    if (productType === '5') row.trialCalculationType = '1';
-  }
+  if (/^[01345]$/.test(productType)) { row.productTypes = [productType]; if (productType === '5') row.trialCalculationType = '1'; }
   return { reqDTOS: [row] };
 }
 
@@ -118,7 +120,7 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
   async function getToken() {
     if (accessToken && now() < accessTokenExpiresAt - 60_000) return accessToken;
     if (!apiKey) throw new Error('cj_api_key_missing');
-    const auth = await jsonFetch(fetchImpl, `${CJ_BASE}/authentication/getAccessToken`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/2.0' }, body: JSON.stringify({ apiKey }) });
+    const auth = await jsonFetch(fetchImpl, `${CJ_BASE}/authentication/getAccessToken`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/2.1' }, body: JSON.stringify({ apiKey }) });
     const token = String(auth?.data?.accessToken || '').trim(); if (!token) throw new Error('cj_access_token_missing');
     accessToken = token; const expireAt = Date.parse(auth?.data?.accessTokenExpiryDate || ''); accessTokenExpiresAt = Number.isFinite(expireAt) ? expireAt : now() + 60 * 60 * 1000; return token;
   }
@@ -147,12 +149,27 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
         if (methods.length) return { methods, source: 'zip_tip', fallbackUsed: false, diagnostic: 'accurate_zip_tip_priced' };
         tipDiagnostic = 'tip_returned_no_priced_methods';
       }
-    } catch (error) {
-      tipDiagnostic = String(error?.message || '').startsWith('upstream_') ? 'tip_upstream_unavailable' : 'tip_metadata_or_identity_unavailable';
-    }
+    } catch (error) { tipDiagnostic = String(error?.message || '').startsWith('upstream_') ? 'tip_upstream_unavailable' : 'tip_metadata_or_identity_unavailable'; }
     const freightPayload = await jsonFetch(fetchImpl, `${CJ_BASE}/logistic/freightCalculate`, { method: 'POST', headers: cjHeaders(token), body: JSON.stringify({ startCountryCode: product.originCountryCode, endCountryCode: 'US', zip, products: [{ quantity, vid: product.variantId }] }) });
     const methods = simpleFreightMethods(freightPayload);
     return { methods, source: methods.length ? 'zip_simple_fallback' : null, fallbackUsed: true, diagnostic: methods.length ? `simple_zip_priced_after_${tipDiagnostic}` : `no_priced_shipping_after_${tipDiagnostic}` };
+  }
+  async function evaluateRoutes(product, quantity, zip) {
+    const results = [];
+    for (const route of product.routes) {
+      const scoped = routeProduct(product, route);
+      try {
+        const stock = await verifyCurrentStock(scoped, quantity);
+        if (!stock) { results.push({ route, status: 'stock_unavailable' }); continue; }
+        const shippingEvidence = await resolveShipping(scoped, quantity, zip);
+        if (!shippingEvidence.methods.length) { results.push({ route, status: 'freight_unavailable', shippingEvidence }); continue; }
+        const shipping = shippingEvidence.methods[0];
+        const economics = computeEconomics({ product: scoped, quantity, freightUsd: shipping.usd });
+        results.push({ route, status: economics.approved ? 'approved' : 'economics_failed', shippingEvidence, shipping, economics });
+      } catch { results.push({ route, status: 'upstream_unavailable' }); }
+    }
+    const ranked = results.filter(row => row.shipping && row.economics).sort((a, b) => Number(b.economics.approved) - Number(a.economics.approved) || Number(a.shippingEvidence.source !== 'zip_tip') - Number(b.shippingEvidence.source !== 'zip_tip') || b.economics.contributionUsd - a.economics.contributionUsd || a.economics.landedUsd - b.economics.landedUsd);
+    return { selected: ranked[0] || null, results };
   }
   return Object.freeze({
     configuredSkus: Object.freeze([...products.keys()]),
@@ -161,13 +178,12 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
       if (!sku || !zip || !quantity) return { ok: false, status: 400, error: 'invalid_quote_request' };
       const product = products.get(sku); if (!product) return { ok: false, status: 404, error: 'sku_not_quote_enabled' };
       if (!quoteSecret || quoteSecret.length < 32) return { ok: false, status: 503, error: 'quote_signing_not_configured' };
-      const stock = await verifyCurrentStock(product, quantity); if (!stock) return { ok: false, status: 409, error: 'verified_origin_stock_unavailable' };
-      const shippingEvidence = await resolveShipping(product, quantity, zip);
-      if (!shippingEvidence.methods.length) return { ok: false, status: 409, error: 'priced_freight_unavailable', shippingDiagnostic: shippingEvidence.diagnostic };
-      const shipping = shippingEvidence.methods[0], economics = computeEconomics({ product, quantity, freightUsd: shipping.usd });
-      const common = { ok: true, status: 200, checkoutAllowed: economics.approved, sku, quantity, destination: { country: 'US', zip }, shipping, shippingEvidence: { source: shippingEvidence.source, fallbackUsed: shippingEvidence.fallbackUsed, diagnostic: shippingEvidence.diagnostic }, economics, destinationZipPriced: true, stockVerifiedAtQuote: true };
-      if (!economics.approved) return common;
-      const quoteToken = issueQuoteToken({ sku, quantity, zip, freightUsd: shipping.usd, economics, catalogFingerprint: product.catalogFingerprint, secret: quoteSecret, ttlSeconds, now: now() });
+      const portfolio = await evaluateRoutes(product, quantity, zip);
+      if (!portfolio.selected) return { ok: false, status: 409, error: 'no_viable_supplier_route', supplierRoutesChecked: product.routes.length };
+      const selected = portfolio.selected;
+      const common = { ok: true, status: 200, checkoutAllowed: selected.economics.approved, sku, quantity, destination: { country: 'US', zip }, shipping: selected.shipping, shippingEvidence: { source: selected.shippingEvidence.source, fallbackUsed: selected.shippingEvidence.fallbackUsed, diagnostic: selected.shippingEvidence.diagnostic }, economics: selected.economics, destinationZipPriced: true, stockVerifiedAtQuote: true, supplierPortfolio: { routesChecked: product.routes.length, viablePricedRoutes: portfolio.results.filter(row => row.shipping && row.economics).length, selectedRouteId: selected.route.routeId } };
+      if (!selected.economics.approved) return common;
+      const quoteToken = issueQuoteToken({ sku, quantity, zip, freightUsd: selected.shipping.usd, economics: selected.economics, catalogFingerprint: product.catalogFingerprint, secret: quoteSecret, ttlSeconds, now: now() });
       return { ...common, quoteToken, expiresInSeconds: Math.max(60, Math.min(ttlSeconds || 900, 1800)), supplierOrderingEnabled: false };
     },
     async authorizeCheckout(input = {}) {
@@ -175,14 +191,11 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
       if (!verified.valid) return { ok: false, status: 403, error: verified.reason };
       const product = products.get(verified.quote.sku); if (!product) return { ok: false, status: 404, error: 'sku_not_quote_enabled' };
       if (!safeEqualText(verified.quote.catalogFingerprint, product.catalogFingerprint)) return { ok: false, status: 409, error: 'quote_catalog_changed' };
-      const stock = await verifyCurrentStock(product, verified.quote.quantity);
-      if (!stock) return { ok: false, status: 409, error: 'stock_changed_since_quote' };
-      const freshShipping = await resolveShipping(product, verified.quote.quantity, safeZip(input.zip));
-      if (!freshShipping.methods.length) return { ok: false, status: 409, error: 'shipping_changed_since_quote' };
-      const freshEconomics = computeEconomics({ product, quantity: verified.quote.quantity, freightUsd: freshShipping.methods[0].usd });
-      if (!freshEconomics.approved) return { ok: false, status: 409, error: 'economics_changed_since_quote' };
+      const portfolio = await evaluateRoutes(product, verified.quote.quantity, safeZip(input.zip));
+      if (!portfolio.selected || !portfolio.selected.economics.approved) return { ok: false, status: 409, error: 'supplier_portfolio_no_longer_viable' };
       if (!(await consumeOnce(verified.quote))) return { ok: false, status: 409, error: 'quote_already_used' };
-      return { ok: true, status: 200, checkoutAllowed: true, sku: product.sku, quantity: verified.quote.quantity, paymentUrl: product.stripePaymentUrl, expiresAt: verified.quote.exp, quoteUse: 'consumed_once_persistently_when_configured', stockRevalidatedAtCheckout: true, shippingRevalidatedAtCheckout: true, shippingEvidence: { source: freshShipping.source, fallbackUsed: freshShipping.fallbackUsed }, economicsRevalidatedAtCheckout: true, supplierOrderingEnabled: false };
+      const selected = portfolio.selected;
+      return { ok: true, status: 200, checkoutAllowed: true, sku: product.sku, quantity: verified.quote.quantity, paymentUrl: product.stripePaymentUrl, expiresAt: verified.quote.exp, quoteUse: 'consumed_once_persistently_when_configured', stockRevalidatedAtCheckout: true, shippingRevalidatedAtCheckout: true, shippingEvidence: { source: selected.shippingEvidence.source, fallbackUsed: selected.shippingEvidence.fallbackUsed }, economicsRevalidatedAtCheckout: true, supplierPortfolio: { routesChecked: product.routes.length, selectedRouteId: selected.route.routeId }, supplierOrderingEnabled: false };
     },
   });
 }
