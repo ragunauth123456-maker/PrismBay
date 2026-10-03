@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { computeEconomics, createQuoteService, issueQuoteToken, parseQuoteCatalog, verifyQuoteToken } from './shipping-quote.mjs';
+import { createLedgerQuoteConsumer } from './quote-replay.mjs';
+import { openLedger } from './ledger.mjs';
 
 const secret = 'x'.repeat(40);
 const env = {
@@ -14,7 +19,7 @@ const env = {
   }] }),
 };
 
-function fakeFetchFactory({ freight = 4.5, inventory = 100, inventorySequence = null } = {}) {
+function fakeFetchFactory({ freight = 4.5, tipFreight = 3.75, inventory = 100, inventorySequence = null, tipEnabled = true } = {}) {
   const calls = [];
   let stockCall = 0;
   const fetchImpl = async (url, options = {}) => {
@@ -25,7 +30,10 @@ function fakeFetchFactory({ freight = 4.5, inventory = 100, inventorySequence = 
       const current = Array.isArray(inventorySequence) ? inventorySequence[Math.min(stockCall++, inventorySequence.length - 1)] : inventory;
       return { ok: true, json: async () => ({ data: [{ vid: 'VID-CREVICE-1', countryCode: 'US', cjInventoryNum: current }] }) };
     }
-    if (text.includes('/logistic/freightCalculate')) return { ok: true, json: async () => ({ data: [{ logisticName: 'USPS', logisticPrice: freight, logisticAging: '5-8 days' }] }) };
+    if (text.includes('/product/variant/queryByVid')) return { ok: true, json: async () => ({ data: { vid: 'VID-CREVICE-1', pid: 'PID-CREVICE-1', variantSku: 'CJJT173147702BY-TEST', variantWeight: 100, variantVolume: 100000 } }) };
+    if (text.includes('/product/query')) return { ok: true, json: async () => ({ data: { pid: 'PID-CREVICE-1', productProEnSet: ['COMMON'], packingWeight: '120', productType: 0 } }) };
+    if (text.includes('/logistic/freightCalculateTip')) return { ok: true, json: async () => ({ data: tipEnabled ? [{ totalPostageFee: tipFreight, option: { enName: 'CJPacket Accurate' }, arrivalTime: '5-8 days' }] : [] }) };
+    if (text.includes('/logistic/freightCalculate')) return { ok: true, json: async () => ({ data: [{ logisticName: 'USPS Simple', logisticPrice: freight, logisticAging: '5-8 days' }] }) };
     throw new Error('unexpected upstream call');
   };
   return { fetchImpl, calls };
@@ -47,21 +55,39 @@ test('economics fail closed when shipping destroys contribution', () => {
   assert.equal(result.approved, false);
 });
 
-test('valid buyer ZIP receives one catalog-bound checkout authorization only after stock recheck', async () => {
+test('quote prefers accurate Freight Calculation Tip and revalidates shipping before checkout', async () => {
   const { fetchImpl, calls } = fakeFetchFactory();
-  const service = createQuoteService({ env, fetchImpl, now: () => 1_800_000_000_000 });
+  const consumed = new Set();
+  const service = createQuoteService({ env, fetchImpl, now: () => 1_800_000_000_000, consumeQuoteOnce: async ({ jti }) => consumed.has(jti) ? false : (consumed.add(jti), true) });
   const result = await service.quote({ sku: 'crevice', zip: '10001', quantity: 1 });
   assert.equal(result.checkoutAllowed, true);
   assert.equal(result.stockVerifiedAtQuote, true);
+  assert.equal(result.shipping.usd, 3.75);
+  assert.equal(result.shippingEvidence.source, 'zip_tip');
+  assert.equal(result.shippingEvidence.fallbackUsed, false);
+  assert.equal(result.destinationZipPriced, true);
   const checkout = await service.authorizeCheckout({ quoteToken: result.quoteToken, zip: '10001' });
   assert.equal(checkout.checkoutAllowed, true);
   assert.equal(checkout.stockRevalidatedAtCheckout, true);
-  assert.equal(checkout.quoteUse, 'consumed_once');
-  const stockCalls = calls.filter(x => x.url.includes('/product/stock/queryByVid'));
-  assert.equal(stockCalls.length, 2);
-  assert.equal(calls.some(x => /order|pay/i.test(new URL(x.url).pathname)), false);
+  assert.equal(checkout.shippingRevalidatedAtCheckout, true);
+  assert.equal(checkout.economicsRevalidatedAtCheckout, true);
+  assert.equal(checkout.quoteUse, 'consumed_once_persistently_when_configured');
+  assert.equal(calls.filter(x => x.url.includes('/product/stock/queryByVid')).length, 2);
+  assert.equal(calls.filter(x => x.url.includes('/logistic/freightCalculateTip')).length, 2);
+  assert.equal(calls.some(x => /shopping\/order|shopping\/pay/i.test(new URL(x.url).pathname)), false);
   const replay = await service.authorizeCheckout({ quoteToken: result.quoteToken, zip: '10001' });
   assert.equal(replay.error, 'quote_already_used');
+});
+
+test('simple ZIP freight remains a labeled fallback when accurate tip has no priced route', async () => {
+  const { fetchImpl } = fakeFetchFactory({ tipEnabled: false, freight: 4.5 });
+  const service = createQuoteService({ env, fetchImpl, now: () => 1_800_000_000_000 });
+  const result = await service.quote({ sku: 'crevice', zip: '90210', quantity: 1 });
+  assert.equal(result.ok, true);
+  assert.equal(result.shipping.usd, 4.5);
+  assert.equal(result.shippingEvidence.source, 'zip_simple_fallback');
+  assert.equal(result.shippingEvidence.fallbackUsed, true);
+  assert.match(result.shippingEvidence.diagnostic, /simple_zip_priced_after_/);
 });
 
 test('checkout is blocked when stock disappears after quote but before authorization', async () => {
@@ -113,4 +139,23 @@ test('quote refuses checkout when origin inventory is insufficient', async () =>
 test('signed quote token enforces secret and catalog fingerprint requirements', () => {
   assert.throws(() => issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, catalogFingerprint: 'x'.repeat(43), secret: 'short' }), /32 characters/);
   assert.throws(() => issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, secret }), /catalog fingerprint/);
+});
+
+test('ledger-backed one-time quote consumption survives restart', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'quote-replay-test-'));
+  try {
+    let ledger = await openLedger(dir);
+    const firstConsumer = createLedgerQuoteConsumer(ledger, () => 1_000_000);
+    const quote = { jti: 'abcdefghijklmnop1234', exp: 5000 };
+    assert.equal(await firstConsumer(quote), true);
+    assert.equal(await firstConsumer(quote), false);
+    await ledger.close();
+
+    ledger = await openLedger(dir);
+    const secondConsumer = createLedgerQuoteConsumer(ledger, () => 1_000_000);
+    assert.equal(await secondConsumer(quote), false);
+    await ledger.close();
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });
