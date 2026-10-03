@@ -1,0 +1,56 @@
+schema: "paperclip/v1"
+agents:
+  group-controller:
+    adapter:
+      type: claude_local
+  product-intelligence:
+    adapter:
+      type: claude_local
+  supplier-fulfillment:
+    adapter:
+      type: claude_local
+  offer-engineering:
+    adapter:
+      type: claude_local
+  storefront-conversion:
+    adapter:
+      type: claude_local
+  creative-studio:
+    adapter:
+      type: claude_local
+  organic-growth:
+    adapter:
+      type: claude_local
+  creator-affiliate-growth:
+    adapter:
+      type: claude_local
+  revenue-analytics:
+    adapter:
+      type: claude_local
+  experiment-lab:
+    adapter:
+      type: claude_local
+  commerce-control:
+    adapter:
+      type: claude_local
+routines:
+  commercial-control-loop:
+    triggers:
+      - kind: schedule
+        cronExpression: "17 * * * *"
+        timezone: "America/Guyana"
+  product-opportunity-refresh:
+    triggers:
+      - kind: schedule
+        cronExpression: "29 * * * *"
+        timezone: "America/Guyana"
+  supplier-margin-refresh:
+    triggers:
+      - kind: schedule
+        cronExpression: "47 */3 * * *"
+        timezone: "America/Guyana"
+  daily-executive-scorecard:
+    triggers:
+      - kind: schedule
+        cronExpression: "15 8 * * *"
+        timezone: "America/Guyana"
