@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "appId": "prismbay-clean-49izhg",
+  "storeOrigin": "https://prismbay-clean-49izhg.v2.appdeploy.ai",
+  "mode": "backend-swarm-24x7",
+  "timezone": "America/Guyana",
+  "workers": [
+    { "id": "commerce-controller", "minute": 0, "cadence": "hourly" },
+    { "id": "product-scout", "minute": 10, "cadence": "hourly" },
+    { "id": "site-auditor", "minute": 20, "cadence": "hourly" },
+    { "id": "seo-cro", "minute": 30, "cadence": "hourly" },
+    { "id": "offer-creative", "minute": 40, "cadence": "hourly" },
+    { "id": "analytics-experiment", "minute": 50, "cadence": "hourly" }
+  ],
+  "publicHealthPaths": ["/", "/products.json", "/merchant-feed.xml", "/sitemap.xml", "/robots.txt"],
+  "boundaries": {
+    "fakeTraffic": false,
+    "paidSpend": false,
+    "automaticSupplierOrdering": false,
+    "bulkUnsolicitedOutreach": false,
+    "automaticExternalPublishing": false,
+    "autonomousPriceChanges": false
+  },
+  "runtimeAuthority": "AppDeploy cron status for prismbay-clean-49izhg",
+  "githubRole": "Independent configuration and public storefront watchdog; GitHub does not claim visibility into private AppDeploy runtime state."
+}
