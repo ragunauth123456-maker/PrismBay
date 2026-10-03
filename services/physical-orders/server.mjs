@@ -82,7 +82,7 @@ export function createServer({ secret, ledger, catalog, quoteService = null, liv
       if (!allowCheckout(clientKey(req))) { safeLog(logger, 'rate_limited'); return send(429, { error: 'rate_limited' }); }
       try {
         const body = await readJson(req, 8 * 1024);
-        const result = quoteService.authorizeCheckout(body);
+        const result = await quoteService.authorizeCheckout(body);
         safeLog(logger, result.ok ? 'checkout_authorized' : 'checkout_rejected');
         return send(result.status || (result.ok ? 200 : 403), result);
       } catch {
