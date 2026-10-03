@@ -1,0 +1,60 @@
+name: Paperclip Global Commerce Company
+
+on:
+  schedule:
+    - cron: '29 */3 * * *'
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-global-commerce/**'
+      - 'scripts/global-commerce-opportunity-engine.mjs'
+      - 'scripts/global-commerce-opportunity-engine.test.mjs'
+      - '.github/workflows/paperclip-global-commerce.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-global-commerce/**'
+      - 'scripts/global-commerce-opportunity-engine.mjs'
+      - 'scripts/global-commerce-opportunity-engine.test.mjs'
+      - '.github/workflows/paperclip-global-commerce.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  opportunity-company:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out company
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate opportunity and economics controls
+        run: node --test scripts/global-commerce-opportunity-engine.test.mjs
+      - name: Run independent global commerce board
+        run: node scripts/global-commerce-opportunity-engine.mjs
+      - name: Check current public research sources are reachable
+        shell: bash
+        run: |
+          set -e
+          for url in \
+            'https://sell.amazon.com/blog/products-to-sell' \
+            'https://sell.amazon.com/blog/product-ideas' \
+            'https://www.shopify.com/blog/trending-products' \
+            'https://www.ebay.com/sellercenter/selling/what-to-sell' \
+            'https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en'; do
+            code=$(curl -L -A 'Mozilla/5.0 PrismBayResearch/1.0' -sS -o /dev/null -w '%{http_code}' --max-time 25 "$url" || true)
+            echo "$code $url"
+            test "$code" -ge 200 -a "$code" -lt 500
+          done
+      - name: Retain Paperclip global commerce board
+        uses: actions/upload-artifact@v4
+        with:
+          name: paperclip-global-commerce-${{ github.run_id }}
+          path: growth-reports/global-commerce-opportunities.json
+          if-no-files-found: error
+          retention-days: 14
