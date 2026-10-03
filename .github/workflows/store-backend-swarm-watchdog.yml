@@ -1,0 +1,69 @@
+name: PrismBay Store Backend Swarm Watchdog
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
+      - 'scripts/store-backend-swarm-watchdog.mjs'
+      - 'scripts/store-backend-swarm-watchdog.test.mjs'
+      - '.github/workflows/store-backend-swarm-watchdog.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
+      - 'scripts/store-backend-swarm-watchdog.mjs'
+      - 'scripts/store-backend-swarm-watchdog.test.mjs'
+      - '.github/workflows/store-backend-swarm-watchdog.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-store-backend-swarm-watchdog
+  cancel-in-progress: true
+
+jobs:
+  verify-backend-swarm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test watchdog policy
+        run: node --test scripts/store-backend-swarm-watchdog.test.mjs
+
+      - name: Verify live store backend swarm
+        run: node scripts/store-backend-swarm-watchdog.mjs
+
+      - name: Retain backend swarm evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-backend-swarm-${{ github.run_id }}
+          path: growth-reports/store-backend-swarm.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Backend swarm summary
+        run: |
+          node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs=require('fs');
+          const s=JSON.parse(fs.readFileSync('growth-reports/store-backend-swarm.json','utf8'));
+          console.log('## PrismBay Clean | 24x7 Backend Swarm');
+          console.log(`- Healthy: ${s.healthy}`);
+          console.log(`- Workers configured: ${s.workerCount}`);
+          console.log(`- Workers currently reporting OK: ${s.activeWorkerCount}`);
+          console.log(`- Total backend worker runs: ${s.totalRuns}`);
+          console.log(`- Verified sales: ${s.verifiedSales}`);
+          console.log(`- Controller focus: ${s.controllerFocus}`);
+          console.log(`- Last backend update: ${s.lastUpdatedAt}`);
+          NODE
