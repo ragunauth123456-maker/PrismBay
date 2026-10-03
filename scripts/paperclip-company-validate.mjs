@@ -20,6 +20,15 @@ if (!/schema:\s*agentcompanies\/v1/.test(company)) throw new Error('COMPANY.md s
 const sidecar = await fs.readFile(path.join(ROOT, '.paperclip.yaml'), 'utf8');
 if (!/schema:\s*["']paperclip\/v1["']/.test(sidecar)) throw new Error('.paperclip.yaml schema mismatch');
 if (!/America\/Guyana/.test(sidecar)) throw new Error('Expected Guyana timezone');
-const files = await fs.readdir(path.join(ROOT, 'projects/first-verified-sale/tasks'));
-if (files.filter(x => x.endsWith('.md')).length < 6) throw new Error('Revenue project needs at least six starter tasks');
-console.log(JSON.stringify({valid:true, root:ROOT, requiredFiles:required.length, starterTasks:files.length}));
+
+const tasksRoot = path.join(ROOT, 'projects/first-verified-sale/tasks');
+const taskDirs = (await fs.readdir(tasksRoot, { withFileTypes: true })).filter(entry => entry.isDirectory());
+let starterTasks = 0;
+for (const entry of taskDirs) {
+  const taskFile = path.join(tasksRoot, entry.name, 'TASK.md');
+  const text = await fs.readFile(taskFile, 'utf8');
+  if (!text.startsWith('---\n')) throw new Error(`Missing frontmatter: ${path.relative(ROOT, taskFile)}`);
+  starterTasks += 1;
+}
+if (starterTasks < 6) throw new Error('Revenue project needs at least six starter tasks');
+console.log(JSON.stringify({valid:true, root:ROOT, requiredFiles:required.length, starterTasks}));
