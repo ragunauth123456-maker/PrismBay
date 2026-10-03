@@ -1,0 +1,60 @@
+name: Paperclip Global Commerce CJ Sourcing
+
+on:
+  schedule:
+    - cron: '53 */6 * * *'
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
+      - 'scripts/cj-match-policy.mjs'
+      - 'scripts/cj-match-policy.test.mjs'
+      - 'scripts/paperclip-cj-sourcing.mjs'
+      - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - '.github/workflows/paperclip-cj-sourcing.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
+      - 'scripts/cj-match-policy.mjs'
+      - 'scripts/cj-match-policy.test.mjs'
+      - 'scripts/paperclip-cj-sourcing.mjs'
+      - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - '.github/workflows/paperclip-cj-sourcing.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  safety-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/cj-match-policy.test.mjs scripts/paperclip-cj-sourcing.test.mjs
+
+  source-products:
+    if: github.event_name != 'pull_request'
+    needs: safety-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source Paperclip opportunities through read-only CJ API
+        env:
+          CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+        run: node scripts/paperclip-cj-sourcing.mjs
+      - name: Retain supplier evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: paperclip-cj-sourcing-${{ github.run_id }}
+          path: growth-reports/paperclip-cj-sourcing.json
+          if-no-files-found: error
+          retention-days: 14

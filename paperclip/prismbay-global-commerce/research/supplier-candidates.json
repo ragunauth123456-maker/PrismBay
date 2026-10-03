@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-02",
+  "market": "US",
+  "mode": "research_only",
+  "candidates": [
+    {"slug":"car-seat-headrest-hooks","name":"Car Seat Headrest Hooks","query":"car seat headrest hooks","queries":["car seat headrest hooks","vehicle headrest bag hooks"],"researchScore":90,"liveStoreProduct":false},
+    {"slug":"microfiber-car-detailing-cloths","name":"Microfiber Car Detailing Cloth Kit","query":"microfiber car detailing cloth","queries":["microfiber car detailing cloth","car cleaning microfiber towel"],"researchScore":90,"liveStoreProduct":false},
+    {"slug":"knife-cleaning-brush","name":"Knife and Cutlery Cleaning Brush","query":"knife cleaning brush","queries":["knife cleaning brush","cutlery cleaning brush"],"researchScore":89,"liveStoreProduct":false},
+    {"slug":"car-trash-can","name":"Compact Car Trash Can","query":"car trash can","queries":["car trash can","vehicle garbage bin"],"researchScore":88,"liveStoreProduct":false},
+    {"slug":"collapsible-microwave-cover","name":"Collapsible Microwave Food Cover","query":"collapsible microwave cover","queries":["collapsible microwave cover","foldable microwave food cover"],"researchScore":86,"liveStoreProduct":false}
+  ]
+}
