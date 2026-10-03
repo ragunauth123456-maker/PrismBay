@@ -1,12 +1,42 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {positiveNumber,chooseProduct,chooseStock,buildPackScreening} from './paperclip-cj-sourcing.mjs';
+import {positiveNumber,chooseProduct,chooseStock,buildPackScreening,normalizeKnownProduct,candidateVariantChoices} from './paperclip-cj-sourcing.mjs';
 import {selectRotatingCandidates} from './candidate-rotation.mjs';
 
 test('selects only exact approved on-sale product identity',()=>{
  const c={slug:'car-seat-headrest-hooks'};
  const rows=[{id:'bad',nameEn:'Bathroom Wall Hook Rack',saleStatus:'3',sellPrice:2,totalVerifiedInventory:1000},{id:'good',nameEn:'Car Seat Headrest Bag Hooks',saleStatus:'3',sellPrice:3,totalVerifiedInventory:20}];
  assert.equal(chooseProduct(rows,c)?.id,'good');
+});
+
+test('normalizes a known CJ product lookup and rejects an echoed SKU mismatch',()=>{
+ const c={slug:'crevice',exactSupplierSku:'CJJT1731477',exactVariantSku:'CJJT173147702BY'};
+ const good=normalizeKnownProduct({data:{pid:'p1',productSku:'CJJT1731477',productNameEn:'4 In 1 Bottle Gap Cleaner Brush',saleStatus:'3'}},c);
+ assert.equal(good?.id,'p1');
+ assert.equal(good?.sku,'CJJT1731477');
+ assert.equal(good?.knownIdentitySource,'variant_sku_query');
+ assert.equal(good?.knownSupplierSkuEchoed,true);
+ const bad=normalizeKnownProduct({data:{pid:'p2',productSku:'OTHER',productNameEn:'4 In 1 Bottle Gap Cleaner Brush',saleStatus:'3'}},c);
+ assert.equal(bad,null);
+});
+
+test('known product lookup accepts missing SKU echo only when identity name and product id still pass',()=>{
+ const c={slug:'drain-catcher',exactSupplierSku:'CJCF1653868'};
+ const row=normalizeKnownProduct({data:{pid:'p3',productNameEn:'Silicone Sink Drain Filter Hair Catcher',saleStatus:'3'}},c);
+ assert.equal(row?.id,'p3');
+ assert.equal(row?.sku,'CJCF1653868');
+ assert.equal(row?.knownSupplierSkuEchoed,false);
+});
+
+test('exact variant policy never substitutes another variant',()=>{
+ const c={slug:'crevice',exactVariantSku:'CJJT173147702BY'};
+ const rows=[
+  {vid:'wrong-vid',variantSku:'CJJT173147701AZ',variantSellPrice:1.2},
+  {vid:'right-vid',variantSku:'CJJT173147702BY',variantSellPrice:1.3},
+  {vid:'other-vid',variantSku:'CJJT173147703CX',variantSellPrice:1.1},
+ ];
+ assert.deepEqual(candidateVariantChoices(rows,c).map(x=>x.vid),['right-vid']);
+ assert.deepEqual(candidateVariantChoices(rows,{slug:'crevice'}).map(x=>x.vid),['wrong-vid','right-vid','other-vid']);
 });
 
 test('rejects zero prices and prefers usable physical stock',()=>{
