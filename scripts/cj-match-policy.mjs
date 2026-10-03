@@ -24,7 +24,7 @@ const policy = Object.freeze({
   'hanging-closet-organizer': { required: [/\b(closet|wardrobe)\b/i, /\b(hanging|hangable|suspended)\b/i, /\b(organizer|shelf|storage)\b/i], excluded: [/\b(jewelry|mirror|cabinet|lockable|wall[\s-]*door)\b/i] },
   'pan-scraper': { required: [/\b(pan|pot|cookware|dish)\b/i, /\b(scrap\w*|scrub\w*)\b/i], excluded: [/\b(paint|wallpaper|industrial)\b/i] },
   'car-seat-headrest-hooks': { required: [/\b(car|auto|vehicle)\b/i, /\bheadrest\b/i, /\b(hooks?|hangers?)\b/i], excluded: [/\b(wall|bathroom|coat rack|replacement headrest)\b/i] },
-  'microfiber-car-detailing-cloths': { required: [/\bmicrofiber\b/i, /\b(car|auto|vehicle|detailing)\b/i, /\b(cloth|towel|rag)\b/i], excluded: [/\b(mop|replacement pad|bath towel|clothing)\b/i] },
+  'microfiber-car-detailing-cloths': { required: [/\bmicrofiber\b/i, /\b(car|auto|vehicle|detailing)\b/i, /\b(cloths?|towels?|rags?)\b/i], excluded: [/\b(mop|replacement pad|bath towel|clothing)\b/i] },
   'knife-cleaning-brush': { required: [/\b(knife|cutlery|flatware)\b/i, /\bbrush\b/i, /\b(clean|washing|scrub)\w*\b/i], excluded: [/\b(electric toothbrush|hair|paint|makeup)\b/i] },
   'car-trash-can': { required: [/\b(car|auto|vehicle)\b/i, /\b(trash|garbage|waste)\b/i, /\b(can|bin|container)\b/i], excluded: [/\b(kitchen|outdoor wheelie|dumpster)\b/i] },
   'collapsible-microwave-cover': { required: [/\bmicrowave\b/i, /\bcover\b/i, /\b(collapsible|foldable|food|plate)\b/i], excluded: [/\b(replacement part|waveguide|motor|oven appliance)\b/i] },
