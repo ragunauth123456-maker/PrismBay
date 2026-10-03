@@ -22,6 +22,13 @@ function safeZip(value) {
   return /^\d{5}$/.test(zip) ? zip : null;
 }
 
+function safePaymentUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    return url.protocol === 'https:' && ['buy.stripe.com', 'checkout.stripe.com'].includes(url.hostname) ? url.toString() : null;
+  } catch { return null; }
+}
+
 function normalizeCatalog(raw = {}) {
   const products = Array.isArray(raw?.products) ? raw.products : [];
   const map = new Map();
@@ -33,8 +40,9 @@ function normalizeCatalog(raw = {}) {
     const originCountryCode = String(row?.originCountryCode || 'US').toUpperCase();
     const feeRatePct = positiveNumber(row?.feeRatePct) ?? 3.2;
     const returnReservePct = positiveNumber(row?.returnReservePct) ?? 5;
-    if (!sku || !variantId || variantId.length > 200 || !supplierCostUsd || !retailUsd || !/^[A-Z]{2}$/.test(originCountryCode)) continue;
-    map.set(sku, Object.freeze({ sku, variantId, supplierCostUsd, retailUsd, originCountryCode, feeRatePct, returnReservePct }));
+    const stripePaymentUrl = safePaymentUrl(row?.stripePaymentUrl);
+    if (!sku || !variantId || variantId.length > 200 || !supplierCostUsd || !retailUsd || !stripePaymentUrl || !/^[A-Z]{2}$/.test(originCountryCode)) continue;
+    map.set(sku, Object.freeze({ sku, variantId, supplierCostUsd, retailUsd, originCountryCode, feeRatePct, returnReservePct, stripePaymentUrl }));
   }
   return map;
 }
@@ -45,6 +53,16 @@ function canonicalPayload(obj) {
 
 function signPayload(payload, secret) {
   return crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+}
+
+function zipDigest(zip, secret) {
+  return crypto.createHmac('sha256', secret).update(String(zip)).digest('base64url');
+}
+
+function safeEqualText(a, b) {
+  const left = Buffer.from(String(a || ''));
+  const right = Buffer.from(String(b || ''));
+  return left.length === right.length && crypto.timingSafeEqual(left, right);
 }
 
 export function parseQuoteCatalog(env = process.env) {
@@ -86,13 +104,27 @@ export function computeEconomics({ product, quantity, freightUsd }) {
 export function issueQuoteToken({ sku, quantity, zip, freightUsd, economics, secret, ttlSeconds = 900, now = Date.now() }) {
   if (!secret || String(secret).length < 32) throw new Error('QUOTE_SIGNING_SECRET must be at least 32 characters');
   const exp = Math.floor(now / 1000) + Math.max(60, Math.min(Number(ttlSeconds) || 900, 1800));
-  const zipHash = crypto.createHmac('sha256', secret).update(String(zip)).digest('base64url');
-  const payload = canonicalPayload({ v: 1, sku, quantity, zipHash, freightUsd, contributionUsd: economics.contributionUsd, exp });
+  const payload = canonicalPayload({ v: 1, sku, quantity, zipHash: zipDigest(zip, secret), freightUsd, contributionUsd: economics.contributionUsd, exp });
   return `${payload}.${signPayload(payload, secret)}`;
 }
 
+export function verifyQuoteToken({ token, zip, secret, now = Date.now() }) {
+  if (!secret || String(secret).length < 32) return { valid: false, reason: 'quote_signing_not_configured' };
+  const destinationZip = safeZip(zip);
+  const [payload, signature, extra] = String(token || '').split('.');
+  if (!destinationZip || !payload || !signature || extra) return { valid: false, reason: 'invalid_quote_token' };
+  const expected = signPayload(payload, secret);
+  if (!safeEqualText(expected, signature)) return { valid: false, reason: 'invalid_quote_signature' };
+  let decoded;
+  try { decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')); } catch { return { valid: false, reason: 'invalid_quote_payload' }; }
+  if (decoded?.v !== 1 || !safeSku(decoded?.sku) || !intInRange(decoded?.quantity, 1, 25) || !positiveNumber(decoded?.freightUsd) || !positiveNumber(decoded?.contributionUsd) || !Number.isInteger(decoded?.exp)) return { valid: false, reason: 'invalid_quote_payload' };
+  if (decoded.exp <= Math.floor(now / 1000)) return { valid: false, reason: 'quote_expired' };
+  if (!safeEqualText(decoded.zipHash, zipDigest(destinationZip, secret))) return { valid: false, reason: 'quote_destination_mismatch' };
+  return { valid: true, quote: decoded };
+}
+
 function cjHeaders(token) {
-  return { 'CJ-Access-Token': token, 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/1.0' };
+  return { 'CJ-Access-Token': token, 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/1.1' };
 }
 
 async function jsonFetch(fetchImpl, url, options = {}) {
@@ -114,7 +146,7 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
     if (accessToken && now() < accessTokenExpiresAt - 60_000) return accessToken;
     if (!apiKey) throw new Error('cj_api_key_missing');
     const auth = await jsonFetch(fetchImpl, `${CJ_BASE}/authentication/getAccessToken`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/1.0' }, body: JSON.stringify({ apiKey })
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': 'PrismBay-Exact-Quote/1.1' }, body: JSON.stringify({ apiKey })
     });
     const token = String(auth?.data?.accessToken || '').trim();
     if (!token) throw new Error('cj_access_token_missing');
@@ -136,7 +168,6 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
       if (!quoteSecret || quoteSecret.length < 32) return { ok: false, status: 503, error: 'quote_signing_not_configured' };
 
       const token = await getToken();
-
       const stockUrl = new URL(`${CJ_BASE}/product/stock/queryByVid`);
       stockUrl.searchParams.set('vid', product.variantId);
       const stockPayload = await jsonFetch(fetchImpl, stockUrl, { headers: cjHeaders(token) });
@@ -145,8 +176,7 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
       if (!stock) return { ok: false, status: 409, error: 'verified_origin_stock_unavailable' };
 
       const freightPayload = await jsonFetch(fetchImpl, `${CJ_BASE}/logistic/freightCalculate`, {
-        method: 'POST',
-        headers: cjHeaders(token),
+        method: 'POST', headers: cjHeaders(token),
         body: JSON.stringify({ startCountryCode: product.originCountryCode, endCountryCode: 'US', zip, products: [{ quantity, vid: product.variantId }] })
       });
       const methods = (Array.isArray(freightPayload?.data) ? freightPayload.data : [])
@@ -157,25 +187,17 @@ export function createQuoteService({ env = process.env, fetchImpl = globalThis.f
 
       const shipping = methods[0];
       const economics = computeEconomics({ product, quantity, freightUsd: shipping.usd });
-      if (!economics.approved) {
-        return { ok: true, status: 200, checkoutAllowed: false, sku, quantity, destination: { country: 'US', zip }, shipping, economics, finalDestinationVerified: true };
-      }
+      if (!economics.approved) return { ok: true, status: 200, checkoutAllowed: false, sku, quantity, destination: { country: 'US', zip }, shipping, economics, finalDestinationVerified: true };
 
       const quoteToken = issueQuoteToken({ sku, quantity, zip, freightUsd: shipping.usd, economics, secret: quoteSecret, ttlSeconds, now: now() });
-      return {
-        ok: true,
-        status: 200,
-        checkoutAllowed: true,
-        sku,
-        quantity,
-        destination: { country: 'US', zip },
-        shipping,
-        economics,
-        finalDestinationVerified: true,
-        quoteToken,
-        expiresInSeconds: Math.max(60, Math.min(ttlSeconds || 900, 1800)),
-        supplierOrderingEnabled: false,
-      };
+      return { ok: true, status: 200, checkoutAllowed: true, sku, quantity, destination: { country: 'US', zip }, shipping, economics, finalDestinationVerified: true, quoteToken, expiresInSeconds: Math.max(60, Math.min(ttlSeconds || 900, 1800)), supplierOrderingEnabled: false };
+    },
+    authorizeCheckout(input = {}) {
+      const verified = verifyQuoteToken({ token: input.quoteToken, zip: input.zip, secret: quoteSecret, now: now() });
+      if (!verified.valid) return { ok: false, status: 403, error: verified.reason };
+      const product = products.get(verified.quote.sku);
+      if (!product) return { ok: false, status: 404, error: 'sku_not_quote_enabled' };
+      return { ok: true, status: 200, checkoutAllowed: true, sku: product.sku, quantity: verified.quote.quantity, paymentUrl: product.stripePaymentUrl, expiresAt: verified.quote.exp, supplierOrderingEnabled: false };
     },
   });
 }
