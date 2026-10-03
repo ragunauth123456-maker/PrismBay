@@ -10,6 +10,8 @@ on:
       - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
       - 'scripts/cj-match-policy.mjs'
       - 'scripts/cj-match-policy.test.mjs'
+      - 'scripts/cj-freight-policy.mjs'
+      - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
@@ -19,6 +21,8 @@ on:
       - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
       - 'scripts/cj-match-policy.mjs'
       - 'scripts/cj-match-policy.test.mjs'
+      - 'scripts/cj-freight-policy.mjs'
+      - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
@@ -35,7 +39,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test scripts/cj-match-policy.test.mjs scripts/paperclip-cj-sourcing.test.mjs
+      - run: >-
+          node --test
+          scripts/cj-match-policy.test.mjs
+          scripts/cj-freight-policy.test.mjs
+          scripts/paperclip-cj-sourcing.test.mjs
 
   source-products:
     if: github.event_name != 'pull_request'

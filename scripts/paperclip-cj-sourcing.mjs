@@ -25,12 +25,34 @@ export function chooseStock(rows, vid) {
   return valid[0]||null;
 }
 
+export function buildPackScreening(productCostUsd, quantity, freight = {offers:[]}) {
+  const unitCost=positiveNumber(productCostUsd);
+  const qty=Number(quantity);
+  if(!unitCost || !Number.isInteger(qty) || qty<1 || qty>25) return {quantity:qty,priced:false,reason:'invalid_pack_inputs'};
+  const shipping=positiveNumber(freight?.offers?.[0]?.usd);
+  if(!shipping) return {quantity:qty,priced:false,reason:'priced_freight_required'};
+  const productCostTotal=unitCost*qty;
+  const landed=productCostTotal+shipping;
+  return {
+    quantity:qty,
+    priced:true,
+    productCostTotalUsd:+productCostTotal.toFixed(2),
+    lowestFreightUsd:+shipping.toFixed(2),
+    freightPerUnitUsd:+(shipping/qty).toFixed(2),
+    landedCostUsd:+landed.toFixed(2),
+    landedCostPerUnitUsd:+(landed/qty).toFixed(2),
+    freightMethod:freight.offers[0]?.name||null,
+    aging:freight.offers[0]?.aging||null,
+    finalDestinationVerified:false,
+  };
+}
+
 function flatten(payload) {
   const groups=payload?.data?.content;
   return Array.isArray(groups)?groups.flatMap(g=>Array.isArray(g?.productList)?g.productList:[]):[];
 }
 
-function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.0'}; }
+function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.1'}; }
 
 export async function sourceCandidate({client,base,token,candidate}) {
   let product=null;
@@ -62,27 +84,46 @@ export async function sourceCandidate({client,base,token,candidate}) {
     }
   } catch {}
   const productCostUsd=positiveNumber(variant?.variantSellPrice) ?? positiveNumber(product?.nowPrice ?? product?.discountPrice ?? product?.sellPrice);
-  const result={...baseResult,status:variant&&stock?'variant_stock_verified':'variant_stock_required',variantInventoryVerified:Boolean(variant&&stock),product:{id:String(product.id),name:product.nameEn,sku:product.sku||product.spu||null,variantId:variant?.vid||null,variantSku:variant?.variantSku||null,originCountryCode:stock?String(stock.countryCode).toUpperCase():null,productCostUsd,inventory:stock?Number(stock.cjInventoryNum||0):null}};
+  const inventory=stock?Number(stock.cjInventoryNum||0):null;
+  const result={...baseResult,status:variant&&stock?'variant_stock_verified':'variant_stock_required',variantInventoryVerified:Boolean(variant&&stock),product:{id:String(product.id),name:product.nameEn,sku:product.sku||product.spu||null,variantId:variant?.vid||null,variantSku:variant?.variantSku||null,originCountryCode:stock?String(stock.countryCode).toUpperCase():null,productCostUsd,inventory}};
   if(!variant||!stock) return result;
 
-  let freight={offers:[],diagnostic:'quote_unavailable'};
-  try {
-    const payload=await client(base+'/logistic/freightCalculate',{method:'POST',headers:headers(token),body:JSON.stringify(freightRequest(String(variant.vid),null,String(stock.countryCode).toUpperCase()))});
-    freight=parseCJFreight(payload,'country_estimate');
-  } catch {}
-  return {...result,status:freight.offers.length?'supplier_cost_and_freight_estimate_ready':'freight_estimate_required',freightVerified:freight.offers.length>0,freight,lowestFreightUsd:freight.offers[0]?.usd??null,note:'Country freight is screening evidence only. Exact buyer destination freight and full unit economics are still required before launch.'};
+  const packFreightScreening=[];
+  let singleFreight={offers:[],diagnostic:'quote_unavailable'};
+  for(const quantity of [1,3,5]){
+    if(Number.isFinite(inventory) && inventory<quantity){
+      packFreightScreening.push({quantity,priced:false,reason:'verified_origin_inventory_below_pack_quantity'});
+      continue;
+    }
+    let freight={offers:[],diagnostic:'quote_unavailable'};
+    try {
+      const payload=await client(base+'/logistic/freightCalculate',{method:'POST',headers:headers(token),body:JSON.stringify(freightRequest(String(variant.vid),null,String(stock.countryCode).toUpperCase(),quantity))});
+      freight=parseCJFreight(payload,'country_estimate');
+    } catch {}
+    if(quantity===1) singleFreight=freight;
+    packFreightScreening.push(buildPackScreening(productCostUsd,quantity,freight));
+  }
+  const pricedPacks=packFreightScreening.filter(x=>x.priced);
+  return {...result,
+    status:pricedPacks.length?'supplier_cost_and_pack_freight_ready':'freight_estimate_required',
+    freightVerified:singleFreight.offers.length>0,
+    freight:singleFreight,
+    lowestFreightUsd:singleFreight.offers[0]?.usd??null,
+    packFreightScreening,
+    bestScreenedLandedPerUnitUsd:pricedPacks.length?Math.min(...pricedPacks.map(x=>x.landedCostPerUnitUsd)):null,
+    note:'Country freight is screening evidence only. Exact buyer destination freight, current retail validation and full unit economics are still required before launch.'};
 }
 
 export async function main(){
   const apiKey=String(process.env.CJ_API_KEY||'').trim(); if(!apiKey) throw new Error('CJ_API_KEY is required');
   const client=createCJReadOnlyClient(); const base='https://developers.cjdropshipping.com/api2.0/v1';
-  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.0'},body:JSON.stringify({apiKey})});
+  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.1'},body:JSON.stringify({apiKey})});
   const token=String(auth?.data?.accessToken||''); if(!token) throw new Error('CJ authentication returned no access token'); console.log('::add-mask::'+token);
   const catalog=JSON.parse(await fs.readFile('paperclip/prismbay-global-commerce/research/supplier-candidates.json','utf8'));
   const results=[]; for(const candidate of (catalog.candidates||[]).slice(0,5)) results.push(await sourceCandidate({client,base,token,candidate}));
-  const report={schemaVersion:1,checkedAt:new Date().toISOString(),market:catalog.market||'US',mode:'paperclip_global_commerce_read_only',candidateCount:results.length,supplierMatches:results.filter(x=>x.supplierVerified).length,verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,freightEstimates:results.filter(x=>x.freightVerified).length,ordersEnabled:false,listingsEnabled:false,profitReadyCount:0,results};
+  const report={schemaVersion:2,checkedAt:new Date().toISOString(),market:catalog.market||'US',mode:'paperclip_global_commerce_read_only',candidateCount:results.length,supplierMatches:results.filter(x=>x.supplierVerified).length,verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,freightEstimates:results.filter(x=>x.freightVerified).length,ordersEnabled:false,listingsEnabled:false,profitReadyCount:0,results};
   await fs.mkdir('growth-reports',{recursive:true}); await fs.writeFile('growth-reports/paperclip-cj-sourcing.json',JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({candidateCount:report.candidateCount,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,results:results.map(r=>({slug:r.slug,status:r.status,productCostUsd:r.product?.productCostUsd??null,lowestFreightUsd:r.lowestFreightUsd??null}))},null,2));
+  console.log(JSON.stringify({candidateCount:report.candidateCount,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,results:results.map(r=>({slug:r.slug,status:r.status,productCostUsd:r.product?.productCostUsd??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
   return report;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) await main();

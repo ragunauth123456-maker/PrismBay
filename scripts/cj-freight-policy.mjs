@@ -53,10 +53,6 @@ export function parseCJFreight(payload, scope = 'country_estimate', zip = null) 
         services.length ? 'no_usable_shipping_quote' : 'no_shipping_methods_returned' };
 }
 
-// CJ documents Freight Calculation Tip as the more accurate trial-calculation route.
-// Prefer totalPostageFee because CJ defines it as wrapped postage plus applicable
-// tax/clearance/tariff amounts. Fall back to wrapPostage and discountFee only when
-// the total is absent. Zero remains ambiguous and never authorizes checkout.
 export function parseCJFreightTip(payload, scope = 'tip_example_zip_estimate', zip = null) {
   const services = Array.isArray(payload?.data) ? payload.data : [];
   const offers = [];
@@ -83,7 +79,7 @@ export function parseCJFreightTip(payload, scope = 'tip_example_zip_estimate', z
         services.length ? 'no_usable_tip_shipping_quote' : 'no_tip_shipping_methods_returned' };
 }
 
-export function freightRequest(vid, zip = null, origin = 'US') {
+export function freightRequest(vid, zip = null, origin = 'US', quantity = 1) {
   if (typeof vid !== 'string' || !vid.trim() || vid.length > 200) {
     throw new Error('A validated variant ID is required');
   }
@@ -92,17 +88,16 @@ export function freightRequest(vid, zip = null, origin = 'US') {
   }
   const source = String(origin || '').toUpperCase();
   if (!/^[A-Z]{2}$/.test(source)) throw new Error('Origin must be a two-letter country code');
+  const qty = Number(quantity);
+  if (!Number.isInteger(qty) || qty < 1 || qty > 25) throw new Error('Quantity must be an integer from 1 to 25');
   return {
     startCountryCode: source,
     endCountryCode: 'US',
-    products: [{ quantity: 1, vid }],
+    products: [{ quantity: qty, vid }],
     ...(zip ? { zip } : {}),
   };
 }
 
-// Build only fields documented by CJ for Freight Calculation Tip. Variant volume is
-// documented in mm^3 while Tip expects cm^3, so divide by 1000. Product packWeight
-// is treated as the packaged-weight ceiling when it exceeds variant net weight.
 export function freightTipRequest({ variant, detail, zip = null, origin = 'US' } = {}) {
   const sku = typeof variant?.variantSku === 'string' ? variant.variantSku.trim() : '';
   const weight = positiveNumber(variant?.variantWeight);
