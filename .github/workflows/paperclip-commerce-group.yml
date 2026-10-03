@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-commerce-group/**'
+      - 'scripts/paperclip-commerce-group.mjs'
+      - 'scripts/paperclip-commerce-group.test.mjs'
+      - '.github/workflows/paperclip-commerce-group.yml'
   workflow_run:
     workflows:
       - 'PrismBay Paperclip Revenue Ops'
