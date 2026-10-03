@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-03T05:48:10.639Z",
+  "updatedAt": "2026-10-03T12:04:03.572Z",
   "market": "US",
   "methodology": "Public-news attention, freshness, and short-form demonstration fit. This is not PrismBay sales data and is not a TikTok, Amazon, Google, or Bing product ranking.",
   "refreshTargetHours": 6,
@@ -27,7 +27,7 @@
           "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ZRDlxanVrQ3JSeXhtdXBjS3JmVTdkQnV2LURHdldCN1BidHU0ZjhselZXRVZWLVhJUEpwaUMwTEgweU5mLVRmZnozS3dJUTk5TGZTZHctbHpmZHkySDktbE1hZ0Zsdw?oc=5"
         },
         {
-          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - people.com",
+          "title": "Say Goodbye to Wrinkled Clothing with an Easy-to-Use Clothes Steamer — Prices Start at $31 - People.com",
           "source": "Google News",
           "publishedAt": "2026-05-06T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9HWkFheEdZLU5KN28wQmVlLVZWVFJZSUZpcFlSTmJLSFJJc3lacVNuUTNycF9SN0tnRmM4QnZ1SXNwcDFid3kya1RUU2J0cjEyQUxOY1N6YXI0UHI3?oc=5"
@@ -59,7 +59,7 @@
       "signalScore": 80.5,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 95,
+        "publicMentions": 94,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 7,
         "sourcesAvailable": [
@@ -107,7 +107,7 @@
       "signalScore": 74.5,
       "signalLabel": "high-attention",
       "evidence": {
-        "publicMentions": 108,
+        "publicMentions": 107,
         "mentionsLast7Days": 0,
         "mentionsLast30Days": 4,
         "sourcesAvailable": [
@@ -213,7 +213,7 @@
       },
       "sampleSignals": [
         {
-          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - people.com",
+          "title": "The 10 Best Pet Hair Removers We Tested, Including Laundry Sheets and Lint Rollers - People.com",
           "source": "Google News",
           "publishedAt": "2026-04-29T07:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE56STN5dFAtRmlSdG04UW8zZWlkemZwOW4wQTJFeUt5ZU9hYmhrYmJGb1Y1a3p3WDFsaVpkWFBLTkNyR2dMZnNzT2N5UjFoQ0pCZnNTc1hUOUQ3ZE0?oc=5"
@@ -309,7 +309,7 @@
       },
       "sampleSignals": [
         {
-          "title": "10 handy cleaning caddies you need to make life easier - realhomes.com",
+          "title": "10 handy cleaning caddies you need to make life easier - Real Homes",
           "source": "Google News",
           "publishedAt": "2022-01-27T08:00:00.000Z",
           "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE12eWlYN0NrZFZnUHZ6T0JWN3JsZFhmS2IwR0dsNFhnQWM3WHEtN3FjN0hQODRpa3dfUThCRTBVc0RtRU9YcFpoeXZ5ZnA3dkJFMHZYd3kxLWxQcGFCZU94UjNUQl9ZakNJaHJV?oc=5"
