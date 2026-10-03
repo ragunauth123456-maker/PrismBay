@@ -81,6 +81,36 @@ test('falls through to a second exact-match supplier when the first has no verif
  assert.equal(result.supplierAlternativesFound,2);
 });
 
+test('chooses the stocked supplier route with lower screened landed cost',async()=>{
+ const candidate={slug:'crevice',name:'Crevice Brush',researchScore:90,queries:['gap cleaner brush'],supplierPortfolioSize:2};
+ const base='https://developers.cjdropshipping.com/api2.0/v1';
+ const client=async(url,opts={})=>{
+   const text=String(url);
+   if(text.includes('/product/listV2')) return {data:{content:[{productList:[
+     {id:'p1',nameEn:'Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:1,totalVerifiedInventory:100},
+     {id:'p2',nameEn:'Crevice Gap Cleaning Brush',saleStatus:'3',sellPrice:2,totalVerifiedInventory:80},
+   ]}]}};
+   if(text.includes('/product/variant/query')&&text.includes('pid=p1')) return {data:[{vid:'v1',variantSku:'S1',variantSellPrice:1}]};
+   if(text.includes('/product/variant/query')&&text.includes('pid=p2')) return {data:[{vid:'v2',variantSku:'S2',variantSellPrice:2}]};
+   if(text.includes('/product/stock/queryByVid')&&text.includes('vid=v1')) return {data:[{vid:'v1',countryCode:'US',totalInventoryNum:100,cjInventoryNum:50}]};
+   if(text.includes('/product/stock/queryByVid')&&text.includes('vid=v2')) return {data:[{vid:'v2',countryCode:'US',totalInventoryNum:100,cjInventoryNum:40}]};
+   if(text.endsWith('/logistic/freightCalculate')) {
+     const body=JSON.parse(opts.body||'{}');
+     const vid=body.products?.[0]?.vid;
+     const qty=body.products?.[0]?.quantity;
+     const price=vid==='v1' ? 9*qty : 3*qty;
+     return {data:[{logisticName:'Carrier',logisticPrice:price,logisticAging:'4-8'}]};
+   }
+   throw new Error('unexpected '+text);
+ };
+ const result=await sourceCandidate({client,base,token:'t',candidate});
+ assert.equal(result.product.id,'p2');
+ assert.equal(result.selectedSupplierRank,2);
+ assert.equal(result.selectionBasis,'lowest_screened_single_unit_landed_cost_then_origin_and_inventory');
+ assert.equal(result.supplierRoutePortfolio[0].screenedSingleUnitLandedUsd,5);
+ assert.equal(result.supplierRoutePortfolio[1].screenedSingleUnitLandedUsd,10);
+});
+
 test('multi-pack screening amortizes priced freight without claiming destination verification',()=>{
  const pack=buildPackScreening(1.79,5,{offers:[{name:'Carrier',usd:11.5,aging:'3-8'}]});
  assert.equal(pack.priced,true);
