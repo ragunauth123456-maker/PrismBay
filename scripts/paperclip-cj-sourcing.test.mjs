@@ -1,12 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {positiveNumber,chooseProduct,chooseStock,buildPackScreening,normalizeKnownProduct,candidateVariantChoices} from './paperclip-cj-sourcing.mjs';
+import {positiveNumber,chooseProduct,chooseProducts,chooseStock,buildPackScreening,normalizeKnownProduct,candidateVariantChoices,sourceCandidate} from './paperclip-cj-sourcing.mjs';
 import {selectRotatingCandidates} from './candidate-rotation.mjs';
 
 test('selects only exact approved on-sale product identity',()=>{
  const c={slug:'car-seat-headrest-hooks'};
  const rows=[{id:'bad',nameEn:'Bathroom Wall Hook Rack',saleStatus:'3',sellPrice:2,totalVerifiedInventory:1000},{id:'good',nameEn:'Car Seat Headrest Bag Hooks',saleStatus:'3',sellPrice:3,totalVerifiedInventory:20}];
  assert.equal(chooseProduct(rows,c)?.id,'good');
+});
+
+test('bounded supplier portfolio deduplicates product ids and preserves inventory priority',()=>{
+ const c={slug:'crevice'};
+ const rows=[
+  {id:'p1',nameEn:'Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:2,totalVerifiedInventory:100},
+  {id:'p1',nameEn:'Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:2,totalVerifiedInventory:90},
+  {id:'p2',nameEn:'Crevice Gap Cleaning Brush',saleStatus:'3',sellPrice:2.5,totalVerifiedInventory:80},
+  {id:'p3',nameEn:'Water Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:3,totalVerifiedInventory:70},
+  {id:'p4',nameEn:'Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:3,totalVerifiedInventory:60},
+ ];
+ assert.deepEqual(chooseProducts(rows,c,3).map(x=>x.id),['p1','p2','p3']);
 });
 
 test('normalizes a known CJ product lookup and rejects an echoed SKU mismatch',()=>{
@@ -43,6 +55,30 @@ test('rejects zero prices and prefers usable physical stock',()=>{
  assert.equal(positiveNumber(0),null);
  const stock=chooseStock([{vid:'v',countryCode:'CN',totalInventoryNum:100,cjInventoryNum:20},{vid:'v',countryCode:'US',totalInventoryNum:20,cjInventoryNum:2}], 'v');
  assert.equal(stock.countryCode,'US');
+});
+
+test('falls through to a second exact-match supplier when the first has no verified stock',async()=>{
+ const candidate={slug:'crevice',name:'Crevice Brush',researchScore:90,queries:['gap cleaner brush']};
+ const base='https://developers.cjdropshipping.com/api2.0/v1';
+ const client=async(url,opts={})=>{
+   const text=String(url);
+   if(text.includes('/product/listV2')) return {data:{content:[{productList:[
+     {id:'p1',nameEn:'Bottle Gap Cleaner Brush',saleStatus:'3',sellPrice:1.2,totalVerifiedInventory:100},
+     {id:'p2',nameEn:'Crevice Gap Cleaning Brush',saleStatus:'3',sellPrice:1.4,totalVerifiedInventory:80},
+   ]}]}};
+   if(text.includes('/product/variant/query')&&text.includes('pid=p1')) return {data:[{vid:'v1',variantSku:'S1',variantSellPrice:1.2}]};
+   if(text.includes('/product/variant/query')&&text.includes('pid=p2')) return {data:[{vid:'v2',variantSku:'S2',variantSellPrice:1.4}]};
+   if(text.includes('/product/stock/queryByVid')&&text.includes('vid=v1')) return {data:[{vid:'v1',countryCode:'US',totalInventoryNum:0,cjInventoryNum:0}]};
+   if(text.includes('/product/stock/queryByVid')&&text.includes('vid=v2')) return {data:[{vid:'v2',countryCode:'US',totalInventoryNum:50,cjInventoryNum:20}]};
+   if(text.endsWith('/logistic/freightCalculate')) return {data:[{logisticName:'USPS',logisticPrice:4,logisticAging:'4-8'}]};
+   throw new Error('unexpected '+text);
+ };
+ const result=await sourceCandidate({client,base,token:'t',candidate});
+ assert.equal(result.variantInventoryVerified,true);
+ assert.equal(result.product.id,'p2');
+ assert.equal(result.selectedSupplierRank,2);
+ assert.equal(result.fallbackSupplierUsed,true);
+ assert.equal(result.supplierAlternativesFound,2);
 });
 
 test('multi-pack screening amortizes priced freight without claiming destination verification',()=>{
