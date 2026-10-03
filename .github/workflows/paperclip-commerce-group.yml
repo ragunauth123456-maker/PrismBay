@@ -1,0 +1,78 @@
+name: PrismBay Paperclip Commerce Group
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - 'PrismBay Paperclip Revenue Ops'
+      - 'Paperclip Global Commerce Company'
+      - 'Paperclip Global Commerce CJ Sourcing'
+      - 'PrismBay CJ Supplier Verification'
+      - 'PrismBay Retail Promotion Swarm'
+    types: [completed]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-commerce-group/**'
+      - 'scripts/paperclip-commerce-group.mjs'
+      - 'scripts/paperclip-commerce-group.test.mjs'
+      - '.github/workflows/paperclip-commerce-group.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-paperclip-commerce-group
+  cancel-in-progress: true
+
+jobs:
+  commerce-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate ten-company commercial organization
+        run: node --test scripts/paperclip-commerce-group.test.mjs
+
+      - name: Refresh independent opportunity board
+        run: node scripts/global-commerce-opportunity-engine.mjs
+
+      - name: Refresh existing revenue task board
+        run: node scripts/paperclip-revenue-bridge.mjs
+
+      - name: Run parent commercial control loop
+        run: node scripts/paperclip-commerce-group.mjs
+
+      - name: Retain consolidated executive dashboard
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-commerce-group-${{ github.run_id }}
+          path: |
+            growth-reports/prismbay-commerce-group-dashboard.json
+            growth-reports/global-commerce-opportunities.json
+            growth-reports/paperclip-revenue-board.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Commercial summary
+        run: |
+          node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs=require('fs');
+          const d=JSON.parse(fs.readFileSync('growth-reports/prismbay-commerce-group-dashboard.json','utf8'));
+          console.log('## PrismBay Commerce Group');
+          console.log(`- Verified sales: ${d.verifiedSales}`);
+          console.log(`- Promotion-eligible products: ${d.promotionEligibleCount}`);
+          console.log(`- Current bottleneck: ${d.currentBottleneck.stage} / ${d.currentBottleneck.reason}`);
+          console.log(`- Accountable company: ${d.currentBottleneck.owner}`);
+          console.log(`- Research candidates: ${d.researchCandidates.join(', ') || 'none'}`);
+          console.log(`- External approvals waiting: ${d.externalActionsAwaitingOwnerApproval.join(', ') || 'none'}`);
+          NODE
