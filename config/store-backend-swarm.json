@@ -1,16 +1,26 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "appId": "prismbay-clean-49izhg",
   "storeOrigin": "https://prismbay-clean-49izhg.v2.appdeploy.ai",
   "mode": "backend-swarm-24x7",
   "timezone": "America/Guyana",
+  "strictKpiContract": "config/strict-kpis.json",
+  "kpiPolicy": {
+    "greenAtOrAbove": 90,
+    "redBelow": 75,
+    "consecutiveRedBeforeIntervention": 2,
+    "consecutiveRedBeforeRoleRewrite": 3,
+    "missingEvidenceGetsCredit": false,
+    "activityAloneCountsAsSuccess": false,
+    "integrityBreachForcesCritical": true
+  },
   "workers": [
-    { "id": "commerce-controller", "minute": 0, "cadence": "hourly" },
-    { "id": "product-scout", "minute": 10, "cadence": "hourly" },
-    { "id": "site-auditor", "minute": 20, "cadence": "hourly" },
-    { "id": "seo-cro", "minute": 30, "cadence": "hourly" },
-    { "id": "offer-creative", "minute": 40, "cadence": "hourly" },
-    { "id": "analytics-experiment", "minute": 50, "cadence": "hourly" }
+    { "id": "commerce-controller", "minute": 0, "cadence": "hourly", "minimumInspectionsPerRun": 2, "minimumActionsPerRun": 2 },
+    { "id": "product-scout", "minute": 10, "cadence": "hourly", "minimumInspectionsPerRun": 2, "minimumActionsPerRun": 3 },
+    { "id": "site-auditor", "minute": 20, "cadence": "hourly", "minimumInspectionsPerRun": 3, "minimumActionsPerRun": 2 },
+    { "id": "seo-cro", "minute": 30, "cadence": "hourly", "minimumInspectionsPerRun": 2, "minimumActionsPerRun": 3 },
+    { "id": "offer-creative", "minute": 40, "cadence": "hourly", "minimumInspectionsPerRun": 1, "minimumActionsPerRun": 3 },
+    { "id": "analytics-experiment", "minute": 50, "cadence": "hourly", "minimumInspectionsPerRun": 1, "minimumActionsPerRun": 2 }
   ],
   "publicHealthPaths": ["/", "/products.json", "/merchant-feed.xml", "/sitemap.xml", "/robots.txt"],
   "boundaries": {
@@ -21,6 +31,6 @@
     "automaticExternalPublishing": false,
     "autonomousPriceChanges": false
   },
-  "runtimeAuthority": "AppDeploy cron status for prismbay-clean-49izhg",
-  "githubRole": "Independent configuration and public storefront watchdog; GitHub does not claim visibility into private AppDeploy runtime state."
+  "runtimeAuthority": "AppDeploy cron status and persisted swarm KPI state for prismbay-clean-49izhg",
+  "githubRole": "Independent KPI contract, configuration and public storefront watchdog; GitHub does not invent private AppDeploy runtime measurements."
 }
