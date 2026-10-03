@@ -26,3 +26,9 @@ test('ranker never upgrades screening freight into final freight',()=>{
  assert.equal(board.ranked[0].exactDestinationFreightVerified,false);
  assert.equal(board.ranked[0].marketRetailValidated,false);
 });
+
+test('missing provisional floor remains null instead of synthetic zero',()=>{
+ const board=buildCommercialRank({sourcing:{results:[{slug:'x',researchScore:90,supplierVerified:false,variantInventoryVerified:false,freightVerified:false,product:{}}]},stress:{products:[{slug:'x',bestProvisionalUnitFloorUsd:null}]}});
+ assert.equal(board.ranked[0].bestProvisionalUnitFloorUsd,null);
+ assert.equal(board.ranked[0].inventory,null);
+});
