@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "objective": "Measure real buyer progression without fabricating traffic or treating internal worker activity as customer demand.",
+  "events": [
+    {"id":"product_view","requiredFields":["productSlug","source","sessionId"],"customerEvidence":true},
+    {"id":"cta_click","requiredFields":["productSlug","cta","source","sessionId"],"customerEvidence":true},
+    {"id":"checkout_start","requiredFields":["productSlug","source","sessionId"],"customerEvidence":true},
+    {"id":"checkout_blocked","requiredFields":["productSlug","reason","sessionId"],"customerEvidence":true},
+    {"id":"purchase_verified","requiredFields":["productSlug","paymentId","orderReference","source"],"customerEvidence":true,"hardEvidenceRequired":true},
+    {"id":"refund_verified","requiredFields":["productSlug","orderReference"],"customerEvidence":true,"hardEvidenceRequired":true}
+  ],
+  "rules": {
+    "workerRequestsNeverCountAsCustomerSessions": true,
+    "healthChecksNeverCountAsViews": true,
+    "testPaymentsNeverCountAsPurchases": true,
+    "missingSourceMustBeRecordedAsUnknown": true,
+    "noSyntheticConversionRate": true,
+    "privacySafeSessionIdentifiersOnly": true
+  }
+}

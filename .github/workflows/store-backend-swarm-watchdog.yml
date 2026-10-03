@@ -12,6 +12,10 @@ on:
       - 'config/strict-kpis.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
+      - 'scripts/commerce-surface-auditor.mjs'
+      - 'scripts/commerce-surface-auditor.test.mjs'
+      - 'scripts/commerce-surface-remediation.mjs'
+      - 'scripts/commerce-surface-remediation.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
   pull_request:
     branches: [main]
@@ -21,6 +25,10 @@ on:
       - 'config/strict-kpis.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
+      - 'scripts/commerce-surface-auditor.mjs'
+      - 'scripts/commerce-surface-auditor.test.mjs'
+      - 'scripts/commerce-surface-remediation.mjs'
+      - 'scripts/commerce-surface-remediation.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
 
 permissions:
@@ -43,17 +51,26 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Test watchdog and strict KPI policy
-        run: node --test scripts/store-backend-swarm-watchdog.test.mjs
+      - name: Test watchdog, commerce surfaces, remediation and strict KPI policy
+        run: node --test scripts/store-backend-swarm-watchdog.test.mjs scripts/commerce-surface-auditor.test.mjs scripts/commerce-surface-remediation.test.mjs
 
       - name: Verify store health, swarm contract and KPI floors
         run: node scripts/store-backend-swarm-watchdog.mjs
 
-      - name: Retain backend swarm evidence
+      - name: Audit product, merchant, sitemap and robots commercial surfaces
+        run: node scripts/commerce-surface-auditor.mjs
+
+      - name: Convert surface defects into persistent repair work
+        run: node scripts/commerce-surface-remediation.mjs
+
+      - name: Retain backend swarm and commerce surface evidence
         uses: actions/upload-artifact@v4
         with:
           name: store-backend-swarm-${{ github.run_id }}
-          path: growth-reports/store-backend-swarm.json
+          path: |
+            growth-reports/store-backend-swarm.json
+            growth-reports/commerce-surface-audit.json
+            growth-reports/commerce-surface-remediation.json
           if-no-files-found: error
           retention-days: 14
 
@@ -62,6 +79,8 @@ jobs:
           node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs=require('fs');
           const s=JSON.parse(fs.readFileSync('growth-reports/store-backend-swarm.json','utf8'));
+          const c=JSON.parse(fs.readFileSync('growth-reports/commerce-surface-audit.json','utf8'));
+          const r=JSON.parse(fs.readFileSync('growth-reports/commerce-surface-remediation.json','utf8'));
           console.log('## PrismBay Clean | 24x7 Backend Swarm');
           console.log(`- Configured workers: ${s.configuredWorkerCount}`);
           console.log(`- Cadence: ${s.cadence}`);
@@ -72,6 +91,16 @@ jobs:
           console.log(`- Role rewrite after consecutive misses: ${s.kpiPolicy.consecutiveRedBeforeRoleRewrite}`);
           console.log(`- Runtime authority: ${s.runtimeAuthority}`);
           console.log(`- Checked at: ${s.checkedAt}`);
+          console.log('');
+          console.log('## Commerce Surface Audit');
+          console.log(`- Product feed products: ${c.products.productCount}; invalid: ${c.products.invalidProductCount}`);
+          console.log(`- Merchant feed items: ${c.merchant.itemCount || 0}`);
+          console.log(`- Sitemap URLs: ${c.sitemap.urlCount || 0}`);
+          console.log(`- Technical surface ready: ${c.technicalSurfaceReady}`);
+          console.log(`- Open surface issues: ${c.issueCount}`);
+          console.log(`- Persistent repair tasks: ${r.activeTaskCount}`);
+          console.log(`- Highest-priority repair: ${r.nextAction}`);
+          console.log(`- External free-distribution approval known: ${c.freeDistributionAccountApprovalKnown}`);
           console.log('- Missing evidence gets zero credit; activity alone is not success; integrity breach forces critical.');
-          console.log('- GitHub does not infer private AppDeploy runtime KPI scores; AppDeploy remains authoritative for runtime worker performance.');
+          console.log('- Technical feed readiness is not platform approval and does not authorize publication or paid distribution.');
           NODE

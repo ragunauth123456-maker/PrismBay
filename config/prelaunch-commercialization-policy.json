@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "mode": "draft_only_until_commercial_gates_pass",
+  "minimumConcurrentKits": 5,
+  "requiredKitSections": ["productPageRequirements","seoThemes","faqPrompts","objectionPrompts","offerHypotheses","creativeBriefs","channelPackages","measurementPlan"],
+  "activationRequires": ["exactSkuIdentity","variantStockVerified","unitEconomicsVerified","finalDestinationFreightOrSafeShippingRule","checkoutAllowed","rightsAndClaimsVerified"],
+  "boundaries": {
+    "automaticPublishing": false,
+    "paidSpend": false,
+    "automaticListing": false,
+    "fakeReviews": false,
+    "fakeScarcity": false,
+    "unsupportedClaims": false
+  }
+}

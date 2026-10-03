@@ -2,29 +2,39 @@ name: Paperclip Global Commerce CJ Sourcing
 
 on:
   schedule:
-    - cron: '47 */3 * * *'
+    - cron: '47 * * * *'
   workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
       - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
+      - 'scripts/candidate-rotation.mjs'
       - 'scripts/cj-match-policy.mjs'
       - 'scripts/cj-match-policy.test.mjs'
       - 'scripts/cj-freight-policy.mjs'
       - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - 'scripts/supplier-economics-stress-test.mjs'
+      - 'scripts/supplier-economics-stress-test.test.mjs'
+      - 'scripts/supplier-commercial-ranker.mjs'
+      - 'scripts/supplier-commercial-ranker.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
   push:
     branches: [main]
     paths:
       - 'paperclip/prismbay-global-commerce/research/supplier-candidates.json'
+      - 'scripts/candidate-rotation.mjs'
       - 'scripts/cj-match-policy.mjs'
       - 'scripts/cj-match-policy.test.mjs'
       - 'scripts/cj-freight-policy.mjs'
       - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - 'scripts/supplier-economics-stress-test.mjs'
+      - 'scripts/supplier-economics-stress-test.test.mjs'
+      - 'scripts/supplier-commercial-ranker.mjs'
+      - 'scripts/supplier-commercial-ranker.test.mjs'
       - '.github/workflows/paperclip-cj-sourcing.yml'
 
 permissions:
@@ -44,6 +54,8 @@ jobs:
           scripts/cj-match-policy.test.mjs
           scripts/cj-freight-policy.test.mjs
           scripts/paperclip-cj-sourcing.test.mjs
+          scripts/supplier-economics-stress-test.test.mjs
+          scripts/supplier-commercial-ranker.test.mjs
 
   source-products:
     if: github.event_name != 'pull_request'
@@ -55,14 +67,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Source Paperclip opportunities through read-only CJ API
+      - name: Source rotating Paperclip opportunity batch through read-only CJ API
         env:
           CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+          PAPERCLIP_CJ_BATCH_SIZE: '5'
+          PAPERCLIP_CJ_ANCHOR_COUNT: '2'
         run: node scripts/paperclip-cj-sourcing.mjs
-      - name: Retain supplier evidence
+      - name: Stress-test provisional landed economics
+        run: node scripts/supplier-economics-stress-test.mjs
+      - name: Re-rank candidates using verified commercial evidence
+        run: node scripts/supplier-commercial-ranker.mjs
+      - name: Retain supplier and economics evidence
         uses: actions/upload-artifact@v4
         with:
           name: paperclip-cj-sourcing-${{ github.run_id }}
-          path: growth-reports/paperclip-cj-sourcing.json
+          path: |
+            growth-reports/paperclip-cj-sourcing.json
+            growth-reports/supplier-economics-stress-test.json
+            growth-reports/supplier-commercial-rank.json
           if-no-files-found: error
           retention-days: 14

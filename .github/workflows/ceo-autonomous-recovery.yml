@@ -9,20 +9,28 @@ on:
     paths:
       - 'config/autonomous-growth-system.json'
       - 'config/strict-kpis.json'
+      - 'config/conversion-event-contract.json'
+      - 'config/prelaunch-commercialization-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
       - 'scripts/autonomous-company-task-allocator.test.mjs'
+      - 'scripts/prelaunch-commercialization-factory.mjs'
+      - 'scripts/prelaunch-commercialization-factory.test.mjs'
       - '.github/workflows/ceo-autonomous-recovery.yml'
   pull_request:
     branches: [main]
     paths:
       - 'config/autonomous-growth-system.json'
       - 'config/strict-kpis.json'
+      - 'config/conversion-event-contract.json'
+      - 'config/prelaunch-commercialization-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
       - 'scripts/autonomous-company-task-allocator.test.mjs'
+      - 'scripts/prelaunch-commercialization-factory.mjs'
+      - 'scripts/prelaunch-commercialization-factory.test.mjs'
       - '.github/workflows/ceo-autonomous-recovery.yml'
 
 permissions:
@@ -42,10 +50,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate recovery and allocator engines
+      - name: Validate recovery, allocator and prelaunch engines
         run: |
           test -s config/autonomous-growth-system.json
-          node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs
+          test -s config/conversion-event-contract.json
+          test -s config/prelaunch-commercialization-policy.json
+          node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs scripts/prelaunch-commercialization-factory.test.mjs
 
       - name: Rebuild commercial evidence needed for autonomous decisions
         run: |
@@ -66,7 +76,10 @@ jobs:
       - name: Allocate quantified work to all ten companies
         run: node scripts/autonomous-company-task-allocator.mjs
 
-      - name: Retain autonomous recovery evidence
+      - name: Build synchronized prelaunch commercialization kits
+        run: node scripts/prelaunch-commercialization-factory.mjs
+
+      - name: Retain autonomous recovery and prelaunch evidence
         uses: actions/upload-artifact@v4
         with:
           name: prismbay-ceo-recovery-${{ github.run_id }}
@@ -76,6 +89,8 @@ jobs:
             growth-reports/autonomous-company-taskboard.json
             growth-reports/strict-kpi-scorecard.json
             growth-reports/prismbay-commerce-group-dashboard.json
+            growth-reports/prelaunch-commercialization.json
+            growth-reports/prelaunch-kits/*.json
           if-no-files-found: error
           retention-days: 14
 
@@ -85,6 +100,7 @@ jobs:
           const fs=require('fs');
           const g=JSON.parse(fs.readFileSync('growth-reports/ceo-autonomous-growth-board.json','utf8'));
           const t=JSON.parse(fs.readFileSync('growth-reports/autonomous-company-taskboard.json','utf8'));
+          const p=JSON.parse(fs.readFileSync('growth-reports/prelaunch-commercialization.json','utf8'));
           console.log('## PrismBay CEO Autonomous Recovery');
           console.log(`- Verified sales: ${g.verifiedSales}`);
           console.log(`- CEO priority: ${g.ceoPriority}`);
@@ -96,4 +112,6 @@ jobs:
           console.log(`- Blocker escalation: ${g.blockerEscalation.stage}`);
           console.log(`- Parallel-route deficit: ${g.portfolioControls.parallelRouteDeficit}`);
           console.log(`- Quantified tasks: ${t.totalTasks} across ${t.activeCompanies} companies`);
+          console.log(`- Prelaunch kits synchronized: ${p.kitCount}`);
+          console.log(`- Prelaunch publication enabled: ${p.publicationEnabled}`);
           NODE
