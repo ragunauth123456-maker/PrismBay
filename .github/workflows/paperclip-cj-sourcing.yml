@@ -15,6 +15,8 @@ on:
       - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - 'scripts/cj-variant-detail-enricher.mjs'
+      - 'scripts/cj-variant-detail-enricher.test.mjs'
       - 'scripts/supplier-economics-stress-test.mjs'
       - 'scripts/supplier-economics-stress-test.test.mjs'
       - 'scripts/supplier-commercial-ranker.mjs'
@@ -31,6 +33,8 @@ on:
       - 'scripts/cj-freight-policy.test.mjs'
       - 'scripts/paperclip-cj-sourcing.mjs'
       - 'scripts/paperclip-cj-sourcing.test.mjs'
+      - 'scripts/cj-variant-detail-enricher.mjs'
+      - 'scripts/cj-variant-detail-enricher.test.mjs'
       - 'scripts/supplier-economics-stress-test.mjs'
       - 'scripts/supplier-economics-stress-test.test.mjs'
       - 'scripts/supplier-commercial-ranker.mjs'
@@ -54,6 +58,7 @@ jobs:
           scripts/cj-match-policy.test.mjs
           scripts/cj-freight-policy.test.mjs
           scripts/paperclip-cj-sourcing.test.mjs
+          scripts/cj-variant-detail-enricher.test.mjs
           scripts/supplier-economics-stress-test.test.mjs
           scripts/supplier-commercial-ranker.test.mjs
 
@@ -73,16 +78,21 @@ jobs:
           PAPERCLIP_CJ_BATCH_SIZE: '5'
           PAPERCLIP_CJ_ANCHOR_COUNT: '2'
         run: node scripts/paperclip-cj-sourcing.mjs
+      - name: Capture exact selected variant attributes
+        env:
+          CJ_API_KEY: ${{ secrets.CJ_API_KEY }}
+        run: node scripts/cj-variant-detail-enricher.mjs
       - name: Stress-test provisional landed economics
         run: node scripts/supplier-economics-stress-test.mjs
       - name: Re-rank candidates using verified commercial evidence
         run: node scripts/supplier-commercial-ranker.mjs
-      - name: Retain supplier and economics evidence
+      - name: Retain supplier, variant and economics evidence
         uses: actions/upload-artifact@v4
         with:
           name: paperclip-cj-sourcing-${{ github.run_id }}
           path: |
             growth-reports/paperclip-cj-sourcing.json
+            growth-reports/cj-variant-details.json
             growth-reports/supplier-economics-stress-test.json
             growth-reports/supplier-commercial-rank.json
           if-no-files-found: error
