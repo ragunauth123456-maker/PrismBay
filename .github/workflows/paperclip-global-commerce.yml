@@ -2,7 +2,7 @@ name: Paperclip Global Commerce Company
 
 on:
   schedule:
-    - cron: '29 */3 * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
   pull_request:
     branches: [main]
@@ -44,10 +44,12 @@ jobs:
           for url in \
             'https://sell.amazon.com/blog/products-to-sell' \
             'https://sell.amazon.com/blog/product-ideas' \
-            'https://www.shopify.com/blog/trending-products' \
+            'https://www.shopify.com/blog/best-dropshipping-products' \
             'https://www.ebay.com/sellercenter/selling/what-to-sell' \
-            'https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en'; do
-            code=$(curl -L -A 'Mozilla/5.0 PrismBayResearch/1.0' -sS -o /dev/null -w '%{http_code}' --max-time 25 "$url" || true)
+            'https://shop.tiktok.com/us/k/top-5-cleaning-products' \
+            'https://shop.tiktok.com/us/k/kitchen-gadgets' \
+            'https://shop.tiktok.com/us/k/car-accessories'; do
+            code=$(curl -L -A 'Mozilla/5.0 PrismBayResearch/2.0' -sS -o /dev/null -w '%{http_code}' --max-time 25 "$url" || true)
             echo "$code $url"
             test "$code" -ge 200 -a "$code" -lt 500
           done
