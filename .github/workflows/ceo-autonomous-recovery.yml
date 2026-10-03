@@ -10,6 +10,7 @@ on:
       - 'config/autonomous-growth-system.json'
       - 'config/strict-kpis.json'
       - 'config/conversion-event-contract.json'
+      - 'config/prelaunch-commercialization-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
@@ -23,6 +24,7 @@ on:
       - 'config/autonomous-growth-system.json'
       - 'config/strict-kpis.json'
       - 'config/conversion-event-contract.json'
+      - 'config/prelaunch-commercialization-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
@@ -52,6 +54,7 @@ jobs:
         run: |
           test -s config/autonomous-growth-system.json
           test -s config/conversion-event-contract.json
+          test -s config/prelaunch-commercialization-policy.json
           node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs scripts/prelaunch-commercialization-factory.test.mjs
 
       - name: Rebuild commercial evidence needed for autonomous decisions
