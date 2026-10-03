@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "authorizedAt": "2026-10-02",
+  "scope": "PrismBay Clean organic retail promotion for products that pass every supplier, freight, rights and checkout gate",
+  "ownerAuthorized": true,
+  "paidSpendAuthorized": false,
+  "bulkOutreachAuthorized": false,
+  "automaticSupplierOrderingAuthorized": false,
+  "educationalYouTubeRetailUseAuthorized": false,
+  "promotion": {
+    "automaticPromotionAllowedAfterAllOtherGates": true,
+    "allowedChannels": [
+      "owned-search",
+      "owner-approved-creator",
+      "approval-gated-short-form"
+    ]
+  },
+  "media": {
+    "policy": "original_graphics_and_original_copy_only",
+    "supplierMediaAuthorized": false,
+    "thirdPartyMediaAuthorized": false,
+    "promotionMediaRightsVerified": true
+  },
+  "checkoutInfrastructure": {
+    "appId": "prismbay-physical-order-reconciler-srm7mm",
+    "deployed": true,
+    "stripeWebhookSecretConfigured": true,
+    "crevicePaymentLinkMappingVerified": true,
+    "checkoutAllowedOnlyAfterFinalZipFreight": true
+  },
+  "evidence": [
+    "Owner directive in current ChatGPT session to get Paperclip revenue operations running and market PrismBay Clean",
+    "AppDeploy reports the dedicated physical-order reconciler deployed and ready",
+    "AppDeploy secret inventory reports STRIPE_WEBHOOK_SECRET configured",
+    "PrismBay Clean live storefront contains the Crevice Brush Stripe checkout URL",
+    "services/physical-orders/catalog.prismbay-live.json maps the Crevice Brush to its verified live Stripe objects"
+  ]
+}
