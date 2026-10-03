@@ -1,0 +1,46 @@
+name: PrismBay Physical Checkout Quote Gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/physical-orders/**'
+      - '.github/workflows/physical-checkout-quote.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'services/physical-orders/**'
+      - '.github/workflows/physical-checkout-quote.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-session-scoped-checkout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: services/physical-orders
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: services/physical-orders/package-lock.json
+      - name: Install locked service dependencies
+        run: npm ci
+      - name: Run physical-order and checkout-permit tests
+        run: npm test
+      - name: Checkout permit safety summary
+        run: |
+          echo '## PrismBay Clean | Checkout Quote Gate' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Exact buyer destination freight is mandatory.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Fresh supplier stock is mandatory.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Full contribution economics must pass before a permit can be issued.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Checkout permits are bound to SKU + buyer session + destination and expire within 15 minutes.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- No automatic supplier ordering is enabled.' >> "$GITHUB_STEP_SUMMARY"
