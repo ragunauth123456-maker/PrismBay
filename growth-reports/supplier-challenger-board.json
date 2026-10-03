@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-03T16:39:46.639Z",
+  "mode": "read_only_supplier_challenger",
+  "candidateCount": 3,
+  "remapProposalCount": 0,
+  "automaticRemapAllowed": false,
+  "ordersEnabled": false,
+  "paymentsEnabled": false,
+  "results": [
+    {
+      "slug": "crevice",
+      "mapped": {
+        "productId": "1645694697026887680",
+        "productSku": "CJJT1731477",
+        "productName": "4 In 1 Bottle Gap Cleaner Brush Multifunctional Cup Cleaning Brushes Water Bottles Clean Tool Mini Silicone U-shaped Brush Kitchen Gadgets",
+        "variantId": "1645694697148522496",
+        "variantSku": "CJJT173147702BY",
+        "originCountryCode": "CN",
+        "inventory": 1,
+        "productCostUsd": 1.89,
+        "screeningFreightUsd": 6.31,
+        "screenedLandedUsd": 8.2,
+        "stockVerified": true,
+        "freightVerified": true,
+        "maxAffordableFreightUsd": 5.23,
+        "screeningFreightHeadroomUsd": -1.08,
+        "screeningEconomicsPass": false
+      },
+      "challengers": [],
+      "recommendedRemapCandidate": null,
+      "screenedLandedImprovementUsd": null,
+      "automaticRemapAllowed": false,
+      "exactBuyerZipStillRequired": true,
+      "status": "challenger_review_complete"
+    },
+    {
+      "slug": "drain-catcher",
+      "mapped": {
+        "productId": "1609410194650845184",
+        "productSku": "CJCF1653868",
+        "productName": "3PCS Silicone Starfish-shaped Sink Drain Filter Bathtub Hair Catcher Stopper Drain Hole Filter Strainer For Bathroom Kitchen Toilet",
+        "stockVerified": false,
+        "freightVerified": false,
+        "maxAffordableFreightUsd": null,
+        "screeningFreightHeadroomUsd": null,
+        "screeningEconomicsPass": null
+      },
+      "challengers": [],
+      "recommendedRemapCandidate": null,
+      "screenedLandedImprovementUsd": null,
+      "automaticRemapAllowed": false,
+      "exactBuyerZipStillRequired": true,
+      "status": "challenger_review_complete"
+    },
+    {
+      "slug": "pethair",
+      "mapped": {
+        "productId": "2407091017101605500",
+        "productSku": "CJYD2079690",
+        "productName": "Reusable Hair Remover Ball Pet Hair Lint Roller Clothes Dust Cleaning Ball Washable Sticky Gel Lint Rollers Tool For Cat Dog",
+        "stockVerified": false,
+        "freightVerified": false,
+        "maxAffordableFreightUsd": null,
+        "screeningFreightHeadroomUsd": null,
+        "screeningEconomicsPass": null
+      },
+      "challengers": [],
+      "recommendedRemapCandidate": null,
+      "screenedLandedImprovementUsd": null,
+      "automaticRemapAllowed": false,
+      "exactBuyerZipStillRequired": true,
+      "status": "challenger_review_complete"
+    }
+  ]
+}
