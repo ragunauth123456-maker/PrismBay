@@ -1,0 +1,109 @@
+name: PrismBay Quote Enable Evidence Handoff
+
+on:
+  workflow_run:
+    workflows: ['PrismBay CJ Supplier Verification']
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: 'Successful PrismBay CJ Supplier Verification run id'
+        required: true
+        type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/quote-enable-evidence-handoff.yml'
+      - 'scripts/quote-enable-candidate.mjs'
+      - 'scripts/quote-enable-candidate.test.mjs'
+      - 'scripts/freight-ceiling-engine.mjs'
+      - 'scripts/freight-ceiling-engine.test.mjs'
+      - 'scripts/build-quote-runtime-config.mjs'
+      - 'scripts/build-quote-runtime-config.test.mjs'
+      - 'config/retail-commercial-authorization.json'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  safety-tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: >-
+          node --test
+          scripts/freight-ceiling-engine.test.mjs
+          scripts/quote-enable-candidate.test.mjs
+          scripts/build-quote-runtime-config.test.mjs
+
+  build-handoff:
+    if: >-
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out exact main policy and builders
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve source verification run
+        id: source
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            run_id='${{ github.event.workflow_run.id }}'
+          else
+            run_id='${{ inputs.source_run_id }}'
+          fi
+          test -n "$run_id"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+      - name: Download raw CJ verification evidence artifact
+        shell: bash
+        run: |
+          run_id='${{ steps.source.outputs.run_id }}'
+          mkdir -p "$RUNNER_TEMP/cj-evidence"
+          gh run download "$run_id" \
+            --repo '${{ github.repository }}' \
+            --name "prismbay-cj-supplier-verification-$run_id" \
+            --dir "$RUNNER_TEMP/cj-evidence"
+          source=$(find "$RUNNER_TEMP/cj-evidence" -type f -name 'cj-supplier-verification.json' -print -quit)
+          test -n "$source"
+          mkdir -p growth-reports
+          cp "$source" growth-reports/cj-supplier-verification.json
+      - name: Validate builders and produce fail-closed runtime candidate
+        run: |
+          node --test scripts/freight-ceiling-engine.test.mjs scripts/quote-enable-candidate.test.mjs scripts/build-quote-runtime-config.test.mjs
+          node scripts/quote-enable-candidate.mjs
+          node scripts/build-quote-runtime-config.mjs
+      - name: Assert runtime handoff never auto-activates commerce
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const handoff=JSON.parse(fs.readFileSync('growth-reports/quote-runtime-config.json','utf8'));
+          if(handoff.automaticActivation!==false) throw new Error('automatic activation must remain false');
+          if(handoff.finalBuyerZipRequiredPerSession!==true) throw new Error('final ZIP must remain required');
+          if(handoff.supplierOrderingEnabled!==false) throw new Error('supplier ordering must remain disabled');
+          console.log(JSON.stringify({productCount:handoff.productCount,automaticActivation:false,finalBuyerZipRequiredPerSession:true,supplierOrderingEnabled:false}));
+          JS
+      - name: Retain deployment handoff evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-quote-runtime-handoff-${{ steps.source.outputs.run_id }}
+          path: |
+            growth-reports/quote-enable-candidates.json
+            growth-reports/quote-runtime-config.json
+          if-no-files-found: error
+          retention-days: 7
