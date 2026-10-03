@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "parent": "PrismBay Commerce Group",
+  "objective": "Generate verified, profitable dropshipping sales for PrismBay Clean.",
+  "companies": [
+    {"id":"product-intelligence","name":"PrismBay Product Intelligence","funnelStage":"product_discovery","mission":"Find products with strong commercial potential before competitors saturate them.","primaryKpi":"commercially_viable_candidates_reaching_supplier_verification","implementation":["paperclip/prismbay-global-commerce","scripts/global-commerce-opportunity-engine.mjs"]},
+    {"id":"supplier-fulfillment","name":"PrismBay Supplier and Fulfillment Intelligence","funnelStage":"supplier_verification","mission":"Protect margin, delivery performance, product quality and customer experience.","primaryKpi":"verified_products_and_fulfillment_risk","implementation":["scripts/paperclip-cj-sourcing.mjs","scripts/cj-review-board.mjs",".github/workflows/cj-supplier-verification.yml"]},
+    {"id":"offer-engineering","name":"PrismBay Offer Engineering","funnelStage":"offer_development","mission":"Turn verified products into commercially strong offers while protecting contribution margin.","primaryKpi":"gross_profit_per_visitor_and_conversion_rate","implementation":["scripts/organic-growth-agent.mjs","paperclip/prismbay-revenue-company"]},
+    {"id":"storefront-conversion","name":"PrismBay Storefront Conversion","funnelStage":"storefront_readiness","mission":"Convert qualified visitors into buyers by reducing friction and improving truthful merchandising.","primaryKpi":"store_conversion_rate","implementation":["scripts/organic-growth-agent.mjs","paperclip/prismbay-revenue-company/agents/storefront-cro"]},
+    {"id":"creative-studio","name":"PrismBay Creative Studio","funnelStage":"creative_production","mission":"Produce sales-focused short-form creative for approved products using authorized or original media.","primaryKpi":"conversion_contribution","implementation":["scripts/organic-growth-agent.mjs"]},
+    {"id":"organic-growth","name":"PrismBay Organic Growth","funnelStage":"traffic_generation","mission":"Generate qualified traffic without paid advertising as the default strategy.","primaryKpi":"qualified_zero_cost_storefront_sessions","implementation":[".github/workflows/retail-promotion-swarm.yml","scripts/organic-growth-agent.mjs"]},
+    {"id":"creator-affiliate-growth","name":"PrismBay Creator and Affiliate Growth","funnelStage":"traffic_generation","mission":"Build performance-based external distribution through owner-approved creator and affiliate relationships.","primaryKpi":"creator_attributed_revenue","implementation":["paperclip/prismbay-revenue-company/agents/creator-partnerships"]},
+    {"id":"revenue-analytics","name":"PrismBay Revenue Analytics","funnelStage":"measurement","mission":"Measure commercial performance and direct resources toward verified sales and contribution margin.","primaryKpi":"verified_revenue_and_contribution_margin","implementation":["scripts/first-sale-verifier.mjs","scripts/paperclip-revenue-bridge.mjs"]},
+    {"id":"experiment-lab","name":"PrismBay Experiment Lab","funnelStage":"experimentation","mission":"Run disciplined commercial experiments with explicit hypotheses, metrics, stop conditions and measured results.","primaryKpi":"incremental_profit_from_validated_experiments","implementation":["growth-reports"]},
+    {"id":"commerce-control","name":"PrismBay Commerce Control","funnelStage":"control","mission":"Coordinate all companies toward the shared revenue objective, stop weak work and escalate approvals.","primaryKpi":"verified_revenue_progress_and_bottleneck_resolution","implementation":["scripts/paperclip-commerce-group.mjs","paperclip/prismbay-revenue-company"]}
+  ],
+  "currentProducts": ["pressure-washer","cordless-handheld-vacuum","scrubber","mattress-vacuum","garment-steamer","home-caddy","pethair","mini-mop","crevice","drain-catcher"],
+  "rules": {
+    "verifiedPurchasesOnlyCountAsRevenue": true,
+    "zeroCostFirst": true,
+    "paidSpendRequiresApproval": true,
+    "outreachRequiresApproval": true,
+    "supplierOrdersRequireApproval": true,
+    "materialProductionChangesRequireApproval": true,
+    "noFabricatedReviews": true,
+    "noFakeScarcity": true,
+    "educationalYouTubeSeparated": true
+  }
+}
