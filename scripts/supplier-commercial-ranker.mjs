@@ -1,6 +1,12 @@
 import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
+function finiteOrNull(value){
+  if(value === null || value === undefined || value === '') return null;
+  const n=Number(value);
+  return Number.isFinite(n)?n:null;
+}
+
 export function commercialEvidenceScore(result={}) {
   const research=Math.max(0,Math.min(100,Number(result.researchScore||0)));
   const inventory=Number(result.product?.inventory||0);
@@ -32,8 +38,8 @@ export function buildCommercialRank({sourcing={},stress={}}={}) {
       variantInventoryVerified:result.variantInventoryVerified===true,
       freightScreeningVerified:result.freightVerified===true,
       originCountryCode:result.product?.originCountryCode||null,
-      inventory:Number.isFinite(Number(result.product?.inventory))?Number(result.product.inventory):null,
-      bestProvisionalUnitFloorUsd:Number.isFinite(Number(s?.bestProvisionalUnitFloorUsd))?Number(s.bestProvisionalUnitFloorUsd):null,
+      inventory:finiteOrNull(result.product?.inventory),
+      bestProvisionalUnitFloorUsd:finiteOrNull(s?.bestProvisionalUnitFloorUsd),
       exactDestinationFreightVerified:false,
       marketRetailValidated:false,
       operationalStage:scoring.score>=80?'commercial_evidence_leader':scoring.score>=60?'promising_supplier_route':'weak_or_incomplete_supplier_route',
