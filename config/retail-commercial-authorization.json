@@ -25,7 +25,7 @@
     "appId": "prismbay-physical-order-reconciler-srm7mm",
     "deployed": true,
     "stripeWebhookSecretConfigured": true,
-    "crevicePaymentLinkMappingVerified": true,
+    "verifiedCheckoutSkus": ["crevice"],
     "checkoutAllowedOnlyAfterFinalZipFreight": true
   },
   "evidence": [
