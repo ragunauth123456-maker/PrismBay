@@ -39,6 +39,11 @@ routines:
       - kind: schedule
         cronExpression: "*/10 * * * *"
         timezone: "America/Guyana"
+  strict-kpi-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "12,42 * * * *"
+        timezone: "America/Guyana"
   first-sale-war-room:
     triggers:
       - kind: schedule
