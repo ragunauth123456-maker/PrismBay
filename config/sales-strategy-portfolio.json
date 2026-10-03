@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "objective": "Create multiple legitimate paths to the first verified profitable PrismBay Clean sale without weakening commercial evidence standards.",
+  "minimumConcurrentPathsBeforeFirstSale": 8,
+  "rules": {
+    "zeroCostFirst": true,
+    "saleReadyProductRequiredForExternalProductPromotion": true,
+    "paidSpendRequiresOwnerApproval": true,
+    "bulkOutreachProhibited": true,
+    "externalMarketplacePublicationRequiresAccountEligibilityAndApproval": true,
+    "noFakeReviewsOrScarcity": true,
+    "educationalYouTubeSeparated": true,
+    "blockedPathMustCreateFallback": true
+  },
+  "strategies": [
+    {"id":"primary-product-gate-closure","owner":"supplier-fulfillment","class":"product_readiness","action":"Close exact freight, margin and checkout gates on the nearest commercial SKU.","fallback":"Advance the strongest backup product immediately."},
+    {"id":"backup-product-race","owner":"product-intelligence","class":"portfolio","action":"Run supplier and economics verification on multiple backup products in parallel.","fallback":"Replace rejected candidates with newly researched low-regulation products."},
+    {"id":"owned-search-seo","owner":"organic-growth","class":"acquisition","action":"Prepare search-intent product and problem-solution landing content on owned PrismBay Clean surfaces for verified products.","fallback":"Build evergreen category/problem pages while product verification remains incomplete."},
+    {"id":"google-free-listings","owner":"organic-growth","class":"acquisition","action":"Prepare Merchant Center-compatible product feed, shipping, returns and structured product data for eligible target markets; activate only through an eligible verified merchant account.","fallback":"Use owned-search SEO if Merchant Center eligibility or account verification is unavailable."},
+    {"id":"pinterest-product-pins","owner":"organic-growth","class":"acquisition","action":"Prepare Product Rich Pin metadata and catalog-ready product data; publish only where the business account, claimed site and regional eligibility requirements are satisfied.","fallback":"Use standard organic visual content pointing to owned product pages where permitted."},
+    {"id":"tiktok-shop-affiliate","owner":"creator-affiliate-growth","class":"performance_distribution","action":"Prepare open-collaboration and creator-affiliate package for a sale-ready SKU; activate only if the seller account and product are eligible.","fallback":"Maintain owner-approved creator shortlist and rights-safe briefs without bulk outreach."},
+    {"id":"marketplace-listing-packages","owner":"organic-growth","class":"marketplace","action":"Prepare truthful listing packages for eligible marketplaces such as eBay, including title, specs, shipping, returns and image requirements; do not publish without account eligibility and approval.","fallback":"Route traffic to owned storefront instead of forcing marketplace publication."},
+    {"id":"offer-bundle-engineering","owner":"offer-engineering","class":"offer","action":"Model single-unit, multi-unit, bundle, threshold-shipping and cross-sell offers using verified landed cost and contribution margin.","fallback":"Keep the base offer unchanged if economics evidence is incomplete or a live price change is not approved."},
+    {"id":"storefront-cro","owner":"storefront-conversion","class":"conversion","action":"Continuously audit mobile product page, trust, shipping disclosure, CTA, refund information, speed and checkout friction before traffic scales.","fallback":"Repair the existing storefront and checkout mapping before creating replacement infrastructure."},
+    {"id":"short-form-creative-library","owner":"creative-studio","class":"creative","action":"Prepare original rights-safe problem-solution, demonstration, comparison, FAQ and objection-handling creative for likely-to-clear products.","fallback":"Use product-neutral educational problem/solution concepts until a SKU becomes promotion-ready."},
+    {"id":"creator-affiliate-shortlist","owner":"creator-affiliate-growth","class":"performance_distribution","action":"Maintain a qualified creator/affiliate shortlist and commission model for owner-approved outreach after product readiness.","fallback":"Use open-collaboration platform mechanisms where available instead of unsolicited bulk outreach."},
+    {"id":"conversion-experiment-backlog","owner":"experiment-lab","class":"experimentation","action":"Maintain ranked tests for offer, page, creative and channel hypotheses with explicit metrics and stop conditions.","fallback":"Run measurement and preflight tests internally until sufficient external traffic exists."}
+  ]
+}
