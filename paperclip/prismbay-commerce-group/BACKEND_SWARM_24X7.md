@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The PrismBay Clean storefront backend now operates a persistent scheduled AI swarm through the live AppDeploy backend. GitHub/Paperclip remains the external code-control, watchdog and recovery plane.
+The PrismBay Clean storefront backend now operates a persistent scheduled AI swarm through the live AppDeploy backend. GitHub/Paperclip remains the external code-control, configuration-watchdog and recovery plane.
 
 This is not fake traffic automation. The swarm works on the commercial system itself: storefront health, product merchandising, SEO/CRO opportunities, truthful offer and creative preparation, analytics/experiment design, and commerce control.
 
@@ -12,7 +12,7 @@ App: `prismbay-clean-49izhg`
 
 Public storefront: `https://prismbay-clean-49izhg.v2.appdeploy.ai/`
 
-Sanitized backend swarm status: `https://prismbay-clean-49izhg.v2.appdeploy.ai/api/swarm-status`
+The backend also exposes an internal swarm-status route for the storefront runtime. Because the static Next.js export serves public unknown paths through the frontend fallback, GitHub does not treat the public `/api/*` URL as authoritative runtime evidence.
 
 ## Six resident scheduled workers
 
@@ -43,17 +43,19 @@ The backend swarm must never:
 - change retail prices autonomously;
 - weaken product identity, freight, fulfillment, checkout or evidence requirements.
 
-## GitHub/Paperclip watchdog
+## Runtime authority and GitHub/Paperclip watchdog
 
-GitHub Actions polls the sanitized status endpoint every ten minutes. The watchdog validates:
+AppDeploy is the authoritative source for private cron execution status, next-run scheduling and failure counts for the six backend workers.
 
-- the backend is reachable;
-- exactly six workers remain configured;
-- safety boundaries remain closed;
-- persisted swarm state is not stale after execution has begun;
-- the backend continues exposing a controller focus and worker run state.
+GitHub Actions runs a separate watchdog every ten minutes. It validates what GitHub can independently verify without inventing cross-platform visibility:
 
-This allows Paperclip to distinguish a healthy backend swarm from a silent failure.
+- the committed six-worker swarm contract;
+- ten-minute staggered coverage across the hour;
+- closed safety boundaries;
+- public PrismBay Clean storefront health;
+- product feed, merchant feed, sitemap and robots availability.
+
+The watchdog explicitly does not claim that a public frontend request proves private AppDeploy cron execution. This keeps the monitoring evidence honest while still giving Paperclip an independent failure signal for configuration or storefront breakage.
 
 ## Commercial principle
 
