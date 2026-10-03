@@ -123,7 +123,7 @@ function flatten(payload) {
   return Array.isArray(groups)?groups.flatMap(g=>Array.isArray(g?.productList)?g.productList:[]):[];
 }
 
-function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.4'}; }
+function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.5'}; }
 
 async function lookupKnownProduct({client,base,token,candidate}) {
   const exactVariantSku=String(candidate?.exactVariantSku||'').trim();
@@ -162,7 +162,29 @@ async function inspectProductRoute({client,base,token,candidate,product}) {
     }
   } catch {}
   const productCostUsd=positiveNumber(variant?.variantSellPrice) ?? positiveNumber(variantChoices[0]?.variantSellPrice) ?? positiveNumber(product?.nowPrice ?? product?.discountPrice ?? product?.sellPrice);
-  return { product, variant, stock, variantChoices, productCostUsd };
+  let singleFreight={offers:[],diagnostic:'quote_unavailable'};
+  if(variant&&stock){
+    try {
+      const payload=await client(base+'/logistic/freightCalculate',{method:'POST',headers:headers(token),body:JSON.stringify(freightRequest(String(variant.vid),null,String(stock.countryCode).toUpperCase(),1))});
+      singleFreight=parseCJFreight(payload,'country_estimate');
+    } catch {}
+  }
+  const freightUsd=positiveNumber(singleFreight?.offers?.[0]?.usd);
+  const screenedSingleUnitLandedUsd=productCostUsd&&freightUsd?+(productCostUsd+freightUsd).toFixed(2):null;
+  return { product, variant, stock, variantChoices, productCostUsd, singleFreight, screenedSingleUnitLandedUsd };
+}
+
+function routeRank(a,b){
+  const aReady=Boolean(a.variant&&a.stock);
+  const bReady=Boolean(b.variant&&b.stock);
+  if(aReady!==bReady) return aReady?-1:1;
+  const aLanded=a.screenedSingleUnitLandedUsd??Infinity;
+  const bLanded=b.screenedSingleUnitLandedUsd??Infinity;
+  if(aLanded!==bLanded) return aLanded-bLanded;
+  const aUs=String(a.stock?.countryCode||'').toUpperCase()==='US';
+  const bUs=String(b.stock?.countryCode||'').toUpperCase()==='US';
+  if(aUs!==bUs) return aUs?-1:1;
+  return Number(b.stock?.cjInventoryNum||0)-Number(a.stock?.cjInventoryNum||0);
 }
 
 export async function sourceCandidate({client,base,token,candidate}) {
@@ -220,13 +242,11 @@ export async function sourceCandidate({client,base,token,candidate}) {
   };
   if(!productChoices.length) return {...baseResult,status:known.attempted?'known_identity_unavailable_fallback_failed':'supplier_match_not_found',supplierAlternativesInspected:0};
 
+  const portfolioLimit=known.product?1:Math.max(1,Math.min(Number(candidate?.supplierPortfolioSize||2),3));
   const inspections=[];
-  for(const product of productChoices.slice(0,3)){
-    const inspection=await inspectProductRoute({client,base,token,candidate,product});
-    inspections.push(inspection);
-    if(inspection.variant&&inspection.stock) break;
-  }
-  const selected=inspections.find(x=>x.variant&&x.stock) || inspections[0];
+  for(const product of productChoices.slice(0,portfolioLimit)) inspections.push(await inspectProductRoute({client,base,token,candidate,product}));
+  const ranked=[...inspections].sort(routeRank);
+  const selected=ranked[0]||inspections[0];
   const product=selected.product;
   const variant=selected.variant;
   const stock=selected.stock;
@@ -236,7 +256,20 @@ export async function sourceCandidate({client,base,token,candidate}) {
   const exactVariantRequired=Boolean(String(candidate?.exactVariantSku||'').trim());
   const inventory=stock?Number(stock.cjInventoryNum||0):null;
   const variantStatus=variant&&stock?'variant_stock_verified':exactVariantRequired?'known_variant_stock_required':'variant_stock_required';
-  const result={...baseResult,status:variantStatus,variantInventoryVerified:Boolean(variant&&stock),supplierAlternativesFound:productChoices.length,supplierAlternativesInspected:inspections.length,selectedSupplierRank,fallbackSupplierUsed:selectedSupplierRank>1,product:{
+  const supplierRoutePortfolio=ranked.map(route=>({
+    productId:productId(route.product)||null,
+    productSku:productSku(route.product)||null,
+    variantId:route.variant?.vid||route.variantChoices?.[0]?.vid||null,
+    variantSku:route.variant?.variantSku||route.variantChoices?.[0]?.variantSku||null,
+    originCountryCode:route.stock?String(route.stock.countryCode).toUpperCase():null,
+    inventory:route.stock?Number(route.stock.cjInventoryNum||0):null,
+    productCostUsd:route.productCostUsd??null,
+    screeningFreightUsd:route.singleFreight?.offers?.[0]?.usd??null,
+    screenedSingleUnitLandedUsd:route.screenedSingleUnitLandedUsd,
+    variantInventoryVerified:Boolean(route.variant&&route.stock),
+    screeningFreightVerified:Boolean(route.singleFreight?.offers?.length),
+  }));
+  const result={...baseResult,status:variantStatus,variantInventoryVerified:Boolean(variant&&stock),supplierAlternativesFound:productChoices.length,supplierAlternativesInspected:inspections.length,selectedSupplierRank,fallbackSupplierUsed:selectedSupplierRank>1,selectionBasis:'lowest_screened_single_unit_landed_cost_then_origin_and_inventory',supplierRoutePortfolio,product:{
     id:String(productId(product)),
     name:productName(product),
     sku:productSku(product)||candidate.exactSupplierSku||null,
@@ -250,18 +283,19 @@ export async function sourceCandidate({client,base,token,candidate}) {
   if(!variant||!stock) return result;
 
   const packFreightScreening=[];
-  let singleFreight={offers:[],diagnostic:'quote_unavailable'};
+  let singleFreight=selected.singleFreight||{offers:[],diagnostic:'quote_unavailable'};
   for(const quantity of [1,3,5]){
     if(Number.isFinite(inventory) && inventory<quantity){
       packFreightScreening.push({quantity,priced:false,reason:'verified_origin_inventory_below_pack_quantity'});
       continue;
     }
-    let freight={offers:[],diagnostic:'quote_unavailable'};
-    try {
-      const payload=await client(base+'/logistic/freightCalculate',{method:'POST',headers:headers(token),body:JSON.stringify(freightRequest(String(variant.vid),null,String(stock.countryCode).toUpperCase(),quantity))});
-      freight=parseCJFreight(payload,'country_estimate');
-    } catch {}
-    if(quantity===1) singleFreight=freight;
+    let freight=quantity===1?singleFreight:{offers:[],diagnostic:'quote_unavailable'};
+    if(quantity!==1){
+      try {
+        const payload=await client(base+'/logistic/freightCalculate',{method:'POST',headers:headers(token),body:JSON.stringify(freightRequest(String(variant.vid),null,String(stock.countryCode).toUpperCase(),quantity))});
+        freight=parseCJFreight(payload,'country_estimate');
+      } catch {}
+    }
     packFreightScreening.push(buildPackScreening(productCostUsd,quantity,freight));
   }
   const pricedPacks=packFreightScreening.filter(x=>x.priced);
@@ -272,7 +306,7 @@ export async function sourceCandidate({client,base,token,candidate}) {
     lowestFreightUsd:singleFreight.offers[0]?.usd??null,
     packFreightScreening,
     bestScreenedLandedPerUnitUsd:pricedPacks.length?Math.min(...pricedPacks.map(x=>x.landedCostPerUnitUsd)):null,
-    note:'Country freight is screening evidence only. Exact buyer destination freight, current retail validation and full unit economics are still required before launch.'};
+    note:'Supplier routes are ranked with screening freight only. Exact buyer destination freight, current retail validation and full unit economics are still required before launch.'};
 }
 
 export async function main(){
@@ -280,7 +314,7 @@ export async function main(){
   if(!apiKey) throw new Error('CJ_API_KEY is required');
   const client=createCJReadOnlyClient();
   const base='https://developers.cjdropshipping.com/api2.0/v1';
-  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.4'},body:JSON.stringify({apiKey})});
+  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.5'},body:JSON.stringify({apiKey})});
   const token=String(auth?.data?.accessToken||'');
   if(!token) throw new Error('CJ authentication returned no access token');
   console.log('::add-mask::'+token);
@@ -293,7 +327,7 @@ export async function main(){
   const results=[];
   for(const candidate of rotation.selected) results.push(await sourceCandidate({client,base,token,candidate}));
   const report={
-    schemaVersion:5,
+    schemaVersion:6,
     checkedAt:new Date().toISOString(),
     market:catalog.market||'US',
     mode:'paperclip_global_commerce_read_only',
@@ -306,6 +340,7 @@ export async function main(){
     verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,
     freightEstimates:results.filter(x=>x.freightVerified).length,
     supplierFallbacksUsed:results.filter(x=>x.fallbackSupplierUsed).length,
+    supplierEconomicsSelections:results.filter(x=>x.selectionBasis?.startsWith('lowest_screened')).length,
     ordersEnabled:false,
     listingsEnabled:false,
     profitReadyCount:0,
@@ -313,7 +348,7 @@ export async function main(){
   };
   await fs.mkdir('growth-reports',{recursive:true});
   await fs.writeFile('growth-reports/paperclip-cj-sourcing.json',JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({catalogCandidateCount:report.catalogCandidateCount,candidateCount:report.candidateCount,rotation:report.rotation,knownIdentityAttempts:report.knownIdentityAttempts,knownIdentityRevalidations:report.knownIdentityRevalidations,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,supplierFallbacksUsed:report.supplierFallbacksUsed,results:results.map(r=>({slug:r.slug,status:r.status,searchScope:r.searchScope,knownIdentityRevalidated:r.knownIdentityRevalidated,supplierAlternativesFound:r.supplierAlternativesFound??0,supplierAlternativesInspected:r.supplierAlternativesInspected??0,selectedSupplierRank:r.selectedSupplierRank??null,fallbackSupplierUsed:r.fallbackSupplierUsed??false,productCostUsd:r.product?.productCostUsd??null,variantSku:r.product?.variantSku??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
+  console.log(JSON.stringify({catalogCandidateCount:report.catalogCandidateCount,candidateCount:report.candidateCount,rotation:report.rotation,knownIdentityAttempts:report.knownIdentityAttempts,knownIdentityRevalidations:report.knownIdentityRevalidations,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,supplierFallbacksUsed:report.supplierFallbacksUsed,supplierEconomicsSelections:report.supplierEconomicsSelections,results:results.map(r=>({slug:r.slug,status:r.status,searchScope:r.searchScope,selectedSupplierRank:r.selectedSupplierRank??null,fallbackSupplierUsed:r.fallbackSupplierUsed??false,selectionBasis:r.selectionBasis??null,supplierRoutePortfolio:r.supplierRoutePortfolio??[],productCostUsd:r.product?.productCostUsd??null,variantSku:r.product?.variantSku??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
   return report;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) await main();
