@@ -52,12 +52,17 @@ routines:
   supplier-margin-refresh:
     triggers:
       - kind: schedule
-        cronExpression: "47 */3 * * *"
+        cronExpression: "37 * * * *"
         timezone: "America/Guyana"
   portfolio-fallback-refresh:
     triggers:
       - kind: schedule
-        cronExpression: "53 */3 * * *"
+        cronExpression: "47 * * * *"
+        timezone: "America/Guyana"
+  no-idle-pre-sale-check:
+    triggers:
+      - kind: schedule
+        cronExpression: "57 * * * *"
         timezone: "America/Guyana"
   daily-executive-scorecard:
     triggers:
