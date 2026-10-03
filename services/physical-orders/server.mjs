@@ -7,6 +7,7 @@ import { loadCatalog } from './catalog.mjs';
 import { openLedger } from './ledger.mjs';
 import { ingest } from './orders.mjs';
 import { createQuoteService } from './shipping-quote.mjs';
+import { createLedgerQuoteConsumer } from './quote-replay.mjs';
 
 // Logging is an allowlist: never serialize event bodies, errors, URLs, ZIPs, tokens, or customer data.
 export function safeLog(sink, code) {
@@ -125,7 +126,8 @@ export async function start(env = process.env) {
   const catalog = loadCatalog(env.PHYSICAL_CATALOG_PATH);
   if (env.PROD === 'true' && !catalog.mappings.length) throw Error('Physical catalog import required');
   const ledger = await openLedger(resolve(env.DATA_DIR || 'data'));
-  const quoteService = createQuoteService({ env });
+  const consumeQuoteOnce = createLedgerQuoteConsumer(ledger);
+  const quoteService = createQuoteService({ env, consumeQuoteOnce });
   const server = createServer({ secret: env.STRIPE_WEBHOOK_SECRET, ledger, catalog, quoteService, live: env.STRIPE_LIVE_MODE === 'true' });
   server.listen(Number(env.PORT || 3001), '0.0.0.0', () => safeLog(console.log, 'started'));
   const shutdown = () => server.close(async () => { await ledger.close(); process.exit(0); });
