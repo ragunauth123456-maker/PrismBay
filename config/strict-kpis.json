@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "objective": "Generate real, verified, profitable PrismBay Clean sales while preserving evidence, platform integrity and contribution margin.",
+  "scoring": {
+    "green": { "min": 90, "max": 100 },
+    "yellow": { "min": 75, "max": 89 },
+    "red": { "min": 50, "max": 74 },
+    "critical": { "min": 0, "max": 49 }
+  },
+  "evidenceRules": {
+    "missingEvidenceGetsCredit": false,
+    "unknownCountsAsPass": false,
+    "activityAloneCountsAsSuccess": false,
+    "selfReportedRevenueCounts": false,
+    "verifiedEvidenceRequiredForRevenue": true,
+    "integrityBreachForcesCritical": true
+  },
+  "consequences": {
+    "yellowConsecutiveCycles": 2,
+    "yellowAction": "tighten_scope_and_raise_priority",
+    "redConsecutiveCycles": 2,
+    "redAction": "launch_parallel_recovery_route_and_rewrite_assignment",
+    "criticalConsecutiveCycles": 1,
+    "criticalAction": "stop_weak_route_preserve_evidence_and_replace_strategy",
+    "threeRedCyclesAction": "restructure_worker_or_company_mandate",
+    "ownerEscalation": "only_for_owner_only_or_platform_only_actions_while_other_work_continues"
+  },
+  "globalMandatoryKpis": [
+    { "id": "evidence_integrity", "weight": 20, "target": 100, "unit": "percent", "hardFailBelow": 100 },
+    { "id": "no_idle_before_first_sale", "weight": 15, "target": 100, "unit": "percent", "hardFailBelow": 100 },
+    { "id": "blocker_to_alternative_latency", "weight": 10, "target": 60, "direction": "lte", "unit": "minutes" },
+    { "id": "assignment_freshness", "weight": 10, "target": 60, "direction": "lte", "unit": "minutes" }
+  ],
+  "companies": {
+    "product-intelligence": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "fresh_evidence_coverage", "weight": 25, "target": 90, "direction": "gte", "unit": "percent", "window": "24h" },
+        { "id": "qualified_candidates_to_supplier_verification", "weight": 35, "target": 5, "direction": "gte", "unit": "candidates_per_day" },
+        { "id": "candidate_duplicate_or_regulated_escape_rate", "weight": 20, "target": 0, "direction": "lte", "unit": "percent" },
+        { "id": "top_candidate_actionability", "weight": 20, "target": 100, "direction": "gte", "unit": "percent_with_clear_next_gate" }
+      ]
+    },
+    "supplier-fulfillment": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "verified_supplier_variant_stock_candidates", "weight": 30, "target": 3, "direction": "gte", "unit": "active_candidates" },
+        { "id": "primary_blocker_to_alternate_route_latency", "weight": 25, "target": 60, "direction": "lte", "unit": "minutes" },
+        { "id": "supplier_evidence_staleness", "weight": 20, "target": 6, "direction": "lte", "unit": "hours" },
+        { "id": "unverified_fulfillment_release_rate", "weight": 25, "target": 0, "direction": "lte", "unit": "percent", "hardFailAbove": 0 }
+      ]
+    },
+    "offer-engineering": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "verified_products_with_three_offer_variants", "weight": 25, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "offers_passing_margin_floor", "weight": 35, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "offer_refresh_after_material_product_change", "weight": 20, "target": 120, "direction": "lte", "unit": "minutes" },
+        { "id": "unsupported_claim_rate", "weight": 20, "target": 0, "direction": "lte", "unit": "percent", "hardFailAbove": 0 }
+      ]
+    },
+    "storefront-conversion": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "critical_commercial_route_health", "weight": 30, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "eligible_products_with_checkout_path", "weight": 30, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "material_cro_issue_to_task_latency", "weight": 20, "target": 60, "direction": "lte", "unit": "minutes" },
+        { "id": "broken_buyer_path_count", "weight": 20, "target": 0, "direction": "lte", "unit": "count" }
+      ]
+    },
+    "creative-studio": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "rights_safe_original_creative_rate", "weight": 35, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "primary_product_creative_concepts", "weight": 25, "target": 3, "direction": "gte", "unit": "concepts_per_day" },
+        { "id": "creative_to_measurable_hypothesis_rate", "weight": 20, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "fabricated_review_or_scarcity_rate", "weight": 20, "target": 0, "direction": "lte", "unit": "percent", "hardFailAbove": 0 }
+      ]
+    },
+    "organic-growth": {
+      "cadence": "hourly",
+      "kpis": [
+        { "id": "eligible_product_zero_cost_channel_coverage", "weight": 30, "target": 3, "direction": "gte", "unit": "channels" },
+        { "id": "promotion_asset_readiness_latency", "weight": 20, "target": 240, "direction": "lte", "unit": "minutes" },
+        { "id": "unverified_product_promotion_rate", "weight": 30, "target": 0, "direction": "lte", "unit": "percent", "hardFailAbove": 0 },
+        { "id": "qualified_zero_cost_sessions", "weight": 20, "target": 1, "direction": "gte", "unit": "measured_sessions", "activationCondition": "instrumentation_available_and_product_eligible" }
+      ]
+    },
+    "creator-affiliate-growth": {
+      "cadence": "daily",
+      "kpis": [
+        { "id": "qualified_creator_affiliate_shortlist", "weight": 30, "target": 10, "direction": "gte", "unit": "new_qualified_profiles_per_day" },
+        { "id": "unauthorized_outreach_rate", "weight": 30, "target": 0, "direction": "lte", "unit": "percent", "hardFailAbove": 0 },
+        { "id": "eligible_product_partner_package_readiness", "weight": 20, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "creator_attributed_verified_revenue", "weight": 20, "target": 1, "direction": "gte", "unit": "verified_orders", "activationCondition": "outreach_or_affiliate_activation_authorized" }
+      ]
+    },
+    "revenue-analytics": {
+      "cadence": "each_cycle",
+      "kpis": [
+        { "id": "revenue_claim_evidence_rate", "weight": 35, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "verified_order_reconciliation_latency", "weight": 25, "target": 15, "direction": "lte", "unit": "minutes" },
+        { "id": "verified_order_attribution_coverage", "weight": 20, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "fabricated_or_test_order_counted_as_sale", "weight": 20, "target": 0, "direction": "lte", "unit": "count", "hardFailAbove": 0 }
+      ]
+    },
+    "experiment-lab": {
+      "cadence": "daily",
+      "kpis": [
+        { "id": "experiments_with_hypothesis_metric_stop_rule", "weight": 30, "target": 100, "direction": "gte", "unit": "percent" },
+        { "id": "new_executable_experiments_prepared", "weight": 25, "target": 2, "direction": "gte", "unit": "experiments_per_day" },
+        { "id": "experiments_without_measurement", "weight": 25, "target": 0, "direction": "lte", "unit": "count", "hardFailAbove": 0 },
+        { "id": "validated_incremental_profit", "weight": 20, "target": 0, "direction": "gte", "unit": "usd", "activationCondition": "sufficient_real_traffic_or_orders" }
+      ]
+    },
+    "commerce-control": {
+      "cadence": "each_cycle",
+      "kpis": [
+        { "id": "companies_with_active_assignment_before_first_sale", "weight": 25, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "bottleneck_has_named_owner", "weight": 20, "target": 100, "direction": "gte", "unit": "percent", "hardFailBelow": 100 },
+        { "id": "primary_blocker_parallel_routes", "weight": 20, "target": 2, "direction": "gte", "unit": "routes" },
+        { "id": "first_sale_scoreboard_freshness", "weight": 15, "target": 45, "direction": "lte", "unit": "minutes" },
+        { "id": "verified_profitable_sales", "weight": 20, "target": 1, "direction": "gte", "unit": "orders" }
+      ]
+    }
+  },
+  "backendWorkers": {
+    "commerce-controller": {
+      "cadence": "hourly_at_00",
+      "minimumInspectionsPerRun": 2,
+      "minimumActionsPerRun": 2,
+      "kpis": ["evidence_inspection_count", "non_idle_action_count", "single_controller_focus", "parallel_fallback_present", "integrity"]
+    },
+    "product-scout": {
+      "cadence": "hourly_at_10",
+      "minimumInspectionsPerRun": 2,
+      "minimumActionsPerRun": 3,
+      "kpis": ["catalog_evidence_inspection_count", "actionable_merchandising_findings", "ranked_next_gate", "integrity"]
+    },
+    "site-auditor": {
+      "cadence": "hourly_at_20",
+      "minimumInspectionsPerRun": 3,
+      "minimumActionsPerRun": 2,
+      "kpis": ["critical_path_checks", "detected_issue_to_action", "false_healthy_rate", "integrity"]
+    },
+    "seo-cro": {
+      "cadence": "hourly_at_30",
+      "minimumInspectionsPerRun": 2,
+      "minimumActionsPerRun": 3,
+      "kpis": ["seo_cro_evidence_checks", "measurable_actions", "unsupported_behavior_claim_rate", "integrity"]
+    },
+    "offer-creative": {
+      "cadence": "hourly_at_40",
+      "minimumInspectionsPerRun": 1,
+      "minimumActionsPerRun": 3,
+      "kpis": ["product_evidence_check", "truthful_offer_or_creative_actions", "rights_safe_rate", "integrity"]
+    },
+    "analytics-experiment": {
+      "cadence": "hourly_at_50",
+      "minimumInspectionsPerRun": 1,
+      "minimumActionsPerRun": 2,
+      "kpis": ["measurement_evidence_check", "experiment_or_instrumentation_actions", "fabricated_metric_rate", "integrity"]
+    }
+  },
+  "backendRunScoring": {
+    "inspectionTargetWeight": 35,
+    "actionTargetWeight": 35,
+    "nonIdleSummaryWeight": 15,
+    "roleSpecificOutputWeight": 15,
+    "redBelow": 75,
+    "greenAtOrAbove": 90,
+    "consecutiveRedBeforeIntervention": 2,
+    "consecutiveRedBeforeRoleRewrite": 3
+  },
+  "parentController": {
+    "cadence": "each_control_cycle",
+    "kpis": [
+      { "id": "verified_sales", "target": 1, "direction": "gte", "unit": "orders" },
+      { "id": "active_company_coverage", "target": 100, "direction": "gte", "unit": "percent" },
+      { "id": "concurrent_sales_strategies", "target": 8, "direction": "gte", "unit": "strategies" },
+      { "id": "unowned_blockers", "target": 0, "direction": "lte", "unit": "count" },
+      { "id": "stalled_blockers_without_alternative", "target": 0, "direction": "lte", "unit": "count" },
+      { "id": "integrity_breaches", "target": 0, "direction": "lte", "unit": "count", "hardFailAbove": 0 }
+    ]
+  }
+}
