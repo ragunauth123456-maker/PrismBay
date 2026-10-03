@@ -44,6 +44,11 @@ routines:
       - kind: schedule
         cronExpression: "2,17,32,47 * * * *"
         timezone: "America/Guyana"
+  commercial-tournament:
+    triggers:
+      - kind: schedule
+        cronExpression: "8,23,38,53 * * * *"
+        timezone: "America/Guyana"
   strict-kpi-review:
     triggers:
       - kind: schedule

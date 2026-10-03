@@ -11,12 +11,17 @@ on:
       - 'config/strict-kpis.json'
       - 'config/conversion-event-contract.json'
       - 'config/prelaunch-commercialization-policy.json'
+      - 'config/commercial-tournament-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
       - 'scripts/autonomous-company-task-allocator.test.mjs'
       - 'scripts/prelaunch-commercialization-factory.mjs'
       - 'scripts/prelaunch-commercialization-factory.test.mjs'
+      - 'scripts/ceo-commercial-tournament.mjs'
+      - 'scripts/ceo-commercial-tournament.test.mjs'
+      - 'scripts/decision-evidence-priority.mjs'
+      - 'scripts/decision-evidence-priority.test.mjs'
       - '.github/workflows/ceo-autonomous-recovery.yml'
   pull_request:
     branches: [main]
@@ -25,12 +30,17 @@ on:
       - 'config/strict-kpis.json'
       - 'config/conversion-event-contract.json'
       - 'config/prelaunch-commercialization-policy.json'
+      - 'config/commercial-tournament-policy.json'
       - 'scripts/ceo-autonomous-growth-engine.mjs'
       - 'scripts/ceo-autonomous-growth-engine.test.mjs'
       - 'scripts/autonomous-company-task-allocator.mjs'
       - 'scripts/autonomous-company-task-allocator.test.mjs'
       - 'scripts/prelaunch-commercialization-factory.mjs'
       - 'scripts/prelaunch-commercialization-factory.test.mjs'
+      - 'scripts/ceo-commercial-tournament.mjs'
+      - 'scripts/ceo-commercial-tournament.test.mjs'
+      - 'scripts/decision-evidence-priority.mjs'
+      - 'scripts/decision-evidence-priority.test.mjs'
       - '.github/workflows/ceo-autonomous-recovery.yml'
 
 permissions:
@@ -50,12 +60,13 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate recovery, allocator and prelaunch engines
+      - name: Validate recovery, allocator, prelaunch, tournament and evidence-priority engines
         run: |
           test -s config/autonomous-growth-system.json
           test -s config/conversion-event-contract.json
           test -s config/prelaunch-commercialization-policy.json
-          node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs scripts/prelaunch-commercialization-factory.test.mjs
+          test -s config/commercial-tournament-policy.json
+          node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs scripts/prelaunch-commercialization-factory.test.mjs scripts/ceo-commercial-tournament.test.mjs scripts/decision-evidence-priority.test.mjs
 
       - name: Rebuild commercial evidence needed for autonomous decisions
         run: |
@@ -79,7 +90,13 @@ jobs:
       - name: Build synchronized prelaunch commercialization kits
         run: node scripts/prelaunch-commercialization-factory.mjs
 
-      - name: Retain autonomous recovery and prelaunch evidence
+      - name: Run commercial tournament and reallocate internal attention
+        run: node scripts/ceo-commercial-tournament.mjs
+
+      - name: Rank evidence by commercial decision leverage
+        run: node scripts/decision-evidence-priority.mjs
+
+      - name: Retain autonomous recovery, tournament, evidence-priority and prelaunch evidence
         uses: actions/upload-artifact@v4
         with:
           name: prismbay-ceo-recovery-${{ github.run_id }}
@@ -91,16 +108,21 @@ jobs:
             growth-reports/prismbay-commerce-group-dashboard.json
             growth-reports/prelaunch-commercialization.json
             growth-reports/prelaunch-kits/*.json
+            growth-reports/ceo-commercial-tournament.json
+            growth-reports/commercial-hypothesis-ledger.json
+            growth-reports/decision-evidence-priority.json
           if-no-files-found: error
           retention-days: 14
 
-      - name: CEO recovery summary
+      - name: CEO recovery and tournament summary
         run: |
           node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs=require('fs');
           const g=JSON.parse(fs.readFileSync('growth-reports/ceo-autonomous-growth-board.json','utf8'));
           const t=JSON.parse(fs.readFileSync('growth-reports/autonomous-company-taskboard.json','utf8'));
           const p=JSON.parse(fs.readFileSync('growth-reports/prelaunch-commercialization.json','utf8'));
+          const c=JSON.parse(fs.readFileSync('growth-reports/ceo-commercial-tournament.json','utf8'));
+          const e=JSON.parse(fs.readFileSync('growth-reports/decision-evidence-priority.json','utf8'));
           console.log('## PrismBay CEO Autonomous Recovery');
           console.log(`- Verified sales: ${g.verifiedSales}`);
           console.log(`- CEO priority: ${g.ceoPriority}`);
@@ -110,8 +132,15 @@ jobs:
           console.log(`- Evidence debt: ${g.evidenceDebtCount}`);
           console.log(`- Product race: ${g.productRaceCount}`);
           console.log(`- Blocker escalation: ${g.blockerEscalation.stage}`);
-          console.log(`- Parallel-route deficit: ${g.portfolioControls.parallelRouteDeficit}`);
           console.log(`- Quantified tasks: ${t.totalTasks} across ${t.activeCompanies} companies`);
           console.log(`- Prelaunch kits synchronized: ${p.kitCount}`);
-          console.log(`- Prelaunch publication enabled: ${p.publicationEnabled}`);
+          console.log('');
+          console.log('## Commercial Tournament');
+          console.log(`- Top product for internal attention: ${c.productTournament[0]?.slug || 'none'}`);
+          console.log(`- Products competing: ${c.productTournament.length}`);
+          console.log(`- Strategies competing: ${c.strategyTournament.length}`);
+          console.log(`- Open measurable hypotheses: ${c.hypothesisLedger.length}`);
+          console.log(`- Weakest company: ${c.weakestCompanies[0]?.id || 'none'}`);
+          console.log(`- Highest-leverage evidence: ${e.immediateTopFive[0]?.evidence || 'none'} for ${e.immediateTopFive[0]?.subject || 'none'}`);
+          console.log('- Allocation is internal attention, not a forecast of sales probability.');
           NODE
