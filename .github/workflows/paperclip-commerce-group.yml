@@ -2,7 +2,7 @@ name: PrismBay Paperclip Commerce Group
 
 on:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '7,37 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -10,6 +10,8 @@ on:
       - 'paperclip/prismbay-commerce-group/**'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
+      - 'scripts/paperclip-no-idle-guard.mjs'
+      - 'scripts/paperclip-no-idle-guard.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
   workflow_run:
     workflows:
@@ -25,6 +27,8 @@ on:
       - 'paperclip/prismbay-commerce-group/**'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
+      - 'scripts/paperclip-no-idle-guard.mjs'
+      - 'scripts/paperclip-no-idle-guard.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
 
 permissions:
@@ -47,11 +51,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate master execution contract and ten-company organization
+      - name: Validate master execution contracts and ten-company organization
         shell: bash
         run: |
           test -s paperclip/prismbay-commerce-group/MASTER_EXECUTION_PROMPT.md
-          node --test scripts/paperclip-commerce-group.test.mjs
+          test -s paperclip/prismbay-commerce-group/NO_IDLE_UNTIL_FIRST_SALE.md
+          node --test scripts/paperclip-commerce-group.test.mjs scripts/paperclip-no-idle-guard.test.mjs
 
       - name: Refresh independent opportunity board
         run: node scripts/global-commerce-opportunity-engine.mjs
@@ -70,6 +75,9 @@ jobs:
 
       - name: Run parent commercial control loop and First Sale War Room
         run: node scripts/paperclip-commerce-group.mjs
+
+      - name: Enforce no-idle operation until first verified sale
+        run: node scripts/paperclip-no-idle-guard.mjs
 
       - name: Retain consolidated executive dashboard
         uses: actions/upload-artifact@v4
@@ -91,6 +99,7 @@ jobs:
           const fs=require('fs');
           const d=JSON.parse(fs.readFileSync('growth-reports/prismbay-commerce-group-dashboard.json','utf8'));
           const w=d.firstSaleWarRoom || {};
+          const n=d.noIdleUntilFirstSale || {};
           console.log('## PrismBay Commerce Group | First Sale War Room');
           console.log(`- Verified sales: ${d.verifiedSales}`);
           console.log(`- Promotion-ready products: ${d.promotionEligibleCount}`);
@@ -101,6 +110,8 @@ jobs:
           console.log(`- Work actively running: ${(w.workActivelyRunning || []).join(', ') || 'none'}`);
           console.log(`- Alternatives being tested: ${(w.alternativePathsInProgress || []).join(', ') || 'none'}`);
           console.log(`- Next-best candidate: ${w.nextBestProduct || 'none'}`);
+          console.log(`- Active company assignments: ${(n.assignments || []).length}`);
+          console.log(`- Next cycle required before first sale: ${n.nextCycleRequired === true}`);
           console.log(`- External owner action required: ${(d.externalActionsAwaitingOwnerApproval || []).join(', ') || 'none'}`);
           console.log(`- Next commercial action: ${d.scoreboard?.nextAction || 'none'}`);
           NODE
