@@ -1,0 +1,99 @@
+name: PrismBay CEO Autonomous Recovery Loop
+
+on:
+  schedule:
+    - cron: '5,20,35,50 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'config/autonomous-growth-system.json'
+      - 'config/strict-kpis.json'
+      - 'scripts/ceo-autonomous-growth-engine.mjs'
+      - 'scripts/ceo-autonomous-growth-engine.test.mjs'
+      - 'scripts/autonomous-company-task-allocator.mjs'
+      - 'scripts/autonomous-company-task-allocator.test.mjs'
+      - '.github/workflows/ceo-autonomous-recovery.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'config/autonomous-growth-system.json'
+      - 'config/strict-kpis.json'
+      - 'scripts/ceo-autonomous-growth-engine.mjs'
+      - 'scripts/ceo-autonomous-growth-engine.test.mjs'
+      - 'scripts/autonomous-company-task-allocator.mjs'
+      - 'scripts/autonomous-company-task-allocator.test.mjs'
+      - '.github/workflows/ceo-autonomous-recovery.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-ceo-autonomous-recovery
+  cancel-in-progress: true
+
+jobs:
+  recover-and-reallocate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate recovery and allocator engines
+        run: |
+          test -s config/autonomous-growth-system.json
+          node --test scripts/ceo-autonomous-growth-engine.test.mjs scripts/autonomous-company-task-allocator.test.mjs
+
+      - name: Rebuild commercial evidence needed for autonomous decisions
+        run: |
+          node scripts/global-commerce-opportunity-engine.mjs
+          node scripts/retail-promotion-swarm.mjs
+          node scripts/tiktok-retail-readiness.mjs
+          node scripts/first-sale-verifier.mjs
+          node scripts/paperclip-revenue-bridge.mjs
+          node scripts/prioritize-commercial-candidates.mjs
+          node scripts/paperclip-sales-strategy-engine.mjs
+          node scripts/paperclip-commerce-group.mjs
+          node scripts/paperclip-no-idle-guard.mjs
+          node scripts/strict-kpi-scorecard.mjs
+
+      - name: Detect deadlocks, evidence debt and recovery routes
+        run: node scripts/ceo-autonomous-growth-engine.mjs
+
+      - name: Allocate quantified work to all ten companies
+        run: node scripts/autonomous-company-task-allocator.mjs
+
+      - name: Retain autonomous recovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-ceo-recovery-${{ github.run_id }}
+          path: |
+            growth-reports/ceo-autonomous-growth-board.json
+            growth-reports/evidence-debt-ledger.json
+            growth-reports/autonomous-company-taskboard.json
+            growth-reports/strict-kpi-scorecard.json
+            growth-reports/prismbay-commerce-group-dashboard.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: CEO recovery summary
+        run: |
+          node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs=require('fs');
+          const g=JSON.parse(fs.readFileSync('growth-reports/ceo-autonomous-growth-board.json','utf8'));
+          const t=JSON.parse(fs.readFileSync('growth-reports/autonomous-company-taskboard.json','utf8'));
+          console.log('## PrismBay CEO Autonomous Recovery');
+          console.log(`- Verified sales: ${g.verifiedSales}`);
+          console.log(`- CEO priority: ${g.ceoPriority}`);
+          console.log(`- Critical companies: ${g.portfolioControls.criticalCompanies.join(', ') || 'none'}`);
+          console.log(`- Red companies: ${g.portfolioControls.redCompanies.join(', ') || 'none'}`);
+          console.log(`- Recovery sprints: ${g.recoverySprints.length}`);
+          console.log(`- Evidence debt: ${g.evidenceDebtCount}`);
+          console.log(`- Product race: ${g.productRaceCount}`);
+          console.log(`- Blocker escalation: ${g.blockerEscalation.stage}`);
+          console.log(`- Parallel-route deficit: ${g.portfolioControls.parallelRouteDeficit}`);
+          console.log(`- Quantified tasks: ${t.totalTasks} across ${t.activeCompanies} companies`);
+          NODE
