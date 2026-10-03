@@ -10,7 +10,7 @@ import { createQuoteService } from './shipping-quote.mjs';
 
 // Logging is an allowlist: never serialize event bodies, errors, URLs, ZIPs, tokens, or customer data.
 export function safeLog(sink, code) {
-  sink(JSON.stringify({ service: 'physical-orders', code: ['accepted', 'rejected', 'storage_error', 'started', 'quote_ok', 'quote_rejected', 'rate_limited'].includes(code) ? code : 'redacted' }));
+  sink(JSON.stringify({ service: 'physical-orders', code: ['accepted', 'rejected', 'storage_error', 'started', 'quote_ok', 'quote_rejected', 'checkout_authorized', 'checkout_rejected', 'rate_limited'].includes(code) ? code : 'redacted' }));
 }
 
 export function validateStorage(env, mountinfo) {
@@ -51,17 +51,21 @@ function createMinuteLimiter({ max = 8, now = () => Date.now() } = {}) {
   };
 }
 
+function clientKey(req) {
+  return String(req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim().slice(0, 80);
+}
+
 export function createServer({ secret, ledger, catalog, quoteService = null, live = true, logger = console.log, now = () => Date.now() }) {
   if (!secret?.startsWith('whsec_')) throw Error('Signing secret required');
   const allowQuote = createMinuteLimiter({ max: 8, now });
+  const allowCheckout = createMinuteLimiter({ max: 12, now });
   const server = http.createServer(async (req, res) => {
     const send = (status, body) => { res.writeHead(status, { 'content-type': 'application/json', 'cache-control': 'no-store' }); res.end(JSON.stringify(body)); };
     if (req.method === 'GET' && req.url === '/health') return send(200, { service: 'physical-orders', status: 'ok', quoteEnabled: Boolean(quoteService?.configuredSkus?.length) });
 
     if (req.method === 'POST' && req.url === '/shipping/quote') {
       if (!quoteService?.configuredSkus?.length) return send(503, { error: 'shipping_quotes_not_configured' });
-      const clientKey = String(req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim().slice(0, 80);
-      if (!allowQuote(clientKey)) { safeLog(logger, 'rate_limited'); return send(429, { error: 'rate_limited' }); }
+      if (!allowQuote(clientKey(req))) { safeLog(logger, 'rate_limited'); return send(429, { error: 'rate_limited' }); }
       try {
         const body = await readJson(req, 8 * 1024);
         const result = await quoteService.quote(body);
@@ -70,6 +74,20 @@ export function createServer({ secret, ledger, catalog, quoteService = null, liv
       } catch (error) {
         safeLog(logger, 'quote_rejected');
         return send(error?.status || 502, { error: error?.status ? error.message : 'quote_upstream_unavailable' });
+      }
+    }
+
+    if (req.method === 'POST' && req.url === '/checkout/authorize') {
+      if (!quoteService?.configuredSkus?.length) return send(503, { error: 'checkout_authorization_not_configured' });
+      if (!allowCheckout(clientKey(req))) { safeLog(logger, 'rate_limited'); return send(429, { error: 'rate_limited' }); }
+      try {
+        const body = await readJson(req, 8 * 1024);
+        const result = quoteService.authorizeCheckout(body);
+        safeLog(logger, result.ok ? 'checkout_authorized' : 'checkout_rejected');
+        return send(result.status || (result.ok ? 200 : 403), result);
+      } catch {
+        safeLog(logger, 'checkout_rejected');
+        return send(400, { error: 'invalid_checkout_authorization_request' });
       }
     }
 
