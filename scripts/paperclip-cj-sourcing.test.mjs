@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {positiveNumber,chooseProduct,chooseStock,buildPackScreening} from './paperclip-cj-sourcing.mjs';
+import {selectRotatingCandidates} from './candidate-rotation.mjs';
 
 test('selects only exact approved on-sale product identity',()=>{
  const c={slug:'car-seat-headrest-hooks'};
@@ -27,4 +28,25 @@ test('multi-pack screening amortizes priced freight without claiming destination
 test('pack screening fails closed without positive freight',()=>{
  assert.equal(buildPackScreening(1.79,3,{offers:[]}).priced,false);
  assert.equal(buildPackScreening(1.79,0,{offers:[{usd:4}]}).priced,false);
+});
+
+test('keeps top two anchors while rotating remaining supplier slots',()=>{
+ const candidates=Array.from({length:8},(_,i)=>({slug:`p${i+1}`}));
+ const a=selectRotatingCandidates(candidates,{batchSize:5,anchorCount:2,slot:0});
+ const b=selectRotatingCandidates(candidates,{batchSize:5,anchorCount:2,slot:3});
+ assert.deepEqual(a.selected.map(x=>x.slug),['p1','p2','p3','p4','p5']);
+ assert.deepEqual(b.selected.map(x=>x.slug),['p1','p2','p6','p7','p8']);
+ assert.equal(a.selected.length,5);
+ assert.equal(b.selected.length,5);
+});
+
+test('rotation wraps without duplicates and eventually covers the full queue',()=>{
+ const candidates=Array.from({length:9},(_,i)=>({slug:`p${i+1}`}));
+ const seen=new Set();
+ for(let slot=0;slot<7;slot+=1){
+   const batch=selectRotatingCandidates(candidates,{batchSize:5,anchorCount:2,slot});
+   assert.equal(new Set(batch.selected.map(x=>x.slug)).size,batch.selected.length);
+   for(const row of batch.selected) seen.add(row.slug);
+ }
+ assert.equal(seen.size,9);
 });
