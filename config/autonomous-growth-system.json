@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "objective": "Continuously convert weak KPI performance, stale blockers and unused commercial capacity into evidence-backed recovery work until verified profitable sales exist.",
+  "operatingRules": {
+    "verifiedSalesRemainUltimateKpi": true,
+    "criticalOrRedNeverWaitsForNextIdea": true,
+    "missingEvidenceCreatesEvidenceDebtTask": true,
+    "staleBlockerCreatesParallelRoute": true,
+    "ownerOnlyBlockerDoesNotPauseIndependentWork": true,
+    "activityWithoutEvidenceNeverCountsAsRecovery": true,
+    "zeroCostFirst": true,
+    "noPaidSpendWithoutApproval": true,
+    "noAutomaticSupplierOrders": true,
+    "noBulkUnsolicitedOutreach": true,
+    "noUnauthorizedPublishing": true,
+    "noFakeTrafficReviewsScarcityOrSales": true
+  },
+  "portfolioRules": {
+    "minimumProductsInRaceBeforeFirstSale": 5,
+    "minimumIndependentAcquisitionPaths": 6,
+    "minimumParallelRoutesForPrimaryBlocker": 3,
+    "primaryBlockerWarningMinutes": 120,
+    "primaryBlockerReplaceRouteMinutes": 360,
+    "primaryBlockerPortfolioShiftMinutes": 720,
+    "minimumRecoverySprintsForNonGreenCompanies": 1
+  },
+  "preSaleFactories": {
+    "offerHypothesesPerPrimaryProduct": 3,
+    "creativeConceptsPerPrimaryProduct": 5,
+    "croHypothesesPerPrimaryProduct": 3,
+    "seoIntentAssetsPerPrimaryProduct": 3,
+    "measurementPlansPerActiveChannel": 1
+  },
+  "recoveryPolicy": {
+    "critical": {
+      "priority": 1,
+      "action": "immediate_recovery_sprint_and_strategy_replacement_if_evidence_cannot_be_created",
+      "supportRequired": true
+    },
+    "red": {
+      "priority": 2,
+      "action": "parallel_recovery_sprint_with_explicit_evidence_target",
+      "supportRequired": true
+    },
+    "yellow": {
+      "priority": 3,
+      "action": "optimization_sprint_to_reach_green",
+      "supportRequired": false
+    },
+    "green": {
+      "priority": 4,
+      "action": "protect_integrity_and_replicate_proven_process",
+      "supportRequired": false
+    }
+  },
+  "supportMap": {
+    "product-intelligence": ["supplier-fulfillment", "revenue-analytics"],
+    "supplier-fulfillment": ["product-intelligence", "commerce-control"],
+    "offer-engineering": ["revenue-analytics", "storefront-conversion"],
+    "storefront-conversion": ["commerce-control", "organic-growth"],
+    "creative-studio": ["organic-growth", "experiment-lab"],
+    "organic-growth": ["revenue-analytics", "creative-studio"],
+    "creator-affiliate-growth": ["organic-growth", "revenue-analytics"],
+    "revenue-analytics": ["commerce-control"],
+    "experiment-lab": ["revenue-analytics", "commerce-control"],
+    "commerce-control": ["revenue-analytics", "supplier-fulfillment"]
+  },
+  "redTeamChecks": [
+    "disprove_supplier_identity_variant_and_stock",
+    "disprove_landed_margin_and_freight_assumptions",
+    "disprove_checkout_and_buyer_path_readiness",
+    "disprove_rights_policy_and_claim_safety",
+    "disprove_channel_attribution_and_measurement_readiness"
+  ],
+  "killConditions": [
+    "regulated_or_prohibited_product",
+    "supplier_identity_cannot_be_verified",
+    "stock_or_variant_cannot_be_verified_after_alternative_routes",
+    "landed_economics_fail_margin_floor",
+    "commercialization_requires_unapproved_or_noncompliant_action",
+    "rights_or_claims_cannot_be supported"
+  ],
+  "scaleConditions": [
+    "verified_non_test_paid_order",
+    "complete_cost_and_freight_evidence",
+    "positive_verified_contribution_margin",
+    "attribution_present",
+    "fulfillment_and_refund_evidence_intact"
+  ]
+}
