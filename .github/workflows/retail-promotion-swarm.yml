@@ -15,6 +15,9 @@ on:
       - '.github/workflows/retail-promotion-swarm.yml'
       - 'scripts/retail-promotion-swarm.mjs'
       - 'scripts/retail-promotion-swarm.test.mjs'
+      - 'scripts/tiktok-retail-readiness.mjs'
+      - 'scripts/first-sale-verifier.mjs'
+      - 'scripts/retail-readiness-closure.test.mjs'
       - 'scripts/dropshipping-dispatch.mjs'
       - 'scripts/organic-growth-agent.mjs'
       - 'scripts/cj-review-board.mjs'
@@ -49,6 +52,7 @@ jobs:
         run: >-
           node --test
           scripts/retail-promotion-swarm.test.mjs
+          scripts/retail-readiness-closure.test.mjs
           scripts/cj-review-board.test.mjs
           scripts/cj-match-policy.test.mjs
           scripts/cj-freight-policy.test.mjs
@@ -72,15 +76,25 @@ jobs:
       - name: Build fail-closed retail promotion plan
         run: node scripts/retail-promotion-swarm.mjs
 
+      - name: Build TikTok retail readiness evidence
+        run: node scripts/tiktok-retail-readiness.mjs
+
+      - name: Verify first non-test paid sale evidence
+        run: node scripts/first-sale-verifier.mjs
+
       - name: Verify no blocked product leaked into promotion lanes
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           const report = JSON.parse(fs.readFileSync('growth-reports/retail-promotion-swarm.json', 'utf8'));
+          const storefront = JSON.parse(fs.readFileSync('growth-reports/storefront-cro-auditor.json', 'utf8'));
           if (!report.reviewFresh && report.promotionEligibleCount !== 0) throw new Error('Stale supplier evidence released a promotion');
           if (report.promotionEligibleCount !== report.trackedOffers.length) throw new Error('Tracked offer count does not match eligible products');
           for (const item of report.promotionEligible) {
             if (!item.promotionEligible || item.missing.length) throw new Error(`Blocked product leaked into promotion: ${item.slug}`);
+          }
+          if (report.promotionEligibleCount === 0 && storefront?.result?.activeStorefront?.hasProductSchema === true) {
+            throw new Error('Product offer schema leaked while no physical product is promotion eligible');
           }
           console.log(`Promotion eligible: ${report.promotionEligibleCount}`);
           NODE
@@ -92,6 +106,8 @@ jobs:
           name: prismbay-retail-promotion-swarm-${{ github.run_id }}
           path: |
             growth-reports/retail-promotion-swarm.json
+            growth-reports/tiktok-retail-readiness.json
+            growth-reports/first-sale-verification.json
             growth-reports/dropshipping-worker-board.json
             growth-reports/trend-scout.json
             growth-reports/hook-creative-writer.json
@@ -110,4 +126,5 @@ jobs:
         run: |
           echo 'The retail swarm runs all eight existing growth roles and the supplier-aware dispatch controller.' >> "$GITHUB_STEP_SUMMARY"
           echo 'External product promotion stays blocked until every supplier, final-freight, rights, checkout and promotion gate passes.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'TikTok readiness and first-sale evidence are independently fail-closed.' >> "$GITHUB_STEP_SUMMARY"
           echo 'The educational YouTube channel is excluded from retail distribution.' >> "$GITHUB_STEP_SUMMARY"
