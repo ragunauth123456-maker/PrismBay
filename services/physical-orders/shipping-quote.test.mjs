@@ -32,11 +32,12 @@ function fakeFetchFactory({ freight = 4.5, inventory = 100 } = {}) {
   return { fetchImpl, calls };
 }
 
-test('catalog only accepts fully specified quote products and Stripe-hosted checkout URLs', () => {
+test('catalog only accepts fully specified quote products and fingerprints commercial config', () => {
   const catalog = parseQuoteCatalog(env);
   assert.equal(catalog.size, 1);
   assert.equal(catalog.get('crevice').variantId, 'VID-CREVICE-1');
   assert.match(catalog.get('crevice').stripePaymentUrl, /^https:\/\/buy\.stripe\.com\//);
+  assert.match(catalog.get('crevice').catalogFingerprint, /^[A-Za-z0-9_-]{32,100}$/);
   const bad = parseQuoteCatalog({ ...env, CJ_QUOTE_PRODUCTS_JSON: JSON.stringify({ products: [{ sku: 'x', cjVariantId: 'v', supplierCostUsd: 1, retailUsd: 10, stripePaymentUrl: 'https://evil.example/pay' }] }) });
   assert.equal(bad.size, 0);
 });
@@ -48,7 +49,7 @@ test('economics fail closed when shipping destroys contribution', () => {
   assert.equal(result.reason, 'commercial_thresholds_failed');
 });
 
-test('valid buyer ZIP can receive a signed checkout quote when stock and economics pass', async () => {
+test('valid buyer ZIP receives one catalog-bound checkout authorization only', async () => {
   const { fetchImpl, calls } = fakeFetchFactory();
   const service = createQuoteService({ env, fetchImpl, now: () => 1_800_000_000_000 });
   const result = await service.quote({ sku: 'crevice', zip: '10001', quantity: 1 });
@@ -65,15 +66,42 @@ test('valid buyer ZIP can receive a signed checkout quote when stock and economi
   const checkout = service.authorizeCheckout({ quoteToken: result.quoteToken, zip: '10001' });
   assert.equal(checkout.checkoutAllowed, true);
   assert.equal(checkout.paymentUrl, 'https://buy.stripe.com/test-crevice');
+  assert.equal(checkout.quoteUse, 'consumed_once');
   assert.equal(checkout.supplierOrderingEnabled, false);
+
+  const replay = service.authorizeCheckout({ quoteToken: result.quoteToken, zip: '10001' });
+  assert.equal(replay.ok, false);
+  assert.equal(replay.error, 'quote_already_used');
 });
 
 test('signed quote cannot be reused for another ZIP or after expiry', () => {
   const now = 1_800_000_000_000;
-  const token = issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, secret, ttlSeconds: 60, now });
+  const fingerprint = parseQuoteCatalog(env).get('crevice').catalogFingerprint;
+  const token = issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, catalogFingerprint: fingerprint, secret, ttlSeconds: 60, now, nonce: 'abcdefghijklmnop1234' });
   assert.equal(verifyQuoteToken({ token, zip: '10001', secret, now }).valid, true);
   assert.equal(verifyQuoteToken({ token, zip: '90210', secret, now }).reason, 'quote_destination_mismatch');
   assert.equal(verifyQuoteToken({ token, zip: '10001', secret, now: now + 61_000 }).reason, 'quote_expired');
+});
+
+test('catalog change invalidates an otherwise valid quote before checkout URL release', async () => {
+  const now = () => 1_800_000_000_000;
+  const { fetchImpl } = fakeFetchFactory();
+  const original = createQuoteService({ env, fetchImpl, now });
+  const quote = await original.quote({ sku: 'crevice', zip: '10001', quantity: 1 });
+  assert.equal(quote.checkoutAllowed, true);
+
+  const changedEnv = {
+    ...env,
+    CJ_QUOTE_PRODUCTS_JSON: JSON.stringify({ products: [{
+      sku: 'crevice', cjVariantId: 'VID-CREVICE-1', supplierCostUsd: 2, retailUsd: 17.99,
+      originCountryCode: 'US', feeRatePct: 3.2, returnReservePct: 5,
+      stripePaymentUrl: 'https://buy.stripe.com/test-crevice',
+    }] }),
+  };
+  const changed = createQuoteService({ env: changedEnv, fetchImpl, now });
+  const result = changed.authorizeCheckout({ quoteToken: quote.quoteToken, zip: '10001' });
+  assert.equal(result.ok, false);
+  assert.equal(result.error, 'quote_catalog_changed');
 });
 
 test('quote refuses unregistered SKU and invalid ZIP before supplier calls', async () => {
@@ -92,6 +120,7 @@ test('quote refuses checkout when origin inventory is insufficient', async () =>
   assert.equal(result.error, 'verified_origin_stock_unavailable');
 });
 
-test('signed quote token enforces minimum secret length', () => {
-  assert.throws(() => issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, secret: 'short' }), /32 characters/);
+test('signed quote token enforces secret and catalog fingerprint requirements', () => {
+  assert.throws(() => issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, catalogFingerprint: 'x'.repeat(43), secret: 'short' }), /32 characters/);
+  assert.throws(() => issueQuoteToken({ sku: 'crevice', quantity: 1, zip: '10001', freightUsd: 4, economics: { contributionUsd: 9 }, secret }), /catalog fingerprint/);
 });
