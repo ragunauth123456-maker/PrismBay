@@ -1,58 +1,44 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateSwarmStatus } from './store-backend-swarm-watchdog.mjs';
+import { validateManifest } from './store-backend-swarm-watchdog.mjs';
 
-function healthyStatus(overrides = {}) {
-  const now = new Date('2026-10-03T13:00:00Z').toISOString();
+function healthyManifest(overrides = {}) {
   return {
-    status: 'ok',
     mode: 'backend-swarm-24x7',
-    workerCount: 6,
-    activeWorkerCount: 2,
-    totalRuns: 3,
-    verifiedSales: 0,
-    controllerFocus: 'Close the next material commercial gate.',
-    lastUpdatedAt: now,
-    workers: Array.from({ length: 6 }, (_, index) => ({
-      id: `worker-${index + 1}`,
-      role: `Worker ${index + 1}`,
-      status: 'ok',
-      runs: 1,
-      lastRunAt: now,
-      cooldownUntil: null,
-    })),
+    appId: 'prismbay-clean-49izhg',
+    storeOrigin: 'https://prismbay-clean-49izhg.v2.appdeploy.ai',
+    workers: [0,10,20,30,40,50].map((minute, index) => ({ id: `worker-${index + 1}`, minute, cadence: 'hourly' })),
+    publicHealthPaths: ['/', '/products.json', '/merchant-feed.xml'],
     boundaries: {
       fakeTraffic: false,
       paidSpend: false,
       automaticSupplierOrdering: false,
       bulkUnsolicitedOutreach: false,
       automaticExternalPublishing: false,
+      autonomousPriceChanges: false,
     },
+    runtimeAuthority: 'AppDeploy cron status for prismbay-clean-49izhg',
     ...overrides,
   };
 }
 
-test('accepts healthy six-worker backend swarm', () => {
-  const now = Date.parse('2026-10-03T13:30:00Z');
-  const report = validateSwarmStatus(healthyStatus(), now);
-  assert.equal(report.healthy, true);
-  assert.equal(report.workerCount, 6);
-  assert.equal(report.totalRuns, 3);
+test('accepts six staggered hourly backend workers', () => {
+  const manifest = validateManifest(healthyManifest());
+  assert.equal(manifest.workers.length, 6);
+  assert.deepEqual(manifest.workers.map(worker => worker.minute), [0,10,20,30,40,50]);
 });
 
 test('fails if a prohibited commercial boundary opens', () => {
-  const status = healthyStatus({ boundaries: { ...healthyStatus().boundaries, paidSpend: true } });
-  assert.throws(() => validateSwarmStatus(status, Date.parse('2026-10-03T13:30:00Z')), /boundary_open:paidSpend/);
+  const manifest = healthyManifest({ boundaries: { ...healthyManifest().boundaries, paidSpend: true } });
+  assert.throws(() => validateManifest(manifest), /boundary_open:paidSpend/);
 });
 
-test('fails closed if executed swarm state becomes stale', () => {
-  const status = healthyStatus({ lastUpdatedAt: '2026-10-03T10:00:00Z' });
-  assert.throws(() => validateSwarmStatus(status, Date.parse('2026-10-03T13:30:00Z')), /state_stale/);
+test('fails if worker cadence loses ten-minute coverage', () => {
+  const manifest = healthyManifest({ workers: [0,10,20,30,40,40].map((minute, index) => ({ id: `worker-${index + 1}`, minute, cadence: 'hourly' })) });
+  assert.throws(() => validateManifest(manifest), /schedule_mismatch/);
 });
 
-test('permits an initialized zero-run swarm before its first scheduled worker executes', () => {
-  const status = healthyStatus({ totalRuns: 0, activeWorkerCount: 0, lastUpdatedAt: '2026-10-03T10:00:00Z' });
-  const report = validateSwarmStatus(status, Date.parse('2026-10-03T13:30:00Z'));
-  assert.equal(report.healthy, true);
-  assert.equal(report.totalRuns, 0);
+test('fails if configured worker count drops below six', () => {
+  const manifest = healthyManifest({ workers: healthyManifest().workers.slice(0, 5) });
+  assert.throws(() => validateManifest(manifest), /worker_count_mismatch/);
 });
