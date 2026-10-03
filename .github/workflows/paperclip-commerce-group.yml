@@ -37,7 +37,7 @@ concurrency:
 jobs:
   commerce-control:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Check out PrismBay
         uses: actions/checkout@v4
@@ -47,16 +47,28 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate ten-company commercial organization
-        run: node --test scripts/paperclip-commerce-group.test.mjs
+      - name: Validate master execution contract and ten-company organization
+        shell: bash
+        run: |
+          test -s paperclip/prismbay-commerce-group/MASTER_EXECUTION_PROMPT.md
+          node --test scripts/paperclip-commerce-group.test.mjs
 
       - name: Refresh independent opportunity board
         run: node scripts/global-commerce-opportunity-engine.mjs
 
+      - name: Refresh current promotion readiness
+        run: node scripts/retail-promotion-swarm.mjs
+
+      - name: Refresh TikTok retail readiness
+        run: node scripts/tiktok-retail-readiness.mjs
+
+      - name: Refresh verified first-sale evidence
+        run: node scripts/first-sale-verifier.mjs
+
       - name: Refresh existing revenue task board
         run: node scripts/paperclip-revenue-bridge.mjs
 
-      - name: Run parent commercial control loop
+      - name: Run parent commercial control loop and First Sale War Room
         run: node scripts/paperclip-commerce-group.mjs
 
       - name: Retain consolidated executive dashboard
@@ -67,19 +79,28 @@ jobs:
             growth-reports/prismbay-commerce-group-dashboard.json
             growth-reports/global-commerce-opportunities.json
             growth-reports/paperclip-revenue-board.json
+            growth-reports/retail-promotion-swarm.json
+            growth-reports/tiktok-retail-readiness.json
+            growth-reports/first-sale-verification.json
           if-no-files-found: error
           retention-days: 14
 
-      - name: Commercial summary
+      - name: First Sale War Room summary
         run: |
           node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs=require('fs');
           const d=JSON.parse(fs.readFileSync('growth-reports/prismbay-commerce-group-dashboard.json','utf8'));
-          console.log('## PrismBay Commerce Group');
+          const w=d.firstSaleWarRoom || {};
+          console.log('## PrismBay Commerce Group | First Sale War Room');
           console.log(`- Verified sales: ${d.verifiedSales}`);
-          console.log(`- Promotion-eligible products: ${d.promotionEligibleCount}`);
+          console.log(`- Promotion-ready products: ${d.promotionEligibleCount}`);
           console.log(`- Current bottleneck: ${d.currentBottleneck.stage} / ${d.currentBottleneck.reason}`);
           console.log(`- Accountable company: ${d.currentBottleneck.owner}`);
-          console.log(`- Research candidates: ${d.researchCandidates.join(', ') || 'none'}`);
-          console.log(`- External approvals waiting: ${d.externalActionsAwaitingOwnerApproval.join(', ') || 'none'}`);
+          console.log(`- Closest product: ${w.closestProduct || 'none'}`);
+          console.log(`- Remaining gates: ${(w.remainingGates || []).join(', ') || 'none'}`);
+          console.log(`- Work actively running: ${(w.workActivelyRunning || []).join(', ') || 'none'}`);
+          console.log(`- Alternatives being tested: ${(w.alternativePathsInProgress || []).join(', ') || 'none'}`);
+          console.log(`- Next-best candidate: ${w.nextBestProduct || 'none'}`);
+          console.log(`- External owner action required: ${(d.externalActionsAwaitingOwnerApproval || []).join(', ') || 'none'}`);
+          console.log(`- Next commercial action: ${d.scoreboard?.nextAction || 'none'}`);
           NODE

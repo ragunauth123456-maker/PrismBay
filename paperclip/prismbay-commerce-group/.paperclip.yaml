@@ -34,6 +34,11 @@ agents:
     adapter:
       type: claude_local
 routines:
+  first-sale-war-room:
+    triggers:
+      - kind: schedule
+        cronExpression: "7 * * * *"
+        timezone: "America/Guyana"
   commercial-control-loop:
     triggers:
       - kind: schedule
@@ -48,6 +53,11 @@ routines:
     triggers:
       - kind: schedule
         cronExpression: "47 */3 * * *"
+        timezone: "America/Guyana"
+  portfolio-fallback-refresh:
+    triggers:
+      - kind: schedule
+        cronExpression: "53 */3 * * *"
         timezone: "America/Guyana"
   daily-executive-scorecard:
     triggers:
