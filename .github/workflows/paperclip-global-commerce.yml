@@ -14,6 +14,10 @@ on:
       - 'scripts/global-commerce-opportunity-engine.test.mjs'
       - 'scripts/catalog-opportunity-bridge.mjs'
       - 'scripts/catalog-opportunity-bridge.test.mjs'
+      - 'scripts/freight-ceiling-engine.mjs'
+      - 'scripts/freight-ceiling-engine.test.mjs'
+      - 'scripts/quote-enable-candidate.mjs'
+      - 'scripts/quote-enable-candidate.test.mjs'
       - '.github/workflows/paperclip-global-commerce.yml'
   push:
     branches: [main]
@@ -25,6 +29,10 @@ on:
       - 'scripts/global-commerce-opportunity-engine.test.mjs'
       - 'scripts/catalog-opportunity-bridge.mjs'
       - 'scripts/catalog-opportunity-bridge.test.mjs'
+      - 'scripts/freight-ceiling-engine.mjs'
+      - 'scripts/freight-ceiling-engine.test.mjs'
+      - 'scripts/quote-enable-candidate.mjs'
+      - 'scripts/quote-enable-candidate.test.mjs'
       - '.github/workflows/paperclip-global-commerce.yml'
 
 permissions:
@@ -42,7 +50,7 @@ jobs:
         with:
           node-version: '22'
       - name: Validate opportunity, acceleration and economics controls
-        run: node --test scripts/global-commerce-opportunity-engine.test.mjs scripts/catalog-opportunity-bridge.test.mjs
+        run: node --test scripts/global-commerce-opportunity-engine.test.mjs scripts/catalog-opportunity-bridge.test.mjs scripts/freight-ceiling-engine.test.mjs scripts/quote-enable-candidate.test.mjs
       - name: Run independent global commerce board
         run: node scripts/global-commerce-opportunity-engine.mjs
       - name: Run existing-catalog demand acceleration bridge

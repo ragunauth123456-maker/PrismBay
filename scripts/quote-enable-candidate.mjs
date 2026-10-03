@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { matchesIntendedProduct } from './cj-match-policy.mjs';
+import { commercialFreightCeiling } from './freight-ceiling-engine.mjs';
 
 const positive = value => {
   const n = Number(value);
@@ -30,6 +31,7 @@ export function buildQuoteEnableCandidates(report, authorization) {
     const originCountryCode = String(product?.warehouse || row?.originCountryCode || '').toUpperCase();
     const paymentUrl = safeStripeUrl(checkoutUrls[slug]);
     const identityVerified = Boolean(slug && product?.name && matchesIntendedProduct({ slug }, product.name));
+    const freightBudget = retailUsd && supplierCostUsd ? commercialFreightCeiling({ retailUsd, supplierCostUsd, quantity: 1, feeRatePct: 3.2, returnReservePct: 5 }) : null;
     const eligible = Boolean(
       authorization?.ownerAuthorized === true &&
       checkout.deployed === true &&
@@ -37,7 +39,7 @@ export function buildQuoteEnableCandidates(report, authorization) {
       checkout.checkoutAllowedOnlyAfterFinalZipFreight === true &&
       allowedSkus.has(slug) && paymentUrl && identityVerified &&
       row?.supplierVerified === true && row?.variantInventoryVerified === true && row?.freightVerified === true &&
-      cjVariantId && supplierCostUsd && retailUsd && /^[A-Z]{2}$/.test(originCountryCode)
+      cjVariantId && supplierCostUsd && retailUsd && /^[A-Z]{2}$/.test(originCountryCode) && freightBudget?.viable === true
     );
     if (!eligible) continue;
     candidates.push({
@@ -51,6 +53,12 @@ export function buildQuoteEnableCandidates(report, authorization) {
       stripePaymentUrl: paymentUrl,
       feeRatePct: 3.2,
       returnReservePct: 5,
+      freightBudget: {
+        maxFreightUsd: freightBudget.maxFreightUsd,
+        maxFreightPerUnitUsd: freightBudget.maxFreightPerUnitUsd,
+        governingConstraint: freightBudget.governingConstraint,
+        minimumContributionUsd: freightBudget.minimumContributionUsd,
+      },
       evidence: {
         supplierIdentityVerified: true,
         variantInventoryVerified: true,
@@ -63,7 +71,7 @@ export function buildQuoteEnableCandidates(report, authorization) {
     });
   }
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     checkedAt: report.checkedAt,
     mode: 'quote_enable_candidate_only',
     automaticActivation: false,
