@@ -9,12 +9,21 @@ on:
     types: [completed]
   issue_comment:
     types: [created]
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/retail-promotion-swarm.yml'
+      - 'scripts/retail-promotion-swarm.mjs'
+      - 'scripts/retail-promotion-swarm.test.mjs'
+      - 'scripts/dropshipping-dispatch.mjs'
+      - 'scripts/organic-growth-agent.mjs'
+      - 'scripts/cj-review-board.mjs'
 
 permissions:
   contents: read
 
 concurrency:
-  group: prismbay-retail-promotion-swarm
+  group: prismbay-retail-promotion-swarm-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -22,15 +31,14 @@ jobs:
     if: >-
       github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request' ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
       (github.event_name == 'issue_comment' && github.actor == 'ragunauthramsaroop' && startsWith(github.event.issue.title, '[RETAIL-GROWTH-SWARM]') && contains(github.event.comment.body, 'run retail growth swarm'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check out PrismBay main
+      - name: Check out PrismBay
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
