@@ -13,6 +13,22 @@ export function validateManifest(manifest) {
     throw new Error('store_backend_swarm_schedule_mismatch');
   }
   if (manifest.workers.some(worker => worker.cadence !== 'hourly')) throw new Error('store_backend_swarm_cadence_mismatch');
+  if (manifest.workers.some(worker => !Number.isFinite(worker.minimumInspectionsPerRun) || worker.minimumInspectionsPerRun < 1)) {
+    throw new Error('store_backend_swarm_kpi_inspection_floor_missing');
+  }
+  if (manifest.workers.some(worker => !Number.isFinite(worker.minimumActionsPerRun) || worker.minimumActionsPerRun < 1)) {
+    throw new Error('store_backend_swarm_kpi_action_floor_missing');
+  }
+  if (manifest.kpiPolicy?.greenAtOrAbove !== 90 || manifest.kpiPolicy?.redBelow !== 75) {
+    throw new Error('store_backend_swarm_kpi_band_policy_mismatch');
+  }
+  if (manifest.kpiPolicy?.consecutiveRedBeforeIntervention !== 2 || manifest.kpiPolicy?.consecutiveRedBeforeRoleRewrite !== 3) {
+    throw new Error('store_backend_swarm_kpi_consequence_policy_mismatch');
+  }
+  if (manifest.kpiPolicy?.missingEvidenceGetsCredit !== false || manifest.kpiPolicy?.activityAloneCountsAsSuccess !== false || manifest.kpiPolicy?.integrityBreachForcesCritical !== true) {
+    throw new Error('store_backend_swarm_kpi_evidence_policy_mismatch');
+  }
+  if (manifest.strictKpiContract !== 'config/strict-kpis.json') throw new Error('store_backend_swarm_kpi_contract_missing');
   const boundaryKeys = ['fakeTraffic','paidSpend','automaticSupplierOrdering','bulkUnsolicitedOutreach','automaticExternalPublishing','autonomousPriceChanges'];
   for (const key of boundaryKeys) {
     if (manifest.boundaries?.[key] !== false) throw new Error(`store_backend_swarm_boundary_open:${key}`);
@@ -43,7 +59,7 @@ export async function main() {
   if (failures.length) throw new Error(`storefront_health_failed:${failures.map(check => `${check.path}:${check.status}`).join(',')}`);
 
   const report = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     checkedAt: new Date().toISOString(),
     mode: manifest.mode,
     appId: manifest.appId,
@@ -51,11 +67,13 @@ export async function main() {
     configuredWorkerCount: manifest.workers.length,
     cadence: 'one backend worker cycle every ten minutes via six staggered hourly AppDeploy cron jobs',
     workers: manifest.workers,
+    kpiPolicy: manifest.kpiPolicy,
+    strictKpiContract: manifest.strictKpiContract,
     boundaries: manifest.boundaries,
     publicHealth: checks,
     runtimeAuthority: manifest.runtimeAuthority,
-    githubVisibility: 'GitHub verifies the committed swarm contract and public storefront health. Private AppDeploy cron execution status remains authoritative in AppDeploy and is not inferred by this report.',
-    commercialTruth: 'Backend swarm configuration and health checks are operational evidence only. They are not traffic, a customer, a sale, revenue or profit.',
+    githubVisibility: 'GitHub verifies the committed swarm and KPI contracts plus public storefront health. Private AppDeploy runtime KPI scores and cron execution status remain authoritative in AppDeploy and are not inferred by this report.',
+    commercialTruth: 'Backend swarm configuration, KPI contracts and health checks are operational evidence only. They are not traffic, a customer, a sale, revenue or profit.',
   };
   await fs.mkdir('growth-reports', { recursive: true });
   await fs.writeFile('growth-reports/store-backend-swarm.json', JSON.stringify(report, null, 2) + '\n');
@@ -63,6 +81,8 @@ export async function main() {
     healthy: true,
     workers: report.configuredWorkerCount,
     storefrontChecks: report.publicHealth.length,
+    kpiGreenAtOrAbove: report.kpiPolicy.greenAtOrAbove,
+    kpiRedBelow: report.kpiPolicy.redBelow,
     runtimeAuthority: report.runtimeAuthority,
   }, null, 2));
   return report;
