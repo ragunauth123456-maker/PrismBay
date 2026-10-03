@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "objective": "Allocate scarce internal attention to the strongest evidence-backed routes while preserving exploration until verified profitable sales exist.",
+  "cadenceMinutes": 15,
+  "resourceBudget": {
+    "internalUnits": 100,
+    "minimumExplorationReservePct": 20,
+    "maximumSingleProductPct": 35,
+    "minimumActiveProductPct": 5,
+    "maximumSingleStrategyPct": 20
+  },
+  "productScoring": {
+    "readinessPctWeight": 45,
+    "researchScoreWeight": 25,
+    "evidenceCompletionWeight": 20,
+    "primaryCheckoutInfrastructureBonus": 10
+  },
+  "strategyScoring": {
+    "activeInternal": 80,
+    "activeInternalPrepare": 65,
+    "accountOrOwnerActivationCheck": 55,
+    "postSaleMeasureAndScale": 90,
+    "blockedPenalty": 25,
+    "measurementPlanBonus": 10
+  },
+  "tournamentRules": {
+    "minimumProductsCompetingBeforeFirstSale": 5,
+    "minimumStrategiesCompetingBeforeFirstSale": 8,
+    "topProductsFastLaneCount": 2,
+    "promotionRequiresPromotionReadyProduct": true,
+    "noProbabilityClaimsWithoutObservedSales": true,
+    "zeroPaidSpendUntilAuthorized": true,
+    "noAutomaticSupplierOrdering": true,
+    "noUnauthorizedPublishing": true,
+    "noFakeTrafficReviewsScarcityOrSales": true
+  },
+  "hypothesisRules": {
+    "everyHypothesisNeedsMetric": true,
+    "everyHypothesisNeedsStopRule": true,
+    "everyHypothesisNeedsEvidenceGate": true,
+    "maximumOpenHypotheses": 30,
+    "staleHypothesisHours": 24,
+    "unmeasurableHypothesisAction": "rewrite_or_kill"
+  },
+  "reallocation": {
+    "criticalCompanyBoostUnits": 5,
+    "redCompanyBoostUnits": 3,
+    "yellowCompanyBoostUnits": 1,
+    "greenCompanyBoostUnits": 0,
+    "staleBlockerShiftUnits": 10,
+    "routeKillRequiresEvidence": true
+  }
+}
