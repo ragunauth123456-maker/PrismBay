@@ -1,0 +1,17 @@
+schema: "paperclip/v1"
+routines:
+  revenue-command-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "11 */3 * * *"
+        timezone: "America/Guyana"
+  supplier-readiness-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "41 */2 * * *"
+        timezone: "America/Guyana"
+  daily-growth-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "15 8 * * *"
+        timezone: "America/Guyana"
