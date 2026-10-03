@@ -1,0 +1,45 @@
+schema: "paperclip/v1"
+agents:
+  commerce-ceo:
+    adapter:
+      type: claude_local
+  trend-intelligence:
+    adapter:
+      type: claude_local
+  marketplace-research:
+    adapter:
+      type: claude_local
+  supplier-sourcing:
+    adapter:
+      type: claude_local
+  unit-economics:
+    adapter:
+      type: claude_local
+  offer-architect:
+    adapter:
+      type: claude_local
+  distribution-strategist:
+    adapter:
+      type: claude_local
+  experiment-analyst:
+    adapter:
+      type: claude_local
+  risk-controller:
+    adapter:
+      type: claude_local
+routines:
+  global-opportunity-scan:
+    triggers:
+      - kind: schedule
+        cronExpression: "29 */3 * * *"
+        timezone: "America/Guyana"
+  supplier-and-economics-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "47 */6 * * *"
+        timezone: "America/Guyana"
+  daily-scale-kill-review:
+    triggers:
+      - kind: schedule
+        cronExpression: "20 8 * * *"
+        timezone: "America/Guyana"
