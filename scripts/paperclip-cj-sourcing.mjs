@@ -3,6 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { createCJReadOnlyClient } from './cj-api-limiter.mjs';
 import { matchesIntendedProduct } from './cj-match-policy.mjs';
 import { freightRequest, parseCJFreight } from './cj-freight-policy.mjs';
+import { selectRotatingCandidates } from './candidate-rotation.mjs';
 
 export function positiveNumber(value) {
   if (value === null || value === undefined || typeof value === 'boolean' || String(value).trim() === '') return null;
@@ -52,7 +53,7 @@ function flatten(payload) {
   return Array.isArray(groups)?groups.flatMap(g=>Array.isArray(g?.productList)?g.productList:[]):[];
 }
 
-function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.1'}; }
+function headers(token){ return {'CJ-Access-Token':token,'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.2'}; }
 
 export async function sourceCandidate({client,base,token,candidate}) {
   let product=null;
@@ -117,13 +118,33 @@ export async function sourceCandidate({client,base,token,candidate}) {
 export async function main(){
   const apiKey=String(process.env.CJ_API_KEY||'').trim(); if(!apiKey) throw new Error('CJ_API_KEY is required');
   const client=createCJReadOnlyClient(); const base='https://developers.cjdropshipping.com/api2.0/v1';
-  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.1'},body:JSON.stringify({apiKey})});
+  const auth=await client(base+'/authentication/getAccessToken',{method:'POST',headers:{'Content-Type':'application/json','User-Agent':'PrismBay-Paperclip-Sourcing/1.2'},body:JSON.stringify({apiKey})});
   const token=String(auth?.data?.accessToken||''); if(!token) throw new Error('CJ authentication returned no access token'); console.log('::add-mask::'+token);
   const catalog=JSON.parse(await fs.readFile('paperclip/prismbay-global-commerce/research/supplier-candidates.json','utf8'));
-  const results=[]; for(const candidate of (catalog.candidates||[]).slice(0,5)) results.push(await sourceCandidate({client,base,token,candidate}));
-  const report={schemaVersion:2,checkedAt:new Date().toISOString(),market:catalog.market||'US',mode:'paperclip_global_commerce_read_only',candidateCount:results.length,supplierMatches:results.filter(x=>x.supplierVerified).length,verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,freightEstimates:results.filter(x=>x.freightVerified).length,ordersEnabled:false,listingsEnabled:false,profitReadyCount:0,results};
+  const rotation=selectRotatingCandidates(catalog.candidates||[],{
+    batchSize:Number(process.env.PAPERCLIP_CJ_BATCH_SIZE||5),
+    anchorCount:Number(process.env.PAPERCLIP_CJ_ANCHOR_COUNT||2),
+    slot:process.env.PAPERCLIP_CJ_ROTATION_SLOT,
+  });
+  const results=[]; for(const candidate of rotation.selected) results.push(await sourceCandidate({client,base,token,candidate}));
+  const report={
+    schemaVersion:3,
+    checkedAt:new Date().toISOString(),
+    market:catalog.market||'US',
+    mode:'paperclip_global_commerce_read_only',
+    catalogCandidateCount:Array.isArray(catalog.candidates)?catalog.candidates.length:0,
+    candidateCount:results.length,
+    rotation:{slot:rotation.slot,batchSize:rotation.batchSize,anchorCount:rotation.anchorCount,rotatingPoolSize:rotation.rotatingPoolSize,offset:rotation.offset,selectedSlugs:rotation.selected.map(x=>x.slug)},
+    supplierMatches:results.filter(x=>x.supplierVerified).length,
+    verifiedVariants:results.filter(x=>x.variantInventoryVerified).length,
+    freightEstimates:results.filter(x=>x.freightVerified).length,
+    ordersEnabled:false,
+    listingsEnabled:false,
+    profitReadyCount:0,
+    results,
+  };
   await fs.mkdir('growth-reports',{recursive:true}); await fs.writeFile('growth-reports/paperclip-cj-sourcing.json',JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({candidateCount:report.candidateCount,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,results:results.map(r=>({slug:r.slug,status:r.status,productCostUsd:r.product?.productCostUsd??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
+  console.log(JSON.stringify({catalogCandidateCount:report.catalogCandidateCount,candidateCount:report.candidateCount,rotation:report.rotation,supplierMatches:report.supplierMatches,verifiedVariants:report.verifiedVariants,freightEstimates:report.freightEstimates,results:results.map(r=>({slug:r.slug,status:r.status,productCostUsd:r.product?.productCostUsd??null,lowestFreightUsd:r.lowestFreightUsd??null,packFreightScreening:r.packFreightScreening??[]}))},null,2));
   return report;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) await main();
