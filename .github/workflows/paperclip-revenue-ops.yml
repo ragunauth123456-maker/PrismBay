@@ -1,0 +1,89 @@
+name: PrismBay Paperclip Revenue Ops
+
+on:
+  schedule:
+    - cron: '11 */3 * * *'
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'paperclip/prismbay-revenue-company/**'
+      - 'scripts/paperclip-company-validate.mjs'
+      - 'scripts/paperclip-revenue-bridge.mjs'
+      - '.github/workflows/paperclip-revenue-ops.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prismbay-paperclip-revenue-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  revenue-ops:
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' && github.actor == 'ragunauthramsaroop' && startsWith(github.event.issue.title, '[PAPERCLIP-REVENUE]') && contains(github.event.comment.body, 'run revenue ops'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out PrismBay
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate Paperclip company package
+        run: node scripts/paperclip-company-validate.mjs
+
+      - name: Enforce retail safety tests
+        run: >-
+          node --test
+          scripts/retail-promotion-swarm.test.mjs
+          scripts/retail-readiness-closure.test.mjs
+          scripts/cj-review-board.test.mjs
+          scripts/cj-match-policy.test.mjs
+          scripts/cj-freight-policy.test.mjs
+          scripts/dropshipping-dispatch.test.mjs
+          scripts/organic-growth-agent.test.mjs
+          scripts/board-freshness.test.mjs
+
+      - name: Run existing revenue workers
+        shell: bash
+        run: |
+          set -euo pipefail
+          roles=('Trend Scout' 'Hook/Creative Writer' 'Storefront CRO Auditor' 'Creator/Partner Scout' 'Publisher' 'Analytics Reviewer' 'Offer Optimizer' 'GitHub Support Scout')
+          for role in "${roles[@]}"; do node scripts/organic-growth-agent.mjs "$role"; done
+          node scripts/dropshipping-dispatch.mjs
+          node scripts/retail-promotion-swarm.mjs
+          node scripts/tiktok-retail-readiness.mjs
+          node scripts/first-sale-verifier.mjs
+          node scripts/paperclip-revenue-bridge.mjs
+
+      - name: Retain Paperclip revenue board
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prismbay-paperclip-revenue-${{ github.run_id }}
+          path: |
+            growth-reports/paperclip-revenue-board.json
+            growth-reports/retail-promotion-swarm.json
+            growth-reports/tiktok-retail-readiness.json
+            growth-reports/first-sale-verification.json
+            growth-reports/storefront-cro-auditor.json
+            growth-reports/creator-partner-scout.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Write revenue status
+        if: always()
+        run: |
+          echo 'Paperclip company package: paperclip/prismbay-revenue-company' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Goal: first verified profitable non-test PrismBay Clean retail order.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Existing supplier, rights, checkout, publication and YouTube-separation controls remain authoritative.' >> "$GITHUB_STEP_SUMMARY"
