@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "authorizedAt": "2026-10-02",
   "scope": "PrismBay Clean organic retail promotion for products that pass every supplier, freight, rights and checkout gate",
   "ownerAuthorized": true,
@@ -26,6 +26,9 @@
     "deployed": true,
     "stripeWebhookSecretConfigured": true,
     "verifiedCheckoutSkus": ["crevice"],
+    "verifiedCheckoutUrls": {
+      "crevice": "https://buy.stripe.com/cNi5kE8XAeSndGib8QgnK02"
+    },
     "checkoutAllowedOnlyAfterFinalZipFreight": true
   },
   "evidence": [
