@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
+      - 'config/store-backend-swarm.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
@@ -15,6 +16,7 @@ on:
     branches: [main]
     paths:
       - 'paperclip/prismbay-commerce-group/BACKEND_SWARM_24X7.md'
+      - 'config/store-backend-swarm.json'
       - 'scripts/store-backend-swarm-watchdog.mjs'
       - 'scripts/store-backend-swarm-watchdog.test.mjs'
       - '.github/workflows/store-backend-swarm-watchdog.yml'
@@ -42,7 +44,7 @@ jobs:
       - name: Test watchdog policy
         run: node --test scripts/store-backend-swarm-watchdog.test.mjs
 
-      - name: Verify live store backend swarm
+      - name: Verify store health and committed swarm contract
         run: node scripts/store-backend-swarm-watchdog.mjs
 
       - name: Retain backend swarm evidence
@@ -59,11 +61,10 @@ jobs:
           const fs=require('fs');
           const s=JSON.parse(fs.readFileSync('growth-reports/store-backend-swarm.json','utf8'));
           console.log('## PrismBay Clean | 24x7 Backend Swarm');
-          console.log(`- Healthy: ${s.healthy}`);
-          console.log(`- Workers configured: ${s.workerCount}`);
-          console.log(`- Workers currently reporting OK: ${s.activeWorkerCount}`);
-          console.log(`- Total backend worker runs: ${s.totalRuns}`);
-          console.log(`- Verified sales: ${s.verifiedSales}`);
-          console.log(`- Controller focus: ${s.controllerFocus}`);
-          console.log(`- Last backend update: ${s.lastUpdatedAt}`);
+          console.log(`- Configured workers: ${s.configuredWorkerCount}`);
+          console.log(`- Cadence: ${s.cadence}`);
+          console.log(`- Public storefront checks passing: ${s.publicHealth.filter(x=>x.ok).length}/${s.publicHealth.length}`);
+          console.log(`- Runtime authority: ${s.runtimeAuthority}`);
+          console.log(`- Checked at: ${s.checkedAt}`);
+          console.log('- GitHub does not infer private AppDeploy cron execution state; AppDeploy remains authoritative for runtime status.');
           NODE
