@@ -8,10 +8,13 @@ on:
     branches: [main]
     paths:
       - 'paperclip/prismbay-commerce-group/**'
+      - 'config/sales-strategy-portfolio.json'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
       - 'scripts/paperclip-no-idle-guard.mjs'
       - 'scripts/paperclip-no-idle-guard.test.mjs'
+      - 'scripts/paperclip-sales-strategy-engine.mjs'
+      - 'scripts/paperclip-sales-strategy-engine.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
   workflow_run:
     workflows:
@@ -25,10 +28,13 @@ on:
     branches: [main]
     paths:
       - 'paperclip/prismbay-commerce-group/**'
+      - 'config/sales-strategy-portfolio.json'
       - 'scripts/paperclip-commerce-group.mjs'
       - 'scripts/paperclip-commerce-group.test.mjs'
       - 'scripts/paperclip-no-idle-guard.mjs'
       - 'scripts/paperclip-no-idle-guard.test.mjs'
+      - 'scripts/paperclip-sales-strategy-engine.mjs'
+      - 'scripts/paperclip-sales-strategy-engine.test.mjs'
       - '.github/workflows/paperclip-commerce-group.yml'
 
 permissions:
@@ -56,7 +62,8 @@ jobs:
         run: |
           test -s paperclip/prismbay-commerce-group/MASTER_EXECUTION_PROMPT.md
           test -s paperclip/prismbay-commerce-group/NO_IDLE_UNTIL_FIRST_SALE.md
-          node --test scripts/paperclip-commerce-group.test.mjs scripts/paperclip-no-idle-guard.test.mjs
+          test -s config/sales-strategy-portfolio.json
+          node --test scripts/paperclip-commerce-group.test.mjs scripts/paperclip-no-idle-guard.test.mjs scripts/paperclip-sales-strategy-engine.test.mjs
 
       - name: Refresh independent opportunity board
         run: node scripts/global-commerce-opportunity-engine.mjs
@@ -73,6 +80,9 @@ jobs:
       - name: Refresh existing revenue task board
         run: node scripts/paperclip-revenue-bridge.mjs
 
+      - name: Run diversified CEO sales strategy portfolio
+        run: node scripts/paperclip-sales-strategy-engine.mjs
+
       - name: Run parent commercial control loop and First Sale War Room
         run: node scripts/paperclip-commerce-group.mjs
 
@@ -85,6 +95,7 @@ jobs:
           name: prismbay-commerce-group-${{ github.run_id }}
           path: |
             growth-reports/prismbay-commerce-group-dashboard.json
+            growth-reports/sales-strategy-board.json
             growth-reports/global-commerce-opportunities.json
             growth-reports/paperclip-revenue-board.json
             growth-reports/retail-promotion-swarm.json
@@ -98,11 +109,14 @@ jobs:
           node - <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs=require('fs');
           const d=JSON.parse(fs.readFileSync('growth-reports/prismbay-commerce-group-dashboard.json','utf8'));
+          const s=JSON.parse(fs.readFileSync('growth-reports/sales-strategy-board.json','utf8'));
           const w=d.firstSaleWarRoom || {};
           const n=d.noIdleUntilFirstSale || {};
-          console.log('## PrismBay Commerce Group | First Sale War Room');
+          console.log('## PrismBay Commerce Group | CEO First Sale War Room');
           console.log(`- Verified sales: ${d.verifiedSales}`);
           console.log(`- Promotion-ready products: ${d.promotionEligibleCount}`);
+          console.log(`- Concurrent sales strategies: ${s.concurrentStrategyCount}`);
+          console.log(`- Acquisition/distribution paths: ${s.acquisitionPaths.map(x=>x.id).join(', ')}`);
           console.log(`- Current bottleneck: ${d.currentBottleneck.stage} / ${d.currentBottleneck.reason}`);
           console.log(`- Accountable company: ${d.currentBottleneck.owner}`);
           console.log(`- Closest product: ${w.closestProduct || 'none'}`);
